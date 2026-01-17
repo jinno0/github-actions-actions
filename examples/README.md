@@ -25,6 +25,17 @@ To use this example in your repository:
 3. Adjust branches and custom rules as needed
 4. Commit and push the file
 
+### spec-to-code-example.yml
+
+Demonstrates how to use the `spec-to-code` action to generate source code from Markdown specifications using Claude Code CLI.
+
+To use this example in your repository:
+
+1. Copy `spec-to-code-example.yml` to your repository's `.github/workflows/` directory
+2. Create a `specs/` directory and add your Markdown specification files
+3. Ensure you are running on a `self-hosted` runner where the `claude` CLI is available
+4. Commit and push the file
+
 ## Using Actions from This Repository
 
 All actions in this repository can be referenced as:

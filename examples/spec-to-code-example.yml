@@ -1,0 +1,38 @@
+name: Generate Code from Spec
+
+on:
+  push:
+    paths:
+      - 'specs/**.md'
+  workflow_dispatch:
+    inputs:
+      spec-path:
+        description: 'Path to spec file'
+        required: true
+        default: 'specs/example.md'
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate Code
+        uses: ./actions/spec-to-code
+        with:
+          spec-path: ${{ github.event.inputs.spec-path || 'specs/example.md' }}
+          output-dir: 'src'
+          language: 'TypeScript'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit and Push generated code
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add src/
+          git commit -m "feat: generate code from specification [skip ci]" || echo "No changes to commit"
+          git push
