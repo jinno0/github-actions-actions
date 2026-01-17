@@ -1,0 +1,15 @@
+You are an expert in GitHub Actions. Fix the following workflow file based on the detected issues.
+
+FILE: {FILE}
+ISSUES:
+{ISSUES}
+
+CURRENT CONTENT:
+{CURRENT_CONTENT}
+
+GOAL:
+Fix the issues while preserving the intended logic of the workflow.
+Use the file system tools to overwrite the file "{FILE}" with the corrected content.
+If you cannot fix an issue, explain why.
+
+Start fixing now.

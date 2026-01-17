@@ -13,6 +13,10 @@ inputs:
     description: 'Claude model to use (default: sonnet)'
     required: false
     default: 'sonnet'
+  doc-prompt-template:
+    description: 'Path to custom doc prompt template (optional, uses built-in template if not specified)'
+    required: false
+    default: ''
   github-token:
     description: 'GitHub token'
     required: true
@@ -28,19 +32,21 @@ runs:
 
         echo "Updating $DOC_PATH based on source in $SOURCE_PATH..."
 
-        # Create documentation prompt
-        echo 'You are a technical writer and expert developer. Your task is to update the documentation to reflect the current state of the source code.' > /tmp/doc_prompt.txt
-        echo '' >> /tmp/doc_prompt.txt
-        echo "SOURCE PATH: $SOURCE_PATH" >> /tmp/doc_prompt.txt
-        echo "DOCUMENT TO UPDATE: $DOC_PATH" >> /tmp/doc_prompt.txt
-        echo '' >> /tmp/doc_prompt.txt
-        echo 'GOAL:' >> /tmp/doc_prompt.txt
-        echo "1. Analyze the source code in $SOURCE_PATH." >> /tmp/doc_prompt.txt
-        echo "2. Update $DOC_PATH to ensure it accurately describes the features, usage, and structure of the code." >> /tmp/doc_prompt.txt
-        echo '3. Keep the documentation clear, concise, and professional.' >> /tmp/doc_prompt.txt
-        echo "4. Use the file system tools to overwrite $DOC_PATH with the updated content." >> /tmp/doc_prompt.txt
-        echo '' >> /tmp/doc_prompt.txt
-        echo 'Start updating now.' >> /tmp/doc_prompt.txt
+        DOC_PROMPT_TEMPLATE="${{ inputs.doc-prompt-template }}"
+
+        # Use custom template if provided, otherwise use built-in
+        if [ -n "$DOC_PROMPT_TEMPLATE" ] && [ -f "$DOC_PROMPT_TEMPLATE" ]; then
+          TEMPLATE_FILE="$DOC_PROMPT_TEMPLATE"
+        else
+          TEMPLATE_FILE="${{ github.action_path }}/templates/doc_prompt.txt"
+        fi
+
+        # Read template and replace placeholders
+        DOC_PROMPT=$(sed -e "s/{SOURCE_PATH}/$SOURCE_PATH/g" \
+                          -e "s/{DOC_PATH}/$DOC_PATH/g" \
+                          "$TEMPLATE_FILE")
+
+        echo "$DOC_PROMPT" > /tmp/doc_prompt.txt
 
         # Run Claude Code CLI
         claude --dangerously-skip-permissions --model "$MODEL" < /tmp/doc_prompt.txt

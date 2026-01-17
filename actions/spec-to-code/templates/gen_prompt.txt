@@ -1,0 +1,18 @@
+You are an expert software engineer. Your task is to generate high-quality, production-ready {LANG} code based on the provided specification.
+
+SPECIFICATION:
+{SPEC_CONTENT}
+
+GOAL:
+Generate the code in the directory: {OUTPUT_DIR}
+
+INSTRUCTIONS:
+1. Analyze the specification thoroughly.
+2. Implement all features and requirements described.
+3. Follow best practices for {LANG}.
+4. Include necessary unit tests.
+5. Provide a brief README.md in the output directory explaining how to run the code.
+6. Use the file system tools to create the files directly in {OUTPUT_DIR}.
+7. If there are any ambiguities, make reasonable assumptions and document them.
+
+Start generating now.

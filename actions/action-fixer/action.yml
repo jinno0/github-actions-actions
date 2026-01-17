@@ -17,6 +17,10 @@ inputs:
     description: 'Claude model for AI-powered fixes (default: sonnet)'
     required: false
     default: 'sonnet'
+  fix-prompt-template:
+    description: 'Path to custom fix prompt template (optional, uses built-in template if not specified)'
+    required: false
+    default: ''
 runs:
   using: 'composite'
   steps:
@@ -104,23 +108,24 @@ runs:
             # AI-powered fix if enabled
             if [ "${{ inputs.auto-fix }}" = "true" ]; then
               echo "  Attempting AI-powered fix for $file..."
-              
-              # Create fix prompt
-              echo 'You are an expert in GitHub Actions. Fix the following workflow file based on the detected issues.' > /tmp/fix_prompt.txt
-              echo '' >> /tmp/fix_prompt.txt
-              echo "FILE: $file" >> /tmp/fix_prompt.txt
-              echo 'ISSUES:' >> /tmp/fix_prompt.txt
-              echo "$ISSUES" >> /tmp/fix_prompt.txt
-              echo '' >> /tmp/fix_prompt.txt
-              echo 'CURRENT CONTENT:' >> /tmp/fix_prompt.txt
-              echo "$(cat "$file")" >> /tmp/fix_prompt.txt
-              echo '' >> /tmp/fix_prompt.txt
-              echo 'GOAL:' >> /tmp/fix_prompt.txt
-              echo 'Fix the issues while preserving the intended logic of the workflow.' >> /tmp/fix_prompt.txt
-              echo "Use the file system tools to overwrite the file \"$file\" with the corrected content." >> /tmp/fix_prompt.txt
-              echo 'If you cannot fix an issue, explain why.' >> /tmp/fix_prompt.txt
-              echo '' >> /tmp/fix_prompt.txt
-              echo 'Start fixing now.' >> /tmp/fix_prompt.txt
+
+              FIX_PROMPT_TEMPLATE="${{ inputs.fix-prompt-template }}"
+
+              # Use custom template if provided, otherwise use built-in
+              if [ -n "$FIX_PROMPT_TEMPLATE" ] && [ -f "$FIX_PROMPT_TEMPLATE" ]; then
+                TEMPLATE_FILE="$FIX_PROMPT_TEMPLATE"
+              else
+                TEMPLATE_FILE="${{ github.action_path }}/templates/fix_prompt.txt"
+              fi
+
+              # Read template and replace placeholders
+              CURRENT_CONTENT=$(cat "$file")
+              FIX_PROMPT=$(sed -e "s/{FILE}/$file/g" \
+                                -e "s/{ISSUES}/$ISSUES/g" \
+                                -e "s/{CURRENT_CONTENT}/$CURRENT_CONTENT/g" \
+                                "$TEMPLATE_FILE")
+
+              echo "$FIX_PROMPT" > /tmp/fix_prompt.txt
               if claude --dangerously-skip-permissions --model "${{ inputs.claude-model }}" < /tmp/fix_prompt.txt > /tmp/claude_fix.log 2>&1; then
                 echo "  AI-powered fix completed for $file"
                 FIXES=$((FIXES + 1))

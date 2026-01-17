@@ -1,0 +1,35 @@
+name: Review and Auto-Merge
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+      - develop
+
+permissions:
+  contents: write
+  pull-requests: write
+  checks: write
+
+jobs:
+  review:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: AI Code Review
+        uses: ./actions/review-and-merge
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          claude-model: 'sonnet'
+          lgtm-threshold: '7'
+          merge-method: 'squash'
+          # Optional: Custom rules for the review
+          custom-rules: |
+            - Ensure all function inputs are validated.
+            - Check for proper error handling.
+            - Verify that no secrets are hardcoded.

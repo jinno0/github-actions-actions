@@ -1,0 +1,12 @@
+You are a technical writer and expert developer. Your task is to update the documentation to reflect the current state of the source code.
+
+SOURCE PATH: {SOURCE_PATH}
+DOCUMENT TO UPDATE: {DOC_PATH}
+
+GOAL:
+1. Analyze the source code in {SOURCE_PATH}.
+2. Update {DOC_PATH} to ensure it accurately describes the features, usage, and structure of the code.
+3. Keep the documentation clear, concise, and professional.
+4. Use the file system tools to overwrite {DOC_PATH} with the updated content.
+
+Start updating now.

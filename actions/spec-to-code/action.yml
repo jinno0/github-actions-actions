@@ -16,6 +16,10 @@ inputs:
     description: 'Claude model to use (default: sonnet)'
     required: false
     default: 'sonnet'
+  gen-prompt-template:
+    description: 'Path to custom generation prompt template (optional, uses built-in template if not specified)'
+    required: false
+    default: ''
   github-token:
     description: 'GitHub token'
     required: true
@@ -33,6 +37,7 @@ runs:
         OUTPUT_DIR="${{ inputs.output-dir }}"
         LANG="${{ inputs.language }}"
         MODEL="${{ inputs.claude-model }}"
+        GEN_PROMPT_TEMPLATE="${{ inputs.gen-prompt-template }}"
 
         if [ ! -f "$SPEC_PATH" ]; then
           echo "::error::Specification file not found: $SPEC_PATH"
@@ -41,25 +46,23 @@ runs:
 
         echo "Generating $LANG code in $OUTPUT_DIR based on $SPEC_PATH..."
 
-        # Create generation prompt
-        echo "You are an expert software engineer. Your task is to generate high-quality, production-ready $LANG code based on the provided specification." > /tmp/gen_prompt.txt
-        echo '' >> /tmp/gen_prompt.txt
-        echo 'SPECIFICATION:' >> /tmp/gen_prompt.txt
-        echo "$(cat "$SPEC_PATH")" >> /tmp/gen_prompt.txt
-        echo '' >> /tmp/gen_prompt.txt
-        echo 'GOAL:' >> /tmp/gen_prompt.txt
-        echo "Generate the code in the directory: $OUTPUT_DIR" >> /tmp/gen_prompt.txt
-        echo '' >> /tmp/gen_prompt.txt
-        echo 'INSTRUCTIONS:' >> /tmp/gen_prompt.txt
-        echo '1. Analyze the specification thoroughly.' >> /tmp/gen_prompt.txt
-        echo '2. Implement all features and requirements described.' >> /tmp/gen_prompt.txt
-        echo "3. Follow best practices for $LANG." >> /tmp/gen_prompt.txt
-        echo '4. Include necessary unit tests.' >> /tmp/gen_prompt.txt
-        echo '5. Provide a brief README.md in the output directory explaining how to run the code.' >> /tmp/gen_prompt.txt
-        echo "6. Use the file system tools to create the files directly in $OUTPUT_DIR." >> /tmp/gen_prompt.txt
-        echo '7. If there are any ambiguities, make reasonable assumptions and document them.' >> /tmp/gen_prompt.txt
-        echo '' >> /tmp/gen_prompt.txt
-        echo 'Start generating now.' >> /tmp/gen_prompt.txt
+        # Read spec content
+        SPEC_CONTENT=$(cat "$SPEC_PATH")
+
+        # Use custom template if provided, otherwise use built-in
+        if [ -n "$GEN_PROMPT_TEMPLATE" ] && [ -f "$GEN_PROMPT_TEMPLATE" ]; then
+          TEMPLATE_FILE="$GEN_PROMPT_TEMPLATE"
+        else
+          TEMPLATE_FILE="${{ github.action_path }}/templates/gen_prompt.txt"
+        fi
+
+        # Read template and replace placeholders
+        GEN_PROMPT=$(sed -e "s/{LANG}/$LANG/g" \
+                          -e "s/{SPEC_CONTENT}/$SPEC_CONTENT/g" \
+                          -e "s/{OUTPUT_DIR}/$OUTPUT_DIR/g" \
+                          "$TEMPLATE_FILE")
+
+        echo "$GEN_PROMPT" > /tmp/gen_prompt.txt
 
         # Run Claude Code CLI
         # Note: Using --dangerously-skip-permissions as it is running in a controlled self-hosted environment

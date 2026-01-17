@@ -14,6 +14,17 @@ To use this example in your repository:
 2. Adjust the paths and triggers as needed
 3. Commit and push the file
 
+### review-and-merge-example.yml
+
+Demonstrates how to use the `review-and-merge` action to automatically review Pull Requests using Claude Code CLI and merge them if they meet quality standards.
+
+To use this example in your repository:
+
+1. Copy `review-and-merge-example.yml` to your repository's `.github/workflows/` directory
+2. Ensure you are running on a `self-hosted` runner where the `claude` CLI is available
+3. Adjust branches and custom rules as needed
+4. Commit and push the file
+
 ## Using Actions from This Repository
 
 All actions in this repository can be referenced as:
