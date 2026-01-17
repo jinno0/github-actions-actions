@@ -36,6 +36,17 @@ To use this example in your repository:
 3. Ensure you are running on a `self-hosted` runner where the `claude` CLI is available
 4. Commit and push the file
 
+### auto-refactor-example.yml
+
+Demonstrates how to use the `auto-refactor` action to automatically improve code quality and readability using Claude Code CLI.
+
+To use this example in your repository:
+
+1. Copy `auto-refactor-example.yml` to your repository's `.github/workflows/` directory
+2. Ensure you are running on a `self-hosted` runner where the `claude` CLI is available
+3. Commit and push the file
+4. Trigger the workflow manually via the Actions tab and specify the path and instructions
+
 ## Using Actions from This Repository
 
 All actions in this repository can be referenced as:
