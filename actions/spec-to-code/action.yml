@@ -57,9 +57,9 @@ runs:
         fi
 
         # Read template and replace placeholders
-        GEN_PROMPT=$(sed -e "s/{LANG}/$LANG/g" \
-                          -e "s/{SPEC_CONTENT}/$SPEC_CONTENT/g" \
-                          -e "s/{OUTPUT_DIR}/$OUTPUT_DIR/g" \
+        GEN_PROMPT=$(sed -e "s#{LANG}#$LANG#g" \
+                          -e "s#{SPEC_CONTENT}#$SPEC_CONTENT#g" \
+                          -e "s#{OUTPUT_DIR}#$OUTPUT_DIR#g" \
                           "$TEMPLATE_FILE")
 
         echo "$GEN_PROMPT" > /tmp/gen_prompt.txt

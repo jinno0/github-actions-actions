@@ -120,9 +120,9 @@ runs:
 
               # Read template and replace placeholders
               CURRENT_CONTENT=$(cat "$file")
-              FIX_PROMPT=$(sed -e "s/{FILE}/$file/g" \
-                                -e "s/{ISSUES}/$ISSUES/g" \
-                                -e "s/{CURRENT_CONTENT}/$CURRENT_CONTENT/g" \
+              FIX_PROMPT=$(sed -e "s#{FILE}#$file#g" \
+                                -e "s#{ISSUES}#$ISSUES#g" \
+                                -e "s#{CURRENT_CONTENT}#$CURRENT_CONTENT#g" \
                                 "$TEMPLATE_FILE")
 
               echo "$FIX_PROMPT" > /tmp/fix_prompt.txt

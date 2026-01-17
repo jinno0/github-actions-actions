@@ -42,8 +42,8 @@ runs:
         fi
 
         # Read template and replace placeholders
-        DOC_PROMPT=$(sed -e "s/{SOURCE_PATH}/$SOURCE_PATH/g" \
-                          -e "s/{DOC_PATH}/$DOC_PATH/g" \
+        DOC_PROMPT=$(sed -e "s#{SOURCE_PATH}#$SOURCE_PATH#g" \
+                          -e "s#{DOC_PATH}#$DOC_PATH#g" \
                           "$TEMPLATE_FILE")
 
         echo "$DOC_PROMPT" > /tmp/doc_prompt.txt

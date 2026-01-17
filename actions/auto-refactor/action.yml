@@ -45,8 +45,8 @@ runs:
         fi
 
         # Read template and replace placeholders
-        REFACTOR_PROMPT=$(sed -e "s/{TARGET_PATH}/$TARGET_PATH/g" \
-                              -e "s/{INSTRUCTION}/$INSTRUCTION/g" \
+        REFACTOR_PROMPT=$(sed -e "s#{TARGET_PATH}#$TARGET_PATH#g" \
+                              -e "s#{INSTRUCTION}#$INSTRUCTION#g" \
                               "$TEMPLATE_FILE")
 
         echo "$REFACTOR_PROMPT" > /tmp/refactor_prompt.txt

@@ -51,9 +51,9 @@ runs:
         fi
 
         # Read template and replace placeholders
-        RELEASE_PROMPT=$(sed -e "s/{GIT_LOG}/$GIT_LOG/g" \
-                              -e "s/{PRS}/$PRS/g" \
-                              -e "s/{OUTPUT}/$OUTPUT/g" \
+        RELEASE_PROMPT=$(sed -e "s#{GIT_LOG}#$GIT_LOG#g" \
+                              -e "s#{PRS}#$PRS#g" \
+                              -e "s#{OUTPUT}#$OUTPUT#g" \
                               "$TEMPLATE_FILE")
 
         echo "$RELEASE_PROMPT" > /tmp/release_prompt.txt

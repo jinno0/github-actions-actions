@@ -143,12 +143,12 @@ runs:
         fi
 
         # Create comment from template
-        COMMENT=$(sed -e "s/{VERDICT}/$VERDICT/g" \
-                      -e "s/{CONFIDENCE}/$CONFIDENCE/g" \
-                      -e "s/{THRESHOLD}/$THRESHOLD/g" \
-                      -e "s/{SUMMARY}/$SUMMARY/g" \
-                      -e "s/{STATUS_MESSAGE}/$STATUS_MESSAGE/g" \
-                      -e "s/{MODEL}/${{ inputs.claude-model }}/g" \
+        COMMENT=$(sed -e "s#{VERDICT}#$VERDICT#g" \
+                      -e "s#{CONFIDENCE}#$CONFIDENCE#g" \
+                      -e "s#{THRESHOLD}#$THRESHOLD#g" \
+                      -e "s#{SUMMARY}#$SUMMARY#g" \
+                      -e "s#{STATUS_MESSAGE}#$STATUS_MESSAGE#g" \
+                      -e "s#{MODEL}#${{ inputs.claude-model }}#g" \
                       "$TEMPLATE_FILE")
 
         gh pr comment $PR_NUMBER --body "$COMMENT"
