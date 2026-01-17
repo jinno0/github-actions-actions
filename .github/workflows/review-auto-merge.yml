@@ -1,0 +1,38 @@
+name: Review and Auto-Merge PR
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  pull_request_review:
+    types: [submitted]
+
+# Ensure only one workflow runs at a time per PR
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  review-and-merge:
+    # Only run on self-hosted runners with Claude Code CLI
+    runs-on: self-hosted
+    if: |
+      github.event_name == 'pull_request' &&
+      !github.event.pull_request.draft
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Review PR and Auto-Merge
+        uses: ./actions/review-and-merge
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          claude-model: sonnet
+          lgtm-threshold: '7'
+          merge-method: squash
