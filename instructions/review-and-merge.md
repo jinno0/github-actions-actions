@@ -21,6 +21,7 @@ This action uses Claude Code CLI to review Pull Requests and automatically merge
     with:
       github-token: ${{ secrets.GITHUB_TOKEN }}
       lgtm-threshold: '7'  # Adjust sensitivity (1-10)
+      # auto-fix: 'true'   # Uncomment to enable auto-correction and merge
     ```
 
 3.  **Customize Rules (Optional)**:
@@ -30,6 +31,16 @@ This action uses Claude Code CLI to review Pull Requests and automatically merge
       - Check for security vulnerabilities.
       - Ensure variable naming follows camelCase.
     ```
+
+## Auto-Fix Mode
+
+If you set `auto-fix: 'true'`, the action will:
+1.  Analyze the code changes.
+2.  **Automatically apply fixes** to the files if issues are found (using AI).
+3.  Commit and push the fixes to the branch.
+4.  Merge the PR automatically.
+
+**Note**: In this mode, detailed review comments are skipped in favor of direct code correction.
 
 ## Usage
 

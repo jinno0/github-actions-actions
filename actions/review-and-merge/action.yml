@@ -1,5 +1,5 @@
 name: 'Review PR and Auto-Merge'
-description: 'Review a PR using Claude Code CLI and merge if LGTM'
+description: 'Review a PR using Claude Code CLI and merge if LGTM. Can also auto-fix issues.'
 inputs:
   github-token:
     description: 'GitHub token with repo permissions'
@@ -28,6 +28,10 @@ inputs:
     description: 'Additional rules or guidelines for the review'
     required: false
     default: ''
+  auto-fix:
+    description: 'Whether to automatically fix issues found in the review (default: false)'
+    required: false
+    default: 'false'
 runs:
   using: 'composite'
   steps:
@@ -48,7 +52,7 @@ runs:
         echo "diff_size=$(wc -c < /tmp/pr_diff.patch)" >> $GITHUB_OUTPUT
         echo "PR diff saved to /tmp/pr_diff.patch"
 
-    - name: Review with Claude Code CLI
+    - name: Review or Fix with Claude Code CLI
       shell: bash
       id: review
       run: |
@@ -59,67 +63,100 @@ runs:
         THRESHOLD="${{ inputs.lgtm-threshold }}"
         REVIEW_PROMPT_TEMPLATE="${{ inputs.review-prompt-template }}"
         CUSTOM_RULES="${{ inputs.custom-rules }}"
+        AUTO_FIX="${{ inputs.auto-fix }}"
 
-        echo "Running Claude Code CLI review..."
+        echo "Running Claude Code CLI..."
         echo "Model: $MODEL"
-        echo "LGTM Threshold: $THRESHOLD/10"
+        echo "Auto Fix: $AUTO_FIX"
 
-        # Use custom template if provided, otherwise use built-in
-        if [ -n "$REVIEW_PROMPT_TEMPLATE" ] && [ -f "$REVIEW_PROMPT_TEMPLATE" ]; then
-          echo "Using custom review prompt template: $REVIEW_PROMPT_TEMPLATE"
-          REVIEW_PROMPT_FILE="$REVIEW_PROMPT_TEMPLATE"
-        else
-          REVIEW_PROMPT_FILE="${{ github.action_path }}/templates/review_prompt.txt"
-        fi
+        if [ "$AUTO_FIX" = "true" ]; then
+          # --- AUTO FIX MODE ---
+          echo "Entering Auto-Fix mode..."
+          
+          # Use fix prompt template
+          TEMPLATE_FILE="${{ github.action_path }}/templates/fix_prompt.txt"
+          
+          cat "$TEMPLATE_FILE" > /tmp/fix_prompt.txt
+          
+          if [ -n "$CUSTOM_RULES" ]; then
+            echo -e "\nAdditional Rules:\n$CUSTOM_RULES" >> /tmp/fix_prompt.txt
+          fi
+          
+          echo '' >> /tmp/fix_prompt.txt
+          cat /tmp/pr_diff.patch >> /tmp/fix_prompt.txt
 
-        # Create review prompt from template
-        cat "$REVIEW_PROMPT_FILE" > /tmp/review_prompt.txt
-        
-        # Inject custom rules if provided
-        if [ -n "$CUSTOM_RULES" ]; then
-          echo -e "\nAdditional Rules for this Review:\n$CUSTOM_RULES" >> /tmp/review_prompt.txt
-        fi
+          # Run Claude to FIX files
+          # Not redirecting to json, letting it edit files
+          if claude --dangerously-skip-permissions --model "$MODEL" < /tmp/fix_prompt.txt > /tmp/claude_output.txt 2>&1; then
+             echo "Claude fix execution completed"
+          else
+             echo "Claude execution failed"
+             exit 1
+          fi
 
-        echo '' >> /tmp/review_prompt.txt
-
-        # Append PR diff
-        cat /tmp/pr_diff.patch >> /tmp/review_prompt.txt
-
-        # Run Claude Code CLI
-        if claude --dangerously-skip-permissions --model "$MODEL" < /tmp/review_prompt.txt > /tmp/claude_response.json 2>&1; then
-          echo "Claude review completed"
-        else
-          echo "Claude CLI failed, using fallback"
-          echo '{"verdict":"REQUEST_CHANGES","confidence":1,"summary":"Claude CLI error","issues":["Claude Code CLI failed to execute"]}' > /tmp/claude_response.json
-        fi
-
-        # Parse response (simple extraction)
-        if grep -q '"verdict"[[:space:]]*:[[:space:]]*"LGTM"' /tmp/claude_response.json; then
+          # Check for changes
+          if git diff --quiet; then
+            echo "No changes made by Claude."
+            SUMMARY="Analyzed code, no fixes needed."
+          else
+            echo "Changes detected. Committing..."
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git config user.name "github-actions[bot]"
+            git add .
+            git commit -m "fix: auto-correction by Claude Code"
+            git push
+            SUMMARY="Applied auto-fixes based on code analysis."
+          fi
+          
+          # In auto-fix mode, we assume LGTM if execution succeeded
           VERDICT="LGTM"
+          CONFIDENCE="10"
+          
         else
-          VERDICT="REQUEST_CHANGES"
+          # --- REVIEW MODE ---
+          echo "Entering Review mode..."
+
+          # Use custom template if provided, otherwise use built-in
+          if [ -n "$REVIEW_PROMPT_TEMPLATE" ] && [ -f "$REVIEW_PROMPT_TEMPLATE" ]; then
+            REVIEW_PROMPT_FILE="$REVIEW_PROMPT_TEMPLATE"
+          else
+            REVIEW_PROMPT_FILE="${{ github.action_path }}/templates/review_prompt.txt"
+          fi
+
+          cat "$REVIEW_PROMPT_FILE" > /tmp/review_prompt.txt
+          
+          if [ -n "$CUSTOM_RULES" ]; then
+            echo -e "\nAdditional Rules for this Review:\n$CUSTOM_RULES" >> /tmp/review_prompt.txt
+          fi
+
+          echo '' >> /tmp/review_prompt.txt
+          cat /tmp/pr_diff.patch >> /tmp/review_prompt.txt
+
+          if claude --dangerously-skip-permissions --model "$MODEL" < /tmp/review_prompt.txt > /tmp/claude_response.json 2>&1; then
+            echo "Claude review completed"
+          else
+            echo '{"verdict":"REQUEST_CHANGES","confidence":1,"summary":"Claude CLI error"}' > /tmp/claude_response.json
+          fi
+
+          # Parse JSON response
+          if grep -q '"verdict"[[:space:]]*:[[:space:]]*"LGTM"' /tmp/claude_response.json; then
+            VERDICT="LGTM"
+          else
+            VERDICT="REQUEST_CHANGES"
+          fi
+          CONFIDENCE=$(grep -oP '"confidence"[[:space:]]*:[[:space:]]*\K\d+' /tmp/claude_response.json || echo "1")
+          SUMMARY=$(grep -oP '"summary"[[:space:]]*:[[:space:]]*"\K[^"].*' /tmp/claude_response.json || echo "No summary")
         fi
-
-        # Extract confidence (default to 1 if not found)
-        CONFIDENCE=$(grep -oP '"confidence"[[:space:]]*:[[:space:]]*\K\d+' /tmp/claude_response.json || echo "1")
-
-        # Extract summary
-        SUMMARY=$(grep -oP '"summary"[[:space:]]*:[[:space:]]*"\K[^"]*' /tmp/claude_response.json || echo "No summary")
 
         echo "verdict=$VERDICT" >> $GITHUB_OUTPUT
         echo "confidence=$CONFIDENCE" >> $GITHUB_OUTPUT
         echo "summary=$SUMMARY" >> $GITHUB_OUTPUT
 
-        # Save full response for comment
-        cp /tmp/claude_response.json /tmp/review_result.json
-
-        echo "Review Verdict: $VERDICT"
-        echo "Confidence: $CONFIDENCE/$THRESHOLD"
-
     - name: Post review comment
       shell: bash
-      if: always()
+      if: always() && inputs.auto-fix != 'true'
       run: |
+        # Only post detailed comments in Review Mode
         PR_NUMBER=${{ github.event.pull_request.number }}
         VERDICT="${{ steps.review.outputs.verdict }}"
         CONFIDENCE="${{ steps.review.outputs.confidence }}"
@@ -127,22 +164,18 @@ runs:
         THRESHOLD="${{ inputs.lgtm-threshold }}"
         COMMENT_TEMPLATE="${{ inputs.comment-template }}"
 
-        # Use custom template if provided, otherwise use built-in
         if [ -n "$COMMENT_TEMPLATE" ] && [ -f "$COMMENT_TEMPLATE" ]; then
-          echo "Using custom comment template: $COMMENT_TEMPLATE"
           TEMPLATE_FILE="$COMMENT_TEMPLATE"
         else
           TEMPLATE_FILE="${{ github.action_path }}/templates/comment_template.txt"
         fi
 
-        # Determine status message
         if [ "$VERDICT" = "LGTM" ] && [ "$CONFIDENCE" -ge "$THRESHOLD" ]; then
           STATUS_MESSAGE="✅ This PR meets the LGTM threshold and will be auto-merged."
         else
           STATUS_MESSAGE="❌ This PR does not meet the LGTM threshold or requires changes."
         fi
 
-        # Create comment from template
         COMMENT=$(sed -e "s#{VERDICT}#$VERDICT#g" \
                       -e "s#{CONFIDENCE}#$CONFIDENCE#g" \
                       -e "s#{THRESHOLD}#$THRESHOLD#g" \
