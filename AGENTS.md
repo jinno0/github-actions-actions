@@ -112,3 +112,162 @@ AIエージェントは以下の場合に人間に報告してください：
 
 TBD
 将来的には、AIエージェントが自身で PURPOSE.md や POLICY.md を更新する仕組みを導入予定です。
+
+---
+
+# GitHub Actions 開発ノウハウ
+
+このリポジトリで GitHub Actions を開発・保守する際のノウハウとベストプラクティスです。
+
+## テンプレートファイルの切り出し方
+
+action.yml 内にプロンプトや文章をハードコーディングするのではなく、テンプレートファイルとして切り出します。
+
+### 背景
+
+- **メンテナンス性**: 文章修正時に action.yml を編集する必要がなくなる
+- **カスタマイズ性**: ユーザーが独自テンプレートを提供できる
+- **可読性**: action.yml がスッキリし、ロジックと文章が分離される
+
+### 実装パターン
+
+#### 1. テンプレートファイルの作成
+
+`actions/{action-name}/templates/{prompt_name}.txt` を作成：
+
+```
+actions/review-and-merge/templates/review_prompt.txt
+```
+
+プレースホルダーには `{VARIABLE_NAME}` 形式を使用：
+
+```text
+You are reviewing a GitHub Pull Request.
+
+PR Number: {PR_NUMBER}
+PR Title: {PR_TITLE}
+
+Verdict: {VERDICT}
+```
+
+#### 2. action.yml での input 定義
+
+```yaml
+inputs:
+  prompt-template:
+    description: 'Path to custom prompt template (optional, uses built-in template if not specified)'
+    required: false
+    default: ''
+```
+
+#### 3. action.yml での使用
+
+```yaml
+run: |
+  PROMPT_TEMPLATE="${{ inputs.prompt-template }}"
+
+  # Use custom template if provided, otherwise use built-in
+  if [ -n "$PROMPT_TEMPLATE" ] && [ -f "$PROMPT_TEMPLATE" ]; then
+    TEMPLATE_FILE="$PROMPT_TEMPLATE"
+  else
+    TEMPLATE_FILE="${{ github.action_path }}/templates/review_prompt.txt"
+  fi
+
+  # Read template and replace placeholders
+  PROMPT=$(sed -e "s/{PR_NUMBER}/$PR_NUMBER/g" \
+              -e "s/{PR_TITLE}/$PR_TITLE/g" \
+              -e "s/{VERDICT}/$VERDICT/g" \
+              "$TEMPLATE_FILE")
+
+  echo "$PROMPT" > /tmp/final_prompt.txt
+```
+
+### セキュリティ上の注意
+
+プレースホルダー置換には `sed` を使用しています。ユーザー入力をテンプレートに埋め込む場合は、コマンドインジェクションを防ぐため、以下の点に注意：
+
+1. **変数は二重引用符で囲む**: `"$VARIABLE"`
+2. **特殊文字のエスケープが必要な場合は検討する**
+3. **外部入力はバリデーションする**
+
+## YAML 構文の注意点
+
+### 避けるべきパターン: heredoc
+
+**❌ 良くない例:**
+
+```yaml
+run: |
+  cat << EOF > /tmp/prompt.txt
+You are reviewing code.
+PR: $PR_NUMBER
+EOF
+```
+
+**問題点:**
+- YAML パーサーによってはインデントが厳密になりエラーになる
+- YAML 内の `|` (literal style scalar) と bash の heredoc が干渉する
+
+**✅ 良い例:**
+
+```yaml
+run: |
+  echo 'You are reviewing code.' > /tmp/prompt.txt
+  echo "PR: $PR_NUMBER" >> /tmp/prompt.txt
+```
+
+または、テンプレートファイルを使用：
+
+```yaml
+run: |
+  sed -e "s/{PR_NUMBER}/$PR_NUMBER/g" \
+      "${{ github.action_path }}/templates/prompt.txt" > /tmp/final.txt
+```
+
+### プレースホルダーの命名規則
+
+- **中括弧を使用**: `{VARIABLE_NAME}`
+- **大文字スネークケース**: `{SOURCE_PATH}`, `{DOC_PATH}`
+- **説明的な名前**: `{CURRENT_CONTENT}` ではなく `{FILE_CONTENT}`
+
+## 既存の実装例
+
+以下の action でテンプレートファイルを使用しています：
+
+| Action | テンプレートファイル | プレースホルダー例 |
+|--------|---------------------|-------------------|
+| `action-fixer` | `templates/fix_prompt.txt` | `{FILE}`, `{ISSUES}`, `{CURRENT_CONTENT}` |
+| `auto-document` | `templates/doc_prompt.txt` | `{SOURCE_PATH}`, `{DOC_PATH}` |
+| `auto-refactor` | `templates/refactor_prompt.txt` | `{TARGET_PATH}`, `{INSTRUCTION}` |
+| `release-notes-ai` | `templates/release_prompt.txt` | `{GIT_LOG}`, `{PRS}`, `{OUTPUT}` |
+| `review-and-merge` | `templates/review_prompt.txt`, `templates/comment_template.txt` | `{VERDICT}`, `{CONFIDENCE}`, `{SUMMARY}` |
+| `spec-to-code` | `templates/gen_prompt.txt` | `{LANG}`, `{SPEC_CONTENT}`, `{OUTPUT_DIR}` |
+
+## 新しい action を作成する際の手順
+
+1. **テンプレートファイルの作成**
+   ```bash
+   mkdir -p actions/new-action/templates
+   # actions/new-action/templates/prompt.txt を作成
+   ```
+
+2. **action.yml の作成**
+   - inputs に `{template-name}-template` を追加
+   - `run:` ブロックでテンプレート読み込みロジックを実装
+
+3. **YAML 構文チェック**
+   ```bash
+   python3 -c "import yaml; yaml.safe_load(open('actions/new-action/action.yml'))"
+   ```
+
+4. **テンプレート置換のテスト**
+   ```bash
+   # プレースホルダー置換が正しく動作するか確認
+   sed -e "s/{VAR}/value/g" template.txt
+   ```
+
+## 参考リソース
+
+- [GitHub Actions: Composite actions](https://docs.github.com/en/actions/creating-actions/creating-a-composite-action)
+- [YAML仕様](https://yaml.org/spec/)
+- 既存の実装: `actions/review-and-merge/` が参考実装
