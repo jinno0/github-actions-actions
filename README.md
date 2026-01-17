@@ -1,147 +1,50 @@
-# GitHub Actions - Organization Actions & Workflows
+# AI Hub - GitHub Actions for AI-Native Development
 
-GitHub組織で共通利用するActionsとWorkflowsを管理するリポジトリ。
+このリポジトリは、GitHub組織全体の開発効率と品質を向上させるための「AIネイティブなGitHub Actions」を提供するハブです。
+Self-hosted runner上で動作する **Claude Code CLI** を活用し、文脈を理解した高度な自動化（レビュー、修正、ドキュメント生成など）を実現します。
 
-## Actions
+## 🚀 提供している AI Actions
 
-### Review PR and Auto-Merge
+現在、以下の6つの主要な AI Actions を提供しています。
 
-Claude Code CLIを使用してPRをレビューし、LGTM（Looks Good To Me）と判定された場合に自動マージするActionです。
+| Action | 概要 | セットアップガイド |
+|--------|------|-------------------|
+| `review-and-merge` | PRをAIがレビューし、品質基準を満たせば自動マージ | [Guide](./instructions/review-and-merge.md) |
+| `spec-to-code` | Markdown仕様書からコードを自動生成 | [Guide](./instructions/spec-to-code.md) |
+| `action-fixer` | Workflowのエラーを検知し、AIが自動修正 | [Guide](./instructions/action-fixer.md) |
+| `auto-refactor` | 自然言語の指示に基づき、既存コードをリファクタリング | [Guide](./instructions/auto-refactor.md) |
+| `auto-document` | コードの変更を検知し、README等のドキュメントを自動更新 | [Guide](./instructions/auto-document.md) |
+| `release-notes-ai` | コミット履歴から人間が読みやすいリリースノートを生成 | [Guide](./instructions/release-notes-ai.md) |
 
-#### 使用方法
+## 🛠 使い方
 
-リポジトリのワークフローから参照：
+全ての Action には、すぐに試せる**利用例（Examples）**と、詳細な**導入手順（Instructions）**が用意されています。
 
-```yaml
-name: Review and Auto-Merge
+### 1. 利用例をコピーする
+[examples/](./examples/) ディレクトリにある `.yml` ファイルを、あなたの方のリポジトリの `.github/workflows/` にコピーしてください。
 
-on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+### 2. 手順書を確認する
+[instructions/](./instructions/) ディレクトリにある各 Action のドキュメントに従って、必要な権限や環境を設定してください。
 
-permissions:
-  pull-requests: write
-  contents: write
+## 🏗 前提条件
 
-jobs:
-  review:
-    runs-on: self-hosted
-    steps:
-      - uses: your-org/github-actions-actions/actions/review-and-merge@main
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          claude-model: sonnet          # 使用するClaudeモデル
-          lgtm-threshold: '7'           # LGTM判定のしきい値 (1-10)
-          merge-method: squash          # マージ方法 (squash/merge/rebase)
-```
+これらの Action を利用するには、以下の環境が必要です。
 
-#### 必要要件
+- **Self-hosted Runner**: 組織またはリポジトリで設定されたセルフホストランナー。
+- **Claude Code CLI**: ランナー上で `claude` コマンドが実行可能であること。
+- **GitHub CLI**: `gh` コマンドが実行可能であること。
 
-- **Self-hosted Runner**: Claude Code CLI (`claude`) がインストールされたrunner
-- **Permissions**: `pull-requests: write`, `contents: write`
+詳細なセットアップ方法は、各 Action のガイドを参照してください。
 
-#### 入力パラメータ
+## 📜 開発者向けガイド
 
-| パラメータ | 必須 | デフォルト | 説明 |
-|-----------|------|-----------|------|
-| `github-token` | ✓ | - | GitHubトークン |
-| `claude-model` | | `sonnet` | 使用するClaudeモデル |
-| `lgtm-threshold` | | `7` | LGTM判定の最低confidenceスコア (1-10) |
-| `merge-method` | | `squash` | マージ方法 (`squash`, `merge`, `rebase`) |
+このリポジトリに新しい Action を追加したり、既存のものを改善したりする場合は、[AGENTS.md](./AGENTS.md) を必ず確認してください。
+テンプレートの切り出し方や、YAML構文の注意点、必須となる構成要素（Action/Example/Instruction）について定義されています。
 
-#### 動作フロー
+## 🎯 プロジェクトの目的
 
-1. PRのdiffを取得
-2. Claude Code CLIでコードレビューを実行
-3. 結果をPRにコメントとして投稿
-4. LGTM且つconfidenceがしきい値以上の場合、自動マージ
+詳細なロードマップや現在のステータスについては、[PURPOSE.md](./PURPOSE.md) を参照してください。
 
-## Workflows
+## ⚖️ 憲法
 
-### Review and Auto-Merge PR
-
-PR作成・更新時に自動レビューとマージを実行するワークフローです。
-
-**トリガー条件:**
-- PRがopened/synchronize/reopenedされたとき
-- DraftでないPRのみ対象
-
-**使用方法:**
-このリポジトリでワークフローを有効化するには、Self-hosted Runnerを設定してください。
-
-## セットアップ
-
-### Self-hosted Runnerの設定
-
-1. Claude Code CLIをインストールしたマシンを準備
-2. OrganizationのSettings > Actions > Runners からrunnerを追加
-3. ワークフローが`runs-on: self-hosted`で実行されるよう設定
-
-### Claude Code CLIのインストール
-
-```bash
-npm install -g @anthropic-ai/claude-code
-```
-
-### Actions Fixer
-
-GitHub Actionsのワークフローやアクションのエラーをチェックし、一般的な問題を自動修正するActionです。
-
-#### 使用方法
-
-リポジトリのワークフローから参照：
-
-```yaml
-name: Validate and Fix Workflows
-
-on:
-  pull_request:
-    paths:
-      - '.github/**'
-  workflow_dispatch:
-
-permissions:
-  contents: write
-  pull-requests: write
-
-jobs:
-  validate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Validate Workflows
-        uses: your-org/github-actions-actions/actions/action-fixer@main
-        with:
-          fail-on-error: 'true'
-          auto-fix: 'false'
-```
-
-#### 入力パラメータ
-
-| パラメータ | 必須 | デフォルト | 説明 |
-|-----------|------|-----------|------|
-| `fail-on-error` | | `true` | エラー発見時にジョブを失敗させるか |
-| `auto-fix` | | `false` | 自動修正を適用してPRを作成するか |
-| `commit-message` | | `fix: correct workflow validation issues` | 自動修正時のコミットメッセージ |
-
-#### 検出・修正する問題
-
-| 問題 | 説明 | 自動修正 |
-|------|------|----------|
-| YAML構文エラー | yamllintとPython yamlモジュールで検証 | ✅ |
-| 破損したxargsコマンド | `xargs -I {} sh -c` の問題を検出 | ✅ |
-| 欠落したruns-on | ジョブにruns-onがない場合を検出 | ❌ |
-| 非推奨アクション | `@v1`, `@v2` などの古いバージョンを検出 | ❌ |
-| 権限設定の欠如 | permissionsがない場合を警告 | ❌ |
-
-#### 動作フロー
-
-1. YAML構文の検証
-2. 一般的なワークフローの問題をチェック
-3. auto-fixが有効な場合、問題を自動修正
-4. 修正内容でPRを自動作成（auto-fix=trueの場合）
-
-## ライセンス
-
-TBD
+このリポジトリの不変の原則については、[SYSTEM_CONSTITUTION.md](./SYSTEM_CONSTITUTION.md) を参照してください。

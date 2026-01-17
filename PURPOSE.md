@@ -19,10 +19,11 @@
 - ✅ `auto-document`: ドキュメント自動更新Actionの新規作成
 - ✅ `release-notes-ai`: AIリリースノート生成Actionの新規作成
 
-### Phase 3: Stabilization & Adoption (Next)
-- ⬜ 各Actionの検証用ワークフローの作成
+### Phase 3: Stabilization & Adoption (In Progress)
+- ✅ 各Actionの検証用ワークフローの作成 (`examples/`)
+- ✅ 各Actionの導入ガイドの作成 (`instructions/`)
 - ⬜ 組織内プロジェクトへの導入とフィードバック収集
-- ⬜ ドキュメント（README）の整備
+- ✅ ドキュメント（README）の整備
 
 ## Core Competencies
 
