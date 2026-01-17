@@ -1,0 +1,34 @@
+name: Auto Update Documentation
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - 'actions/**'
+
+permissions:
+  contents: write
+
+jobs:
+  update-docs:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Auto Document
+        uses: ./actions/auto-document
+        with:
+          source-path: '.'
+          doc-path: 'README.md'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit and Push changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add README.md
+          git commit -m "docs: automatic update by AI [skip ci]" || echo "No changes to commit"
+          git push

@@ -47,6 +47,17 @@ To use this example in your repository:
 3. Commit and push the file
 4. Trigger the workflow manually via the Actions tab and specify the path and instructions
 
+### auto-document-example.yml
+
+Demonstrates how to use the `auto-document` action to keep your documentation in sync with your source code changes.
+
+To use this example in your repository:
+
+1. Copy `auto-document-example.yml` to your repository's `.github/workflows/` directory
+2. Adjust the `source-path` and `doc-path` as needed
+3. Ensure you are running on a `self-hosted` runner where the `claude` CLI is available
+4. Commit and push the file
+
 ## Using Actions from This Repository
 
 All actions in this repository can be referenced as:
