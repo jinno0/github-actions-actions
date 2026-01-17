@@ -1,0 +1,66 @@
+name: 'Spec to Code'
+description: 'Generate code from Markdown specifications using Claude Code CLI'
+inputs:
+  spec-path:
+    description: 'Path to the Markdown specification file'
+    required: true
+  output-dir:
+    description: 'Directory where the code should be generated'
+    required: false
+    default: '.'
+  language:
+    description: 'Primary programming language (e.g., Python, TypeScript)'
+    required: false
+    default: 'TypeScript'
+  claude-model:
+    description: 'Claude model to use (default: sonnet)'
+    required: false
+    default: 'sonnet'
+  github-token:
+    description: 'GitHub token'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Ensure output directory exists
+      shell: bash
+      run: mkdir -p ${{ inputs.output-dir }}
+
+    - name: Generate Code with Claude Code CLI
+      shell: bash
+      run: |
+        SPEC_PATH="${{ inputs.spec-path }}"
+        OUTPUT_DIR="${{ inputs.output-dir }}"
+        LANG="${{ inputs.language }}"
+        MODEL="${{ inputs.claude-model }}"
+
+        if [ ! -f "$SPEC_PATH" ]; then
+          echo "::error::Specification file not found: $SPEC_PATH"
+          exit 1
+        fi
+
+        echo "Generating $LANG code in $OUTPUT_DIR based on $SPEC_PATH..."
+
+        # Create generation prompt
+        echo "You are an expert software engineer. Your task is to generate high-quality, production-ready $LANG code based on the provided specification." > /tmp/gen_prompt.txt
+        echo '' >> /tmp/gen_prompt.txt
+        echo 'SPECIFICATION:' >> /tmp/gen_prompt.txt
+        echo "$(cat "$SPEC_PATH")" >> /tmp/gen_prompt.txt
+        echo '' >> /tmp/gen_prompt.txt
+        echo 'GOAL:' >> /tmp/gen_prompt.txt
+        echo "Generate the code in the directory: $OUTPUT_DIR" >> /tmp/gen_prompt.txt
+        echo '' >> /tmp/gen_prompt.txt
+        echo 'INSTRUCTIONS:' >> /tmp/gen_prompt.txt
+        echo '1. Analyze the specification thoroughly.' >> /tmp/gen_prompt.txt
+        echo '2. Implement all features and requirements described.' >> /tmp/gen_prompt.txt
+        echo "3. Follow best practices for $LANG." >> /tmp/gen_prompt.txt
+        echo '4. Include necessary unit tests.' >> /tmp/gen_prompt.txt
+        echo '5. Provide a brief README.md in the output directory explaining how to run the code.' >> /tmp/gen_prompt.txt
+        echo "6. Use the file system tools to create the files directly in $OUTPUT_DIR." >> /tmp/gen_prompt.txt
+        echo '7. If there are any ambiguities, make reasonable assumptions and document them.' >> /tmp/gen_prompt.txt
+        echo '' >> /tmp/gen_prompt.txt
+        echo 'Start generating now.' >> /tmp/gen_prompt.txt
+
+        # Run Claude Code CLI
+        # Note: Using --dangerously-skip-permissions as it is running in a controlled self-hosted environment
+        claude --dangerously-skip-permissions --model "$MODEL" < /tmp/gen_prompt.txt

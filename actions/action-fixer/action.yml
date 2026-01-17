@@ -13,6 +13,10 @@ inputs:
     description: 'Commit message for auto-fix (default: "fix: correct workflow validation issues")'
     required: false
     default: 'fix: correct workflow validation issues'
+  claude-model:
+    description: 'Claude model for AI-powered fixes (default: sonnet)'
+    required: false
+    default: 'sonnet'
 runs:
   using: 'composite'
   steps:
@@ -96,6 +100,34 @@ runs:
             echo "  Issues found:"
             echo -e "$ISSUES"
             ERRORS=$((ERRORS + 1))
+
+            # AI-powered fix if enabled
+            if [ "${{ inputs.auto-fix }}" = "true" ]; then
+              echo "  Attempting AI-powered fix for $file..."
+              
+              # Create fix prompt
+              echo 'You are an expert in GitHub Actions. Fix the following workflow file based on the detected issues.' > /tmp/fix_prompt.txt
+              echo '' >> /tmp/fix_prompt.txt
+              echo "FILE: $file" >> /tmp/fix_prompt.txt
+              echo 'ISSUES:' >> /tmp/fix_prompt.txt
+              echo "$ISSUES" >> /tmp/fix_prompt.txt
+              echo '' >> /tmp/fix_prompt.txt
+              echo 'CURRENT CONTENT:' >> /tmp/fix_prompt.txt
+              echo "$(cat "$file")" >> /tmp/fix_prompt.txt
+              echo '' >> /tmp/fix_prompt.txt
+              echo 'GOAL:' >> /tmp/fix_prompt.txt
+              echo 'Fix the issues while preserving the intended logic of the workflow.' >> /tmp/fix_prompt.txt
+              echo "Use the file system tools to overwrite the file \"$file\" with the corrected content." >> /tmp/fix_prompt.txt
+              echo 'If you cannot fix an issue, explain why.' >> /tmp/fix_prompt.txt
+              echo '' >> /tmp/fix_prompt.txt
+              echo 'Start fixing now.' >> /tmp/fix_prompt.txt
+              if claude --dangerously-skip-permissions --model "${{ inputs.claude-model }}" < /tmp/fix_prompt.txt > /tmp/claude_fix.log 2>&1; then
+                echo "  AI-powered fix completed for $file"
+                FIXES=$((FIXES + 1))
+              else
+                echo "  AI-powered fix failed for $file. Check /tmp/claude_fix.log"
+              fi
+            fi
           else
             echo "  OK"
           fi
@@ -137,15 +169,18 @@ runs:
             git checkout -b "$BRANCH"
             git push origin "$BRANCH"
 
-            gh pr create \
-              --title "fix: automated workflow validation fixes" \
-              --body "This PR was automatically created by GitHub Actions Fixer to resolve workflow validation issues.
+            # Create PR body
+            PR_BODY="This PR was automatically created by GitHub Actions Fixer to resolve workflow validation issues.
 
             **Changes:**
             - Fixed YAML validation commands
             - Corrected syntax errors
 
-            Please review the changes before merging." \
+            Please review the changes before merging."
+
+            gh pr create \
+              --title "fix: automated workflow validation fixes" \
+              --body "$PR_BODY" \
               --base main
           fi
         fi

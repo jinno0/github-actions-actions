@@ -1,0 +1,59 @@
+name: 'AI Release Notes'
+description: 'Generate high-quality release notes from commit history using Claude Code CLI'
+inputs:
+  base-ref:
+    description: 'Base reference (e.g., previous tag or main)'
+    required: false
+    default: 'main'
+  head-ref:
+    description: 'Head reference (e.g., current branch or tag)'
+    required: false
+    default: 'HEAD'
+  output-file:
+    description: 'File to save the release notes to'
+    required: false
+    default: 'RELEASE_NOTES.md'
+  claude-model:
+    description: 'Claude model to use (default: sonnet)'
+    required: false
+    default: 'sonnet'
+  github-token:
+    description: 'GitHub token'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Generate Release Notes with Claude Code CLI
+      shell: bash
+      run: |
+        BASE="${{ inputs.base-ref }}"
+        HEAD="${{ inputs.head-ref }}"
+        OUTPUT="${{ inputs.output-file }}"
+        MODEL="${{ inputs.claude-model }}"
+
+        echo "Generating release notes from $BASE to $HEAD..."
+
+        # Collect commit logs
+        GIT_LOG=$(git log "$BASE..$HEAD" --oneline --no-merges)
+        # Collect merged PRs
+        PRS=$(gh pr list --base main --state merged --json title,number,author -L 50)
+
+        # Create prompt
+        echo 'You are a release manager. Generate a professional and user-friendly release note based on the following changes.' > /tmp/release_prompt.txt
+        echo '' >> /tmp/release_prompt.txt
+        echo 'COMMIT LOGS:' >> /tmp/release_prompt.txt
+        echo "$GIT_LOG" >> /tmp/release_prompt.txt
+        echo '' >> /tmp/release_prompt.txt
+        echo 'MERGED PRs (JSON):' >> /tmp/release_prompt.txt
+        echo "$PRS" >> /tmp/release_prompt.txt
+        echo '' >> /tmp/release_prompt.txt
+        echo 'GOAL:' >> /tmp/release_prompt.txt
+        echo '1. Summarize the changes into logical categories (e.g., New Features, Bug Fixes, Documentation, Maintenance).' >> /tmp/release_prompt.txt
+        echo '2. Highlight significant changes for the end-users.' >> /tmp/release_prompt.txt
+        echo '3. Output the result in Markdown format.' >> /tmp/release_prompt.txt
+        echo "4. Use the file system tools to save the result to \"$OUTPUT\"." >> /tmp/release_prompt.txt
+        echo '' >> /tmp/release_prompt.txt
+        echo 'Start generating now.' >> /tmp/release_prompt.txt
+
+        # Run Claude Code CLI
+        claude --dangerously-skip-permissions --model "$MODEL" < /tmp/release_prompt.txt

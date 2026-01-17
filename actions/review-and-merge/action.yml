@@ -24,6 +24,10 @@ inputs:
     description: 'Path to custom comment template (optional, uses built-in template if not specified)'
     required: false
     default: ''
+  custom-rules:
+    description: 'Additional rules or guidelines for the review'
+    required: false
+    default: ''
 runs:
   using: 'composite'
   steps:
@@ -54,6 +58,7 @@ runs:
         MODEL="${{ inputs.claude-model }}"
         THRESHOLD="${{ inputs.lgtm-threshold }}"
         REVIEW_PROMPT_TEMPLATE="${{ inputs.review-prompt-template }}"
+        CUSTOM_RULES="${{ inputs.custom-rules }}"
 
         echo "Running Claude Code CLI review..."
         echo "Model: $MODEL"
@@ -69,6 +74,12 @@ runs:
 
         # Create review prompt from template
         cat "$REVIEW_PROMPT_FILE" > /tmp/review_prompt.txt
+        
+        # Inject custom rules if provided
+        if [ -n "$CUSTOM_RULES" ]; then
+          echo -e "\nAdditional Rules for this Review:\n$CUSTOM_RULES" >> /tmp/review_prompt.txt
+        fi
+
         echo '' >> /tmp/review_prompt.txt
 
         # Append PR diff

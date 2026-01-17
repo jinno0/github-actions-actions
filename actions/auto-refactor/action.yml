@@ -1,0 +1,49 @@
+name: 'Auto Refactor'
+description: 'Automatically refactor code using Claude Code CLI'
+inputs:
+  path:
+    description: 'File or directory to refactor'
+    required: true
+  instruction:
+    description: 'Specific refactoring instructions (e.g., "Use async/await", "Improve readability")'
+    required: false
+    default: 'Improve code quality, readability, and follow best practices.'
+  claude-model:
+    description: 'Claude model to use (default: sonnet)'
+    required: false
+    default: 'sonnet'
+  github-token:
+    description: 'GitHub token'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Refactor with Claude Code CLI
+      shell: bash
+      run: |
+        TARGET_PATH="${{ inputs.path }}"
+        INSTRUCTION="${{ inputs.instruction }}"
+        MODEL="${{ inputs.claude-model }}"
+
+        if [ ! -e "$TARGET_PATH" ]; then
+          echo "::error::Target path not found: $TARGET_PATH"
+          exit 1
+        fi
+
+        echo "Refactoring $TARGET_PATH with instructions: $INSTRUCTION"
+
+        # Create refactor prompt
+        echo 'You are an expert software architect and engineer. Your task is to refactor the code at the following path.' > /tmp/refactor_prompt.txt
+        echo '' >> /tmp/refactor_prompt.txt
+        echo "PATH: $TARGET_PATH" >> /tmp/refactor_prompt.txt
+        echo "INSTRUCTION: $INSTRUCTION" >> /tmp/refactor_prompt.txt
+        echo '' >> /tmp/refactor_prompt.txt
+        echo 'GOAL:' >> /tmp/refactor_prompt.txt
+        echo 'Refactor the code to improve quality, maintainability, and adherence to the provided instruction.' >> /tmp/refactor_prompt.txt
+        echo 'Use the file system tools to modify the files directly.' >> /tmp/refactor_prompt.txt
+        echo 'Always ensure the code remains functional and pass any existing tests if possible.' >> /tmp/refactor_prompt.txt
+        echo '' >> /tmp/refactor_prompt.txt
+        echo 'Start refactoring now.' >> /tmp/refactor_prompt.txt
+
+        # Run Claude Code CLI
+        claude --dangerously-skip-permissions --model "$MODEL" < /tmp/refactor_prompt.txt

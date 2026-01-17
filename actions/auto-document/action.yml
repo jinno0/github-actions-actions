@@ -1,0 +1,46 @@
+name: 'Auto Document'
+description: 'Automatically update documentation based on code changes using Claude Code CLI'
+inputs:
+  source-path:
+    description: 'Path to source code to analyze'
+    required: false
+    default: '.'
+  doc-path:
+    description: 'Path to the document to update (e.g., README.md)'
+    required: false
+    default: 'README.md'
+  claude-model:
+    description: 'Claude model to use (default: sonnet)'
+    required: false
+    default: 'sonnet'
+  github-token:
+    description: 'GitHub token'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Update Documentation with Claude Code CLI
+      shell: bash
+      run: |
+        SOURCE_PATH="${{ inputs.source-path }}"
+        DOC_PATH="${{ inputs.doc-path }}"
+        MODEL="${{ inputs.claude-model }}"
+
+        echo "Updating $DOC_PATH based on source in $SOURCE_PATH..."
+
+        # Create documentation prompt
+        echo 'You are a technical writer and expert developer. Your task is to update the documentation to reflect the current state of the source code.' > /tmp/doc_prompt.txt
+        echo '' >> /tmp/doc_prompt.txt
+        echo "SOURCE PATH: $SOURCE_PATH" >> /tmp/doc_prompt.txt
+        echo "DOCUMENT TO UPDATE: $DOC_PATH" >> /tmp/doc_prompt.txt
+        echo '' >> /tmp/doc_prompt.txt
+        echo 'GOAL:' >> /tmp/doc_prompt.txt
+        echo "1. Analyze the source code in $SOURCE_PATH." >> /tmp/doc_prompt.txt
+        echo "2. Update $DOC_PATH to ensure it accurately describes the features, usage, and structure of the code." >> /tmp/doc_prompt.txt
+        echo '3. Keep the documentation clear, concise, and professional.' >> /tmp/doc_prompt.txt
+        echo "4. Use the file system tools to overwrite $DOC_PATH with the updated content." >> /tmp/doc_prompt.txt
+        echo '' >> /tmp/doc_prompt.txt
+        echo 'Start updating now.' >> /tmp/doc_prompt.txt
+
+        # Run Claude Code CLI
+        claude --dangerously-skip-permissions --model "$MODEL" < /tmp/doc_prompt.txt
