@@ -51,31 +51,24 @@ runs:
         echo "LGTM Threshold: $THRESHOLD/10"
 
         # Create review prompt
-        cat > /tmp/review_prompt.txt << 'EOF'
-You are reviewing a GitHub Pull Request. Your task:
-
-1. Review the code changes in the diff
-2. Check for:
-   - Logic errors and bugs
-   - Security vulnerabilities
-   - Performance issues
-   - Code style inconsistencies
-   - Missing error handling
-   - Breaking changes
-3. Provide your verdict as:
-   - LGTM (Looks Good To Me) - if the PR is good to merge
-   - REQUEST_CHANGES - if the PR needs changes
-
-Respond in this exact JSON format:
-{
-  "verdict": "LGTM" or "REQUEST_CHANGES",
-  "confidence": 1-10,
-  "summary": "Brief summary of your review",
-  "issues": ["list of issues found (empty if LGTM)"]
-}
-
-The diff follows:
-EOF
+        echo 'You are reviewing a GitHub Pull Request. Your task:' > /tmp/review_prompt.txt
+        echo '' >> /tmp/review_prompt.txt
+        echo '1. Review the code changes in the diff' >> /tmp/review_prompt.txt
+        echo '2. Check for:' >> /tmp/review_prompt.txt
+        echo '   - Logic errors and bugs' >> /tmp/review_prompt.txt
+        echo '   - Security vulnerabilities' >> /tmp/review_prompt.txt
+        echo '   - Performance issues' >> /tmp/review_prompt.txt
+        echo '   - Code style inconsistencies' >> /tmp/review_prompt.txt
+        echo '   - Missing error handling' >> /tmp/review_prompt.txt
+        echo '   - Breaking changes' >> /tmp/review_prompt.txt
+        echo '3. Provide your verdict as:' >> /tmp/review_prompt.txt
+        echo '   - LGTM (Looks Good To Me) - if the PR is good to merge' >> /tmp/review_prompt.txt
+        echo '   - REQUEST_CHANGES - if the PR needs changes' >> /tmp/review_prompt.txt
+        echo '' >> /tmp/review_prompt.txt
+        echo 'Respond in this exact JSON format:' >> /tmp/review_prompt.txt
+        echo '{"verdict": "LGTM" or "REQUEST_CHANGES", "confidence": 1-10, "summary": "Brief summary of your review", "issues": ["list of issues found (empty if LGTM)"]}' >> /tmp/review_prompt.txt
+        echo '' >> /tmp/review_prompt.txt
+        echo 'The diff follows:' >> /tmp/review_prompt.txt
 
         cat /tmp/pr_diff.patch >> /tmp/review_prompt.txt
 
