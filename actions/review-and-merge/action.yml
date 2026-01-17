@@ -1,5 +1,5 @@
 name: 'Review PR and Auto-Merge'
-description: 'Review a PR using Claude Code CLI and merge if LGTM. Can also auto-fix issues. Automatically rebases branch if behind and attempts to resolve merge conflicts.'
+description: 'Automatically fix code issues using Claude Code CLI and merge the PR.'
 inputs:
   github-token:
     description: 'GitHub token with repo permissions'

@@ -9,7 +9,7 @@ Self-hosted runner上で動作する **Claude Code CLI** を活用し、文脈�
 
 | Action | 概要 | セットアップガイド |
 |--------|------|-------------------|
-| `review-and-merge` | PRをAIがレビューし、品質基準を満たせば自動マージ | [Guide](./instructions/review-and-merge.md) |
+| `review-and-merge` | AIがコードを自動修正し、そのまま自動マージ（Auto-Fix標準装備） | [Guide](./instructions/review-and-merge.md) |
 | `spec-to-code` | Markdown仕様書からコードを自動生成 | [Guide](./instructions/spec-to-code.md) |
 | `action-fixer` | Workflowのエラーを検知し、AIが自動修正 | [Guide](./instructions/action-fixer.md) |
 | `auto-refactor` | 自然言語の指示に基づき、既存コードをリファクタリング | [Guide](./instructions/auto-refactor.md) |
