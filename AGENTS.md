@@ -30,7 +30,7 @@ AIエージェントは、タスク実行時に**最新のプロジェクト情�
 - ✅ **プロンプト肥大化防止**: 全文ではなく「必要な部分だけ」埋め込み
 - ✅ **常に最新情報**: 実行時に動的に読み込むので、古い情報を見る心配がない
 - ✅ **WORKTREE問題解決**: TASKS.mdがworktreeにない場合でも、内容を伝達可能
-- ✅ **スリム化**: 過去の情報は埋め込まず、現在の情報だけに集中
+- ✅ **スリム化**: 過去の情報は埋め込みず、現在の情報だけに集中
 
 ## 必読ファイル（この順で読むこと）
 
@@ -271,3 +271,42 @@ run: |
 - [GitHub Actions: Composite actions](https://docs.github.com/en/actions/creating-actions/creating-a-composite-action)
 - [YAML仕様](https://yaml.org/spec/)
 - 既存の実装: `actions/review-and-merge/` が参考実装
+
+## Action構造標準（Standard Action Structure）
+
+新しい Action を作成または既存の Action を整備する際は、必ず以下の3つの構成要素をセットで用意してください。これにより、開発者と利用者の双方がスムーズに利用できるようになります。
+
+### 1. Action 実装 (`actions/{name}/`)
+- **`action.yml`**: Action の定義ファイル。
+- **`templates/`**: プロンプトや通知メッセージのテンプレートファイル。`.yml` にハードコーディングせず、必ずここから読み込むこと。
+
+### 2. 利用例 (`examples/{name}-example.yml`)
+- ユーザーがコピー＆ペーストしてすぐに使える完全なワークフローファイル。
+- `examples/` ディレクトリ直下に配置する。
+- 必要な `permissions` や `runs-on: self-hosted` を明記すること。
+
+### 3. 利用ガイド (`instructions/{name}.md`)
+- `examples/` のワークフローを参照し、セットアップ手順を解説するドキュメント。
+- `instructions/` ディレクトリ直下に配置する。
+- 以下の項目を含めること：
+    - **Prerequisites**: 前提条件（Runner, Token権限など）
+    - **Setup Instructions**: 具体的な導入手順
+    - **Usage**: 使い方やトリガーの説明
+
+### 構成例
+
+```text
+root/
+├── actions/
+│   └── my-awesome-action/
+│       ├── action.yml
+│       └── templates/
+│           └── prompt.txt
+├── examples/
+│   └── my-awesome-action-example.yml
+└── instructions/
+    └── my-awesome-action.md
+```
+
+### 自動化ルール
+AIエージェントは、Action を新規作成または大幅に修正した場合、上記の `examples/` と `instructions/` も同期して更新（または作成）しなければならない。
