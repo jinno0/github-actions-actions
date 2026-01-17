@@ -32,15 +32,36 @@ This action uses Claude Code CLI to review Pull Requests and automatically merge
       - Ensure variable naming follows camelCase.
     ```
 
-## Auto-Fix Mode
+## Auto-Fix Mode (Enabled by default)
 
-If you set `auto-fix: 'true'`, the action will:
+By default (`auto-fix: 'true'`), the action will:
 1.  Analyze the code changes.
 2.  **Automatically apply fixes** to the files if issues are found (using AI).
 3.  Commit and push the fixes to the branch.
 4.  Merge the PR automatically.
 
-**Note**: In this mode, detailed review comments are skipped in favor of direct code correction.
+If you want to only receive review comments without automatic code changes, set `auto-fix: 'false'`.
+
+**Note**: In auto-fix mode, detailed review comments are skipped in favor of direct code correction.
+
+## Automatic Rebase and Conflict Resolution
+
+Before merging, the action will automatically:
+
+1. **Check if the PR branch is behind** the base branch (`main`, `develop`, etc.)
+2. **Rebase the branch** if it's behind, using `git rebase origin/<base-branch>`
+3. **Attempt automatic conflict resolution** if rebase fails:
+   - Detects conflicted files using `git diff --name-only --diff-filter=U`
+   - Resolves conflicts by preferring the base branch version (`git checkout --theirs`)
+   - Continues the rebase after resolution
+   - Force pushes with `--force-with-lease` for safety
+
+If conflicts cannot be resolved automatically, the action will:
+- Abort the rebase cleanly
+- Post a warning: `Could not automatically resolve merge conflicts. Manual intervention required.`
+- Exit with error status, preventing the merge
+
+This ensures that PRs are always up-to-date with the base branch before merging, reducing merge conflicts.
 
 ## Usage
 

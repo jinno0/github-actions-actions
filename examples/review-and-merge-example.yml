@@ -28,8 +28,8 @@ jobs:
           claude-model: 'sonnet'
           lgtm-threshold: '7'
           merge-method: 'squash'
-          # Optional: Automatically fix issues and merge
-          # auto-fix: 'true'
+          # Optional: auto-fix is 'true' by default. Set to 'false' to only review without fixing.
+          # auto-fix: 'false'
           # Optional: Custom rules for the review
           custom-rules: |
             - Ensure all function inputs are validated.

@@ -1,5 +1,5 @@
 name: 'Review PR and Auto-Merge'
-description: 'Review a PR using Claude Code CLI and merge if LGTM. Can also auto-fix issues.'
+description: 'Review a PR using Claude Code CLI and merge if LGTM. Can also auto-fix issues. Automatically rebases branch if behind and attempts to resolve merge conflicts.'
 inputs:
   github-token:
     description: 'GitHub token with repo permissions'
@@ -29,9 +29,9 @@ inputs:
     required: false
     default: ''
   auto-fix:
-    description: 'Whether to automatically fix issues found in the review (default: false)'
+    description: 'Whether to automatically fix issues found in the review (default: true)'
     required: false
-    default: 'false'
+    default: 'true'
 runs:
   using: 'composite'
   steps:
@@ -185,6 +185,66 @@ runs:
                       "$TEMPLATE_FILE")
 
         gh pr comment $PR_NUMBER --body "$COMMENT"
+
+    - name: Rebase if needed before merge
+      shell: bash
+      if: steps.review.outputs.verdict == 'LGTM' && steps.review.outputs.confidence >= inputs.lgtm-threshold
+      run: |
+        PR_NUMBER=${{ github.event.pull_request.number }}
+        MERGE_METHOD="${{ inputs.merge-method }}"
+        BASE_BRANCH="${{ github.event.pull_request.base.ref_name }}"
+
+        echo "Checking if rebase is needed..."
+        # Fetch latest base branch
+        git fetch origin "$BASE_BRANCH"
+
+        # Check if branch is behind base
+        BEHIND_COUNT=$(git rev-list --count HEAD..origin/"$BASE_BRANCH" 2>/dev/null || echo "0")
+
+        if [ "$BEHIND_COUNT" -gt 0 ]; then
+          echo "Branch is $BEHIND commits behind $BASE_BRANCH. Rebasing..."
+
+          # Attempt rebase
+          if git rebase origin/"$BASE_BRANCH"; then
+            echo "Rebase successful. Force pushing..."
+            git push --force-with-lease
+          else
+            echo "Rebase failed. Attempting to resolve conflicts..."
+
+            # Check if there are conflicts
+            if ! git diff --quiet; then
+              echo "Conflicts detected. Attempting automatic resolution..."
+
+              # Try to resolve using 'theirs' for conflicts (prefer base branch changes)
+              # This is a conservative approach - can be customized
+              git diff --name-only --diff-filter=U | while read -r file; do
+                echo "Found conflict in: $file"
+                # Checkout the base branch version for conflict files
+                git checkout --theirs "$file" 2>/dev/null || git checkout --ours "$file"
+                git add "$file"
+              done
+
+              # Continue rebase after resolution
+              if git rebase --continue; then
+                echo "Conflicts resolved. Committing and pushing..."
+                git config user.email "github-actions[bot]@users.noreply.github.com"
+                git config user.name "github-actions[bot]"
+                git push --force-with-lease
+              else
+                echo "Failed to resolve conflicts automatically. Aborting rebase."
+                git rebase --abort 2>/dev/null || true
+                echo "::warning::Could not automatically resolve merge conflicts. Manual intervention required."
+                exit 1
+              fi
+            else
+              echo "Rebase failed for unknown reason. Aborting."
+              git rebase --abort 2>/dev/null || true
+              exit 1
+            fi
+          fi
+        else
+          echo "Branch is up to date with $BASE_BRANCH. No rebase needed."
+        fi
 
     - name: Merge PR if LGTM
       shell: bash
