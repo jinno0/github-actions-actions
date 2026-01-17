@@ -58,6 +58,17 @@ To use this example in your repository:
 3. Ensure you are running on a `self-hosted` runner where the `claude` CLI is available
 4. Commit and push the file
 
+### release-notes-ai-example.yml
+
+Demonstrates how to use the `release-notes-ai` action to generate human-readable release notes from your commit history and Pull Requests.
+
+To use this example in your repository:
+
+1. Copy `release-notes-ai-example.yml` to your repository's `.github/workflows/` directory
+2. Ensure you are running on a `self-hosted` runner where the `claude` CLI and `gh` CLI are available
+3. Commit and push the file
+4. Create a new tag (e.g., `git tag v1.0.1 && git push origin v1.0.1`) to trigger the workflow
+
 ## Using Actions from This Repository
 
 All actions in this repository can be referenced as:

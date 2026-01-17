@@ -1,0 +1,39 @@
+name: Generate AI Release Notes
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release-notes:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get previous tag
+        id: previoustag
+        run: |
+          # Get the second most recent tag
+          PREV_TAG=$(git tag --sort=-v:refname | sed -n '2p')
+          echo "prev_tag=$PREV_TAG" >> $GITHUB_OUTPUT
+
+      - name: Run AI Release Notes
+        uses: ./actions/release-notes-ai
+        with:
+          base-ref: ${{ steps.previoustag.outputs.prev_tag || 'main' }}
+          head-ref: ${{ github.ref_name }}
+          output-file: 'RELEASE_NOTES.md'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update Release with notes
+        run: |
+          gh release edit ${{ github.ref_name }} --notes-file RELEASE_NOTES.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
