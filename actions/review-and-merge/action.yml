@@ -1,0 +1,172 @@
+name: 'Review PR and Auto-Merge'
+description: 'Review a PR using Claude Code CLI and merge if LGTM'
+inputs:
+  github-token:
+    description: 'GitHub token with repo permissions'
+    required: true
+  claude-model:
+    description: 'Claude model to use (default: sonnet)'
+    required: false
+    default: 'sonnet'
+  lgtm-threshold:
+    description: 'Minimum confidence score for LGTM (1-10, default: 7)'
+    required: false
+    default: '7'
+  merge-method:
+    description: 'Merge method (squash, merge, rebase)'
+    required: false
+    default: 'squash'
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout PR
+      shell: bash
+      run: |
+        PR_NUMBER=${{ github.event.pull_request.number }}
+        echo "Checking out PR #$PR_NUMBER"
+        gh pr checkout $PR_NUMBER
+
+    - name: Get PR diff
+      shell: bash
+      id: diff
+      run: |
+        PR_NUMBER=${{ github.event.pull_request.number }}
+        echo "Fetching PR diff..."
+        gh pr diff $PR_NUMBER > /tmp/pr_diff.patch
+        echo "diff_size=$(wc -c < /tmp/pr_diff.patch)" >> $GITHUB_OUTPUT
+        echo "PR diff saved to /tmp/pr_diff.patch"
+
+    - name: Review with Claude Code CLI
+      shell: bash
+      id: review
+      run: |
+        PR_NUMBER=${{ github.event.pull_request.number }}
+        PR_TITLE="${{ github.event.pull_request.title }}"
+        PR_BODY="${{ github.event.pull_request.body }}"
+        MODEL="${{ inputs.claude-model }}"
+        THRESHOLD="${{ inputs.lgtm-threshold }}"
+
+        echo "Running Claude Code CLI review..."
+        echo "Model: $MODEL"
+        echo "LGTM Threshold: $THRESHOLD/10"
+
+        # Create review prompt
+        cat > /tmp/review_prompt.txt << 'EOF'
+You are reviewing a GitHub Pull Request. Your task:
+
+1. Review the code changes in the diff
+2. Check for:
+   - Logic errors and bugs
+   - Security vulnerabilities
+   - Performance issues
+   - Code style inconsistencies
+   - Missing error handling
+   - Breaking changes
+3. Provide your verdict as:
+   - LGTM (Looks Good To Me) - if the PR is good to merge
+   - REQUEST_CHANGES - if the PR needs changes
+
+Respond in this exact JSON format:
+{
+  "verdict": "LGTM" or "REQUEST_CHANGES",
+  "confidence": 1-10,
+  "summary": "Brief summary of your review",
+  "issues": ["list of issues found (empty if LGTM)"]
+}
+
+The diff follows:
+EOF
+
+        cat /tmp/pr_diff.patch >> /tmp/review_prompt.txt
+
+        # Run Claude Code CLI
+        if claude --dangerously-skip-permissions --model "$MODEL" < /tmp/review_prompt.txt > /tmp/claude_response.json 2>&1; then
+          echo "Claude review completed"
+        else
+          echo "Claude CLI failed, using fallback"
+          echo '{"verdict":"REQUEST_CHANGES","confidence":1,"summary":"Claude CLI error","issues":["Claude Code CLI failed to execute"]}' > /tmp/claude_response.json
+        fi
+
+        # Parse response (simple extraction)
+        if grep -q '"verdict"[[:space:]]*:[[:space:]]*"LGTM"' /tmp/claude_response.json; then
+          VERDICT="LGTM"
+        else
+          VERDICT="REQUEST_CHANGES"
+        fi
+
+        # Extract confidence (default to 1 if not found)
+        CONFIDENCE=$(grep -oP '"confidence"[[:space:]]*:[[:space:]]*\K\d+' /tmp/claude_response.json || echo "1")
+
+        # Extract summary
+        SUMMARY=$(grep -oP '"summary"[[:space:]]*:[[:space:]]*"\K[^"]*' /tmp/claude_response.json || echo "No summary")
+
+        echo "verdict=$VERDICT" >> $GITHUB_OUTPUT
+        echo "confidence=$CONFIDENCE" >> $GITHUB_OUTPUT
+        echo "summary=$SUMMARY" >> $GITHUB_OUTPUT
+
+        # Save full response for comment
+        cp /tmp/claude_response.json /tmp/review_result.json
+
+        echo "Review Verdict: $VERDICT"
+        echo "Confidence: $CONFIDENCE/$THRESHOLD"
+
+    - name: Post review comment
+      shell: bash
+      if: always()
+      run: |
+        PR_NUMBER=${{ github.event.pull_request.number }}
+        VERDICT="${{ steps.review.outputs.verdict }}"
+        CONFIDENCE="${{ steps.review.outputs.confidence }}"
+        SUMMARY="${{ steps.review.outputs.summary }}"
+        THRESHOLD="${{ inputs.lgtm-threshold }}"
+
+        # Create comment
+        COMMENT="## 🤖 Claude Code Review
+
+**Verdict:** $VERDICT
+**Confidence:** $CONFIDENCE/$THRESHOLD
+
+**Summary:**
+$SUMMARY
+
+"
+
+        if [ "$VERDICT" = "LGTM" ] && [ "$CONFIDENCE" -ge "$THRESHOLD" ]; then
+          COMMENT="${COMMENT}
+✅ This PR meets the LGTM threshold and will be auto-merged.
+"
+        else
+          COMMENT="${COMMENT}
+❌ This PR does not meet the LGTM threshold or requires changes.
+"
+        fi
+
+        COMMENT="${COMMENT}
+
+---
+Reviewed by Claude Code CLI (Model: ${{ inputs.claude-model }})"
+
+        gh pr comment $PR_NUMBER --body "$COMMENT"
+
+    - name: Merge PR if LGTM
+      shell: bash
+      if: steps.review.outputs.verdict == 'LGTM' && steps.review.outputs.confidence >= inputs.lgtm-threshold
+      run: |
+        PR_NUMBER=${{ github.event.pull_request.number }}
+        MERGE_METHOD="${{ inputs.merge-method }}"
+
+        echo "Merging PR #$PR_NUMBER using $MERGE_METHOD merge..."
+
+        case "$MERGE_METHOD" in
+          squash)
+            gh pr merge $PR_NUMBER --squash --delete-branch --subject "Auto-merge after LGTM review"
+            ;;
+          merge)
+            gh pr merge $PR_NUMBER --merge --delete-branch
+            ;;
+          rebase)
+            gh pr merge $PR_NUMBER --rebase --delete-branch
+            ;;
+        esac
+
+        echo "PR merged successfully"
