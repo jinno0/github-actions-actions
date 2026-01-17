@@ -114,30 +114,29 @@ runs:
         THRESHOLD="${{ inputs.lgtm-threshold }}"
 
         # Create comment
-        COMMENT="## 🤖 Claude Code Review
+        printf -v COMMENT '## 🤖 Claude Code Review
 
-**Verdict:** $VERDICT
-**Confidence:** $CONFIDENCE/$THRESHOLD
+'"**Verdict:** %s
+**Confidence:** %s/%s
 
 **Summary:**
-$SUMMARY
+%s
 
-"
+' "$VERDICT" "$CONFIDENCE" "$THRESHOLD" "$SUMMARY"
 
         if [ "$VERDICT" = "LGTM" ] && [ "$CONFIDENCE" -ge "$THRESHOLD" ]; then
-          COMMENT="${COMMENT}
-✅ This PR meets the LGTM threshold and will be auto-merged.
-"
+          printf -v COMMENT '%s✅ This PR meets the LGTM threshold and will be auto-merged.
+' "$COMMENT"
         else
-          COMMENT="${COMMENT}
-❌ This PR does not meet the LGTM threshold or requires changes.
-"
+          printf -v COMMENT '%s❌ This PR does not meet the LGTM threshold or requires changes.
+' "$COMMENT"
         fi
 
-        COMMENT="${COMMENT}
+        printf -v COMMENT '%s
 
 ---
-Reviewed by Claude Code CLI (Model: ${{ inputs.claude-model }})"
+Reviewed by Claude Code CLI (Model: %s)
+' "$COMMENT" "${{ inputs.claude-model }}"
 
         gh pr comment $PR_NUMBER --body "$COMMENT"
 
