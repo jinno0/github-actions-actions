@@ -51,15 +51,21 @@ Before merging, the action will automatically:
 1. **Check if the PR branch is behind** the base branch (`main`, `develop`, etc.)
 2. **Rebase the branch** if it's behind, using `git rebase origin/<base-branch>`
 3. **Attempt automatic conflict resolution** if rebase fails:
-   - Detects conflicted files using `git diff --name-only --diff-filter=U`
+   - Detects conflicted files using `git status --short | grep "^UU"`
    - Resolves conflicts by preferring the base branch version (`git checkout --theirs`)
    - Continues the rebase after resolution
    - Force pushes with `--force-with-lease` for safety
 
+4. **Push all changes at once** (auto-fix commits and/or rebased commits)
+
 If conflicts cannot be resolved automatically, the action will:
 - Abort the rebase cleanly
-- Post a warning: `Could not automatically resolve merge conflicts. Manual intervention required.`
+- Post an error: `Could not automatically resolve merge conflicts. Manual intervention required.`
 - Exit with error status, preventing the merge
+
+In review mode (`auto-fix: 'false'`), the action will also report whether:
+- The branch was **automatically rebased** before merge
+- **Conflicts were resolved** automatically
 
 This ensures that PRs are always up-to-date with the base branch before merging, reducing merge conflicts.
 
