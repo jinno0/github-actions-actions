@@ -1,0 +1,12 @@
+## 🤖 Claude Code Review
+
+**Verdict:** {VERDICT}
+**Confidence:** {CONFIDENCE}/{THRESHOLD}
+
+**Summary:**
+{SUMMARY}
+
+{STATUS_MESSAGE}
+
+---
+Reviewed by Claude Code CLI (Model: {MODEL})

@@ -16,6 +16,14 @@ inputs:
     description: 'Merge method (squash, merge, rebase)'
     required: false
     default: 'squash'
+  review-prompt-template:
+    description: 'Path to custom review prompt template (optional, uses built-in template if not specified)'
+    required: false
+    default: ''
+  comment-template:
+    description: 'Path to custom comment template (optional, uses built-in template if not specified)'
+    required: false
+    default: ''
 runs:
   using: 'composite'
   steps:
@@ -45,31 +53,25 @@ runs:
         PR_BODY="${{ github.event.pull_request.body }}"
         MODEL="${{ inputs.claude-model }}"
         THRESHOLD="${{ inputs.lgtm-threshold }}"
+        REVIEW_PROMPT_TEMPLATE="${{ inputs.review-prompt-template }}"
 
         echo "Running Claude Code CLI review..."
         echo "Model: $MODEL"
         echo "LGTM Threshold: $THRESHOLD/10"
 
-        # Create review prompt
-        echo 'You are reviewing a GitHub Pull Request. Your task:' > /tmp/review_prompt.txt
-        echo '' >> /tmp/review_prompt.txt
-        echo '1. Review the code changes in the diff' >> /tmp/review_prompt.txt
-        echo '2. Check for:' >> /tmp/review_prompt.txt
-        echo '   - Logic errors and bugs' >> /tmp/review_prompt.txt
-        echo '   - Security vulnerabilities' >> /tmp/review_prompt.txt
-        echo '   - Performance issues' >> /tmp/review_prompt.txt
-        echo '   - Code style inconsistencies' >> /tmp/review_prompt.txt
-        echo '   - Missing error handling' >> /tmp/review_prompt.txt
-        echo '   - Breaking changes' >> /tmp/review_prompt.txt
-        echo '3. Provide your verdict as:' >> /tmp/review_prompt.txt
-        echo '   - LGTM (Looks Good To Me) - if the PR is good to merge' >> /tmp/review_prompt.txt
-        echo '   - REQUEST_CHANGES - if the PR needs changes' >> /tmp/review_prompt.txt
-        echo '' >> /tmp/review_prompt.txt
-        echo 'Respond in this exact JSON format:' >> /tmp/review_prompt.txt
-        echo '{"verdict": "LGTM" or "REQUEST_CHANGES", "confidence": 1-10, "summary": "Brief summary of your review", "issues": ["list of issues found (empty if LGTM)"]}' >> /tmp/review_prompt.txt
-        echo '' >> /tmp/review_prompt.txt
-        echo 'The diff follows:' >> /tmp/review_prompt.txt
+        # Use custom template if provided, otherwise use built-in
+        if [ -n "$REVIEW_PROMPT_TEMPLATE" ] && [ -f "$REVIEW_PROMPT_TEMPLATE" ]; then
+          echo "Using custom review prompt template: $REVIEW_PROMPT_TEMPLATE"
+          REVIEW_PROMPT_FILE="$REVIEW_PROMPT_TEMPLATE"
+        else
+          REVIEW_PROMPT_FILE="${{ github.action_path }}/templates/review_prompt.txt"
+        fi
 
+        # Create review prompt from template
+        cat "$REVIEW_PROMPT_FILE" > /tmp/review_prompt.txt
+        echo '' >> /tmp/review_prompt.txt
+
+        # Append PR diff
         cat /tmp/pr_diff.patch >> /tmp/review_prompt.txt
 
         # Run Claude Code CLI
@@ -112,31 +114,31 @@ runs:
         CONFIDENCE="${{ steps.review.outputs.confidence }}"
         SUMMARY="${{ steps.review.outputs.summary }}"
         THRESHOLD="${{ inputs.lgtm-threshold }}"
+        COMMENT_TEMPLATE="${{ inputs.comment-template }}"
 
-        # Create comment
-        printf -v COMMENT '## 🤖 Claude Code Review
-
-'"**Verdict:** %s
-**Confidence:** %s/%s
-
-**Summary:**
-%s
-
-' "$VERDICT" "$CONFIDENCE" "$THRESHOLD" "$SUMMARY"
-
-        if [ "$VERDICT" = "LGTM" ] && [ "$CONFIDENCE" -ge "$THRESHOLD" ]; then
-          printf -v COMMENT '%s✅ This PR meets the LGTM threshold and will be auto-merged.
-' "$COMMENT"
+        # Use custom template if provided, otherwise use built-in
+        if [ -n "$COMMENT_TEMPLATE" ] && [ -f "$COMMENT_TEMPLATE" ]; then
+          echo "Using custom comment template: $COMMENT_TEMPLATE"
+          TEMPLATE_FILE="$COMMENT_TEMPLATE"
         else
-          printf -v COMMENT '%s❌ This PR does not meet the LGTM threshold or requires changes.
-' "$COMMENT"
+          TEMPLATE_FILE="${{ github.action_path }}/templates/comment_template.txt"
         fi
 
-        printf -v COMMENT '%s
+        # Determine status message
+        if [ "$VERDICT" = "LGTM" ] && [ "$CONFIDENCE" -ge "$THRESHOLD" ]; then
+          STATUS_MESSAGE="✅ This PR meets the LGTM threshold and will be auto-merged."
+        else
+          STATUS_MESSAGE="❌ This PR does not meet the LGTM threshold or requires changes."
+        fi
 
----
-Reviewed by Claude Code CLI (Model: %s)
-' "$COMMENT" "${{ inputs.claude-model }}"
+        # Create comment from template
+        COMMENT=$(sed -e "s/{VERDICT}/$VERDICT/g" \
+                      -e "s/{CONFIDENCE}/$CONFIDENCE/g" \
+                      -e "s/{THRESHOLD}/$THRESHOLD/g" \
+                      -e "s/{SUMMARY}/$SUMMARY/g" \
+                      -e "s/{STATUS_MESSAGE}/$STATUS_MESSAGE/g" \
+                      -e "s/{MODEL}/${{ inputs.claude-model }}/g" \
+                      "$TEMPLATE_FILE")
 
         gh pr comment $PR_NUMBER --body "$COMMENT"
 
