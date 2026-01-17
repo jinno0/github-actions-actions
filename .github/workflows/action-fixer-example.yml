@@ -1,0 +1,47 @@
+# Example workflow for using action-fixer
+# Copy this to your repository's .github/workflows/ directory
+
+name: Validate and Fix Workflows
+
+on:
+  pull_request:
+    paths:
+      - '.github/**'
+  push:
+    branches: [main, develop]
+    paths:
+      - '.github/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  validate-only:
+    name: Validate Workflows
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate Workflows
+        uses: ./actions/action-fixer
+        with:
+          fail-on-error: 'true'
+          auto-fix: 'false'
+
+  auto-fix:
+    name: Auto-fix and Create PR
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Auto-fix Workflows
+        uses: ./actions/action-fixer
+        with:
+          fail-on-error: 'false'
+          auto-fix: 'true'
+          commit-message: 'fix: correct workflow validation issues'

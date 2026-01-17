@@ -1,0 +1,151 @@
+name: 'GitHub Actions Fixer'
+description: 'Validate and auto-fix common GitHub Actions workflow errors'
+inputs:
+  fail-on-error:
+    description: 'Fail the action if errors are found (default: true)'
+    required: false
+    default: 'true'
+  auto-fix:
+    description: 'Automatically fix issues and create a commit (default: false)'
+    required: false
+    default: 'false'
+  commit-message:
+    description: 'Commit message for auto-fix (default: "fix: correct workflow validation issues")'
+    required: false
+    default: 'fix: correct workflow validation issues'
+runs:
+  using: 'composite'
+  steps:
+    - name: Install yamllint
+      shell: bash
+      run: |
+        if ! command -v yamllint &> /dev/null; then
+          pip install yamllint
+        fi
+
+    - name: Validate YAML files
+      shell: bash
+      id: validate
+      run: |
+        echo "Checking YAML files in .github/workflows/..."
+        ERRORS=0
+        FIXES=0
+
+        # Find all YAML files
+        YAML_FILES=$(find .github -name "*.yml" -o -name "*.yaml" 2>/dev/null || true)
+
+        if [ -z "$YAML_FILES" ]; then
+          echo "No YAML files found in .github/"
+          exit 0
+        fi
+
+        # Create temp directory for fixed files
+        TEMP_DIR=$(mktemp -d)
+        trap "rm -rf $TEMP_DIR" EXIT
+
+        echo "$YAML_FILES" | while read -r file; do
+          if [ ! -f "$file" ]; then
+            continue
+          fi
+
+          echo "Validating: $file"
+
+          # Check for common issues
+          ISSUES=""
+
+          # Issue 1: Find validate YAML with broken xargs command
+          if grep -q 'find.*yml.*xargs.*I {} sh -c.*python.*yaml.safe_load.*open.*{}' "$file" 2>/dev/null; then
+            ISSUES="${ISSUES}  - Broken xargs YAML validation command detected\n"
+
+            # Auto-fix if enabled
+            if [ "${{ inputs.auto-fix }}" = "true" ]; then
+              echo "  Attempting to fix..."
+              # Replace with safer version
+              sed -i 's/find \. -name "\*\.yml" -o -name "\*\.yaml" | xargs -I {} sh -c .*/find . -name "*.yml" -o -name "*.yaml" | while read -r f; do echo "Validating $f" \&\& python -c "import yaml; yaml.safe_load(open(\"$f\"))"; done/' "$file"
+              FIXES=$((FIXES + 1))
+              echo "  Fixed: YAML validation command"
+            fi
+          fi
+
+          # Issue 2: Validate YAML syntax
+          if ! yamllint -d "{extends: default, rules: {line-length: {max: 200}, indentation: {spaces: 2}}}" "$file" 2>/dev/null; then
+            # Try to parse with Python to get more details
+            ERROR_OUTPUT=$(python -c "import yaml; yaml.safe_load(open('$file'))" 2>&1 || true)
+            if [ -n "$ERROR_OUTPUT" ]; then
+              ISSUES="${ISSUES}  - YAML syntax error: ${ERROR_OUTPUT}\n"
+            fi
+          fi
+
+          # Issue 3: Check for common workflow mistakes
+          # Missing runs-on
+          if grep -q 'jobs:' "$file" && ! grep -q 'runs-on:' "$file"; then
+            ISSUES="${ISSUES}  - Missing 'runs-on' in job\n"
+          fi
+
+          # Issue 4: Check for deprecated actions
+          if grep -q 'actions/checkout@v1' "$file" || grep -q 'actions/checkout@v2' "$file"; then
+            ISSUES="${ISSUES}  - Using deprecated checkout action version\n"
+          fi
+
+          # Issue 5: Check for missing permissions
+          if grep -q 'jobs:' "$file" && ! grep -q 'permissions:' "$file"; then
+            ISSUES="${ISSUES}  - Warning: Missing 'permissions' (recommended for security)\n"
+          fi
+
+          if [ -n "$ISSUES" ]; then
+            echo "  Issues found:"
+            echo -e "$ISSUES"
+            ERRORS=$((ERRORS + 1))
+          else
+            echo "  OK"
+          fi
+        done
+
+        # Output summary
+        if [ $ERRORS -gt 0 ]; then
+          echo "::error::Found $ERRORS file(s) with validation issues"
+          echo "errors=$ERRORS" >> $GITHUB_OUTPUT
+          if [ "${{ inputs.fail-on-error }}" = "true" ]; then
+            exit 1
+          fi
+        else
+          echo "All YAML files are valid!"
+          echo "errors=0" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Commit auto-fixes
+      if: inputs.auto-fix == 'true' && steps.validate.outputs.errors != '0'
+      shell: bash
+      run: |
+        git config --local user.email "action-fixer[bot]@users.noreply.github.com"
+        git config --local user.name "GitHub Actions Fixer Bot"
+        git add .github/
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "${{ inputs.commit-message }}"
+          echo "Created commit with auto-fixes"
+        fi
+
+    - name: Create PR for fixes
+      if: inputs.auto-fix == 'true'
+      shell: bash
+      run: |
+        if git rev-parse --verify HEAD^{commit} >/dev/null 2>&1; then
+          if ! git diff --quiet origin/main...HEAD 2>/dev/null; then
+            BRANCH="action-fixer-auto-$(date +%s)"
+            git checkout -b "$BRANCH"
+            git push origin "$BRANCH"
+
+            gh pr create \
+              --title "fix: automated workflow validation fixes" \
+              --body "This PR was automatically created by GitHub Actions Fixer to resolve workflow validation issues.
+
+            **Changes:**
+            - Fixed YAML validation commands
+            - Corrected syntax errors
+
+            Please review the changes before merging." \
+              --base main
+          fi
+        fi
