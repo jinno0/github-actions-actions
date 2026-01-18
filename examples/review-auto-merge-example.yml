@@ -1,3 +1,17 @@
+# AI Review and Auto-Merge Workflow Example
+#
+# This workflow demonstrates automated PR review and merging using Claude Code CLI.
+# Place this file at: .github/workflows/review-auto-merge.yml
+#
+# Features:
+# - AI-powered code review with auto-fix
+# - CI status verification
+# - Automatic merging on success
+# - Retry logic for merge failures
+#
+# Requirements:
+# - Self-hosted runner with Claude Code CLI installed
+
 name: AI Review and Auto-Merge
 
 on:
@@ -118,7 +132,7 @@ jobs:
           if [ "$VERDICT" = "LGTM" ] && [ "$FAILED_CHECKS" = "false" ]; then
             echo "✅ Conditions met for auto-merge" >> $GITHUB_STEP_SUMMARY
 
-            # Retry merge logic
+            # Retry logic
             MAX_ATTEMPTS=10
             ATTEMPT=1
             MERGE_METHODS=("squash" "merge" "rebase")
