@@ -107,10 +107,14 @@ runs:
 
         echo "### Rebasing onto $BASE_REF" >> $GITHUB_STEP_SUMMARY
 
+        # Clean up any leftover state
+        git reset --hard HEAD 2>/dev/null || true
+        git clean -fd 2>/dev/null || true
+
         # Fetch latest
         git fetch origin "$BASE_REF"
         git fetch origin "pull/$PR_NUMBER/head:pr-$PR_NUMBER"
-        git checkout "pr-$PR_NUMBER"
+        git checkout "pr-$PR_NUMBER" 2>/dev/null || git switch -C "pr-$PR_NUMBER" "origin/pull/$PR_NUMBER/head"
 
         # Check if behind
         BEHIND=$(git rev-list --count "HEAD..origin/$BASE_REF" 2>/dev/null || echo "0")
