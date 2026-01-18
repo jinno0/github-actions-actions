@@ -1,0 +1,123 @@
+version: "1.0"
+updated_at: "2026-01-18T13:10:00Z"
+
+product_goal:
+  north_star: "組織全体の開発効率と品質を向上させるための「AIネイティブなGitHub Actions」の信頼できるハブを提供する"
+  success_metrics:
+    - id: "MET-001"
+      name: "組織内採用率"
+      target: "複数のリポジトリでActionsが採用されている"
+    - id: "MET-002"
+      name: "AI提案受入率"
+      target: "AIの提案に対する修正率（Acceptance Rate）が向上し続ける"
+    - id: "MET-003"
+      name: "開発時間削減"
+      target: "人間が本質的な設計や意思決定に集中できる時間が増加"
+  non_goals:
+    - "単なるシェルスクリプトのラッパー（既存のActionsで十分なもの）"
+    - "完全に無人での運用（AIのハルシネーションリスクを考慮）"
+    - "特定プロダクトに強く結合しすぎたロジック（再利用性を重視）"
+    - "再利用可能 Workflow テンプレート（github-actions-templatesの責務）"
+    - "Runner 管理（github-actions-hubの責務）"
+
+milestones:
+  - id: "MS-001"
+    name: "Foundation & POC"
+    intent: "Self-hosted runner + Claude Code CLI の基本動作検証"
+    deliverables:
+      - "review-and-merge actionの基本実装"
+      - "基本的なActions Lint/Fix機能（action-fixer）"
+    acceptance:
+      - type: "manual"
+        target: "Self-hosted runner上でClaude Code CLIが実行可能"
+    priority: "P0"
+    status: "done"
+    dependencies: []
+    risks:
+      - "Claude Code CLIの安定性"
+
+  - id: "MS-002"
+    name: "AI Action Hub Implementation"
+    intent: "主要なAI Actionsの実装と機能追加"
+    deliverables:
+      - "review-and-merge: カスタムルール注入機能"
+      - "spec-to-code: 仕様書からのコード生成"
+      - "action-fixer: AIによるエラー自動修正"
+      - "auto-refactor: 指示ベースのリファクタリング"
+      - "auto-document: ドキュメント自動更新"
+      - "release-notes-ai: AIリリースノート生成"
+    acceptance:
+      - type: "invariant"
+        target: "INV-005"
+      - type: "manual"
+        target: "各Actionがexamples/とinstructions/を持つ"
+    priority: "P0"
+    status: "done"
+    dependencies: ["MS-001"]
+    risks:
+      - "AIのハルシネーションによる不正確な提案"
+
+  - id: "MS-003"
+    name: "Stabilization & Adoption"
+    intent: "各Actionの検証と導入サポート"
+    deliverables:
+      - "各Actionの検証用ワークフロー（examples/）"
+      - "各Actionの導入ガイド（instructions/）"
+      - "READMEの整備"
+      - "組織内プロジェクトへの導入とフィードバック収集"
+    acceptance:
+      - type: "test"
+        target: "全Actionのexample workflowが実行可能"
+      - type: "manual"
+        target: "組織内3以上のリポジトリで採用"
+    priority: "P0"
+    status: "active"
+    dependencies: ["MS-002"]
+    risks:
+      - "導入時の教育コスト"
+      - " Runner環境の違いによる動作不一致"
+
+  - id: "MS-004"
+    name: "Quality & Reliability"
+    intent: "テストカバレッジ向上と品質保証"
+    deliverables:
+      - "各Actionのテストスイート"
+      - "エッジケースのドキュメント化"
+      - "エラーハンドリングの強化"
+    acceptance:
+      - type: "test"
+        target: "主要なパスについてテストカバレッジ80%以上"
+    priority: "P1"
+    status: "planned"
+    dependencies: ["MS-003"]
+    risks:
+      - "AIモデルの更新による挙動変化"
+
+  - id: "MS-005"
+    name: "Advanced Features"
+    intent: "高度な自動化機能の追加"
+    deliverables:
+      - "マルチリポジトリ間の連携"
+      - "メトリクス収集・ダッシュボード"
+      - "カスタムルールの共有・再利用"
+    acceptance:
+      - type: "manual"
+        target: "主要な機能についてユーザードキュメントが完成"
+    priority: "P2"
+    status: "planned"
+    dependencies: ["MS-004"]
+    risks:
+      - "複雑性の増大による保守性低下"
+
+work_policy:
+  default_mode: "pr"
+  iteration_budget:
+    max_cycles: 5
+    max_files_changed: 25
+    max_loc_add: 800
+    max_loc_del: 800
+  quality_gates:
+    must_pass: ["lint", "test"]
+  concept_policy:
+    concept_sync_version: "0.3"
+    bloat_is_failure: true

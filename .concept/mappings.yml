@@ -1,0 +1,118 @@
+updated_at: "2026-01-18T12:46:40Z"
+mappings:
+  CompositeAction:
+    code_symbols: []
+    db: []
+    api: []
+    files:
+      - "SYSTEM_CONSTITUTION.md#L95-L105"
+      - "AGENTS.md#L15-L30"
+
+  AIHub:
+    code_symbols: []
+    db: []
+    api: []
+    files:
+      - "PURPOSE.md#L1-L20"
+      - "README.md#L1-L10"
+
+  ClaudeCodeCLI:
+    code_symbols: []
+    db: []
+    api: []
+    files:
+      - "PURPOSE.md#L10-L15"
+      - "AGENTS.md#L8-L12"
+
+  ReviewAndMergeAction:
+    code_symbols:
+      - "actions/review-and-merge/action.yml"
+    db: []
+    api: []
+    files:
+      - "actions/review-and-merge/action.yml"
+      - "examples/review-and-merge-example.yml"
+      - "instructions/review-and-merge.md"
+
+  AutoFix:
+    code_symbols:
+      - "actions/review-and-merge/action.yml::inputs.auto-fix"
+      - "actions/review-and-merge/action.yml::AUTO FIX MODE"
+    db: []
+    api: []
+    files:
+      - "actions/review-and-merge/action.yml#L33-L35"
+      - "actions/review-and-merge/action.yml#L80-L120"
+
+  ConflictResolution:
+    code_symbols:
+      - "actions/review-and-merge/action.yml::steps.Rebase and resolve conflicts before merge"
+    db: []
+    api: []
+    files:
+      - "actions/review-and-merge/action.yml#L190-L220"
+
+  TemplateFile:
+    code_symbols: []
+    db: []
+    api: []
+    files:
+      - "actions/review-and-merge/templates/"
+      - "actions/spec-to-code/templates/"
+      - "actions/action-fixer/templates/"
+      - "actions/auto-document/templates/"
+      - "actions/auto-refactor/templates/"
+      - "actions/release-notes-ai/templates/"
+      - "AGENTS.md#L15-L60"
+
+  StandardActionStructure:
+    code_symbols: []
+    db: []
+    api: []
+    files:
+      - "actions/*/action.yml"
+      - "examples/*"
+      - "instructions/*"
+      - "AGENTS.md#L165-L200"
+
+  VersionPinning:
+    code_symbols: []
+    db: []
+    api: []
+    files:
+      - "SYSTEM_CONSTITUTION.md#L95-L100"
+      - "examples/*.yml"
+
+  SingleResponsibility:
+    code_symbols: []
+    db: []
+    api: []
+    files:
+      - "SYSTEM_CONSTITUTION.md#L35-L40"
+      - "actions/*/action.yml"
+
+  OrganizationWideReusability:
+    code_symbols: []
+    db: []
+    api: []
+    files:
+      - "SYSTEM_CONSTITUTION.md#L80-L85"
+      - "actions/*/action.yml"
+
+  PublishPrAction:
+    code_symbols:
+      - "actions/publish-pr/action.yml"
+    db: []
+    api: []
+
+  AutoMergeAction:
+    code_symbols:
+      - "actions/auto-merge/action.yml"
+    db: []
+    api: []
+
+  ReviewAndFixAction:
+    code_symbols:
+      - "actions/review-and-merge/action.yml"
+    db: []
+    api: []

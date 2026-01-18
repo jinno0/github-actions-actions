@@ -1,0 +1,59 @@
+updated_at: "2026-01-18T14:21:00Z"
+queue:
+  - id: "TP-001"
+    proposed_canonical: "PublishPrAction"
+    proposed_layer: "domain"
+    term_raw_examples: ["Publish PR", "publish-pr", "publish action"]
+    reason: "New action split from review-and-merge. Focuses only on converting draft PR to ready."
+    evidence:
+      - source: "actions/publish-pr/action.yml"
+        quote: "name: 'Publish PR', description: 'Convert a draft pull request to ready for review'"
+    auto_merge_candidates:
+      - term: "ReviewAndMergeAction"
+        similarity: 0.45
+    decision: "pending"
+    expires_after_runs: 10
+    created_run: "2026-01-18T14:21:00Z"
+
+  - id: "TP-002"
+    proposed_canonical: "AutoMergeAction"
+    proposed_layer: "domain"
+    term_raw_examples: ["Auto Merge PR", "auto-merge", "merge action"]
+    reason: "New action split from review-and-merge. Focuses only on merging with configurable methods."
+    evidence:
+      - source: "actions/auto-merge/action.yml"
+        quote: "name: 'Auto Merge PR', description: 'Merge a pull request with specified method'"
+    auto_merge_candidates:
+      - term: "ReviewAndMergeAction"
+        similarity: 0.48
+    decision: "pending"
+    expires_after_runs: 10
+    created_run: "2026-01-18T14:21:00Z"
+
+  - id: "TP-003"
+    proposed_canonical: "ReviewAndFixAction"
+    proposed_layer: "domain"
+    term_raw_examples: ["AI Review and Fix", "review-fix", "review and fix"]
+    reason: "Renamed from review-and-merge to reflect split. Now focuses only on review and fix phases."
+    evidence:
+      - source: "actions/review-and-merge/action.yml"
+        quote: "name: 'AI Review and Fix', description: 'Review and automatically fix code issues'"
+    auto_merge_candidates:
+      - term: "ReviewAndMergeAction"
+        similarity: 0.85
+    decision: "pending"
+    expires_after_runs: 10
+    created_run: "2026-01-18T14:21:00Z"
+
+  - id: "TP-004"
+    proposed_canonical: "ActionSplitting"
+    proposed_layer: "aux"
+    term_raw_examples: ["action splitting", "splitting actions", "refactor actions"]
+    reason: "Refactoring pattern where complex actions are split into simpler single-purpose actions."
+    evidence:
+      - source: "git log"
+        quote: "refactor: split review-and-merge into separate actions (publish, review-fix, merge)"
+    auto_merge_candidates: []
+    decision: "pending"
+    expires_after_runs: 10
+    created_run: "2026-01-18T14:21:00Z"

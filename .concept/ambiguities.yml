@@ -1,0 +1,59 @@
+updated_at: "2026-01-18T14:21:00Z"
+ambiguities:
+  - id: "AMB-001"
+    term: "ReviewAndMergeAction"
+    topic: "Action refactoring completeness"
+    severity: "high"
+    uncertainty: 0.65
+    candidates:
+      - "review-fix should replace review-and-merge completely"
+      - "review-and-merge should remain as composite action"
+    missing_info:
+      - "Are the old review-and-merge references still valid?"
+      - "Should examples/review-and-merge-example.yml be updated to use the new split actions?"
+    linked_conflicts: []
+    auto_decision:
+      status: "applied"
+      decision_key: "AUTO:ReviewAndMergeAction.refactoring_strategy"
+      chosen: "ReviewAndFixAction replaces ReviewAndMergeAction; new split actions follow single responsibility"
+      policy: "single_responsibility + clarity"
+      confidence_auto: 0.70
+      decided_at_run: "2026-01-18T14:21:00Z"
+      expires_after_runs: 20
+      revert_triggers:
+        - "user_explicit_feedback"
+        - "breaking_change_detected"
+    last_touched_run: "2026-01-18T14:21:00Z"
+    evidence:
+      - source: "git log#b35a9c6"
+        quote: "refactor: split review-and-merge into separate actions (publish, review-fix, merge)"
+
+  - id: "AMB-002"
+    term: "StandardActionStructure"
+    topic: "Missing examples and instructions for new actions"
+    severity: "high"
+    uncertainty: 0.75
+    candidates:
+      - "Create examples/instructions immediately (strict adherence)"
+      - "Allow temporary gap during refactoring (pragmatic)"
+    missing_info:
+      - "Are these actions meant to be internal-only or organization-wide?"
+      - "Should AI agents auto-generate missing components?"
+    linked_conflicts: ["CFLT-001"]
+    auto_decision:
+      status: "applied"
+      decision_key: "AUTO:StandardActionStructure.gap_tolerance"
+      chosen: "Gap is high-severity violation. Must create examples/instructions or mark as internal-only."
+      policy: "invariant_enforcement + safety"
+      confidence_auto: 0.85
+      decided_at_run: "2026-01-18T14:21:00Z"
+      expires_after_runs: 10
+      revert_triggers:
+        - "actions_marked_internal"
+        - "explicit_exemption_granted"
+    last_touched_run: "2026-01-18T14:21:00Z"
+    evidence:
+      - source: "examples/"
+        quote: "publish-pr-example.yml and auto-merge-example.yml are missing"
+      - source: "instructions/"
+        quote: "publish-pr.md and auto-merge.md are missing"

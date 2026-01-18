@@ -1,0 +1,22 @@
+version: "1.0"
+updated_at: "2026-01-18T13:10:00Z"
+
+commands:
+  lint: "find actions -name '*.yml' -o -name '*.yaml' | xargs yamllint"
+  test: "bash -c 'for action in actions/*/; do [ -f \"\$action/test.sh\" ] && bash \"\$action/test.sh\" || true; done'"
+  build: "echo 'No build step required for composite actions'"
+
+budget:
+  max_cycles: 5
+  max_files: 25
+  max_loc_add: 800
+  max_loc_del: 800
+
+mode: "pr"
+
+# Additional quality checks specific to composite actions
+quality_gates:
+  - name: "yaml_syntax"
+    command: "python3 -c \"import yaml; import sys; [yaml.safe_load(open(f)) for f in sys.argv[1:]]\" actions/*/action.yml"
+  - name: "structure_check"
+    command: "bash -c 'for action in actions/*/; do name=\$(basename \"\$action\"); if [ ! -f \"examples/\${name}-example.yml\" ] || [ ! -f \"instructions/\${name%.md}.md\" ]; then echo \"Missing example or instruction for \$action\"; exit 1; fi; done'"

@@ -1,0 +1,16 @@
+updated_at: "2026-01-18T14:21:00Z"
+conflicts:
+  - id: "CFLT-001"
+    term: "StandardActionStructure"
+    about: "invariant"
+    severity: "high"
+    nli: "contradiction"
+    items:
+      - claim: "Every action must have three components: (1) action.yml, (2) example workflow, (3) instruction guide"
+        source: "AGENTS.md#L165-L175"
+      - claim: "publish-pr and auto-merge actions exist without example workflows or instruction guides"
+        source: "actions/publish-pr/action.yml, actions/auto-merge/action.yml"
+    status: "open"
+    active_workaround:
+      decision_key: "AUTO:StandardActionStructure.gap_tolerance"
+      summary: "AUTO: Treat as high-severity violation. Must create missing components or mark as internal-only."
