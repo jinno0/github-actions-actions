@@ -14,33 +14,6 @@ from pathlib import Path
 from typing import Any
 
 
-# 共通ライブラリパスを追加（.claudeディレクトリを動的に探す）
-def find_claude_lib():
-    current = Path(__file__).resolve()
-    for _ in range(8):  # 最大8階層まで遡る
-        claude_lib = current / ".claude" / "lib" / "python"
-        if claude_lib.exists():
-            return str(claude_lib)
-        current = current.parent
-        if current == current.parent:  # ファイルシステムルートに到達
-            break
-    return None  # 見つからない場合
-
-
-claude_lib_path = find_claude_lib()
-if claude_lib_path:
-    sys.path.insert(0, claude_lib_path)
-    from env_utils import load_env_files, setup_python_path
-
-    # 環境初期化（必須）
-    setup_python_path()
-    load_env_files()
-else:
-    import warnings
-
-    warnings.warn("Miyabi共通ライブラリが見つかりませんでした", stacklevel=2)
-
-
 def load_progress(file_path: str) -> dict[str, Any]:
     """
     進捗データをファイルから読み込む

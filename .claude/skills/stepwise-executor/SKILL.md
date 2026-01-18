@@ -30,22 +30,79 @@ AIが最適な分解を提案し、各ステップの実行状況を追跡しな
 
 ## Quick Start
 
+### 統合コマンドで実行する場合（推奨）
+
+1つのコマンドで、目標分解から実行、進捗管理までを一貫して行います。
+
+```bash
+python3 scripts/run.py "組織内プロジェクトへの導入とフィードバック収集"
+```
+
+**出力例**:
+```
+🎯 目標を分解中: 組織内プロジェクトへの導入とフィードバック収集
+コマンド: python3 .../decompose_goal.py ... -o .stepwise/20250119_123456_xxxxx/goal.json
+...
+🚀 ステップ実行中...
+...
+📊 進捗を表示中...
+...
+📂 ワークフローディレクトリ: /path/to/.stepwise/20250119_123456_xxxxx
+```
+
+ワークフローごとに `.stepwise/{ワークフローID}/` ディレクトリが作成され、以下のファイルが保存されます：
+
+- `goal.json`: 分解された目標
+- `progress.json`: 実行進捗
+- `report.md`: レポート（`--export-report` 指定時）
+
+**主なオプション**:
+- `-i, --interactive`: インタラクティブモード（各ステップで入力を求める）
+- `--decompose-only`: 目標分解のみ行う（実行しない）
+- `--resume`: 既存の進捗から再開する
+- `--track-only`: 進捗表示のみ行う
+- `--no-track`: 実行後に進捗表示を行わない
+- `-e, --export-report`: Markdownレポートを出力する
+
+### Claude Code からスキルとして実行する場合（推奨）
+
+Claude Code の対話環境で、以下のようにスキルを呼び出します：
+
+```
+/skill stepwise-executor "組織内プロジェクトへの導入とフィードバック収集"
+```
+
+または、Skill ツールを使用：
+
+```
+Use the stepwise-executor skill to decompose and execute the goal: "組織内プロジェクトへの導入とフィードバック収集"
+```
+
+これにより、目標の分解から進捗管理までが自動的に行われます。
+
+### コマンドラインから直接実行する場合
+
 最も典型的な使用フローを示します。
 
 ### 1. 目標を分解する
 
 ```bash
-python scripts/decompose_goal.py "ユーザー認証機能付きのTodoアプリを作成する"
+python3 scripts/decompose_goal.py "ユーザー認証機能付きのTodoアプリを作成する"
 ```
+
+> **注意**: `python` コマンドではなく `python3` コマンドを使用してください。
 
 **出力例**:
 ```
-🎯 目標を分解中: ユーザー認証機能付きのTodoアプリを作成する
+🎯 目標を分解中...
 
+============================================================
 📋 目標分解サマリー
 ============================================================
+
 元の目標: ユーザー認証機能付きのTodoアプリを作成する
 中間目標数: 7
+分解戦略: トップダウンアプローチ
 
 中間目標:
   1. 要件定義と技術選定 [small]
@@ -57,13 +114,14 @@ python scripts/decompose_goal.py "ユーザー認証機能付きのTodoアプリ
   ...
 
 ✅ 分解結果を保存しました: decomposed_goal.json
+
 次のステップ: execute_steps.py decomposed_goal.json
 ```
 
 ### 2. ステップを実行する
 
 ```bash
-python scripts/execute_steps.py decomposed_goal.json
+python3 scripts/execute_steps.py decomposed_goal.json
 ```
 
 各ステップの実行指示が表示されるので、その指示に従って作業を進めます。
@@ -72,7 +130,7 @@ python scripts/execute_steps.py decomposed_goal.json
 ### 3. 進捗を確認する
 
 ```bash
-python scripts/track_progress.py progress.json
+python3 scripts/track_progress.py progress.json
 ```
 
 **出力例**:
@@ -135,7 +193,7 @@ python scripts/track_progress.py progress.json
 #### 基本的な使い方
 
 ```bash
-python scripts/decompose_goal.py "作業目標の説明"
+python3 scripts/decompose_goal.py "作業目標の説明"
 ```
 
 #### オプション
@@ -147,13 +205,13 @@ python scripts/decompose_goal.py "作業目標の説明"
 
 ```bash
 # 基本的な分解
-python scripts/decompose_goal.py "データ分析レポートを作成する"
+python3 scripts/decompose_goal.py "データ分析レポートを作成する"
 
 # 出力先を指定
-python scripts/decompose_goal.py "APIドキュメントを作成する" -o api_doc_plan.json
+python3 scripts/decompose_goal.py "APIドキュメントを作成する" -o api_doc_plan.json
 
 # プレビューのみ（保存しない）
-python scripts/decompose_goal.py "レガシーコードをリファクタリングする" --show-only
+python3 scripts/decompose_goal.py "レガシーコードをリファクタリングする" --show-only
 ```
 
 #### 環境変数の設定
@@ -185,7 +243,7 @@ export ANTHROPIC_API_KEY=sk-ant-...
 #### 基本的な使い方
 
 ```bash
-python scripts/execute_steps.py decomposed_goal.json
+python3 scripts/execute_steps.py decomposed_goal.json
 ```
 
 #### オプション
@@ -199,7 +257,7 @@ python scripts/execute_steps.py decomposed_goal.json
 **1. 標準モード（非インタラクティブ）**
 
 ```bash
-python scripts/execute_steps.py decomposed_goal.json
+python3 scripts/execute_steps.py decomposed_goal.json
 ```
 
 各ステップの実行指示が表示されます。Claude Code に指示を送信して作業を進め、
@@ -208,7 +266,7 @@ python scripts/execute_steps.py decomposed_goal.json
 **2. インタラクティブモード**
 
 ```bash
-python scripts/execute_steps.py -i decomposed_goal.json
+python3 scripts/execute_steps.py -i decomposed_goal.json
 ```
 
 各ステップで以下の操作が可能:
@@ -220,7 +278,7 @@ python scripts/execute_steps.py -i decomposed_goal.json
 **3. 再開モード**
 
 ```bash
-python scripts/execute_steps.py --resume decomposed_goal.json
+python3 scripts/execute_steps.py --resume decomposed_goal.json
 ```
 
 中断した作業を既存の進捗ファイルから再開します。
@@ -260,7 +318,7 @@ python scripts/execute_steps.py --resume decomposed_goal.json
 #### 基本的な使い方
 
 ```bash
-python scripts/track_progress.py progress.json
+python3 scripts/track_progress.py progress.json
 ```
 
 #### オプション
@@ -277,16 +335,16 @@ python scripts/track_progress.py progress.json
 
 ```bash
 # 全体の進捗を表示
-python scripts/track_progress.py progress.json
+python3 scripts/track_progress.py progress.json
 
 # 完了したステップのみ表示
-python scripts/track_progress.py -f completed progress.json
+python3 scripts/track_progress.py -f completed progress.json
 
 # サマリーのみ表示
-python scripts/track_progress.py -s progress.json
+python3 scripts/track_progress.py -s progress.json
 
 # Markdownレポートを生成
-python scripts/track_progress.py -e report.md progress.json
+python3 scripts/track_progress.py -e report.md progress.json
 ```
 
 ## Advanced Usage
@@ -337,7 +395,7 @@ AI分解の結果が期待に沿わない場合、`references/decomposition_stra
 3. **再開**: `--resume`オプションで再開
 
 ```bash
-python scripts/execute_steps.py --resume decomposed_goal.json
+python3 scripts/execute_steps.py --resume decomposed_goal.json
 ```
 
 ### 分解例の参照
