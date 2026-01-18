@@ -1,0 +1,218 @@
+name: 'Review and Auto-Merge PR'
+description: 'Automatically rebase and merge PRs with aggressive retry logic'
+
+inputs:
+  github-token:
+    description: 'GitHub token with repo scope'
+    required: true
+    default: ${{ github.token }}
+  pr-number:
+    description: 'PR number to merge (auto-detected from event if not specified)'
+    required: false
+  max-attempts:
+    description: 'Maximum merge attempts'
+    required: false
+    default: '15'
+  auto-convert-draft:
+    description: 'Convert draft PRs to ready'
+    required: false
+    default: 'true'
+  remove-wip-labels:
+    description: 'Remove WIP labels automatically'
+    required: false
+    default: 'true'
+
+outputs:
+  merged:
+    description: 'Whether the PR was successfully merged'
+    value: ${{ steps.merge.outputs.merged }}
+  pr-number:
+    description: 'PR number that was processed'
+    value: ${{ steps.check.outputs.pr-number }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Check PR state
+      id: check
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        PR_NUMBER_INPUT: ${{ inputs.pr-number }}
+      run: |
+        set +e
+
+        # Get PR number from input or event
+        if [ -n "$PR_NUMBER_INPUT" ]; then
+          PR_NUMBER="$PR_NUMBER_INPUT"
+        elif [ "${{ github.event_name }}" == "pull_request" ] || [ "${{ github.event_name }}" == "pull_request_review" ]; then
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+        else
+          echo "pr-number=0" >> $GITHUB_OUTPUT
+          echo "error=Could not determine PR number" >> $GITHUB_OUTPUT
+          exit 1
+        fi
+
+        echo "pr-number=$PR_NUMBER" >> $GITHUB_OUTPUT
+
+        # Fetch PR details
+        PR_JSON=$(gh pr view "$PR_NUMBER" --json isDraft,mergeable,state,baseRefName,labels)
+        IS_DRAFT=$(echo "$PR_JSON" | jq -r '.isDraft')
+        MERGEABLE=$(echo "$PR_JSON" | jq -r '.mergeable')
+        BASE_REF=$(echo "$PR_JSON" | jq -r '.baseRefName')
+
+        # Check for WIP labels
+        HAS_WIP=$(echo "$PR_JSON" | jq -r '.labels[].name' | grep -iE '^wip$|^work in progress$|^do not merge$' || echo "")
+
+        echo "is-draft=$IS_DRAFT" >> $GITHUB_OUTPUT
+        echo "mergeable=$MERGEABLE" >> $GITHUB_OUTPUT
+        echo "base-ref=$BASE_REF" >> $GITHUB_OUTPUT
+
+        # Auto-convert draft to ready
+        if [ "${{ inputs.auto-convert-draft }}" = "true" ] && [ "$IS_DRAFT" = "true" ]; then
+          gh pr ready "$PR_NUMBER" || true
+          echo "Auto-converted draft to ready" >> $GITHUB_STEP_SUMMARY
+        fi
+
+        # Remove WIP labels
+        if [ "${{ inputs.remove-wip-labels }}" = "true" ] && [ -n "$HAS_WIP" ]; then
+          for label in $HAS_WIP; do
+            gh pr edit "$PR_NUMBER" --remove-label "$label" || true
+          done
+          echo "Auto-removed WIP labels" >> $GITHUB_STEP_SUMMARY
+        fi
+
+        echo "### PR State Check" >> $GITHUB_STEP_SUMMARY
+        echo "- PR: #$PR_NUMBER" >> $GITHUB_STEP_SUMMARY
+        echo "- Draft: $IS_DRAFT" >> $GITHUB_STEP_SUMMARY
+        echo "- Mergeable: $MERGEABLE" >> $GITHUB_STEP_SUMMARY
+        echo "- Base Ref: $BASE_REF" >> $GITHUB_STEP_SUMMARY
+
+    - name: Rebase and merge
+      id: merge
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        PR_NUMBER: ${{ steps.check.outputs.pr-number }}
+        BASE_REF: ${{ steps.check.outputs.base-ref }}
+        MAX_ATTEMPTS: ${{ inputs.max-attempts }}
+      run: |
+        if [ -z "$PR_NUMBER" ] || [ "$PR_NUMBER" = "0" ]; then
+          echo "merged=false" >> $GITHUB_OUTPUT
+          exit 1
+        fi
+
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+
+        echo "### Rebasing onto $BASE_REF" >> $GITHUB_STEP_SUMMARY
+
+        # Fetch latest
+        git fetch origin "$BASE_REF"
+        git fetch origin "pull/$PR_NUMBER/head:pr-$PR_NUMBER"
+        git checkout "pr-$PR_NUMBER"
+
+        # Check if behind
+        BEHIND=$(git rev-list --count "HEAD..origin/$BASE_REF" 2>/dev/null || echo "0")
+        echo "Commits behind: $BEHIND" >> $GITHUB_STEP_SUMMARY
+
+        if [ "$BEHIND" -gt 0 ]; then
+          # Attempt rebase
+          if git rebase "origin/$BASE_REF"; then
+            git push origin "HEAD:$(git rev-parse --abbrev-ref HEAD)" --force-with-lease
+            echo "✓ Rebase successful" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ Rebase failed, attempting merge commit instead" >> $GITHUB_STEP_SUMMARY
+            git rebase --abort 2>/dev/null || true
+
+            # Try merge commit as fallback
+            if git merge "origin/$BASE_REF" --no-edit --no-ff; then
+              git push origin "HEAD:$(git rev-parse --abbrev-ref HEAD)" --force-with-lease
+              echo "✓ Merge commit created" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "❌ Both rebase and merge failed" >> $GITHUB_STEP_SUMMARY
+              gh pr comment "$PR_NUMBER" --body "❌ Unable to rebase or merge onto \`$BASE_REF\`. Please resolve manually."
+              echo "merged=false" >> $GITHUB_OUTPUT
+              exit 1
+            fi
+          fi
+        else
+          echo "Already up to date" >> $GITHUB_STEP_SUMMARY
+        fi
+
+        echo "### Attempting to merge PR #$PR_NUMBER" >> $GITHUB_STEP_SUMMARY
+
+        # Retry logic - very aggressive
+        ATTEMPT=1
+        MERGE_METHODS=("squash" "merge" "rebase")
+
+        while [ $ATTEMPT -le $MAX_ATTEMPTS ]; do
+          echo "Attempt $ATTEMPT of $MAX_ATTEMPTS" >> $GITHUB_STEP_SUMMARY
+
+          # Check PR state
+          PR_STATE=$(gh pr view "$PR_NUMBER" --json state -q '.state')
+          MERGEABLE=$(gh pr view "$PR_NUMBER" --json mergeable -q '.mergeable')
+
+          if [ "$PR_STATE" != "open" ]; then
+            echo "PR is not open (state: $PR_STATE)" >> $GITHUB_STEP_SUMMARY
+            echo "merged=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          if [ "$MERGEABLE" != "MERGEABLE" ]; then
+            echo "PR not mergeable (status: $MERGEABLE), rebase and retry..." >> $GITHUB_STEP_SUMMARY
+
+            # Try to rebase
+            git fetch origin "$BASE_REF"
+            git fetch origin "pull/$PR_NUMBER/head:pr-$PR_NUMBER"
+            git checkout "pr-$PR_NUMBER"
+
+            if git rebase "origin/$BASE_REF" 2>/dev/null; then
+              git push origin "HEAD:$(git rev-parse --abbrev-ref HEAD)" --force-with-lease
+              sleep 10  # Wait for GitHub to update
+            fi
+          fi
+
+          # Try each merge method
+          for METHOD in "${MERGE_METHODS[@]}"; do
+            echo "Trying merge method: $METHOD" >> $GITHUB_STEP_SUMMARY
+
+            case $METHOD in
+              squash)
+                if gh pr merge "$PR_NUMBER" --squash --delete-branch 2>/dev/null; then
+                  echo "✓ Merged using squash" >> $GITHUB_STEP_SUMMARY
+                  echo "merged=true" >> $GITHUB_OUTPUT
+                  exit 0
+                fi
+                ;;
+              merge)
+                if gh pr merge "$PR_NUMBER" --merge --delete-branch 2>/dev/null; then
+                  echo "✓ Merged using merge commit" >> $GITHUB_STEP_SUMMARY
+                  echo "merged=true" >> $GITHUB_OUTPUT
+                  exit 0
+                fi
+                ;;
+              rebase)
+                if gh pr merge "$PR_NUMBER" --rebase --delete-branch 2>/dev/null; then
+                  echo "✓ Merged using rebase" >> $GITHUB_STEP_SUMMARY
+                  echo "merged=true" >> $GITHUB_OUTPUT
+                  exit 0
+                fi
+                ;;
+            esac
+          done
+
+          ATTEMPT=$((ATTEMPT + 1))
+          if [ $ATTEMPT -le $MAX_ATTEMPTS ]; then
+            WAIT_TIME=2  # Very short wait for aggressive retry
+            echo "Waiting ${WAIT_TIME}s before retry..." >> $GITHUB_STEP_SUMMARY
+            sleep $WAIT_TIME
+          fi
+        done
+
+        # All attempts failed
+        echo "❌ Failed to merge after $MAX_ATTEMPTS attempts" >> $GITHUB_STEP_SUMMARY
+        gh pr comment "$PR_NUMBER" --body "❌ Auto-merge failed after $MAX_ATTEMPTS attempts with all merge methods (squash, merge, rebase)."
+
+        echo "merged=false" >> $GITHUB_OUTPUT
+        exit 1
