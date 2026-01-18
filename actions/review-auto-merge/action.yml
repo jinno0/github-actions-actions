@@ -183,24 +183,36 @@ runs:
 
             case $METHOD in
               squash)
-                if gh pr merge "$PR_NUMBER" --squash --delete-branch 2>/dev/null; then
+                MERGE_OUTPUT=$(gh pr merge "$PR_NUMBER" --squash --delete-branch 2>&1)
+                MERGE_EXIT=$?
+                if [ $MERGE_EXIT -eq 0 ]; then
                   echo "✓ Merged using squash" >> $GITHUB_STEP_SUMMARY
                   echo "merged=true" >> $GITHUB_OUTPUT
                   exit 0
+                else
+                  echo "Squash merge failed: $MERGE_OUTPUT" >> $GITHUB_STEP_SUMMARY
                 fi
                 ;;
               merge)
-                if gh pr merge "$PR_NUMBER" --merge --delete-branch 2>/dev/null; then
+                MERGE_OUTPUT=$(gh pr merge "$PR_NUMBER" --merge --delete-branch 2>&1)
+                MERGE_EXIT=$?
+                if [ $MERGE_EXIT -eq 0 ]; then
                   echo "✓ Merged using merge commit" >> $GITHUB_STEP_SUMMARY
                   echo "merged=true" >> $GITHUB_OUTPUT
                   exit 0
+                else
+                  echo "Merge commit failed: $MERGE_OUTPUT" >> $GITHUB_STEP_SUMMARY
                 fi
                 ;;
               rebase)
-                if gh pr merge "$PR_NUMBER" --rebase --delete-branch 2>/dev/null; then
+                MERGE_OUTPUT=$(gh pr merge "$PR_NUMBER" --rebase --delete-branch 2>&1)
+                MERGE_EXIT=$?
+                if [ $MERGE_EXIT -eq 0 ]; then
                   echo "✓ Merged using rebase" >> $GITHUB_STEP_SUMMARY
                   echo "merged=true" >> $GITHUB_OUTPUT
                   exit 0
+                else
+                  echo "Rebase merge failed: $MERGE_OUTPUT" >> $GITHUB_STEP_SUMMARY
                 fi
                 ;;
             esac
