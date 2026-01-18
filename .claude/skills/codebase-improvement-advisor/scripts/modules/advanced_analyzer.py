@@ -6,13 +6,6 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
-try:
-    import rope.base.project
-
-    ROPE_AVAILABLE = True
-except ImportError:
-    ROPE_AVAILABLE = False
-
 from .models import ClassInfo, FunctionInfo
 
 
@@ -36,14 +29,6 @@ class AdvancedCodeAnalyzer:
         self.functions: list[FunctionInfo] = []
         self.classes: list[ClassInfo] = []
         self.current_file: str | None = None
-
-        if ROPE_AVAILABLE:
-            try:
-                self.rope_project = rope.base.project.Project(str(self.project_path))
-            except Exception:
-                self.rope_project = None
-        else:
-            self.rope_project = None
 
     def analyze_python_file(self, file_path: Path) -> dict:
         """Pythonファイルを分析"""

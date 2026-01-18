@@ -71,13 +71,13 @@ To use this example in your repository:
 
 ## Using Actions from This Repository
 
-All actions in this repository can be referenced as:
+When using actions from this repository in other repositories, always use version tags (e.g., `@v1`, `@v2`) instead of `@main` for stability:
 
 ```yaml
-- uses: owner/repo/actions/action-name@main
+- uses: owner/repo/actions/action-name@v1
 ```
 
-Or when using within this repository:
+Or when using within this repository during development:
 
 ```yaml
 - uses: ./actions/action-name

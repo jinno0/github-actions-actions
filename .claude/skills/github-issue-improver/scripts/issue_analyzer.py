@@ -7,7 +7,6 @@ import re
 from dataclasses import dataclass
 from enum import Enum
 
-import anthropic
 from anthropic import Anthropic
 
 

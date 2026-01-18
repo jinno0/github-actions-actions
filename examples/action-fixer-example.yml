@@ -18,30 +18,17 @@ permissions:
   pull-requests: write
 
 jobs:
-  validate-only:
+  validate-and-fix:
     name: Validate Workflows
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Validate Workflows
         uses: ./actions/action-fixer
         with:
           fail-on-error: 'true'
           auto-fix: 'false'
-
-  auto-fix:
-    name: Auto-fix and Create PR
-    runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Auto-fix Workflows
-        uses: ./actions/action-fixer
-        with:
-          fail-on-error: 'false'
-          auto-fix: 'true'
-          commit-message: 'fix: correct workflow validation issues'
+          commit-message: ''
