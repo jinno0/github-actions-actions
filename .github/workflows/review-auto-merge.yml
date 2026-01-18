@@ -20,7 +20,7 @@ permissions:
 jobs:
   # Pre-flight checks: validate PR state and conditions
   pre-flight:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     outputs:
       should-process: ${{ steps.check.outputs.should-process }}
       is-draft: ${{ steps.check.outputs.is-draft }}
@@ -113,7 +113,7 @@ jobs:
 
   # Resolve merge conflicts if possible
   resolve-conflicts:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: pre-flight
     if: |
       needs.pre-flight.outputs.should-process == 'true' &&
@@ -183,7 +183,7 @@ jobs:
 
   # Skip CI wait - merge everything immediately
   wait-for-ci:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: pre-flight
     if: needs.pre-flight.outputs.should-process == 'true'
 
@@ -195,7 +195,7 @@ jobs:
 
   # Track issues for CI failures and review feedback
   track-issues:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: pre-flight
     if: |
       always() &&
@@ -296,7 +296,7 @@ jobs:
 
   # Rebase PR onto latest base branch
   rebase-pr:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: [pre-flight, wait-for-ci, resolve-conflicts]
     if: |
       always() &&
@@ -357,7 +357,7 @@ jobs:
 
   # Review PR using AI (skip to merge faster)
   review-pr:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: [pre-flight, rebase-pr]
     if: false  # Skip review - merge everything immediately
 
@@ -367,7 +367,7 @@ jobs:
 
   # Merge PR with retry logic
   merge-pr:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: [pre-flight, rebase-pr]
     if: |
       always() &&
