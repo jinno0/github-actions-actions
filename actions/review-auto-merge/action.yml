@@ -177,58 +177,67 @@ runs:
             fi
           fi
 
-          # Try each merge method
-          for METHOD in "${MERGE_METHODS[@]}"; do
-            echo "Trying merge method: $METHOD" >> $GITHUB_STEP_SUMMARY
+        # Try each merge method
+        for METHOD in "${MERGE_METHODS[@]}"; do
+          echo "Trying merge method: $METHOD" >> $GITHUB_STEP_SUMMARY
 
-            case $METHOD in
-              squash)
-                MERGE_OUTPUT=$(gh pr merge "$PR_NUMBER" --squash --delete-branch 2>&1)
-                MERGE_EXIT=$?
-                if [ $MERGE_EXIT -eq 0 ]; then
-                  echo "✓ Merged using squash" >> $GITHUB_STEP_SUMMARY
-                  echo "merged=true" >> $GITHUB_OUTPUT
-                  exit 0
-                else
-                  echo "Squash merge failed: $MERGE_OUTPUT" >> $GITHUB_STEP_SUMMARY
-                fi
-                ;;
-              merge)
-                MERGE_OUTPUT=$(gh pr merge "$PR_NUMBER" --merge --delete-branch 2>&1)
-                MERGE_EXIT=$?
-                if [ $MERGE_EXIT -eq 0 ]; then
-                  echo "✓ Merged using merge commit" >> $GITHUB_STEP_SUMMARY
-                  echo "merged=true" >> $GITHUB_OUTPUT
-                  exit 0
-                else
-                  echo "Merge commit failed: $MERGE_OUTPUT" >> $GITHUB_STEP_SUMMARY
-                fi
-                ;;
-              rebase)
-                MERGE_OUTPUT=$(gh pr merge "$PR_NUMBER" --rebase --delete-branch 2>&1)
-                MERGE_EXIT=$?
-                if [ $MERGE_EXIT -eq 0 ]; then
-                  echo "✓ Merged using rebase" >> $GITHUB_STEP_SUMMARY
-                  echo "merged=true" >> $GITHUB_OUTPUT
-                  exit 0
-                else
-                  echo "Rebase merge failed: $MERGE_OUTPUT" >> $GITHUB_STEP_SUMMARY
-                fi
-                ;;
-            esac
-          done
-
-          ATTEMPT=$((ATTEMPT + 1))
-          if [ $ATTEMPT -le $MAX_ATTEMPTS ]; then
-            WAIT_TIME=2  # Very short wait for aggressive retry
-            echo "Waiting ${WAIT_TIME}s before retry..." >> $GITHUB_STEP_SUMMARY
-            sleep $WAIT_TIME
-          fi
+          case $METHOD in
+            squash)
+              echo "Executing: gh pr merge $PR_NUMBER --squash --delete-branch" >> $GITHUB_STEP_SUMMARY
+              MERGE_OUTPUT=$(gh pr merge "$PR_NUMBER" --squash --delete-branch 2>&1)
+              MERGE_EXIT=$?
+              echo "Exit code: $MERGE_EXIT" >> $GITHUB_STEP_SUMMARY
+              echo "Output: $MERGE_OUTPUT" >> $GITHUB_STEP_SUMMARY
+              if [ $MERGE_EXIT -eq 0 ]; then
+                echo "✓ Merged using squash" >> $GITHUB_STEP_SUMMARY
+                echo "merged=true" >> $GITHUB_OUTPUT
+                exit 0
+              else
+                echo "Squash merge failed: $MERGE_OUTPUT" >> $GITHUB_STEP_SUMMARY
+              fi
+              ;;
+            merge)
+              echo "Executing: gh pr merge $PR_NUMBER --merge --delete-branch" >> $GITHUB_STEP_SUMMARY
+              MERGE_OUTPUT=$(gh pr merge "$PR_NUMBER" --merge --delete-branch 2>&1)
+              MERGE_EXIT=$?
+              echo "Exit code: $MERGE_EXIT" >> $GITHUB_STEP_SUMMARY
+              echo "Output: $MERGE_OUTPUT" >> $GITHUB_STEP_SUMMARY
+              if [ $MERGE_EXIT -eq 0 ]; then
+                echo "✓ Merged using merge commit" >> $GITHUB_STEP_SUMMARY
+                echo "merged=true" >> $GITHUB_OUTPUT
+                exit 0
+              else
+                echo "Merge commit failed: $MERGE_OUTPUT" >> $GITHUB_STEP_SUMMARY
+              fi
+              ;;
+            rebase)
+              echo "Executing: gh pr merge $PR_NUMBER --rebase --delete-branch" >> $GITHUB_STEP_SUMMARY
+              MERGE_OUTPUT=$(gh pr merge "$PR_NUMBER" --rebase --delete-branch 2>&1)
+              MERGE_EXIT=$?
+              echo "Exit code: $MERGE_EXIT" >> $GITHUB_STEP_SUMMARY
+              echo "Output: $MERGE_OUTPUT" >> $GITHUB_STEP_SUMMARY
+              if [ $MERGE_EXIT -eq 0 ]; then
+                echo "✓ Merged using rebase" >> $GITHUB_STEP_SUMMARY
+                echo "merged=true" >> $GITHUB_OUTPUT
+                exit 0
+              else
+                echo "Rebase merge failed: $MERGE_OUTPUT" >> $GITHUB_STEP_SUMMARY
+              fi
+              ;;
+          esac
         done
 
-        # All attempts failed
-        echo "❌ Failed to merge after $MAX_ATTEMPTS attempts" >> $GITHUB_STEP_SUMMARY
-        gh pr comment "$PR_NUMBER" --body "❌ Auto-merge failed after $MAX_ATTEMPTS attempts with all merge methods (squash, merge, rebase)."
+        ATTEMPT=$((ATTEMPT + 1))
+        if [ $ATTEMPT -le $MAX_ATTEMPTS ]; then
+          WAIT_TIME=2  # Very short wait for aggressive retry
+          echo "Waiting ${WAIT_TIME}s before retry..." >> $GITHUB_STEP_SUMMARY
+          sleep $WAIT_TIME
+        fi
+      done
 
-        echo "merged=false" >> $GITHUB_OUTPUT
-        exit 1
+      # All attempts failed
+      echo "❌ Failed to merge after $MAX_ATTEMPTS attempts" >> $GITHUB_STEP_SUMMARY
+      gh pr comment "$PR_NUMBER" --body "❌ Auto-merge failed after $MAX_ATTEMPTS attempts with all merge methods (squash, merge, rebase)."
+
+      echo "merged=false" >> $GITHUB_OUTPUT
+      exit 1
