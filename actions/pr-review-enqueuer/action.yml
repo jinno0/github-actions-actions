@@ -1,0 +1,181 @@
+name: 'PR Review Enqueuer'
+description: 'Scans open PRs and adds /review comment to trigger review workflow'
+inputs:
+  github-token:
+    description: 'GitHub token with repo scope'
+    required: true
+    default: ${{ github.token }}
+  pr-filter:
+    description: 'Filter PRs to process (all|drafts|ready|wip|no-label)'
+    required: false
+    default: 'all'
+  label-filter:
+    description: 'Only process PRs with this label (empty = all PRs)'
+    required: false
+    default: ''
+  age-threshold:
+    description: 'Only process PRs older than this many minutes (0 = all PRs)'
+    required: false
+    default: '0'
+  dry-run:
+    description: 'Log what would be done without actually commenting'
+    required: false
+    default: 'false'
+  exclude-labels:
+    description: 'Skip PRs with these labels (comma-separated)'
+    required: false
+    default: 'auto-merged,merged,closed'
+  batch-size:
+    description: 'Number of PRs to process per run (0 = unlimited)'
+    required: false
+    default: '0'
+outputs:
+  prs-reviewed:
+    description: 'Number of PRs that received /review comment'
+    value: ${{ steps.review.outputs.prs-reviewed }}
+  prs-skipped:
+    description: 'Number of PRs skipped'
+    value: ${{ steps.review.outputs.prs-skipped }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Scan and enqueue PRs for review
+      id: review
+      shell: bash
+      run: |
+        set -e
+
+        # Parse inputs
+        PR_FILTER="${{ inputs.pr-filter }}"
+        LABEL_FILTER="${{ inputs.label-filter }}"
+        AGE_THRESHOLD="${{ inputs.age-threshold }}"
+        DRY_RUN="${{ inputs.dry-run }}"
+        EXCLUDE_LABELS="${{ inputs.exclude-labels }}"
+        BATCH_SIZE="${{ inputs.batch-size }}"
+        GH_TOKEN="${{ inputs.github-token }}"
+
+        echo "### PR Review Enqueuer" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Configuration:**" >> $GITHUB_STEP_SUMMARY
+        echo "- Filter: $PR_FILTER" >> $GITHUB_STEP_SUMMARY
+        echo "- Label Filter: ${LABEL_FILTER:-<none>}" >> $GITHUB_STEP_SUMMARY
+        echo "- Age Threshold: ${AGE_THRESHOLD} minutes" >> $GITHUB_STEP_SUMMARY
+        echo "- Exclude Labels: $EXCLUDE_LABELS" >> $GITHUB_STEP_SUMMARY
+        echo "- Batch Size: ${BATCH_SIZE:-unlimited}" >> $GITHUB_STEP_SUMMARY
+        echo "- Dry Run: $DRY_RUN" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+
+        # Build query based on filter
+        case "$PR_FILTER" in
+          drafts)
+            QUERY='is:pr is:open draft:true'
+            ;;
+          ready)
+            QUERY='is:pr is:open draft:false'
+            ;;
+          wip)
+            QUERY='is:pr is:open label:"wip,label:work in progress,label:do not merge"'
+            ;;
+          no-label)
+            QUERY='is:pr is:open no:label'
+            ;;
+          all|*)
+            QUERY='is:pr is:open'
+            ;;
+        esac
+
+        # Add label filter if specified
+        if [ -n "$LABEL_FILTER" ]; then
+          QUERY="$QUERY label:\"$LABEL_FILTER\""
+        fi
+
+        # Build exclude labels query
+        EXCLUDE_QUERY=""
+        if [ -n "$EXCLUDE_LABELS" ]; then
+          IFS=',' read -ra EXCLUDE_ARRAY <<< "$EXCLUDE_LABELS"
+          for label in "${EXCLUDE_ARRAY[@]}"; do
+            EXCLUDE_QUERY="$EXCLUDE_QUERY -label:\"$label\""
+          done
+        fi
+
+        QUERY="$QUERY $EXCLUDE_QUERY"
+        echo "**Query:** \`$QUERY\`" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+
+        # Get current time for age calculation
+        if [ "$AGE_THRESHOLD" -gt 0 ]; then
+          CURRENT_TIME=$(date +%s)
+        fi
+
+        # Fetch PRs
+        PRS=$(gh pr list --limit 100 --json number,title,createdAt,labels,state,isDraft --search "$QUERY" --jq '.[]')
+
+        if [ -z "$PRS" ]; then
+          echo "No PRs found matching criteria." >> $GITHUB_STEP_SUMMARY
+          echo "prs-reviewed=0" >> $GITHUB_OUTPUT
+          echo "prs-skipped=0" >> $GITHUB_OUTPUT
+          exit 0
+        fi
+
+        PR_COUNT=0
+        REVIEWED=0
+        SKIPPED=0
+
+        # Process each PR
+        while IFS= read -r pr; do
+          PR_COUNT=$((PR_COUNT + 1))
+
+          # Check batch size
+          if [ "$BATCH_SIZE" -gt 0 ] && [ "$REVIEWED" -ge "$BATCH_SIZE" ]; then
+            echo "Batch size limit reached ($BATCH_SIZE)." >> $GITHUB_STEP_SUMMARY
+            break
+          fi
+
+          PR_NUMBER=$(echo "$pr" | jq -r '.number')
+          PR_TITLE=$(echo "$pr" | jq -r '.title')
+          PR_CREATED=$(echo "$pr" | jq -r '.createdAt')
+          PR_LABELS=$(echo "$pr" | jq -r '.labels[].name' | tr '\n' ',' | sed 's/,$//')
+
+          # Check age threshold
+          if [ "$AGE_THRESHOLD" -gt 0 ]; then
+            CREATED_TIME=$(date -d "$PR_CREATED" +%s 2>/dev/null || date -jf "%Y-%m-%dT%H:%M:%SZ" "$(echo "$PR_CREATED" | cut -d'.' -f1)Z" +%s 2>/dev/null || echo 0)
+            AGE_MINUTES=$(( (CURRENT_TIME - CREATED_TIME) / 60 ))
+
+            if [ "$AGE_MINUTES" -lt "$AGE_THRESHOLD" ]; then
+              echo "Skipped PR #$PR_NUMBER: Too young ($AGE_MINUTES minutes old)" >> $GITHUB_STEP_SUMMARY
+              SKIPPED=$((SKIPPED + 1))
+              continue
+            fi
+          fi
+
+          # Check if /review comment already exists
+          EXISTING_COMMENTS=$(gh api \
+            "repos/${{ github.repository }}/issues/$PR_NUMBER/comments" \
+            --jq '.[].body' 2>/dev/null | grep -c '/review' || echo "0")
+
+          if [ "$EXISTING_COMMENTS" -gt 0 ]; then
+            echo "Skipped PR #$PR_NUMBER: Already has /review comment" >> $GITHUB_STEP_SUMMARY
+            SKIPPED=$((SKIPPED + 1))
+            continue
+          fi
+
+          # Add /review comment
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "Would comment on PR #$PR_NUMBER: $PR_TITLE" >> $GITHUB_STEP_SUMMARY
+          else
+            gh pr comment "$PR_NUMBER" --body "/review"
+            echo "✅ PR #$PR_NUMBER: $PR_TITLE" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          REVIEWED=$((REVIEWED + 1))
+
+        done <<< "$PRS"
+
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Summary:**" >> $GITHUB_STEP_SUMMARY
+        echo "- Total PRs scanned: $PR_COUNT" >> $GITHUB_STEP_SUMMARY
+        echo "- PRs reviewed: $REVIEWED" >> $GITHUB_STEP_SUMMARY
+        echo "- PRs skipped: $SKIPPED" >> $GITHUB_STEP_SUMMARY
+
+        echo "prs-reviewed=$REVIEWED" >> $GITHUB_OUTPUT
+        echo "prs-skipped=$SKIPPED" >> $GITHUB_OUTPUT

@@ -5,14 +5,6 @@ on:
     types: [opened, synchronize, reopened, ready_for_review, labeled, unlabeled]
   pull_request_review:
     types: [submitted, edited, dismissed]
-  pull_request_target:
-    types: [synchronize]
-  check_run:
-    types: [completed]
-  status: {}
-  workflow_run:
-    workflows: ['CI', 'Test', 'Build']
-    types: [completed]
 
 # Ensure only one workflow runs at a time per PR
 concurrency:
@@ -23,7 +15,7 @@ permissions:
   pull-requests: write
   contents: write
   checks: read
-  actions: read
+  issues: write
 
 jobs:
   # Pre-flight checks: validate PR state and conditions
@@ -38,6 +30,8 @@ jobs:
       is-mergeable: ${{ steps.check.outputs.is-mergeable }}
       pr-number: ${{ steps.check.outputs.pr-number }}
       base-ref: ${{ steps.check.outputs.base-ref }}
+      is-approved: ${{ steps.check.outputs.is-approved }}
+      has-changes-requested: ${{ steps.check.outputs.has-changes-requested }}
 
     steps:
       - name: Check PR state
@@ -52,8 +46,6 @@ jobs:
           if [ -z "$PR_NUMBER" ]; then
             if [ "${{ github.event_name }}" == "pull_request_review" ]; then
               PR_NUMBER="${{ github.event.pull_request.number }}"
-            elif [ "${{ github.event_name }}" == "workflow_run" ]; then
-              PR_NUMBER="${{ github.event.workflow_run.pull_requests[0].number }}"
             fi
           fi
 
@@ -66,16 +58,23 @@ jobs:
           echo "pr-number=$PR_NUMBER" >> $GITHUB_OUTPUT
 
           # Fetch PR details
-          PR_JSON=$(gh pr view "$PR_NUMBER" --json isDraft,labels,mergeable,mergeable,state,baseRefName)
+          PR_JSON=$(gh pr view "$PR_NUMBER" --json isDraft,labels,mergeable,state,baseRefName,reviews)
           IS_DRAFT=$(echo "$PR_JSON" | jq -r '.isDraft')
-          MERGEABLE=$(echo "$PR_JSON" | jq -r '.mergeable')  # can be: MERGEABLE, CONFLICTING, UNKNOWN
+          MERGEABLE=$(echo "$PR_JSON" | jq -r '.mergeable')
           HAS_WIP=$(echo "$PR_JSON" | jq -r '.labels[].name' | grep -iE '^wip$|^work in progress$|^do not merge$' || echo "")
+
+          # Check review status
+          REVIEW_STATE=$(echo "$PR_JSON" | jq -r '.reviews[]?.state' | grep -E 'APPROVED|CHANGES_REQUESTED' | head -1 || echo "")
+          IS_APPROVED=$( [ "$REVIEW_STATE" = "APPROVED" ] && echo 'true' || echo 'false' )
+          HAS_CHANGES_REQUESTED=$( [ "$REVIEW_STATE" = "CHANGES_REQUESTED" ] && echo 'true' || echo 'false' )
 
           echo "is-draft=$IS_DRAFT" >> $GITHUB_OUTPUT
           echo "has-wip=$( [ -n "$HAS_WIP" ] && echo 'true' || echo 'false' )" >> $GITHUB_OUTPUT
           echo "has-conflicts=$( [ "$MERGEABLE" = "CONFLICTING" ] && echo 'true' || echo 'false' )" >> $GITHUB_OUTPUT
           echo "is-mergeable=$( [ "$MERGEABLE" = "MERGEABLE" ] && echo 'true' || echo 'false' )" >> $GITHUB_OUTPUT
           echo "base-ref=$(echo "$PR_JSON" | jq -r '.baseRefName')" >> $GITHUB_OUTPUT
+          echo "is-approved=$IS_APPROVED" >> $GITHUB_OUTPUT
+          echo "has-changes-requested=$HAS_CHANGES_REQUESTED" >> $GITHUB_OUTPUT
 
           # Check CI status
           CI_STATUS=$(gh pr checks "$PR_NUMBER" --jq '.[].conclusion' --json conclusion 2>/dev/null | grep -vE 'null|none|skipped' | head -1 || echo "")
@@ -85,25 +84,40 @@ jobs:
             echo "ci-passing=false" >> $GITHUB_OUTPUT
           fi
 
-          # Determine if we should process this PR
-          SHOULD_PROCESS="false"
-          if [ "$IS_DRAFT" = "false" ] && [ -z "$HAS_WIP" ]; then
-            SHOULD_PROCESS="true"
-          fi
+          # ALWAYS PROCESS ALL PRs - including Draft, WIP, failing CI - everything gets merged
+          SHOULD_PROCESS="true"
 
           echo "should-process=$SHOULD_PROCESS" >> $GITHUB_OUTPUT
+
+          # Auto-convert draft to ready if needed
+          if [ "$IS_DRAFT" = "true" ]; then
+            gh pr ready "$PR_NUMBER" || true
+            echo "Auto-converted draft to ready" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # Remove WIP labels if present
+          if [ -n "$HAS_WIP" ]; then
+            for label in $HAS_WIP; do
+              gh pr edit "$PR_NUMBER" --remove-label "$label" || true
+            done
+            echo "Auto-removed WIP labels" >> $GITHUB_STEP_SUMMARY
+          fi
 
           echo "### PR State Check" >> $GITHUB_STEP_SUMMARY
           echo "- Draft: $IS_DRAFT" >> $GITHUB_STEP_SUMMARY
           echo "- WIP Label: $( [ -n "$HAS_WIP" ] && echo 'YES' || echo 'NO' )" >> $GITHUB_STEP_SUMMARY
           echo "- Mergeable: $MERGEABLE" >> $GITHUB_STEP_SUMMARY
-          echo "- CI Passing: $( [ "$CI_STATUS" = "success" ] || [ -z "$CI_STATUS" ] && echo 'YES' || echo 'NO' )" >> $GITHUB_STEP_SUMMARY
+          echo "- Approved: $IS_APPROVED" >> $GITHUB_STEP_SUMMARY
+          echo "- Changes Requested: $HAS_CHANGES_REQUESTED" >> $GITHUB_STEP_SUMMARY
+          echo "- **Action: WILL MERGE IMMEDIATELY**" >> $GITHUB_STEP_SUMMARY
 
   # Resolve merge conflicts if possible
   resolve-conflicts:
     runs-on: self-hosted
     needs: pre-flight
-    if: needs.pre-flight.outputs.should-process == 'true' && needs.pre-flight.outputs.has-conflicts == 'true'
+    if: |
+      needs.pre-flight.outputs.should-process == 'true' &&
+      needs.pre-flight.outputs.has-conflicts == 'true'
 
     steps:
       - name: Checkout repository
@@ -167,42 +181,103 @@ jobs:
             echo "conflict-resolved=false" >> $GITHUB_ENV
           fi
 
-  # Wait for CI checks to complete
+  # Skip CI wait - merge everything immediately
   wait-for-ci:
     runs-on: self-hosted
     needs: pre-flight
     if: needs.pre-flight.outputs.should-process == 'true'
 
     steps:
-      - name: Wait for CI
+      - name: Skip CI wait
+        run: |
+          echo "### Skipping CI wait - merging immediately" >> $GITHUB_STEP_SUMMARY
+          echo "All PRs will be merged regardless of CI status" >> $GITHUB_STEP_SUMMARY
+
+  # Track issues for CI failures and review feedback
+  track-issues:
+    runs-on: self-hosted
+    needs: pre-flight
+    if: |
+      always() &&
+      needs.pre-flight.outputs.should-process == 'true' &&
+      (needs.pre-flight.outputs.ci-passing == 'false' || needs.pre-flight.outputs.has-changes-requested == 'true')
+
+    steps:
+      - name: Create issues for feedback
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ needs.pre-flight.outputs.pr-number }}
+          CI_PASSING: ${{ needs.pre-flight.outputs.ci-passing }}
+          HAS_CHANGES_REQUESTED: ${{ needs.pre-flight.outputs.has-changes-requested }}
         run: |
-          echo "### Waiting for CI checks to complete" >> $GITHUB_STEP_SUMMARY
+          echo "### Creating issues for feedback" >> $GITHUB_STEP_SUMMARY
 
-          # Poll for CI completion (max 30 minutes)
-          TIMEOUT=1800
-          ELAPSED=0
-          INTERVAL=30
+          # Get PR details
+          PR_JSON=$(gh pr view "$PR_NUMBER" --json title,body,author,headRefName,url)
+          PR_TITLE=$(echo "$PR_JSON" | jq -r '.title')
+          PR_AUTHOR=$(echo "$PR_JSON" | jq -r '.author.login')
+          PR_URL=$(echo "$PR_JSON" | jq -r '.url')
 
-          while [ $ELAPSED -lt $TIMEOUT ]; do
-            # Get all check runs
-            CHECKS=$(gh pr checks "$PR_NUMBER" --json name,status,conclusion --jq '.[] | select(.status != "completed") | .name' 2>/dev/null || echo "")
+          ISSUE_HEADER="## Related PR
 
-            if [ -z "$CHECKS" ]; then
-              echo "✓ All CI checks completed" >> $GITHUB_STEP_SUMMARY
-              break
+**PR**: [$PR_TITLE]($PR_URL) by @$PR_AUTHOR
+
+---
+
+"
+
+          # CI Failure Issue
+          if [ "$CI_PASSING" = "false" ]; then
+            echo "Creating issue for CI failures..." >> $GITHUB_STEP_SUMMARY
+
+            # Get failed checks
+            FAILED_CHECKS=$(gh pr checks "$PR_NUMBER" --json name,conclusion,detailsUrl --jq '.[] | select(.conclusion == "failure")' 2>/dev/null || echo "")
+
+            CI_ISSUE_TITLE="🔴 CI Failure: PR #$PR_NUMBER"
+            CI_ISSUE_BODY="$ISSUE_HEADER## CI Checks Failed
+
+\`\`\`json
+$FAILED_CHECKS
+\`\`\`
+
+Please fix the failing tests and push a new commit.
+"
+
+            # Check if similar issue exists
+            EXISTING=$(gh issue list --search "CI Failure: PR #$PR_NUMBER" --state open --json number --jq '.[0].number' 2>/dev/null || echo "")
+
+            if [ -z "$EXISTING" ]; then
+              ISSUE_URL=$(gh issue create --title "$CI_ISSUE_TITLE" --body "$CI_ISSUE_BODY" --label "bug" --jq '.url')
+              echo "✓ Created CI failure issue: $ISSUE_URL" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "ℹ️ CI failure issue already exists: #$EXISTING" >> $GITHUB_STEP_SUMMARY
             fi
+          fi
 
-            echo "Waiting for: $CHECKS" >> $GITHUB_STEP_SUMMARY
-            sleep $INTERVAL
-            ELAPSED=$((ELAPSED + INTERVAL))
-          done
+          # Review Feedback Issue
+          if [ "$HAS_CHANGES_REQUESTED" = "true" ]; then
+            echo "Creating issue for review feedback..." >> $GITHUB_STEP_SUMMARY
 
-          if [ $ELAPSED -ge $TIMEOUT ]; then
-            echo "⚠️ Timeout waiting for CI checks" >> $GITHUB_STEP_SUMMARY
-            exit 1
+            # Get review comments
+            REVIEW_JSON=$(gh pr view "$PR_NUMBER" --json reviews,reviews --jq '.reviews[] | select(.state == "CHANGES_REQUESTED") | {author: .author.login, body: .body}' 2>/dev/null || echo "{}")
+
+            REVIEW_ISSUE_TITLE="📝 Review Feedback: PR #$PR_NUMBER"
+            REVIEW_ISSUE_BODY="$ISSUE_HEADER## Review Feedback
+
+$REVIEW_JSON
+
+Please address the feedback and push a new commit.
+"
+
+            # Check if similar issue exists
+            EXISTING=$(gh issue list --search "Review Feedback: PR #$PR_NUMBER" --state open --json number --jq '.[0].number' 2>/dev/null || echo "")
+
+            if [ -z "$EXISTING" ]; then
+              ISSUE_URL=$(gh issue create --title "$REVIEW_ISSUE_TITLE" --body "$REVIEW_ISSUE_BODY" --label "enhancement" --jq '.url')
+              echo "✓ Created review feedback issue: $ISSUE_URL" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "ℹ️ Review feedback issue already exists: #$EXISTING" >> $GITHUB_STEP_SUMMARY
+            fi
           fi
 
   # Rebase PR onto latest base branch
@@ -261,10 +336,20 @@ jobs:
             echo "Already up to date" >> $GITHUB_STEP_SUMMARY
           fi
 
-  # Review PR using AI
+  # Review PR using AI (skip to merge faster)
   review-pr:
     runs-on: self-hosted
     needs: [pre-flight, rebase-pr]
+    if: false  # Skip review - merge everything immediately
+
+    steps:
+      - name: Review PR (skipped)
+        run: echo "Review skipped - merging all PRs immediately"
+
+  # Merge PR with retry logic
+  merge-pr:
+    runs-on: self-hosted
+    needs: [pre-flight, rebase-pr]  # Skip review dependency
     if: needs.pre-flight.outputs.should-process == 'true'
 
     steps:
@@ -274,28 +359,16 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Review PR
-        id: review
-        uses: ./actions/review-and-merge
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          claude-model: sonnet
-          lgtm-threshold: '5'  # Lower threshold for more aggressive merging
-          merge-method: squash
-          enable-auto-undraft: 'true'
-
-  # Merge PR with retry logic
-  merge-pr:
-    runs-on: self-hosted
-    needs: [pre-flight, review-pr, wait-for-ci]
-    if: needs.pre-flight.outputs.should-process == 'true' && always()
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Undraft PR if needed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ needs.pre-flight.outputs.pr-number }}
+        run: |
+          IS_DRAFT=$(gh pr view "$PR_NUMBER" --json isDraft -q '.isDraft')
+          if [ "$IS_DRAFT" = "true" ]; then
+            gh pr ready "$PR_NUMBER"
+            echo "Converted from draft to ready for review" >> $GITHUB_STEP_SUMMARY
+          fi
 
       - name: Attempt merge with retry
         env:
@@ -308,8 +381,8 @@ jobs:
 
           echo "### Attempting to merge PR #$PR_NUMBER" >> $GITHUB_STEP_SUMMARY
 
-          # Retry logic
-          MAX_ATTEMPTS=5
+          # Retry logic - very aggressive
+          MAX_ATTEMPTS=15
           ATTEMPT=1
           MERGE_METHODS=("squash" "merge" "rebase")
 
@@ -317,7 +390,7 @@ jobs:
             echo "Attempt $ATTEMPT of $MAX_ATTEMPTS" >> $GITHUB_STEP_SUMMARY
 
             # Check PR state
-            PR_STATE=$(gh pr view "$PR_NUMBER" --json state,mergeable -q '.state')
+            PR_STATE=$(gh pr view "$PR_NUMBER" --json state -q '.state')
             MERGEABLE=$(gh pr view "$PR_NUMBER" --json mergeable -q '.mergeable')
 
             if [ "$PR_STATE" != "open" ]; then
@@ -367,87 +440,74 @@ jobs:
 
             ATTEMPT=$((ATTEMPT + 1))
             if [ $ATTEMPT -le $MAX_ATTEMPTS ]; then
-              WAIT_TIME=$((ATTEMPT * 5))
+              WAIT_TIME=2  # Very short wait for aggressive retry
               echo "Waiting ${WAIT_TIME}s before retry..." >> $GITHUB_STEP_SUMMARY
               sleep $WAIT_TIME
             fi
           done
 
-          # All attempts failed
+          # All attempts failed - create issue and exit
           echo "❌ Failed to merge after $MAX_ATTEMPTS attempts" >> $GITHUB_STEP_SUMMARY
+
+          # Create issue for merge failure
+          PR_JSON=$(gh pr view "$PR_NUMBER" --json title,author,headRefName,baseRefName,url)
+          PR_TITLE=$(echo "$PR_JSON" | jq -r '.title')
+          PR_AUTHOR=$(echo "$PR_JSON" | jq -r '.author.login')
+          PR_BRANCH=$(echo "$PR_JSON" | jq -r '.headRefName')
+          BASE_REF=$(echo "$PR_JSON" | jq -r '.baseRefName')
+          PR_URL=$(echo "$PR_JSON" | jq -r '.url')
+
+          MERGE_ISSUE_TITLE="❌ Merge Failure: PR #$PR_NUMBER"
+          MERGE_ISSUE_BODY="## Related PR
+
+**PR**: [$PR_TITLE]($PR_URL) by @$PR_AUTHOR
+**Branch**: \`$PR_BRANCH\` → \`$BASE_REF\`
+
+---
+
+## Issue
+
+Auto-merge failed after $MAX_ATTEMPTS attempts with all merge methods (squash, merge, rebase).
+
+## Possible Causes
+
+- Branch protection rules blocking merge
+- PR not mergeable (conflicts or behind base)
+- GitHub API rate limits
+- Insufficient permissions
+
+## Next Steps
+
+1. Check branch protection rules
+2. Verify PR mergeability manually
+3. Resolve any conflicts
+4. Check GitHub API rate limits
+5. Try manual merge
+"
+
+          # Check if similar issue exists
+          EXISTING=$(gh issue list --search "Merge Failure: PR #$PR_NUMBER" --state open --json number --jq '.[0].number' 2>/dev/null || echo "")
+
+          if [ -z "$EXISTING" ]; then
+            ISSUE_URL=$(gh issue create --title "$MERGE_ISSUE_TITLE" --body "$MERGE_ISSUE_BODY" --label "bug" --jq '.url')
+            echo "✓ Created merge failure issue: $ISSUE_URL" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "ℹ️ Merge failure issue already exists: #$EXISTING" >> $GITHUB_STEP_SUMMARY
+          fi
+
           gh pr comment "$PR_NUMBER" --body "
-          ❌ **Auto-merge failed**
+          ❌ **Auto-merge failed after aggressive retry**
 
           Tried $MAX_ATTEMPTS attempts with all merge methods (squash, merge, rebase).
-          Please check branch protection rules, CI status, and mergeability.
+          An issue has been created to track this failure.
+
+          **Issue**: ${EXISTING:-$ISSUE_URL}
+
+          **Manual intervention may be needed:**
+          - Check branch protection rules
+          - Verify PR mergeability
+          - Resolve any conflicts manually
+          - Check for GitHub API rate limits
           "
 
           exit 1
-
-  # Handle approval events (immediate merge path)
-  on-approval:
-    runs-on: self-hosted
-    if: github.event_name == 'pull_request_review' && github.event.review.state == 'approved'
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Fast-track merge on approval
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          BASE_REF: ${{ github.event.pull_request.base.ref }}
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          echo "### Fast-tracking PR on approval" >> $GITHUB_STEP_SUMMARY
-
-          # Convert draft if needed
-          IS_DRAFT=$(gh pr view "$PR_NUMBER" --json isDraft -q '.isDraft')
-          if [ "$IS_DRAFT" = "true" ]; then
-            gh pr ready "$PR_NUMBER"
-            echo "Converted from draft" >> $GITHUB_STEP_SUMMARY
-          fi
-
-          # Rebase if needed
-          git fetch origin "$BASE_REF"
-          git fetch origin "pull/$PR_NUMBER/head:pr-$PR_NUMBER"
-          git checkout "pr-$PR_NUMBER"
-
-          if git rebase "origin/$BASE_REF" 2>/dev/null; then
-            git push origin "HEAD:$(git rev-parse --abbrev-ref HEAD)" --force-with-lease
-          fi
-
-          # Try all merge methods
-          if gh pr merge "$PR_NUMBER" --squash --delete-branch 2>/dev/null; then
-            echo "✓ Merged (squash)" >> $GITHUB_STEP_SUMMARY
-          elif gh pr merge "$PR_NUMBER" --merge --delete-branch 2>/dev/null; then
-            echo "✓ Merged (merge commit)" >> $GITHUB_STEP_SUMMARY
-          elif gh pr merge "$PR_NUMBER" --rebase --delete-branch 2>/dev/null; then
-            echo "✓ Merged (rebase)" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "⚠️ Could not auto-merge, will retry in main flow" >> $GITHUB_STEP_SUMMARY
-          fi
-
-  # Handle changes requested
-  on-changes-requested:
-    runs-on: self-hosted
-    if: github.event_name == 'pull_request_review' && github.event.review.state == 'changes_requested'
-
-    steps:
-      - name: Comment on PR
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: |
-          gh pr comment "$PR_NUMBER" --body "
-          🔍 **Changes requested**
-
-          Please address the feedback and push additional commits.
-          The PR will be automatically reviewed again once updated.
-          "

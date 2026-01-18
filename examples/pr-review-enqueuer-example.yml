@@ -1,0 +1,59 @@
+name: Scheduled PR Review Enqueue
+
+# Run every 3 hours to scan and enqueue PRs for review
+on:
+  schedule:
+    - cron: '0 */3 * * *'  # Every 3 hours
+  workflow_dispatch:  # Allow manual trigger
+
+permissions:
+  pull-requests: write  # For adding /review comments
+  contents: read
+
+jobs:
+  enqueue-prs-for-review:
+    name: Scan and Enqueue PRs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Enqueue all open PRs for review
+        uses: your-org/github-actions-actions/actions/pr-review-enqueuer@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          # Process all open PRs (including drafts and WIP)
+          pr-filter: 'all'
+          # No label filter - process all PRs
+          label-filter: ''
+          # Only process PRs older than 5 minutes (avoid race with PR creation)
+          age-threshold: '5'
+          # Skip already merged/closed PRs
+          exclude-labels: 'auto-merged,merged,closed'
+          # Process unlimited PRs per run
+          batch-size: '0'
+          dry-run: 'false'
+
+      # Alternative: Only ready-for-review PRs
+      # - name: Enqueue ready PRs only
+      #   uses: your-org/github-actions-actions/actions/pr-review-enqueuer@v1
+      #   with:
+      #     pr-filter: 'ready'
+      #     age-threshold: '10'
+
+      # Alternative: Process PRs with specific label
+      # - name: Enqueue labeled PRs
+      #   uses: your-org/github-actions-actions/actions/pr-review-enqueuer@v1
+      #   with:
+      #     pr-filter: 'all'
+      #     label-filter: 'needs-review'
+      #     batch-size: '10'  # Limit to 10 PRs per run
+
+  # Optional: Create a summary issue
+  create-summary:
+    if: always()
+    needs: enqueue-prs-for-review
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check results
+        run: |
+          echo "PRs enqueued: ${{ needs.enqueue-prs-for-review.outputs.prs-reviewed }}"
+          echo "PRs skipped: ${{ needs.enqueue-prs-for-review.outputs.prs-skipped }}"
