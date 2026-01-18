@@ -1,0 +1,58 @@
+name: 'Review and Auto-Merge PR'
+description: 'Automatically rebase and merge PRs'
+
+inputs:
+  github-token:
+    description: 'GitHub token'
+    required: true
+    default: ${{ github.token }}
+  max-attempts:
+    description: 'Maximum merge attempts'
+    required: false
+    default: '5'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Merge PR
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
+        MAX_ATTEMPTS: ${{ inputs.max-attempts }}
+      run: |
+        set -e  # Exit on error
+
+        echo "### Auto-Merge PR #$PR_NUMBER" >> $GITHUB_STEP_SUMMARY
+
+        # Try to merge with retry
+        ATTEMPT=1
+        while [ $ATTEMPT -le $MAX_ATTEMPTS ]; do
+          echo "Attempt $ATTEMPT of $MAX_ATTEMPTS" >> $GITHUB_STEP_SUMMARY
+
+          # Check PR state
+          PR_STATE=$(gh pr view "$PR_NUMBER" --json state -q '.state')
+          if [ "$PR_STATE" != "open" ]; then
+            echo "PR is not open (state: $PR_STATE)" >> $GITHUB_STEP_SUMMARY
+            echo "merged=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+
+          # Try squash merge
+          if gh pr merge "$PR_NUMBER" --squash --delete-branch; then
+            echo "✓ PR merged successfully (squash)" >> $GITHUB_STEP_SUMMARY
+            echo "merged=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Wait before retry
+          if [ $ATTEMPT -lt $MAX_ATTEMPTS ]; then
+            sleep 5
+          fi
+
+          ATTEMPT=$((ATTEMPT + 1))
+        done
+
+        echo "❌ Failed to merge after $MAX_ATTEMPTS attempts" >> $GITHUB_STEP_SUMMARY
+        echo "merged=false" >> $GITHUB_OUTPUT
+        exit 1
