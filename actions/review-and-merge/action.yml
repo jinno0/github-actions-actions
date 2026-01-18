@@ -1,5 +1,5 @@
-name: 'Review PR and Auto-Merge'
-description: 'Automatically fix code issues using Claude Code CLI, rebase if needed, resolve conflicts, and merge the PR.'
+name: 'AI Review and Fix'
+description: 'Review and automatically fix code issues using Claude Code CLI.'
 inputs:
   github-token:
     description: 'GitHub token with repo permissions'
@@ -12,10 +12,6 @@ inputs:
     description: 'Minimum confidence score for LGTM (1-10, default: 7)'
     required: false
     default: '7'
-  merge-method:
-    description: 'Merge method (squash, merge, rebase)'
-    required: false
-    default: 'squash'
   review-prompt-template:
     description: 'Path to custom review prompt template (optional, uses built-in template if not specified)'
     required: false
@@ -32,6 +28,13 @@ inputs:
     description: 'Whether to automatically fix issues found in the review (default: true)'
     required: false
     default: 'true'
+outputs:
+  verdict:
+    description: 'Review verdict (LGTM or REQUEST_CHANGES)'
+    value: ${{ steps.review.outputs.verdict }}
+  confidence:
+    description: 'Confidence score (1-10)'
+    value: ${{ steps.review.outputs.confidence }}
 runs:
   using: 'composite'
   steps:
@@ -57,8 +60,6 @@ runs:
       id: review
       run: |
         PR_NUMBER=${{ github.event.pull_request.number }}
-        PR_TITLE="${{ github.event.pull_request.title }}"
-        PR_BODY="${{ github.event.pull_request.body }}"
         MODEL="${{ inputs.claude-model }}"
         THRESHOLD="${{ inputs.lgtm-threshold }}"
         REVIEW_PROMPT_TEMPLATE="${{ inputs.review-prompt-template }}"
@@ -72,21 +73,16 @@ runs:
         if [ "$AUTO_FIX" = "true" ]; then
           # --- AUTO FIX MODE ---
           echo "Entering Auto-Fix mode..."
-
-          # Use fix prompt template
           TEMPLATE_FILE="${{ github.action_path }}/templates/fix_prompt.txt"
-
           cat "$TEMPLATE_FILE" > /tmp/fix_prompt.txt
-
+          
           if [ -n "$CUSTOM_RULES" ]; then
             echo -e "\nAdditional Rules:\n$CUSTOM_RULES" >> /tmp/fix_prompt.txt
           fi
-
+          
           echo '' >> /tmp/fix_prompt.txt
           cat /tmp/pr_diff.patch >> /tmp/fix_prompt.txt
 
-          # Run Claude to FIX files
-          # Not redirecting to json, letting it edit files
           if claude --dangerously-skip-permissions --model "$MODEL" < /tmp/fix_prompt.txt > /tmp/claude_output.txt 2>&1; then
              echo "Claude fix execution completed"
           else
@@ -94,31 +90,27 @@ runs:
              exit 1
           fi
 
-          # Check for changes and commit locally (DON'T push yet)
           if git diff --quiet; then
             echo "No changes made by Claude."
             SUMMARY="Analyzed code, no fixes needed."
             MADE_CHANGES="false"
           else
-            echo "Changes detected. Committing locally..."
+            echo "Changes detected. Committing..."
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git config user.name "github-actions[bot]"
             git add .
             git commit -m "fix: auto-correction by Claude Code"
+            git push
             SUMMARY="Applied auto-fixes based on code analysis."
             MADE_CHANGES="true"
           fi
-
-          # In auto-fix mode, we assume LGTM if execution succeeded
+          
           VERDICT="LGTM"
           CONFIDENCE="10"
-          echo "made_changes=$MADE_CHANGES" >> $GITHUB_OUTPUT
-
+          
         else
           # --- REVIEW MODE ---
           echo "Entering Review mode..."
-
-          # Use custom template if provided, otherwise use built-in
           if [ -n "$REVIEW_PROMPT_TEMPLATE" ] && [ -f "$REVIEW_PROMPT_TEMPLATE" ]; then
             REVIEW_PROMPT_FILE="$REVIEW_PROMPT_TEMPLATE"
           else
@@ -126,7 +118,7 @@ runs:
           fi
 
           cat "$REVIEW_PROMPT_FILE" > /tmp/review_prompt.txt
-
+          
           if [ -n "$CUSTOM_RULES" ]; then
             echo -e "\nAdditional Rules for this Review:\n$CUSTOM_RULES" >> /tmp/review_prompt.txt
           fi
@@ -140,7 +132,6 @@ runs:
             echo '{"verdict":"REQUEST_CHANGES","confidence":1,"summary":"Claude CLI error"}' > /tmp/claude_response.json
           fi
 
-          # Parse JSON response
           if grep -q '"verdict"[[:space:]]*:[[:space:]]*"LGTM"' /tmp/claude_response.json; then
             VERDICT="LGTM"
           else
@@ -148,107 +139,24 @@ runs:
           fi
           CONFIDENCE=$(grep -oP '"confidence"[[:space:]]*:[[:space:]]*\K\d+' /tmp/claude_response.json || echo "1")
           SUMMARY=$(grep -oP '"summary"[[:space:]]*:[[:space:]]*"\K[^"].*' /tmp/claude_response.json || echo "No summary")
-          echo "made_changes=false" >> $GITHUB_OUTPUT
+          MADE_CHANGES="false"
         fi
 
         echo "verdict=$VERDICT" >> $GITHUB_OUTPUT
         echo "confidence=$CONFIDENCE" >> $GITHUB_OUTPUT
         echo "summary=$SUMMARY" >> $GITHUB_OUTPUT
-
-    - name: Rebase and resolve conflicts before merge
-      shell: bash
-      if: steps.review.outputs.verdict == 'LGTM' && steps.review.outputs.confidence >= inputs.lgtm-threshold
-      id: rebase
-      run: |
-        PR_NUMBER=${{ github.event.pull_request.number }}
-        MERGE_METHOD="${{ inputs.merge-method }}"
-        BASE_BRANCH="${{ github.event.pull_request.base.ref_name }}"
-        MADE_CHANGES="${{ steps.review.outputs.made_changes }}"
-
-        echo "Checking if rebase is needed..."
-        # Fetch latest base branch
-        git fetch origin "$BASE_BRANCH"
-
-        # Check if branch is behind base
-        BEHIND_COUNT=$(git rev-list --count HEAD..origin/"$BASE_BRANCH" 2>/dev/null || echo "0")
-
-        if [ "$BEHIND_COUNT" -gt 0 ]; then
-          echo "Branch is $BEHIND commits behind $BASE_BRANCH. Rebasing..."
-
-          # Attempt rebase
-          if git rebase origin/"$BASE_BRANCH"; then
-            echo "Rebase successful."
-            REBASED="true"
-          else
-            echo "Rebase failed. Attempting to resolve conflicts..."
-
-            # Get list of conflicted files using git ls-files -u (most reliable)
-            CONFLICT_FILES=$(git ls-files -u | awk '{print $4}' | sort -u)
-
-            if [ -n "$CONFLICT_FILES" ]; then
-              echo "Conflicts detected in:"
-              echo "$CONFLICT_FILES"
-
-              # Resolve conflicts by accepting the base branch version (conservative)
-              echo "$CONFLICT_FILES" | while read -r file; do
-                echo "Resolving conflict in: $file"
-                git checkout --theirs "$file" 2>/dev/null || git checkout --ours "$file"
-                git add "$file"
-              done
-
-              # Continue rebase after resolution
-              if git rebase --continue; then
-                echo "Conflicts resolved successfully."
-                REBASED="true"
-                RESOLVED_CONFLICTS="true"
-              else
-                echo "Failed to continue rebase after conflict resolution."
-                git rebase --abort 2>/dev/null || true
-                echo "::error::Could not automatically resolve merge conflicts. Manual intervention required."
-                exit 1
-              fi
-            else
-              echo "No conflict files found, but rebase failed for another reason."
-              git rebase --abort 2>/dev/null || true
-              exit 1
-            fi
-          fi
-        else
-          echo "Branch is up to date with $BASE_BRANCH. No rebase needed."
-          REBASED="false"
-          RESOLVED_CONFLICTS="false"
-        fi
-
-        echo "rebased=$REBASED" >> $GITHUB_OUTPUT
-        echo "resolved_conflicts=${RESOLVED_CONFLICTS:-false}" >> $GITHUB_OUTPUT
-
-    - name: Push changes (auto-fix or rebase)
-      shell: bash
-      if: |
-        steps.rebase.outputs.rebased == 'true' ||
-        steps.review.outputs.made_changes == 'true'
-      run: |
-        # Push all changes (auto-fix commits and/or rebased commits)
-        echo "Pushing changes to remote..."
-        git push --force-with-lease
-        echo "Changes pushed successfully."
+        echo "made_changes=$MADE_CHANGES" >> $GITHUB_OUTPUT
 
     - name: Post review comment
       shell: bash
-      if: |
-        always() &&
-        inputs.auto-fix == 'false' &&
-        steps.review.outputs.verdict != ''
+      if: always() && inputs.auto-fix != 'true'
       run: |
-        # Only post detailed comments in Review Mode
         PR_NUMBER=${{ github.event.pull_request.number }}
         VERDICT="${{ steps.review.outputs.verdict }}"
         CONFIDENCE="${{ steps.review.outputs.confidence }}"
         SUMMARY="${{ steps.review.outputs.summary }}"
         THRESHOLD="${{ inputs.lgtm-threshold }}"
         COMMENT_TEMPLATE="${{ inputs.comment-template }}"
-        REBASED="${{ steps.rebase.outputs.rebased }}"
-        RESOLVED_CONFLICTS="${{ steps.rebase.outputs.resolved_conflicts }}"
 
         if [ -n "$COMMENT_TEMPLATE" ] && [ -f "$COMMENT_TEMPLATE" ]; then
           TEMPLATE_FILE="$COMMENT_TEMPLATE"
@@ -257,16 +165,9 @@ runs:
         fi
 
         if [ "$VERDICT" = "LGTM" ] && [ "$CONFIDENCE" -ge "$THRESHOLD" ]; then
-          STATUS_MESSAGE="✅ This PR meets the LGTM threshold and will be auto-merged."
-          if [ "$REBASED" = "true" ]; then
-            if [ "$RESOLVED_CONFLICTS" = "true" ]; then
-              STATUS_MESSAGE="$STATUS_MESSAGE"$'\n\n'"🔄 **Rebased** and **conflicts resolved** automatically before merge."
-            else
-              STATUS_MESSAGE="$STATUS_MESSAGE"$'\n\n'"🔄 **Rebased** automatically before merge."
-            fi
-          fi
+          STATUS_MESSAGE="✅ This PR meets the LGTM threshold."
         else
-          STATUS_MESSAGE="❌ This PR does not meet the LGTM threshold or requires changes."
+          STATUS_MESSAGE="❌ This PR requires changes."
         fi
 
         COMMENT=$(sed -e "s#{VERDICT}#$VERDICT#g" \
@@ -278,26 +179,3 @@ runs:
                       "$TEMPLATE_FILE")
 
         gh pr comment $PR_NUMBER --body "$COMMENT"
-
-    - name: Merge PR if LGTM
-      shell: bash
-      if: steps.review.outputs.verdict == 'LGTM' && steps.review.outputs.confidence >= inputs.lgtm-threshold
-      run: |
-        PR_NUMBER=${{ github.event.pull_request.number }}
-        MERGE_METHOD="${{ inputs.merge-method }}"
-
-        echo "Merging PR #$PR_NUMBER using $MERGE_METHOD merge..."
-
-        case "$MERGE_METHOD" in
-          squash)
-            gh pr merge $PR_NUMBER --squash --delete-branch --subject "Auto-merge after LGTM review"
-            ;;
-          merge)
-            gh pr merge $PR_NUMBER --merge --delete-branch
-            ;;
-          rebase)
-            gh pr merge $PR_NUMBER --rebase --delete-branch
-            ;;
-        esac
-
-        echo "PR merged successfully"

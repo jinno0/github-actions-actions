@@ -1,0 +1,35 @@
+name: 'Auto Merge PR'
+description: 'Merge a pull request with specified method'
+inputs:
+  github-token:
+    description: 'GitHub token'
+    required: true
+  merge-method:
+    description: 'Merge method (squash, merge, rebase)'
+    required: false
+    default: 'squash'
+  auto-merge:
+    description: 'Enable auto-merge instead of immediate merge (true/false)'
+    required: false
+    default: 'false'
+runs:
+  using: 'composite'
+  steps:
+    - name: Merge PR
+      shell: bash
+      run: |
+        PR_NUMBER=${{ github.event.pull_request.number }}
+        METHOD="${{ inputs.merge-method }}"
+        AUTO="${{ inputs.auto-merge }}"
+
+        ARGS="--$METHOD --delete-branch"
+
+        if [ "$AUTO" = "true" ]; then
+          ARGS="$ARGS --auto"
+          ACTION="Enabling auto-merge"
+        else
+          ACTION="Merging"
+        fi
+
+        echo "$ACTION PR #$PR_NUMBER using $METHOD..."
+        gh pr merge $PR_NUMBER $ARGS

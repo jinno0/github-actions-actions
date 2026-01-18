@@ -1,4 +1,4 @@
-name: Review and Auto-Merge
+name: Review, Fix, and Merge
 
 on:
   pull_request:
@@ -13,7 +13,7 @@ permissions:
   checks: write
 
 jobs:
-  review:
+  ai-pipeline:
     runs-on: self-hosted
     steps:
       - name: Checkout repository
@@ -21,17 +21,28 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: AI Code Review
+      # 1. Publish PR if it is a draft
+      - name: Publish PR
+        if: github.event.pull_request.draft == true
+        uses: ./actions/publish-pr
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      # 2. AI Review and Auto-Fix
+      - name: AI Review and Fix
+        id: review
         uses: ./actions/review-and-merge
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           claude-model: 'sonnet'
           lgtm-threshold: '7'
+          auto-fix: 'true'
+
+      # 3. Auto Merge if LGTM
+      - name: Auto Merge
+        if: steps.review.outputs.verdict == 'LGTM'
+        uses: ./actions/auto-merge
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           merge-method: 'squash'
-          # Optional: auto-fix is 'true' by default. Set to 'false' to only review without fixing.
-          # auto-fix: 'false'
-          # Optional: Custom rules for the review
-          custom-rules: |
-            - Ensure all function inputs are validated.
-            - Check for proper error handling.
-            - Verify that no secrets are hardcoded.
+          auto-merge: 'true'
