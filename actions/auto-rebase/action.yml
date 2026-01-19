@@ -32,6 +32,17 @@ outputs:
 runs:
   using: 'composite'
   steps:
+    - name: Install Claude CLI
+      shell: bash
+      run: |
+        if ! command -v claude &> /dev/null; then
+          echo "Installing Claude Code CLI..."
+          npm install -g @github/copilot
+          echo "✓ Claude CLI installed"
+        else
+          echo "✓ Claude CLI already installed"
+        fi
+
     - name: Checkout PR
       shell: bash
       env:
@@ -70,7 +81,8 @@ runs:
       env:
         GH_TOKEN: ${{ inputs.github-token }}
       run: |
-        set -e
+        # Don't exit on error - we need to handle rebase conflicts
+        set +e
 
         # Determine PR number from event or inputs
         if [ -n "${{ inputs.pr-number }}" ]; then
@@ -145,12 +157,15 @@ runs:
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "🤖 Asking Claude Code CLI to resolve conflicts..." >> $GITHUB_STEP_SUMMARY
 
-        # Run Claude to resolve conflicts
-        if claude --dangerously-skip-permissions --model "$MODEL" < /tmp/conflict_prompt.txt > /tmp/claude_output.txt 2>&1; then
-          echo "Claude conflict resolution completed" >> $GITHUB_STEP_SUMMARY
-        else
-          echo "⚠️ Claude execution had issues" >> $GITHUB_STEP_SUMMARY
-        fi
+        # Run Claude to resolve conflicts (may fail, but we check results)
+        claude --dangerously-skip-permissions --model "$MODEL" < /tmp/conflict_prompt.txt > /tmp/claude_output.txt 2>&1 || true
+
+        # Show Claude output in summary
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Claude output:**" >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
+        cat /tmp/claude_output.txt >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
 
         # Check if conflicts were resolved
         if git diff --quiet; then
