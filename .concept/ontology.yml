@@ -1,5 +1,5 @@
 version: "0.3"
-updated_at: "2026-01-19T13:08:00Z"
+updated_at: "2026-01-19T11:48:08Z"
 
 canonical_terms:
   CompositeAction:
@@ -153,6 +153,12 @@ canonical_terms:
     evidence:
       - source: "SYSTEM_CONSTITUTION.md#L48-L52"
         quote: "Actions must use strict version management with tags (v1, v2). @main references are prohibited for stability."
+      - source: "instructions/bulk-merge-prs.md#L30"
+        quote: "- uses: jinno0/github-actions-actions/actions/bulk-merge-prs@v1"
+      - source: "instructions/bulk-rebase-prs.md#L28"
+        quote: "- uses: jinno0/github-actions-actions/actions/bulk-rebase-prs@v1"
+      - source: "df9138d"
+        quote: "docs: update bulk action instructions to use version tags (@v1) - Replaced all occurrences of @main with @v1"
 
   SingleResponsibility:
     id: "TERM-SINGLE-RESPONSIBILITY"

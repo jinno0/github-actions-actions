@@ -1,4 +1,4 @@
-updated_at: '2026-01-19T06:12:37.762435Z'
+updated_at: '2026-01-19T11:48:08Z'
 mappings:
   CompositeAction:
     code_symbols: []
@@ -73,8 +73,10 @@ mappings:
     db: []
     api: []
     files:
-    - SYSTEM_CONSTITUTION.md#L95-L100
+    - SYSTEM_CONSTITUTION.md#L48-L52
     - examples/*.yml
+    - instructions/bulk-merge-prs.md#L30
+    - instructions/bulk-rebase-prs.md#L28
   SingleResponsibility:
     code_symbols: []
     db: []
