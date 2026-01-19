@@ -1,0 +1,168 @@
+name: 'Auto Rebase PR with AI Conflict Resolution'
+description: 'Automatically rebase a PR and resolve conflicts using Claude Code CLI'
+inputs:
+  github-token:
+    description: 'GitHub token with repo permissions'
+    required: true
+  claude-model:
+    description: 'Claude model to use (default: sonnet)'
+    required: false
+    default: 'sonnet'
+  rebase-strategy:
+    description: 'Rebase strategy: interactive (ai-assisted) or force (always use ai)'
+    required: false
+    default: 'interactive'
+  conflict-resolution-prompt-template:
+    description: 'Path to custom conflict resolution prompt template (optional)'
+    required: false
+    default: ''
+outputs:
+  rebased:
+    description: 'Whether the PR was successfully rebased (true/false)'
+    value: ${{ steps.rebase.outputs.rebased }}
+  conflicts-resolved:
+    description: 'Whether conflicts were resolved by AI (true/false)'
+    value: ${{ steps.rebase.outputs.conflicts_resolved }}
+  conflict-count:
+    description: 'Number of conflicts encountered'
+    value: ${{ steps.rebase.outputs.conflict_count }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout PR
+      shell: bash
+      run: |
+        PR_NUMBER=${{ github.event.pull_request.number }}
+        echo "Checking out PR #$PR_NUMBER..."
+        gh pr checkout $PR_NUMBER
+
+    - name: Fetch latest base branch
+      shell: bash
+      run: |
+        BASE_BRANCH=$(git rev-parse --abbrev-ref origin/HEAD | sed 's|origin/||')
+        echo "Fetching latest $BASE_BRANCH..."
+        git fetch origin "$BASE_BRANCH:origin/$BASE_BRANCH"
+
+    - name: Rebase with AI conflict resolution
+      shell: bash
+      id: rebase
+      run: |
+        set -e
+
+        PR_NUMBER=${{ github.event.pull_request.number }}
+        MODEL="${{ inputs.claude-model }}"
+        STRATEGY="${{ inputs.rebase-strategy }}"
+        CUSTOM_TEMPLATE="${{ inputs.conflict-resolution-prompt-template }}"
+
+        BASE_BRANCH=$(git rev-parse --abbrev-ref origin/HEAD | sed 's|origin/||')
+        CURRENT_BRANCH=$(git branch --show-current)
+
+        echo "### Attempting to rebase PR #$PR_NUMBER" >> $GITHUB_STEP_SUMMARY
+        echo "- Base branch: $BASE_BRANCH" >> $GITHUB_STEP_SUMMARY
+        echo "- Current branch: $CURRENT_BRANCH" >> $GITHUB_STEP_SUMMARY
+        echo "- Strategy: $STRATEGY" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+
+        # Attempt rebase
+        if git rebase "origin/$BASE_BRANCH" 2>&1; then
+          echo "✅ Rebase successful - no conflicts" >> $GITHUB_STEP_SUMMARY
+          git push --force-with-lease
+          echo "rebased=true" >> $GITHUB_OUTPUT
+          echo "conflicts_resolved=false" >> $GITHUB_OUTPUT
+          echo "conflict_count=0" >> $GITHUB_OUTPUT
+          exit 0
+        fi
+
+        # Conflicts detected
+        echo "⚠️ Conflicts detected during rebase" >> $GITHUB_STEP_SUMMARY
+
+        # Count conflicts
+        CONFLICT_COUNT=$(git diff --name-only --diff-filter=U | wc -l)
+        echo "Found $CONFLICT_COUNT file(s) with conflicts" >> $GITHUB_STEP_SUMMARY
+
+        # List conflicted files
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Conflicted files:**" >> $GITHUB_STEP_SUMMARY
+        git diff --name-only --diff-filter=U | while read file; do
+          echo "- \`$file\`" >> $GITHUB_STEP_SUMMARY
+        done
+        echo "" >> $GITHUB_STEP_SUMMARY
+
+        # Prepare prompt for Claude
+        if [ -n "$CUSTOM_TEMPLATE" ] && [ -f "$CUSTOM_TEMPLATE" ]; then
+          PROMPT_FILE="$CUSTOM_TEMPLATE"
+        else
+          PROMPT_FILE="${{ github.action_path }}/templates/conflict_resolution_prompt.txt"
+        fi
+
+        # Create prompt with conflict details
+        sed -e "s/{BASE_BRANCH}/$BASE_BRANCH/g" \
+            -e "s/{CURRENT_BRANCH}/$CURRENT_BRANCH/g" \
+            -e "s/{PR_NUMBER}/$PR_NUMBER/g" \
+            "$PROMPT_FILE" > /tmp/conflict_prompt.txt
+
+        # Add conflict markers info to prompt
+        echo "" >> /tmp/conflict_prompt.txt
+        echo "## Conflicted Files:" >> /tmp/conflict_prompt.txt
+        git diff --name-only --diff-filter=U | while read file; do
+          echo "" >> /tmp/conflict_prompt.txt
+          echo "### $file" >> /tmp/conflict_prompt.txt
+          echo '```' >> /tmp/conflict_prompt.txt
+          cat "$file" >> /tmp/conflict_prompt.txt
+          echo '```' >> /tmp/conflict_prompt.txt
+        done
+
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "🤖 Asking Claude Code CLI to resolve conflicts..." >> $GITHUB_STEP_SUMMARY
+
+        # Run Claude to resolve conflicts
+        if claude --dangerously-skip-permissions --model "$MODEL" < /tmp/conflict_prompt.txt > /tmp/claude_output.txt 2>&1; then
+          echo "Claude conflict resolution completed" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "⚠️ Claude execution had issues" >> $GITHUB_STEP_SUMMARY
+        fi
+
+        # Check if conflicts were resolved
+        if git diff --quiet; then
+          echo "❌ No changes made by Claude - conflicts remain" >> $GITHUB_STEP_SUMMARY
+          # Abort rebase and restore original state
+          git rebase --abort 2>/dev/null || true
+          echo "rebased=false" >> $GITHUB_OUTPUT
+          echo "conflicts_resolved=false" >> $GITHUB_OUTPUT
+          echo "conflict_count=$CONFLICT_COUNT" >> $GITHUB_OUTPUT
+          exit 1
+        fi
+
+        # Check if all conflicts are resolved
+        REMAINING=$(git diff --name-only --diff-filter=U | wc -l)
+        if [ "$REMAINING" -gt 0 ]; then
+          echo "⚠️ $REMAINING file(s) still have conflicts after Claude intervention" >> $GITHUB_STEP_SUMMARY
+          git rebase --abort 2>/dev/null || true
+          echo "rebased=false" >> $GITHUB_OUTPUT
+          echo "conflicts_resolved=false" >> $GITHUB_OUTPUT
+          echo "conflict_count=$CONFLICT_COUNT" >> $GITHUB_OUTPUT
+          exit 1
+        fi
+
+        # Continue rebase after conflict resolution
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "Continuing rebase..." >> $GITHUB_STEP_SUMMARY
+
+        if git rebase --continue 2>&1; then
+          # Push rebased branch
+          echo "Pushing rebased branch..." >> $GITHUB_STEP_SUMMARY
+          git push --force-with-lease
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Rebase completed successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "rebased=true" >> $GITHUB_OUTPUT
+          echo "conflicts_resolved=true" >> $GITHUB_OUTPUT
+          echo "conflict_count=$CONFLICT_COUNT" >> $GITHUB_OUTPUT
+        else
+          echo "❌ Failed to complete rebase after conflict resolution" >> $GITHUB_STEP_SUMMARY
+          git rebase --abort 2>/dev/null || true
+          echo "rebased=false" >> $GITHUB_OUTPUT
+          echo "conflicts_resolved=false" >> $GITHUB_OUTPUT
+          echo "conflict_count=$CONFLICT_COUNT" >> $GITHUB_OUTPUT
+          exit 1
+        fi

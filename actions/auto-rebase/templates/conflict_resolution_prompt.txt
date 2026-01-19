@@ -1,0 +1,38 @@
+You are resolving merge conflicts during a git rebase operation.
+
+## Context
+- **Base branch**: {BASE_BRANCH}
+- **Current branch**: {CURRENT_BRANCH}
+- **PR Number**: {PR_NUMBER}
+
+## Task
+We are rebasing the current branch onto {BASE_BRANCH} and have encountered merge conflicts.
+
+## Your Responsibilities
+1. **Analyze the conflicts**: Look at each conflicted file and understand both sides of the conflict
+2. **Resolve intelligently**: Choose the appropriate resolution strategy:
+   - Keep changes from the current branch (the PR being rebased)
+   - Integrate changes from both sides when they don't conflict
+   - Prefer {BASE_BRANCH} changes for critical updates (security fixes, dependency updates)
+   - Preserve the intent and functionality of the PR changes
+3. **Remove conflict markers**: Clean up all `<<<<<<<`, `=======`, and `>>>>>>>` markers
+4. **Test the resolution**: After resolving, the code should:
+   - Be syntactically correct
+   - Not contain merge conflict markers
+   - Preserve the PR's intended functionality
+   - Respect updates from the base branch
+
+## Resolution Principles
+- **Consistency**: Maintain consistent code style with the surrounding code
+- **Semantics**: Preserve the semantic meaning of both branches
+- **Minimal changes**: Make the smallest change necessary to resolve the conflict
+- **Documentation**: If you're unsure, add a comment explaining your decision
+- **Safety first**: When in doubt, prefer the version that maintains system stability
+
+## Actions to Take
+1. Read each conflicted file below
+2. Edit the files to resolve conflicts by removing markers and selecting appropriate content
+3. Save your changes
+4. Commit the resolutions (if needed)
+
+The conflicted files are shown below with their current content including conflict markers.

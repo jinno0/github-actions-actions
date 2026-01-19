@@ -1,0 +1,27 @@
+name: Auto Rebase PR
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+# Ensure only one workflow runs at a time per PR
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  auto-rebase:
+    runs-on: self-hosted
+
+    steps:
+      - name: Auto Rebase with AI
+        uses: ./actions/auto-rebase
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          claude-model: 'sonnet'
+          rebase-strategy: 'interactive'
