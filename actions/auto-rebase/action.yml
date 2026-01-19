@@ -169,7 +169,7 @@ runs:
         cat /tmp/claude_output.txt >> $GITHUB_STEP_SUMMARY
         echo '```' >> $GITHUB_STEP_SUMMARY
 
-        # Check if conflicts were resolved
+        # Check if conflicts were resolved (files were modified)
         if git diff --quiet; then
           echo "❌ No changes made by Claude - conflicts remain" >> $GITHUB_STEP_SUMMARY
           # Abort rebase and restore original state
@@ -179,6 +179,10 @@ runs:
           echo "conflict_count=$CONFLICT_COUNT" >> $GITHUB_OUTPUT
           exit 1
         fi
+
+        # Stage the resolved files
+        echo "Staging resolved files..." >> $GITHUB_STEP_SUMMARY
+        git add --update
 
         # Check if all conflicts are resolved
         REMAINING=$(git diff --name-only --diff-filter=U | wc -l)
