@@ -1,0 +1,31 @@
+name: 'Bulk Merge PRs Example'
+
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: 'Number of PRs to merge (0 for all)'
+        required: false
+        type: number
+        default: 0
+      dry-run:
+        description: 'Dry run (true/false)'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  bulk-merge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: jinno0/github-actions-actions/actions/bulk-merge-prs@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          limit: ${{ inputs.limit }}
+          merge-method: 'squash'
+          include-drafts: 'true'
+          dry-run: ${{ inputs.dry-run }}

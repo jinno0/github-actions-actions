@@ -1,0 +1,23 @@
+name: Auto Merge PR
+
+on:
+  pull_request:
+    types: [labeled, opened, synchronize, reopened]
+    branches:
+      - main
+      - develop
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge-pr:
+    runs-on: self-hosted
+    steps:
+      - name: Auto Merge
+        uses: ./actions/auto-merge
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          merge-method: 'squash'
+          auto-merge: 'false'

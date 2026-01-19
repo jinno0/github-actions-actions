@@ -1,0 +1,29 @@
+name: 'Bulk Rebase PRs Example'
+
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: 'Number of PRs to rebase (0 for all)'
+        required: false
+        type: number
+        default: 0
+      dry-run:
+        description: 'Dry run (true/false)'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  pull-requests: write
+
+jobs:
+  bulk-rebase:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: jinno0/github-actions-actions/actions/bulk-rebase-prs@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          limit: ${{ inputs.limit }}
+          merge-state-status: 'BEHIND'
+          dry-run: ${{ inputs.dry-run }}

@@ -1,0 +1,21 @@
+name: Publish Draft PR
+
+on:
+  pull_request:
+    types: [opened, ready_for_review]
+    branches:
+      - main
+      - develop
+
+permissions:
+  pull-requests: write
+
+jobs:
+  publish-draft-pr:
+    runs-on: self-hosted
+    steps:
+      - name: Publish Draft PR
+        if: github.event.pull_request.draft == true
+        uses: ./actions/publish-pr
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
