@@ -25,7 +25,7 @@ jobs:
   bulk-rebase:
     runs-on: ubuntu-latest
     steps:
-      - uses: jinno0/github-actions-actions/actions/bulk-rebase-prs@main
+      - uses: jinno0/github-actions-actions/actions/bulk-rebase-prs@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -59,7 +59,7 @@ GitHubのActionsタブから手動実行します。
 ### 全ての古いPRをリベース
 
 ```yaml
-- uses: jinno0/github-actions-actions/actions/bulk-rebase-prs@main
+- uses: jinno0/github-actions-actions/actions/bulk-rebase-prs@v1
   with:
     github-token: ${{ secrets.GITHUB_TOKEN }}
     merge-state-status: 'BEHIND'
@@ -68,7 +68,7 @@ GitHubのActionsタブから手動実行します。
 ### 最初の10件だけ処理
 
 ```yaml
-- uses: jinno0/github-actions-actions/actions/bulk-rebase-prs@main
+- uses: jinno0/github-actions-actions/actions/bulk-rebase-prs@v1
   with:
     github-token: ${{ secrets.GITHUB_TOKEN }}
     limit: '10'
@@ -77,7 +77,7 @@ GitHubのActionsタブから手動実行します。
 ### ドライランで確認
 
 ```yaml
-- uses: jinno0/github-actions-actions/actions/bulk-rebase-prs@main
+- uses: jinno0/github-actions-actions/actions/bulk-rebase-prs@v1
   with:
     github-token: ${{ secrets.GITHUB_TOKEN }}
     dry-run: 'true'

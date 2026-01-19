@@ -139,9 +139,9 @@ The following instruction files intentionally use `owner/repo@main` as placehold
 - [x] Create `examples/publish-pr-example.yml` ✅
 - [x] Create `instructions/publish-pr.md` ✅
 
-### Priority 1: Update Instruction Examples
-- [ ] Update bulk-merge-prs.md: Replace 4x `@main` with `@v1`
-- [ ] Update bulk-rebase-prs.md: Replace 4x `@main` with `@v1`
+### ✅ Completed (Priority 1 items)
+- [x] Update bulk-merge-prs.md: Replaced 4x `@main` with `@v1` ✅
+- [x] Update bulk-rebase-prs.md: Replaced 4x `@main` with `@v1` ✅
 
 ### Priority 2: Consider Template Updates
 - [ ] Update placeholder examples in instruction files to use `@v1` instead of `@main`
@@ -207,7 +207,7 @@ The repository has achieved **100% compliance** with the Standard Action Structu
 4. ✅ **Version Tag Fixes Applied** to bulk action examples
 
 ### Remaining Work
-1. ⚠️ Update instruction files to use version tags in examples
+1. ℹ️ Consider updating remaining placeholder examples (owner/repo@main) to use version tags
 2. ℹ️ Consider increasing template usage from 50% to 80%
 
 ### Workflow Status
@@ -215,6 +215,28 @@ The repository has achieved **100% compliance** with the Standard Action Structu
 - ✅ **Tests Executed**: YAML validation, structure checks
 - ✅ **Documentation Updated**: Test report generated
 - ✅ **Issues Fixed**: Version tag corrections applied
+
+---
+
+---
+
+## 9. Update History
+
+### 2026-01-19 - Version Tag Updates
+**Changes Applied:**
+- ✅ Updated `instructions/bulk-merge-prs.md`: Replaced all 4 occurrences of `@main` with `@v1`
+- ✅ Updated `instructions/bulk-rebase-prs.md`: Replaced all 4 occurrences of `@main` with `@v1`
+
+**Validation Results:**
+- YAML Syntax: ✅ All 12 actions valid
+- Structure Compliance: ✅ 100% (12/12 actions complete)
+- Version Tags: ✅ Bulk action instructions now use @v1
+
+**Files Modified:**
+1. `instructions/bulk-merge-prs.md` (lines 30, 62, 70, 79)
+2. `instructions/bulk-rebase-prs.md` (lines 28, 62, 71, 80)
+
+**Status:** Priority 1 items completed successfully ✅
 
 ---
 

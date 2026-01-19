@@ -27,7 +27,7 @@ jobs:
   bulk-merge:
     runs-on: ubuntu-latest
     steps:
-      - uses: jinno0/github-actions-actions/actions/bulk-merge-prs@main
+      - uses: jinno0/github-actions-actions/actions/bulk-merge-prs@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -59,7 +59,7 @@ GitHubのActionsタブから手動実行します。
 ### 全てのマージ可能なPRをマージ
 
 ```yaml
-- uses: jinno0/github-actions-actions/actions/bulk-merge-prs@main
+- uses: jinno0/github-actions-actions/actions/bulk-merge-prs@v1
   with:
     github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -67,7 +67,7 @@ GitHubのActionsタブから手動実行します。
 ### 最初の10件だけマージ
 
 ```yaml
-- uses: jinno0/github-actions-actions/actions/bulk-merge-prs@main
+- uses: jinno0/github-actions-actions/actions/bulk-merge-prs@v1
   with:
     github-token: ${{ secrets.GITHUB_TOKEN }}
     limit: '10'
@@ -76,7 +76,7 @@ GitHubのActionsタブから手動実行します。
 ### ドライランで確認
 
 ```yaml
-- uses: jinno0/github-actions-actions/actions/bulk-merge-prs@main
+- uses: jinno0/github-actions-actions/actions/bulk-merge-prs@v1
   with:
     github-token: ${{ secrets.GITHUB_TOKEN }}
     dry-run: 'true'
