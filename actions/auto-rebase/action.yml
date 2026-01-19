@@ -4,6 +4,9 @@ inputs:
   github-token:
     description: 'GitHub token with repo permissions'
     required: true
+  pr-number:
+    description: 'PR number to rebase (optional, defaults to event context)'
+    required: false
   claude-model:
     description: 'Claude model to use (default: sonnet)'
     required: false
@@ -31,8 +34,21 @@ runs:
   steps:
     - name: Checkout PR
       shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
       run: |
-        PR_NUMBER=${{ github.event.pull_request.number }}
+        # Determine PR number from event or inputs
+        if [ -n "${{ inputs.pr-number }}" ]; then
+          PR_NUMBER=${{ inputs.pr-number }}
+        else
+          PR_NUMBER=${{ github.event.pull_request.number }}
+        fi
+
+        if [ -z "$PR_NUMBER" ]; then
+          echo "::error::No PR number found. This action requires either pull_request trigger or pr-number input."
+          exit 1
+        fi
+
         echo "Checking out PR #$PR_NUMBER..."
         gh pr checkout $PR_NUMBER
 
@@ -46,10 +62,18 @@ runs:
     - name: Rebase with AI conflict resolution
       shell: bash
       id: rebase
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
       run: |
         set -e
 
-        PR_NUMBER=${{ github.event.pull_request.number }}
+        # Determine PR number from event or inputs
+        if [ -n "${{ inputs.pr-number }}" ]; then
+          PR_NUMBER=${{ inputs.pr-number }}
+        else
+          PR_NUMBER=${{ github.event.pull_request.number }}
+        fi
+
         MODEL="${{ inputs.claude-model }}"
         STRATEGY="${{ inputs.rebase-strategy }}"
         CUSTOM_TEMPLATE="${{ inputs.conflict-resolution-prompt-template }}"
