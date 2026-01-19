@@ -60,8 +60,44 @@ queue:
     reason: "Too generic (aux layer). Not a core business concept. This is a general refactoring pattern, not a domain-specific term."
     expires_after_runs: 10
     created_run: "2026-01-18T14:21:00Z"
-  - id: "TP-005"\n    proposed_canonical: "PrReviewEnqueuerAction"\n    proposed_layer: "domain"\n    term_raw_examples: ["PR Review Enqueuer", "pr-review-enqueuer", "review enqueuer"]\n    reason: "New action that scans open PRs and adds /review comment to trigger review workflow with filtering capabilities."\n    evidence:\n      - source: "actions/pr-review-enqueuer/action.yml"\n        quote: "name: 'PR Review Enqueuer', description: 'Scans open PRs and adds /review comment to trigger review workflow'"\n      - source: "examples/pr-review-enqueuer-example.yml"\n        quote: "Complete workflow example with filter parameters"\n      - source: "instructions/pr-review-enqueuer.md"\n        quote: "Comprehensive setup and usage guide"\n    auto_merge_candidates:\n      - term: "ReviewAndMergeAction"\n        similarity: 0.52\n    decision: "accepted"\n    reason: "Similarity 0.52 < 0.78 threshold. Has complete examples and instructions (3 sources). Clear distinction: trigger mechanism for review workflow vs actual review/merge."\n    expires_after_runs: 10\n    created_run: "2026-01-19T01:28:18Z"
-  - id: "TP-006"\n    proposed_canonical: "ReviewAutoMergeAction"\n    proposed_layer: "domain"\n    term_raw_examples: ["Review and Auto-Merge PR", "review-auto-merge", "auto-merge pr"]\n    reason: "Action that automatically merges PRs with retry logic. Distinct from AutoMergeAction which focuses on merge method configuration."\n    evidence:\n      - source: "actions/review-auto-merge/action.yml"\n        quote: "name: 'Review and Auto-Merge PR', description: 'Automatically rebase and merge PRs'"\n      - source: "examples/review-auto-merge-example.yml"\n        quote: "Complete workflow example with retry parameters"\n      - source: "instructions/review-auto-merge.md"\n        quote: "Comprehensive setup guide including retry logic"\n    auto_merge_candidates:\n      - term: "AutoMergeAction"\n        similarity: 0.72\n    decision: "accepted"\n    reason: "Similarity 0.72 < 0.78 threshold. Has complete examples and instructions (3 sources). AUTO decision AMB-003 keeps separate: focuses on retry logic vs method configuration."\n    expires_after_runs: 10\n    created_run: "2026-01-19T01:28:18Z"
+  - id: "TP-005"
+    proposed_canonical: "PrReviewEnqueuerAction"
+    proposed_layer: "domain"
+    term_raw_examples: ["PR Review Enqueuer", "pr-review-enqueuer", "review enqueuer"]
+    reason: "New action that scans open PRs and adds /review comment to trigger review workflow with filtering capabilities."
+    evidence:
+      - source: "actions/pr-review-enqueuer/action.yml"
+        quote: "name: 'PR Review Enqueuer', description: 'Scans open PRs and adds /review comment to trigger review workflow'"
+      - source: "examples/pr-review-enqueuer-example.yml"
+        quote: "Complete workflow example with filter parameters"
+      - source: "instructions/pr-review-enqueuer.md"
+        quote: "Comprehensive setup and usage guide"
+    auto_merge_candidates:
+      - term: "ReviewAndMergeAction"
+        similarity: 0.52
+    decision: "accepted"
+    reason: "Similarity 0.52 < 0.78 threshold. Has complete examples and instructions (3 sources). Clear distinction: trigger mechanism for review workflow vs actual review/merge."
+    expires_after_runs: 10
+    created_run: "2026-01-19T01:28:18Z"
+  - id: "TP-006"
+    proposed_canonical: "ReviewAutoMergeAction"
+    proposed_layer: "domain"
+    term_raw_examples: ["Review and Auto-Merge PR", "review-auto-merge", "auto-merge pr"]
+    reason: "Action that automatically merges PRs with retry logic. Distinct from AutoMergeAction which focuses on merge method configuration."
+    evidence:
+      - source: "actions/review-auto-merge/action.yml"
+        quote: "name: 'Review and Auto-Merge PR', description: 'Automatically rebase and merge PRs'"
+      - source: "examples/review-auto-merge-example.yml"
+        quote: "Complete workflow example with retry parameters"
+      - source: "instructions/review-auto-merge.md"
+        quote: "Comprehensive setup guide including retry logic"
+    auto_merge_candidates:
+      - term: "AutoMergeAction"
+        similarity: 0.72
+    decision: "accepted"
+    reason: "Similarity 0.72 < 0.78 threshold. Has complete examples and instructions (3 sources). AUTO decision AMB-003 keeps separate: focuses on retry logic vs method configuration."
+    expires_after_runs: 10
+    created_run: "2026-01-19T01:28:18Z"
   - id: "TP-007"
     proposed_canonical: "BulkMergePRsAction"
     proposed_layer: "domain"
