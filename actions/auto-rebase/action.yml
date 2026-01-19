@@ -116,11 +116,25 @@ runs:
           exit 0
         fi
 
-        # Conflicts detected
-        echo "⚠️ Conflicts detected during rebase" >> $GITHUB_STEP_SUMMARY
-
-        # Count conflicts
+        # Check if there are actual conflicts
         CONFLICT_COUNT=$(git diff --name-only --diff-filter=U | wc -l)
+
+        if [ "$CONFLICT_COUNT" -eq 0 ]; then
+          # No conflicts detected, but rebase failed for another reason
+          echo "⚠️ Rebase failed but no conflicts detected" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Rebase output:**" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "$REBASE_OUTPUT" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          git rebase --abort 2>/dev/null || true
+          echo "rebased=false" >> $GITHUB_OUTPUT
+          echo "conflicts_resolved=false" >> $GITHUB_OUTPUT
+          echo "conflict_count=0" >> $GITHUB_OUTPUT
+          exit 1
+        fi
+
+        echo "⚠️ Conflicts detected during rebase" >> $GITHUB_STEP_SUMMARY
         echo "Found $CONFLICT_COUNT file(s) with conflicts" >> $GITHUB_STEP_SUMMARY
 
         # List conflicted files
