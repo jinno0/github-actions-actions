@@ -125,9 +125,10 @@ runs:
         fi
 
         # Create prompt with conflict details
-        sed -e "s/{BASE_BRANCH}/$BASE_BRANCH/g" \
-            -e "s/{CURRENT_BRANCH}/$CURRENT_BRANCH/g" \
-            -e "s/{PR_NUMBER}/$PR_NUMBER/g" \
+        # Use | as delimiter to avoid issues with / in branch names
+        sed -e "s|{BASE_BRANCH}|$BASE_BRANCH|g" \
+            -e "s|{CURRENT_BRANCH}|$CURRENT_BRANCH|g" \
+            -e "s|{PR_NUMBER}|$PR_NUMBER|g" \
             "$PROMPT_FILE" > /tmp/conflict_prompt.txt
 
         # Add conflict markers info to prompt
