@@ -4,7 +4,7 @@ inputs:
   github-token:
     description: 'GitHub token with repo permissions'
     required: true
-  pr-number:
+  pr_number:
     description: 'PR number to rebase (optional, defaults to event context)'
     required: false
   claude-model:
