@@ -30,9 +30,13 @@ We are rebasing the current branch onto {BASE_BRANCH} and have encountered merge
 - **Safety first**: When in doubt, prefer the version that maintains system stability
 
 ## Actions to Take
-1. Read each conflicted file below
-2. Edit the files to resolve conflicts by removing markers and selecting appropriate content
-3. Save your changes
-4. Commit the resolutions (if needed)
+1. Use the Read tool to examine each conflicted file listed below
+2. Use the Edit tool to resolve conflicts in each file:
+   - Remove ALL conflict markers (`<<<<<<<`, `=======`, `>>>>>>>`)
+   - Keep the appropriate content from both sides
+   - Save the file after editing
+3. DO NOT commit - the workflow will handle that
+
+IMPORTANT: You MUST use the Edit tool to modify each file. The files are located in the current working directory.
 
 The conflicted files are shown below with their current content including conflict markers.
