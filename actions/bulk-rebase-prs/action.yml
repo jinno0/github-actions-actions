@@ -1,0 +1,96 @@
+name: 'Bulk Rebase PRs'
+description: 'Rebase multiple pull requests against latest base branch'
+inputs:
+  github-token:
+    description: 'GitHub token'
+    required: true
+    default: ${{ github.token }}
+  limit:
+    description: 'Maximum number of PRs to rebase (0 for all)'
+    required: false
+    default: '0'
+  merge-state-status:
+    description: 'Filter by mergeStateStatus (BEHIND, CLEAN, DIRTY, UNKNOWN, UNSTABLE). Empty = all BEHIND PRs'
+    required: false
+    default: 'BEHIND'
+  dry-run:
+    description: 'Show what would be done without actually rebasing (true/false)'
+    required: false
+    default: 'false'
+runs:
+  using: 'composite'
+  steps:
+    - name: Bulk Rebase PRs
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        LIMIT: ${{ inputs.limit }}
+        STATUS: ${{ inputs.merge-state-status }}
+        DRY_RUN: ${{ inputs.dry-run }}
+      run: |
+        set -e
+
+        echo "### Bulk Rebase PRs" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "Filter: **${STATUS}**" >> $GITHUB_STEP_SUMMARY
+        echo "Limit: **${LIMIT}** (0 = all)" >> $GITHUB_STEP_SUMMARY
+        echo "Dry run: **${DRY_RUN}**" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+
+        # Get PRs to rebase
+        if [ -z "$STATUS" ]; then
+          PRS=$(gh pr list --state open --limit 100 --json number,title,mergeStateStatus \
+            --jq '.[] | select(.mergeStateStatus == "BEHIND") | .number' | tr '\n' ' ')
+        else
+          PRS=$(gh pr list --state open --limit 100 --json number,title,mergeStateStatus \
+            --jq "[.[] | select(.mergeStateStatus == \"${STATUS}\")] | .[].number" | tr '\n' ' ')
+        fi
+
+        if [ -z "$PRS" ]; then
+          echo "No PRs found matching criteria." >> $GITHUB_STEP_SUMMARY
+          exit 0
+        fi
+
+        # Convert to array
+        PR_ARRAY=($PRS)
+        TOTAL=${#PR_ARRAY[@]}
+
+        echo "Found **${TOTAL}** PR(s) to rebase" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+
+        # Apply limit
+        if [ "$LIMIT" -gt 0 ] && [ "$LIMIT" -lt "$TOTAL" ]; then
+          TOTAL=$LIMIT
+        fi
+
+        SUCCESS=0
+        FAILED=0
+
+        for pr in "${PR_ARRAY[@]}"; do
+          if [ $SUCCESS -ge $TOTAL ]; then
+            break
+          fi
+
+          TITLE=$(gh pr view "$pr" --json title -q '.title')
+          echo "Rebasing PR #${pr}: ${TITLE}..." >> $GITHUB_STEP_SUMMARY
+
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "[DRY RUN] Would rebase PR #${pr}" >> $GITHUB_STEP_SUMMARY
+            SUCCESS=$((SUCCESS + 1))
+          else
+            if gh pr rebase "$pr" 2>&1; then
+              echo "✅ Rebased PR #${pr}" >> $GITHUB_STEP_SUMMARY
+              SUCCESS=$((SUCCESS + 1))
+            else
+              echo "❌ Failed to rebase PR #${pr}" >> $GITHUB_STEP_SUMMARY
+              FAILED=$((FAILED + 1))
+            fi
+          fi
+
+          sleep 1
+        done
+
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "## Summary" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Success: **${SUCCESS}**" >> $GITHUB_STEP_SUMMARY
+        echo "- ❌ Failed: **${FAILED}**" >> $GITHUB_STEP_SUMMARY

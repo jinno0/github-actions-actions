@@ -1,0 +1,107 @@
+name: 'Bulk Merge PRs'
+description: 'Merge multiple pull requests that are ready (CLEAN status)'
+inputs:
+  github-token:
+    description: 'GitHub token'
+    required: true
+    default: ${{ github.token }}
+  limit:
+    description: 'Maximum number of PRs to merge (0 for all)'
+    required: false
+    default: '0'
+  merge-method:
+    description: 'Merge method (squash, merge, rebase)'
+    required: false
+    default: 'squash'
+  include-drafts:
+    description: 'Include draft PRs (they will be marked as ready first)'
+    required: false
+    default: 'true'
+  dry-run:
+    description: 'Show what would be done without actually merging (true/false)'
+    required: false
+    default: 'false'
+runs:
+  using: 'composite'
+  steps:
+    - name: Bulk Merge PRs
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        LIMIT: ${{ inputs.limit }}
+        METHOD: ${{ inputs.merge-method }}
+        INCLUDE_DRAFTS: ${{ inputs.include-drafts }}
+        DRY_RUN: ${{ inputs.dry-run }}
+      run: |
+        set -e
+
+        echo "### Bulk Merge PRs" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "Merge method: **${METHOD}**" >> $GITHUB_STEP_SUMMARY
+        echo "Limit: **${LIMIT}** (0 = all)" >> $GITHUB_STEP_SUMMARY
+        echo "Include drafts: **${INCLUDE_DRAFTS}**" >> $GITHUB_STEP_SUMMARY
+        echo "Dry run: **${DRY_RUN}**" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+
+        # Get all open PRs that are CLEAN (not dirty, not unstable)
+        PRS=$(gh pr list --state open --limit 100 --json number,title,mergeStateStatus,isDraft,mergeable \
+          --jq '.[] | select(.mergeable == "MERGEABLE" and .mergeStateStatus == "CLEAN") | .number' \
+          | tr '\n' ' ')
+
+        if [ -z "$PRS" ]; then
+          echo "No mergeable PRs found." >> $GITHUB_STEP_SUMMARY
+          exit 0
+        fi
+
+        # Convert to array
+        PR_ARRAY=($PRS)
+        TOTAL=${#PR_ARRAY[@]}
+
+        echo "Found **${TOTAL}** mergeable PRs" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+
+        # Apply limit
+        if [ "$LIMIT" -gt 0 ] && [ "$LIMIT" -lt "$TOTAL" ]; then
+          TOTAL=$LIMIT
+        fi
+
+        MERGED=0
+        FAILED=0
+
+        for pr in "${PR_ARRAY[@]}"; do
+          if [ "$MERGED" -ge $TOTAL ]; then
+            break
+          fi
+
+          echo "Merging PR #${pr}..." >> $GITHUB_STEP_SUMMARY
+
+          # Mark as ready for review if it's a draft
+          IS_DRAFT=$(gh pr view "$pr" --json isDraft -q '.isDraft')
+          if [ "$IS_DRAFT" = "true" ] && [ "$INCLUDE_DRAFTS" = "true" ]; then
+            gh pr ready "$pr" 2>/dev/null || true
+            echo "Marked draft PR as ready" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          TITLE=$(gh pr view "$pr" --json title -q '.title')
+
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "[DRY RUN] Would merge PR #${pr}: ${TITLE}" >> $GITHUB_STEP_SUMMARY
+            MERGED=$((MERGED + 1))
+          else
+            # Merge
+            if gh pr merge "$pr" --${METHOD} --delete-branch 2>&1; then
+              echo "✅ Merged PR #${pr}: ${TITLE}" >> $GITHUB_STEP_SUMMARY
+              MERGED=$((MERGED + 1))
+            else
+              echo "❌ Failed to merge PR #${pr}" >> $GITHUB_STEP_SUMMARY
+              FAILED=$((FAILED + 1))
+            fi
+          fi
+
+          sleep 1
+        done
+
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "## Summary" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Merged: **${MERGED}**" >> $GITHUB_STEP_SUMMARY
+        echo "- ❌ Failed: **${FAILED}**" >> $GITHUB_STEP_SUMMARY
