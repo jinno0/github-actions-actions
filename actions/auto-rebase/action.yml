@@ -52,10 +52,15 @@ runs:
         echo "Checking out PR #$PR_NUMBER..."
         gh pr checkout $PR_NUMBER
 
+        # Get base branch name and save to file for later steps
+        gh pr view "$PR_NUMBER" --json baseRefName -q '.baseRefName' > /tmp/base_branch.txt
+
     - name: Fetch latest base branch
       shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
       run: |
-        BASE_BRANCH=$(git rev-parse --abbrev-ref origin/HEAD | sed 's|origin/||')
+        BASE_BRANCH=$(cat /tmp/base_branch.txt)
         echo "Fetching latest $BASE_BRANCH..."
         git fetch origin "$BASE_BRANCH:origin/$BASE_BRANCH"
 
@@ -78,7 +83,7 @@ runs:
         STRATEGY="${{ inputs.rebase-strategy }}"
         CUSTOM_TEMPLATE="${{ inputs.conflict-resolution-prompt-template }}"
 
-        BASE_BRANCH=$(git rev-parse --abbrev-ref origin/HEAD | sed 's|origin/||')
+        BASE_BRANCH=$(cat /tmp/base_branch.txt)
         CURRENT_BRANCH=$(git branch --show-current)
 
         echo "### Attempting to rebase PR #$PR_NUMBER" >> $GITHUB_STEP_SUMMARY
