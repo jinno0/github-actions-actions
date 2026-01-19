@@ -169,21 +169,29 @@ runs:
         echo "Please use the Read tool to examine each file above, then use the Edit tool to resolve conflicts." >> /tmp/conflict_prompt.txt
 
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "🤖 Resolving conflicts using strategy: prefer current branch changes" >> $GITHUB_STEP_SUMMARY
+        echo "🤖 Asking Claude Code CLI to resolve conflicts..." >> $GITHUB_STEP_SUMMARY
 
-        # Simple conflict resolution: prefer current branch (the PR) for all conflicts
-        # This is equivalent to "git rebase -X theirs" but applied to each conflicted file
-        git diff --name-only --diff-filter=U | while read file; do
-          echo "Resolving conflicts in: $file" >> $GITHUB_STEP_SUMMARY
+        # Run Claude in interactive mode (without -p) so it can use tools
+        # Give it a simple prompt to resolve the rebase conflicts
+        claude --dangerously-skip-permissions --model "$MODEL" <<EOF
+We are in the middle of a git rebase and there are merge conflicts.
 
-          # Use checkout with --ours to keep the PR branch version
-          # Note: during rebase, "ours" refers to the commits being rebased (the PR)
-          git checkout --ours "$file"
-          git add "$file"
-        done
+Base branch: $BASE_BRANCH
+Current branch: $CURRENT_BRANCH
+PR Number: $PR_NUMBER
 
+Please:
+1. Use the Read tool to examine each conflicted file
+2. Use the Edit tool to resolve conflicts by removing conflict markers and choosing appropriate content
+3. Prefer keeping changes from the current branch (the PR being rebased)
+4. Remove all <<<<<<<, =======, and >>>>>>> markers
+5. Save each file after resolving
+
+DO NOT commit. Just resolve the conflicts and save the files.
+EOF
+
+        # Show Claude output in summary
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "✅ Conflict resolution applied" >> $GITHUB_STEP_SUMMARY
 
         # Check if all conflicts are resolved
         REMAINING=$(git diff --name-only --diff-filter=U | wc -l)
