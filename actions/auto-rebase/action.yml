@@ -160,7 +160,8 @@ runs:
         echo "🤖 Asking Claude Code CLI to resolve conflicts..." >> $GITHUB_STEP_SUMMARY
 
         # Run Claude to resolve conflicts (may fail, but we check results)
-        claude --dangerously-skip-permissions --model "$MODEL" < /tmp/conflict_prompt.txt > /tmp/claude_output.txt 2>&1 || true
+        # Use -p for print mode (non-interactive)
+        claude -p --dangerously-skip-permissions --model "$MODEL" < /tmp/conflict_prompt.txt > /tmp/claude_output.txt 2>&1 || true
 
         # Show Claude output in summary
         echo "" >> $GITHUB_STEP_SUMMARY
