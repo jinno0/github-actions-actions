@@ -173,22 +173,22 @@ runs:
 
         # Run Claude in interactive mode (without -p) so it can use tools
         # Give it a simple prompt to resolve the rebase conflicts
-        claude --dangerously-skip-permissions --model "$MODEL" <<EOF
-We are in the middle of a git rebase and there are merge conflicts.
+        echo "We are in the middle of a git rebase and there are merge conflicts." > /tmp/claude_prompt.txt
+        echo "" >> /tmp/claude_prompt.txt
+        echo "Base branch: $BASE_BRANCH" >> /tmp/claude_prompt.txt
+        echo "Current branch: $CURRENT_BRANCH" >> /tmp/claude_prompt.txt
+        echo "PR Number: $PR_NUMBER" >> /tmp/claude_prompt.txt
+        echo "" >> /tmp/claude_prompt.txt
+        echo "Please:" >> /tmp/claude_prompt.txt
+        echo "1. Use the Read tool to examine each conflicted file" >> /tmp/claude_prompt.txt
+        echo "2. Use the Edit tool to resolve conflicts by removing conflict markers" >> /tmp/claude_prompt.txt
+        echo "3. Prefer keeping changes from the current branch (the PR being rebased)" >> /tmp/claude_prompt.txt
+        echo "4. Remove all <<<<<<<, =======, and >>>>>>> markers" >> /tmp/claude_prompt.txt
+        echo "5. Save each file after resolving" >> /tmp/claude_prompt.txt
+        echo "" >> /tmp/claude_prompt.txt
+        echo "DO NOT commit. Just resolve the conflicts and save the files." >> /tmp/claude_prompt.txt
 
-Base branch: $BASE_BRANCH
-Current branch: $CURRENT_BRANCH
-PR Number: $PR_NUMBER
-
-Please:
-1. Use the Read tool to examine each conflicted file
-2. Use the Edit tool to resolve conflicts by removing conflict markers and choosing appropriate content
-3. Prefer keeping changes from the current branch (the PR being rebased)
-4. Remove all <<<<<<<, =======, and >>>>>>> markers
-5. Save each file after resolving
-
-DO NOT commit. Just resolve the conflicts and save the files.
-EOF
+        claude --dangerously-skip-permissions --model "$MODEL" < /tmp/claude_prompt.txt
 
         # Show Claude output in summary
         echo "" >> $GITHUB_STEP_SUMMARY
