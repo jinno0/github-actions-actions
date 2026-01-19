@@ -1,5 +1,5 @@
-name: 'Auto Rebase PR with AI Conflict Resolution'
-description: 'Automatically rebase a PR and resolve conflicts using Claude Code CLI'
+name: 'Auto Rebase PR with Automatic Conflict Resolution'
+description: 'Automatically rebase a PR and resolve conflicts by preferring PR branch changes'
 inputs:
   github-token:
     description: 'GitHub token with repo permissions'
@@ -155,38 +155,27 @@ runs:
         echo "Please use the Read tool to examine each file above, then use the Edit tool to resolve conflicts." >> /tmp/conflict_prompt.txt
 
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "🤖 Asking Claude Code CLI to resolve conflicts..." >> $GITHUB_STEP_SUMMARY
+        echo "🤖 Resolving conflicts using strategy: prefer current branch changes" >> $GITHUB_STEP_SUMMARY
 
-        # Run Claude to resolve conflicts (may fail, but we check results)
-        # Use -p for print mode (non-interactive)
-        claude -p --dangerously-skip-permissions --model "$MODEL" < /tmp/conflict_prompt.txt > /tmp/claude_output.txt 2>&1 || true
+        # Simple conflict resolution: prefer current branch (the PR) for all conflicts
+        # This is equivalent to "git rebase -X theirs" but applied to each conflicted file
+        git diff --name-only --diff-filter=U | while read file; do
+          echo "Resolving conflicts in: $file" >> $GITHUB_STEP_SUMMARY
 
-        # Show Claude output in summary
+          # Use checkout with --ours to keep the PR branch version
+          # Note: during rebase, "ours" refers to the commits being rebased (the PR)
+          git checkout --ours "$file"
+          git add "$file"
+        done
+
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "**Claude output:**" >> $GITHUB_STEP_SUMMARY
-        echo '```' >> $GITHUB_STEP_SUMMARY
-        cat /tmp/claude_output.txt >> $GITHUB_STEP_SUMMARY
-        echo '```' >> $GITHUB_STEP_SUMMARY
-
-        # Check if conflicts were resolved (files were modified)
-        if git diff --quiet; then
-          echo "❌ No changes made by Claude - conflicts remain" >> $GITHUB_STEP_SUMMARY
-          # Abort rebase and restore original state
-          git rebase --abort 2>/dev/null || true
-          echo "rebased=false" >> $GITHUB_OUTPUT
-          echo "conflicts_resolved=false" >> $GITHUB_OUTPUT
-          echo "conflict_count=$CONFLICT_COUNT" >> $GITHUB_OUTPUT
-          exit 1
-        fi
-
-        # Stage the resolved files
-        echo "Staging resolved files..." >> $GITHUB_STEP_SUMMARY
-        git add --update
+        echo "✅ Conflict resolution applied" >> $GITHUB_STEP_SUMMARY
 
         # Check if all conflicts are resolved
         REMAINING=$(git diff --name-only --diff-filter=U | wc -l)
         if [ "$REMAINING" -gt 0 ]; then
-          echo "⚠️ $REMAINING file(s) still have conflicts after Claude intervention" >> $GITHUB_STEP_SUMMARY
+          echo "❌ Failed to resolve conflicts - $REMAINING file(s) still conflicted" >> $GITHUB_STEP_SUMMARY
+          # Abort rebase and restore original state
           git rebase --abort 2>/dev/null || true
           echo "rebased=false" >> $GITHUB_OUTPUT
           echo "conflicts_resolved=false" >> $GITHUB_OUTPUT
