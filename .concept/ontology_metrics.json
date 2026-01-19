@@ -9,7 +9,7 @@
   "conflicts_open": 0,
   "ambiguities_high": 1,
   "decisions_lines": 53,
-  "claims_lines": 61,
+  "claims_lines": 66,
   "invariants_total": 10,
   "invariants_hard": 0,
   "invariants_soft": 0,
