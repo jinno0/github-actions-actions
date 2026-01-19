@@ -122,20 +122,16 @@ invariants:
         target: "actions/review-and-merge/"
   - id: "INV-STD-STRUCT-003"
     related_terms: ["StandardActionStructure", "PublishPrAction", "AutoMergeAction"]
-    status: "draft"
+    status: "stable"
     strength: "hard"
-    statement: "新しいAction（publish-pr, auto-merge）はStandard Action Structureに違反している（examples/instructionsが欠如）"
-    rationale: "AGENTS.md#L165-L175のinvariant違反"
-    assumptions:
-      - id: "ASM-INV-STD-003"
-        text: "AUTO: 違反をhigh severityとして扱い、是正アクションを要求"
-        decision_key: "AUTO:StandardActionStructure.enforcement"
-        expires_after_runs: 10
+    statement: "すべてのActionはStandard Action Structure（action.yml + example + instruction）に準拠している"
+    rationale: "AGENTS.md#L165-L175のinvariant準拠"
+    assumptions: []
     evidence:
       - source: "examples/"
-        quote: "publish-pr-example.yml and auto-merge-example.yml are missing"
+        quote: "publish-pr-example.yml and auto-merge-example.yml exist"
       - source: "instructions/"
-        quote: "publish-pr.md and auto-merge.md are missing"
+        quote: "publish-pr.md and auto-merge.md exist"
     checks:
       - type: "manual"
         target: "examples/publish-pr-example.yml, examples/auto-merge-example.yml, instructions/publish-pr.md, instructions/auto-merge.md"

@@ -1,4 +1,4 @@
-updated_at: "2026-01-18T12:46:40Z"
+updated_at: "2026-01-19T01:28:18Z"
 mappings:
   CompositeAction:
     code_symbols: []
@@ -114,5 +114,17 @@ mappings:
   ReviewAndFixAction:
     code_symbols:
       - "actions/review-and-merge/action.yml"
+    db: []
+    api: []
+
+  PrReviewEnqueuerAction:
+    code_symbols:
+      - "actions/pr-review-enqueuer/action.yml"
+    db: []
+    api: []
+
+  ReviewAutoMergeAction:
+    code_symbols:
+      - "actions/review-auto-merge/action.yml"
     db: []
     api: []

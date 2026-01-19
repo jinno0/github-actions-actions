@@ -1,5 +1,5 @@
 version: "0.3"
-updated_at: "2026-01-18T12:46:40Z"
+updated_at: "2026-01-19T01:28:18Z"
 
 canonical_terms:
   CompositeAction:
@@ -189,7 +189,7 @@ canonical_terms:
   PublishPrAction:
     id: "TERM-PUBLISH-PR"
     layer: "domain"
-    status: "draft"
+    status: "stable"
     definition: "Draft pull requestをready for reviewに変換するAction（gh pr ready使用）"
     synonyms: ["Publish PR", "publish-pr", "publish action"]
     boundaries:
@@ -209,7 +209,7 @@ canonical_terms:
   AutoMergeAction:
     id: "TERM-AUTO-MERGE"
     layer: "domain"
-    status: "draft"
+    status: "stable"
     definition: "Pull requestを指定したmethod（squash/merge/rebase）でマージするAction。auto-merge有効化も可能"
     synonyms: ["Auto Merge PR", "auto-merge", "merge action"]
     boundaries:

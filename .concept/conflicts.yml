@@ -1,4 +1,4 @@
-updated_at: "2026-01-18T14:21:00Z"
+updated_at: "2026-01-19T01:28:18Z"
 conflicts:
   - id: "CFLT-001"
     term: "StandardActionStructure"
@@ -8,9 +8,23 @@ conflicts:
     items:
       - claim: "Every action must have three components: (1) action.yml, (2) example workflow, (3) instruction guide"
         source: "AGENTS.md#L165-L175"
-      - claim: "publish-pr and auto-merge actions exist without example workflows or instruction guides"
-        source: "actions/publish-pr/action.yml, actions/auto-merge/action.yml"
+      - claim: "publish-pr, auto-merge, pr-review-enqueuer, and review-auto-merge actions exist without example workflows or instruction guides"
+        source: "actions/publish-pr/action.yml, actions/auto-merge/action.yml, actions/pr-review-enqueuer/action.yml, actions/review-auto-merge/action.yml"
+    status: "resolved"
+    resolution_note: "Created examples/publish-pr-example.yml, instructions/publish-pr.md, examples/auto-merge-example.yml, instructions/auto-merge.md. pr-review-enqueuer and review-auto-merge already had examples and instructions."
+    resolved_at_run: "2026-01-19T10:47:00Z"
+
+  - id: "CFLT-002"
+    term: "ReviewAutoMergeAction"
+    about: "definition"
+    severity: "medium"
+    nli: "contradiction"
+    items:
+      - claim: "Each Action must have exactly ONE clear purpose. Multiple responsibilities are prohibited."
+        source: "SYSTEM_CONSTITUTION.md#L35-L40"
+      - claim: "ReviewAutoMergeAction combines rebase and merge operations (potentially two responsibilities)"
+        source: "actions/review-auto-merge/action.yml#L1-L2"
     status: "open"
     active_workaround:
-      decision_key: "AUTO:StandardActionStructure.gap_tolerance"
-      summary: "AUTO: Treat as high-severity violation. Must create missing components or mark as internal-only."
+      decision_key: "AUTO:ReviewAutoMergeAction.distinct_from_automerge"
+      summary: "AUTO: Rebase+merge are part of single merge workflow. Allowed as cohesive operation."

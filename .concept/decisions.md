@@ -1,21 +1,5 @@
 # Active AUTO Decisions (cache) — safe to delete
 
-## AUTO:ReviewAndMergeAction.refactoring_strategy
-- Status: ACTIVE
-- Chosen: ReviewAndFixAction replaces ReviewAndMergeAction; new split actions follow single responsibility
-- Policy: single_responsibility + clarity
-- Expires After Runs: 20
-- Linked: AMB-001
-- Revert Triggers: user_explicit_feedback, breaking_change_detected
-
-## AUTO:StandardActionStructure.gap_tolerance
-- Status: ACTIVE
-- Chosen: Gap is high-severity violation. Must create examples/instructions or mark as internal-only.
-- Policy: invariant_enforcement + safety
-- Expires After Runs: 10
-- Linked: AMB-002 / CFLT-001
-- Revert Triggers: actions_marked_internal, explicit_exemption_granted
-
 ## AUTO:AutoFix.lgtm_on_success
 - Status: ACTIVE
 - Chosen: auto-fix成功時はconfidence=10としてLGTM扱い
@@ -44,16 +28,10 @@
 - Expires After Runs: 20
 - Linked: AutoMergeAction
 
-## AUTO:ReviewAndFixAction.replaces_review_merge
+## AUTO:ReviewAutoMergeAction.distinct_from_automerge
 - Status: ACTIVE
-- Chosen: ReviewAndMergeActionの後継としてdraft扱い
-- Policy: clarity
-- Expires After Runs: 20
-- Linked: ReviewAndFixAction
-
-## AUTO:StandardActionStructure.enforcement
-- Status: ACTIVE
-- Chosen: 違反をhigh severityとして扱い、是正アクションを要求
-- Policy: invariant_enforcement
-- Expires After Runs: 10
-- Linked: INV-STD-STRUCT-003
+- Chosen: Keep separate for now. ReviewAutoMergeAction focuses on retry logic, AutoMergeAction on method configuration. Similarity 0.72 < 0.78 threshold.
+- Policy: similarity_threshold + pragmatic_separation
+- Expires After Runs: 15
+- Linked: ReviewAutoMergeAction / AMB-003
+- Revert Triggers: user_requests_consolidation, similarity_increases_above_078

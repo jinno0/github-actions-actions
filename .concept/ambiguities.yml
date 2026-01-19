@@ -1,10 +1,10 @@
-updated_at: "2026-01-18T14:21:00Z"
+updated_at: "2026-01-19T01:28:18Z"
 ambiguities:
   - id: "AMB-001"
     term: "ReviewAndMergeAction"
     topic: "Action refactoring completeness"
-    severity: "high"
-    uncertainty: 0.65
+    severity: "medium"
+    uncertainty: 0.45
     candidates:
       - "review-fix should replace review-and-merge completely"
       - "review-and-merge should remain as composite action"
@@ -13,7 +13,7 @@ ambiguities:
       - "Should examples/review-and-merge-example.yml be updated to use the new split actions?"
     linked_conflicts: []
     auto_decision:
-      status: "applied"
+      status: "expired"
       decision_key: "AUTO:ReviewAndMergeAction.refactoring_strategy"
       chosen: "ReviewAndFixAction replaces ReviewAndMergeAction; new split actions follow single responsibility"
       policy: "single_responsibility + clarity"
@@ -23,7 +23,7 @@ ambiguities:
       revert_triggers:
         - "user_explicit_feedback"
         - "breaking_change_detected"
-    last_touched_run: "2026-01-18T14:21:00Z"
+    last_touched_run: "2026-01-19T01:28:18Z"
     evidence:
       - source: "git log#b35a9c6"
         quote: "refactor: split review-and-merge into separate actions (publish, review-fix, merge)"
@@ -32,7 +32,7 @@ ambiguities:
     term: "StandardActionStructure"
     topic: "Missing examples and instructions for new actions"
     severity: "high"
-    uncertainty: 0.75
+    uncertainty: 0.55
     candidates:
       - "Create examples/instructions immediately (strict adherence)"
       - "Allow temporary gap during refactoring (pragmatic)"
@@ -41,7 +41,7 @@ ambiguities:
       - "Should AI agents auto-generate missing components?"
     linked_conflicts: ["CFLT-001"]
     auto_decision:
-      status: "applied"
+      status: "superseded"
       decision_key: "AUTO:StandardActionStructure.gap_tolerance"
       chosen: "Gap is high-severity violation. Must create examples/instructions or mark as internal-only."
       policy: "invariant_enforcement + safety"
@@ -51,9 +51,45 @@ ambiguities:
       revert_triggers:
         - "actions_marked_internal"
         - "explicit_exemption_granted"
-    last_touched_run: "2026-01-18T14:21:00Z"
+      superseded_by_run: "2026-01-19T10:47:00Z"
+      superseded_by: "CFLT-001 resolved by creating missing examples and instructions"
+    last_touched_run: "2026-01-19T10:47:00Z"
     evidence:
       - source: "examples/"
         quote: "publish-pr-example.yml and auto-merge-example.yml are missing"
       - source: "instructions/"
         quote: "publish-pr.md and auto-merge.md are missing"
+      - source: "examples/"
+        quote: "pr-review-enqueuer-example.yml and review-auto-merge-example.yml are missing"
+      - source: "instructions/"
+        quote: "pr-review-enqueuer.md and review-auto-merge.md are missing"
+
+  - id: "AMB-003"
+    term: "ReviewAutoMergeAction"
+    topic: "Distinction from AutoMergeAction"
+    severity: "medium"
+    uncertainty: 0.42
+    candidates:
+      - "ReviewAutoMergeAction is distinct (retry logic vs method config)"
+      - "Should merge into AutoMergeAction as single concept"
+    missing_info:
+      - "Why do we need two separate merge actions?"
+      - "Can retry logic be integrated into AutoMergeAction?"
+    linked_conflicts: []
+    auto_decision:
+      status: "applied"
+      decision_key: "AUTO:ReviewAutoMergeAction.distinct_from_automerge"
+      chosen: "Keep separate for now. ReviewAutoMergeAction focuses on retry logic, AutoMergeAction on method configuration. Similarity 0.72 < 0.78 threshold."
+      policy: "similarity_threshold + pragmatic_separation"
+      confidence_auto: 0.65
+      decided_at_run: "2026-01-19T01:28:18Z"
+      expires_after_runs: 15
+      revert_triggers:
+        - "user_requests_consolidation"
+        - "similarity_increases_above_078"
+    last_touched_run: "2026-01-19T01:28:18Z"
+    evidence:
+      - source: "actions/review-auto-merge/action.yml"
+        quote: "description: 'Automatically rebase and merge PRs' (retry logic)"
+      - source: "actions/auto-merge/action.yml"
+        quote: "description: 'Merge a pull request with specified method' (method config)"

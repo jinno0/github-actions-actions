@@ -1,4 +1,4 @@
-updated_at: "2026-01-18T14:21:00Z"
+updated_at: "2026-01-19T01:28:18Z"
 queue:
   - id: "TP-001"
     proposed_canonical: "PublishPrAction"
@@ -11,7 +11,7 @@ queue:
     auto_merge_candidates:
       - term: "ReviewAndMergeAction"
         similarity: 0.45
-    decision: "pending"
+    decision: "accepted"
     expires_after_runs: 10
     created_run: "2026-01-18T14:21:00Z"
 
@@ -26,7 +26,7 @@ queue:
     auto_merge_candidates:
       - term: "ReviewAndMergeAction"
         similarity: 0.48
-    decision: "pending"
+    decision: "accepted"
     expires_after_runs: 10
     created_run: "2026-01-18T14:21:00Z"
 
@@ -41,7 +41,9 @@ queue:
     auto_merge_candidates:
       - term: "ReviewAndMergeAction"
         similarity: 0.85
-    decision: "pending"
+    decision: "merged"
+    merge_target: "ReviewAndMergeAction"
+    reason: "High similarity (0.85) indicates this is the same concept as ReviewAndMergeAction, just in a refactored form. Will use ReviewAndMergeAction as canonical term."
     expires_after_runs: 10
     created_run: "2026-01-18T14:21:00Z"
 
@@ -54,6 +56,35 @@ queue:
       - source: "git log"
         quote: "refactor: split review-and-merge into separate actions (publish, review-fix, merge)"
     auto_merge_candidates: []
-    decision: "pending"
+    decision: "rejected"
+    reason: "Too generic (aux layer). Not a core business concept. This is a general refactoring pattern, not a domain-specific term."
     expires_after_runs: 10
     created_run: "2026-01-18T14:21:00Z"
+  - id: "TP-005"
+    proposed_canonical: "PrReviewEnqueuerAction"
+    proposed_layer: "domain"
+    term_raw_examples: ["PR Review Enqueuer", "pr-review-enqueuer", "review enqueuer"]
+    reason: "New action that scans open PRs and adds /review comment to trigger review workflow with filtering capabilities."
+    evidence:
+      - source: "actions/pr-review-enqueuer/action.yml"
+        quote: "name: 'PR Review Enqueuer', description: 'Scans open PRs and adds /review comment to trigger review workflow'"
+    auto_merge_candidates:
+      - term: "ReviewAndMergeAction"
+        similarity: 0.52
+    decision: "pending"
+    expires_after_runs: 10
+    created_run: "2026-01-19T01:28:18Z"
+  - id: "TP-006"
+    proposed_canonical: "ReviewAutoMergeAction"
+    proposed_layer: "domain"
+    term_raw_examples: ["Review and Auto-Merge PR", "review-auto-merge", "auto-merge pr"]
+    reason: "Action that automatically merges PRs with retry logic. Distinct from AutoMergeAction which focuses on merge method configuration."
+    evidence:
+      - source: "actions/review-auto-merge/action.yml"
+        quote: "name: 'Review and Auto-Merge PR', description: 'Automatically rebase and merge PRs'"
+    auto_merge_candidates:
+      - term: "AutoMergeAction"
+        similarity: 0.72
+    decision: "pending"
+    expires_after_runs: 10
+    created_run: "2026-01-19T01:28:18Z"

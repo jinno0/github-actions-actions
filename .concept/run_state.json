@@ -1,6 +1,7 @@
 {
-  "last_run_id": "2026-01-18T14:21:00Z",
-  "claims_retained_lines": 24,
+  "last_run_id": "2026-01-19T10:47:00Z",
+  "claims_retained_lines": 40,
   "claims_archived_until_run_id": null,
-  "run_count": 2
+  "run_count": 4,
+  "run_index": 4
 }
