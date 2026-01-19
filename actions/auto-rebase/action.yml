@@ -49,8 +49,8 @@ runs:
         GH_TOKEN: ${{ inputs.github-token }}
       run: |
         # Determine PR number from event or inputs
-        if [ -n "${{ inputs.pr-number }}" ]; then
-          PR_NUMBER=${{ inputs.pr-number }}
+        if [ -n "${{ inputs.pr_number }}" ]; then
+          PR_NUMBER=${{ inputs.pr_number }}
         else
           PR_NUMBER=${{ github.event.pull_request.number }}
         fi
@@ -85,8 +85,8 @@ runs:
         set +e
 
         # Determine PR number from event or inputs
-        if [ -n "${{ inputs.pr-number }}" ]; then
-          PR_NUMBER=${{ inputs.pr-number }}
+        if [ -n "${{ inputs.pr_number }}" ]; then
+          PR_NUMBER=${{ inputs.pr_number }}
         else
           PR_NUMBER=${{ github.event.pull_request.number }}
         fi
