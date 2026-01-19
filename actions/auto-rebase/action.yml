@@ -104,8 +104,10 @@ runs:
         echo "- Strategy: $STRATEGY" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
 
-        # Attempt rebase
-        if git rebase "origin/$BASE_BRANCH" 2>&1; then
+        # Attempt rebase (capture output to avoid triggering exit on error)
+        REBASE_OUTPUT=$(git rebase "origin/$BASE_BRANCH" 2>&1) || REBASE_EXIT_CODE=$?
+        if [ -z "$REBASE_EXIT_CODE" ]; then
+          # Rebase succeeded (no exit code set)
           echo "✅ Rebase successful - no conflicts" >> $GITHUB_STEP_SUMMARY
           git push --force-with-lease
           echo "rebased=true" >> $GITHUB_OUTPUT
@@ -193,7 +195,8 @@ runs:
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "Continuing rebase..." >> $GITHUB_STEP_SUMMARY
 
-        if git rebase --continue 2>&1; then
+        CONTINUE_OUTPUT=$(git rebase --continue 2>&1) || CONTINUE_EXIT_CODE=$?
+        if [ -z "$CONTINUE_EXIT_CODE" ]; then
           # Push rebased branch
           echo "Pushing rebased branch..." >> $GITHUB_STEP_SUMMARY
           git push --force-with-lease
