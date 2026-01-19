@@ -17,7 +17,7 @@ This action merges a pull request using the specified merge method (squash, merg
 
    ```yaml
    # Reference: examples/auto-merge-example.yml
-   uses: owner/repo/actions/auto-merge@main
+   uses: owner/repo/actions/auto-merge@v1
    with:
      github-token: ${{ secrets.GITHUB_TOKEN }}
      merge-method: 'squash'
