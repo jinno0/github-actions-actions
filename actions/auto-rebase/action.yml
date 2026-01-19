@@ -145,16 +145,14 @@ runs:
             -e "s|{PR_NUMBER}|$PR_NUMBER|g" \
             "$PROMPT_FILE" > /tmp/conflict_prompt.txt
 
-        # Add conflict markers info to prompt
+        # Add conflicted file list to prompt (just names, Claude will read them)
         echo "" >> /tmp/conflict_prompt.txt
         echo "## Conflicted Files:" >> /tmp/conflict_prompt.txt
         git diff --name-only --diff-filter=U | while read file; do
-          echo "" >> /tmp/conflict_prompt.txt
-          echo "### $file" >> /tmp/conflict_prompt.txt
-          echo '```' >> /tmp/conflict_prompt.txt
-          cat "$file" >> /tmp/conflict_prompt.txt
-          echo '```' >> /tmp/conflict_prompt.txt
+          echo "- \`$file\`" >> /tmp/conflict_prompt.txt
         done
+        echo "" >> /tmp/conflict_prompt.txt
+        echo "Please use the Read tool to examine each file above, then use the Edit tool to resolve conflicts." >> /tmp/conflict_prompt.txt
 
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "🤖 Asking Claude Code CLI to resolve conflicts..." >> $GITHUB_STEP_SUMMARY

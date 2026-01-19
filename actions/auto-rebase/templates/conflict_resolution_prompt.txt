@@ -38,5 +38,3 @@ We are rebasing the current branch onto {BASE_BRANCH} and have encountered merge
 3. DO NOT commit - the workflow will handle that
 
 IMPORTANT: You MUST use the Edit tool to modify each file. The files are located in the current working directory.
-
-The conflicted files are shown below with their current content including conflict markers.
