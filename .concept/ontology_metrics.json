@@ -1,56 +1,56 @@
 {
-  "run_id": "2026-01-19T11:43:00Z",
-  "timestamp": "2026-01-19T11:43:00Z",
+  "run_id": "2026-01-19T13:08:00Z",
+  "timestamp": "2026-01-19T13:08:00Z",
   "ontology": {
-    "total_terms": 15,
+    "total_terms": 19,
     "core_terms": 7,
-    "domain_terms": 7,
+    "domain_terms": 11,
     "aux_terms": 1,
-    "stable_terms": 14,
-    "draft_terms": 1
+    "stable_terms": 17,
+    "draft_terms": 2
   },
   "invariants": {
-    "total": 9,
-    "hard": 7,
+    "total": 10,
+    "hard": 8,
     "soft": 2,
-    "stable": 7,
+    "stable": 8,
     "draft": 2
   },
   "ambiguities": {
     "total": 3,
     "high": 0,
-    "medium": 2,
-    "low": 1,
+    "medium": 1,
+    "low": 2,
     "superseded": 1
   },
   "conflicts": {
     "total": 2,
-    "open": 1,
-    "resolved": 1
+    "open": 0,
+    "resolved": 2
   },
   "claims": {
-    "total_lines": 40,
-    "retained_lines": 40,
+    "total_lines": 58,
+    "retained_lines": 58,
     "archived_lines": 0
   },
   "queue": {
-    "pending": 2,
+    "pending": 0,
     "merged": 1,
     "rejected": 1,
-    "accepted": 2
+    "accepted": 6
   },
   "decisions": {
-    "active": 5,
+    "active": 6,
     "superseded": 1,
     "expired": 1,
-    "lines": 37
+    "lines": 43
   },
   "budget_status": {
     "total_terms_max": 80,
-    "total_terms_current": 15,
-    "total_terms_ratio": 0.188,
+    "total_terms_current": 19,
+    "total_terms_ratio": 0.238,
     "draft_ratio_max": 0.30,
-    "draft_ratio_current": 0.067,
+    "draft_ratio_current": 0.105,
     "draft_ratio_ok": true,
     "within_budget": true
   }

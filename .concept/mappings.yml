@@ -1,4 +1,4 @@
-updated_at: "2026-01-19T01:28:18Z"
+updated_at: "2026-01-19T13:01:00Z"
 mappings:
   CompositeAction:
     code_symbols: []
@@ -128,3 +128,39 @@ mappings:
       - "actions/review-auto-merge/action.yml"
     db: []
     api: []
+  BulkMergePRsAction:
+    code_symbols:
+      - "actions/bulk-merge-prs/action.yml"
+    db: []
+    api: []
+    files:
+      - "actions/bulk-merge-prs/action.yml"
+      - "examples/bulk-merge-prs-example.yml"
+      - "instructions/bulk-merge-prs.md"
+  BulkRebasePRsAction:
+    code_symbols:
+      - "actions/bulk-rebase-prs/action.yml"
+    db: []
+    api: []
+    files:
+      - "actions/bulk-rebase-prs/action.yml"
+      - "examples/bulk-rebase-prs-example.yml"
+      - "instructions/bulk-rebase-prs.md"
+  PrReviewEnqueuerAction:
+    code_symbols:
+      - "actions/pr-review-enqueuer/action.yml"
+    db: []
+    api: []
+    files:
+      - "actions/pr-review-enqueuer/action.yml"
+      - "examples/pr-review-enqueuer-example.yml"
+      - "instructions/pr-review-enqueuer.md"
+  ReviewAutoMergeAction:
+    code_symbols:
+      - "actions/review-auto-merge/action.yml"
+    db: []
+    api: []
+    files:
+      - "actions/review-auto-merge/action.yml"
+      - "examples/review-auto-merge-example.yml"
+      - "instructions/review-auto-merge.md"

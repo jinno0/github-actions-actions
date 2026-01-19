@@ -1,4 +1,4 @@
-updated_at: "2026-01-19T01:28:18Z"
+updated_at: "2026-01-19T13:08:00Z"
 ambiguities:
   - id: "AMB-001"
     term: "ReviewAndMergeAction"
@@ -67,29 +67,31 @@ ambiguities:
   - id: "AMB-003"
     term: "ReviewAutoMergeAction"
     topic: "Distinction from AutoMergeAction"
-    severity: "medium"
-    uncertainty: 0.42
+    severity: "low"
+    uncertainty: 0.15
     candidates:
       - "ReviewAutoMergeAction is distinct (retry logic vs method config)"
       - "Should merge into AutoMergeAction as single concept"
-    missing_info:
-      - "Why do we need two separate merge actions?"
-      - "Can retry logic be integrated into AutoMergeAction?"
+    missing_info: []
     linked_conflicts: []
     auto_decision:
       status: "applied"
       decision_key: "AUTO:ReviewAutoMergeAction.distinct_from_automerge"
-      chosen: "Keep separate for now. ReviewAutoMergeAction focuses on retry logic, AutoMergeAction on method configuration. Similarity 0.72 < 0.78 threshold."
+      chosen: "Keep separate. ReviewAutoMergeAction focuses on retry logic, AutoMergeAction on method configuration. Similarity 0.72 < 0.78 threshold. Both accepted to ontology with complete examples and instructions."
       policy: "similarity_threshold + pragmatic_separation"
-      confidence_auto: 0.65
+      confidence_auto: 0.88
       decided_at_run: "2026-01-19T01:28:18Z"
-      expires_after_runs: 15
+      expires_after_runs: 20
       revert_triggers:
         - "user_requests_consolidation"
         - "similarity_increases_above_078"
-    last_touched_run: "2026-01-19T01:28:18Z"
+    last_touched_run: "2026-01-19T13:08:00Z"
     evidence:
       - source: "actions/review-auto-merge/action.yml"
         quote: "description: 'Automatically rebase and merge PRs' (retry logic)"
       - source: "actions/auto-merge/action.yml"
         quote: "description: 'Merge a pull request with specified method' (method config)"
+      - source: "examples/review-auto-merge-example.yml"
+        quote: "Complete workflow example with retry parameters"
+      - source: "examples/auto-merge-example.yml"
+        quote: "Complete workflow example with method config"

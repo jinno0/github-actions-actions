@@ -135,3 +135,19 @@ invariants:
     checks:
       - type: "manual"
         target: "examples/publish-pr-example.yml, examples/auto-merge-example.yml, instructions/publish-pr.md, instructions/auto-merge.md"
+  - id: "INV-STD-STRUCT-004"
+    related_terms: ["StandardActionStructure", "PrReviewEnqueuerAction", "ReviewAutoMergeAction"]
+    status: "stable"
+    strength: "hard"
+    statement: "PrReviewEnqueuerActionとReviewAutoMergeActionはStandard Action Structureに準拠している"
+    rationale: "AGENTS.md#L165-L175のinvariant準拠。TP-005とTP-006でacceptance条件を満たす"
+    assumptions: []
+    evidence:
+      - source: "examples/"
+        quote: "pr-review-enqueuer-example.yml and review-auto-merge-example.yml exist"
+      - source: "instructions/"
+        quote: "pr-review-enqueuer.md and review-auto-merge.md exist"
+    checks:
+      - type: "manual"
+        target: "examples/pr-review-enqueuer-example.yml, examples/review-auto-merge-example.yml, instructions/pr-review-enqueuer.md, instructions/review-auto-merge.md"
+updated_at: "2026-01-19T13:08:00Z"

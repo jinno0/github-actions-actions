@@ -1,5 +1,5 @@
 version: "0.3"
-updated_at: "2026-01-19T01:28:18Z"
+updated_at: "2026-01-19T13:08:00Z"
 
 canonical_terms:
   CompositeAction:
@@ -245,3 +245,87 @@ canonical_terms:
     evidence:
       - source: "actions/review-and-merge/action.yml"
         quote: "name: 'AI Review and Fix', description: 'Review and automatically fix code issues'"
+
+  BulkMergePRsAction:
+    id: "TERM-BULK-MERGE-PRS"
+    layer: "domain"
+    status: "stable"
+    definition: "CIが通っている複数のPull Requestを一括でマージするAction（mergeable='MERGEABLE'かつmergeStateStatus='CLEAN'のPRのみ対象）"
+    synonyms: ["Bulk Merge PRs", "bulk-merge-prs", "bulk merge action"]
+    boundaries:
+      includes: ["複数PRの一括マージ", "CLEAN statusフィルタ", "limit指定", "merge-method選択", "draft PR自動ready化"]
+      excludes: ["単一PRマージ", "レビュー機能", "リベース機能"]
+    lifecycle: ["Filter", "MarkReady", "Merge", "DeleteBranch"]
+    related_terms: ["AutoMergeAction", "CompositeAction", "SingleResponsibility"]
+    assumptions: []
+    evidence:
+      - source: "actions/bulk-merge-prs/action.yml"
+        quote: "name: 'Bulk Merge PRs', description: 'Merge multiple pull requests that are ready (CLEAN status)'"
+      - source: "instructions/bulk-merge-prs.md#L1-L10"
+        quote: "CIが通っている複数のPull Requestを一括でマージします"
+      - source: "instructions/bulk-merge-prs.md#L95-L100"
+        quote: "推奨ワークフロー: (1) bulk-rebase-prsで古いPRをリベース (2) CIが通るのを待つ (3) bulk-merge-prsで一括マージ"
+
+  BulkRebasePRsAction:
+    id: "TERM-BULK-REBASE-PRS"
+    layer: "domain"
+    status: "stable"
+    definition: "複数のPull Requestを一括で最新のブランチに対してリベースするAction（mergeStateStatusフィルタ対応）"
+    synonyms: ["Bulk Rebase PRs", "bulk-rebase-prs", "bulk rebase action"]
+    boundaries:
+      includes: ["複数PRの一括リベース", "mergeStateStatusフィルタ（BEHIND/CLEAN/DIRTY等）", "limit指定", "最新base branch対照"]
+      excludes: ["単一PRリベース", "マージ機能", "コンフリクト解決"]
+    lifecycle: ["Filter", "Rebase", "WaitCI"]
+    related_terms: ["AutoMergeAction", "CompositeAction", "SingleResponsibility"]
+    assumptions: []
+    evidence:
+      - source: "actions/bulk-rebase-prs/action.yml"
+        quote: "name: 'Bulk Rebase PRs', description: 'Rebase multiple pull requests against latest base branch'"
+      - source: "instructions/bulk-rebase-prs.md#L1-L10"
+        quote: "複数のPull Requestを一括で最新のブランチに対してリベースします"
+      - source: "instructions/bulk-merge-prs.md#L95-L100"
+        quote: "推奨ワークフロー: (1) bulk-rebase-prsで古いPRをリベース (2) CIが通るのを待つ (3) bulk-merge-prsで一括マージ"
+
+  PrReviewEnqueuerAction:
+    id: "TERM-PR-REVIEW-ENQUEUER"
+    layer: "domain"
+    status: "stable"
+    definition: "公開中のPRをスキャンし、レビューワークフローをトリガーする/reviewコメントを追加するAction（フィルタ機能付き）"
+    synonyms: ["PR Review Enqueuer", "pr-review-enqueuer", "review enqueuer action"]
+    boundaries:
+      includes: ["/reviewコメント追加", "PRフィルタ（all/drafts/ready/wip/no-label）", "age閾値", "batch処理"]
+      excludes: ["レビュー実行", "マージ機能", "rebase機能"]
+    lifecycle: ["Scan", "Filter", "Enqueue"]
+    related_terms: ["CompositeAction", "SingleResponsibility"]
+    assumptions: []
+    evidence:
+      - source: "actions/pr-review-enqueuer/action.yml"
+        quote: "name: 'PR Review Enqueuer', description: 'Scans open PRs and adds /review comment to trigger review workflow'"
+      - source: "examples/pr-review-enqueuer-example.yml"
+        quote: "Complete workflow example with filter parameters"
+      - source: "instructions/pr-review-enqueuer.md"
+        quote: "Comprehensive setup and usage guide"
+
+  ReviewAutoMergeAction:
+    id: "TERM-REVIEW-AUTO-MERGE"
+    layer: "domain"
+    status: "stable"
+    definition: "PRを自動的にリベースし、リトライロジック付きでマージするAction（squash merge方式）"
+    synonyms: ["Review and Auto-Merge PR", "review-auto-merge", "auto-merge pr"]
+    boundaries:
+      includes: ["自動rebase", "リトライロジック", "5秒delay", "max-attempts指定", "squash merge"]
+      excludes: ["マージ方法設定", "draft変換", "レビュー機能"]
+    lifecycle: ["CheckState", "Rebase", "Merge", "Retry"]
+    related_terms: ["AutoMergeAction", "CompositeAction", "ConflictResolution"]
+    assumptions:
+      - id: "ASM-REVIEWAUTOMERGE-001"
+        text: "AUTO: rebase+mergeは単一のマージワークフローの一部として結合（単一責務違反ではない）"
+        decision_key: "AUTO:ReviewAutoMergeAction.cohesive_workflow"
+        expires_after_runs: 20
+    evidence:
+      - source: "actions/review-auto-merge/action.yml"
+        quote: "name: 'Review and Auto-Merge PR', description: 'Automatically rebase and merge PRs'"
+      - source: "examples/review-auto-merge-example.yml"
+        quote: "Complete workflow example with retry parameters"
+      - source: "instructions/review-auto-merge.md"
+        quote: "Comprehensive setup guide including retry logic"

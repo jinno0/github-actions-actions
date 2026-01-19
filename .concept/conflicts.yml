@@ -1,4 +1,4 @@
-updated_at: "2026-01-19T01:28:18Z"
+updated_at: "2026-01-19T13:08:00Z"
 conflicts:
   - id: "CFLT-001"
     term: "StandardActionStructure"
@@ -24,7 +24,9 @@ conflicts:
         source: "SYSTEM_CONSTITUTION.md#L35-L40"
       - claim: "ReviewAutoMergeAction combines rebase and merge operations (potentially two responsibilities)"
         source: "actions/review-auto-merge/action.yml#L1-L2"
-    status: "open"
+    status: "resolved"
+    resolution_note: "AUTO decision ASM-REVIEWAUTOMERGE-001 clarifies that rebase+merge form a cohesive merge workflow. Similarity 0.72 to AutoMergeAction confirms distinct purpose (retry logic vs method config). Complete examples and instructions provided."
+    resolved_at_run: "2026-01-19T13:08:00Z"
     active_workaround:
       decision_key: "AUTO:ReviewAutoMergeAction.distinct_from_automerge"
       summary: "AUTO: Rebase+merge are part of single merge workflow. Allowed as cohesive operation."
