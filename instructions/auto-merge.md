@@ -1,5 +1,7 @@
 # Auto Merge PR Setup Guide
 
+> **Note**: For complete AI review + auto-merge workflow setup, see [review-and-auto-merge-workflow.md](./review-and-auto-merge-workflow.md).
+
 This action merges a pull request using the specified merge method (squash, merge, or rebase) and can optionally enable GitHub's built-in auto-merge feature.
 
 ## Prerequisites
