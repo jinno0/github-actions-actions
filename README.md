@@ -41,6 +41,45 @@ Self-hosted runner上で動作する **Claude Code CLI** を活用し、文脈�
 このリポジトリに新しい Action を追加したり、既存のものを改善したりする場合は、[AGENTS.md](./AGENTS.md) を必ず確認してください。
 テンプレートの切り出し方や、YAML構文の注意点、必須となる構成要素（Action/Example/Instruction）について定義されています。
 
+## 🧪 検証・テスト
+
+全ての AI Actions は **Dry Run モード** で自動検証されます。
+
+### 自動テスト（CI）
+
+このリポジトリでは、以下のタイミングで自動テストが実行されます：
+
+- **PR 作成時**: Actions やテンプレートを変更した場合
+- **Main ブランチへの Push**: 変更をマージした場合
+- **手動実行**: GitHub Actions の UI からいつでも実行可能
+
+### テスト内容
+
+ Dry Run テストでは以下を検証します：
+
+- ✅ **構造チェック**: `action.yml`、テンプレートファイル、例ワークフロー、説明ドキュメントが存在するか
+- ✅ **YAML 構文**: 全ての YAML ファイルの構文が正しいか
+- ✅ **プレースホルダー**: テンプレート内の `{VARIABLE}` 形式のプレースホルダーが正しく定義されているか
+- ✅ **モック実行**: Claude CLI をモック化して、Action の実行フローをシミュレート
+
+**重要**: Dry Run モードでは実際の commit/push は行われません。PR マージ直前までの挙動を検証します。
+
+### 手動でテストを実行する
+
+```bash
+# YAML 構文チェック
+find actions -name 'action.yml' -exec python3 -c "import yaml; yaml.safe_load(open('{}'))" \;
+
+# 構造チェック
+for action in actions/*/; do
+  name=$(basename "$action")
+  echo "Checking $name:"
+  echo "  action.yml: $([ -f "$action/action.yml" ] && echo '✓' || echo '✗')"
+  echo "  example: $([ -f "examples/${name}-example.yml" ] && echo '✓' || echo '✗')"
+  echo "  instruction: $([ -f "instructions/${name}.md" ] && echo '✓' || echo '✗')"
+done
+```
+
 ## 🎯 プロジェクトの目的
 
 詳細なロードマップや現在のステータスについては、[PURPOSE.md](./PURPOSE.md) を参照してください。
