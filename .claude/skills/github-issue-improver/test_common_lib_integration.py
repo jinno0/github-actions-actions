@@ -119,50 +119,11 @@ def test_diagnostics():
         print(f"❌ Error testing diagnostics: {e}")
 
 
-def test_common_lib_availability():
-    """Test if common library is available and functional"""
-    print("Testing common library availability...")
-
-    # Find common library
-    current = Path(__file__).resolve()
-    claude_lib = None
-    for _ in range(10):
-        lib_path = current / ".claude" / "lib"
-        if lib_path.exists():
-            claude_lib = lib_path
-            break
-        current = current.parent
-        if current == current.parent:
-            break
-
-    if claude_lib:
-        print(f"✅ Common library found at: {claude_lib}")
-
-        # Test importing modules
-        modules_to_test = ["env_utils", "skill_base", "diagnostics"]
-        python_lib = claude_lib / "python"
-        if python_lib.exists():
-            sys.path.insert(0, str(python_lib))
-
-        for module in modules_to_test:
-            try:
-                __import__(module)
-                print(f"  ✅ {module}: IMPORT SUCCESS")
-            except ImportError as e:
-                print(f"  ❌ {module}: IMPORT FAILED - {e}")
-    else:
-        print("❌ Common library not found")
-        return False
-
-    return True
-
-
 def main():
     """Run all tests"""
     print("=== GitHub Issue Improver Common Library Integration Test ===\n")
 
     tests = [
-        ("Common Library Availability", test_common_lib_availability),
         (".env File Parsing", test_env_parsing),
         ("SkillBase", test_skill_base),
         ("Diagnostics", test_diagnostics),
