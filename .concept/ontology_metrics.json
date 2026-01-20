@@ -5,11 +5,11 @@
   "aux": 0,
   "draft_ratio": 0.053,
   "unmapped_ratio": 0.0,
-  "queue_pending": 1,
+  "queue_pending": 0,
   "conflicts_open": 0,
   "ambiguities_high": 1,
   "decisions_lines": 53,
-  "claims_lines": 85,
+  "claims_lines": 86,
   "invariants_total": 10,
   "invariants_hard": 0,
   "invariants_soft": 0,
@@ -18,5 +18,5 @@
   "ambiguities_expired": 0,
   "ambiguities_superseded": 1,
   "conflicts_total": 2,
-  "updated_at": "2026-01-20T17:56:45.000000Z"
+  "updated_at": "2026-01-21T04:09:33.308205Z"
 }
