@@ -15,5 +15,8 @@
   "invariants_soft": 3,
   "ambiguities_total": 3,
   "ambiguities_applied": 1,
-  "conflicts_total": 2
+  "ambiguities_expired": 1,
+  "ambiguities_superseded": 1,
+  "conflicts_total": 2,
+  "updated_at": "2026-01-20T05:20:42Z"
 }
