@@ -310,3 +310,102 @@ root/
 
 ### 自動化ルール
 AIエージェントは、Action を新規作成または大幅に修正した場合、上記の `examples/` と `instructions/` も同期して更新（または作成）しなければならない。
+
+## Dry Run 検証（Testing）
+
+このリポジトリでは、すべての Action が **Dry Run モード** で自動検証されます。
+
+### CI による自動検証
+
+`.github/workflows/test-all-actions.yml` が以下のタイミングで実行されます：
+
+- **PR 作成時**: `actions/**/*.yml` や `actions/**/templates/**` を変更した場合
+- **Main ブランチへの Push**: 変更をマージした場合
+- **手動実行**: GitHub Actions の UI から特定の Action または全 Action をテスト可能
+
+### 検証内容
+
+Dry Run テストでは以下を検証します：
+
+1. **構造チェック**:
+   ```bash
+   # action.yml が存在するか
+   # templates/*.txt が存在するか
+   # examples/{name}-example.yml が存在するか
+   # instructions/{name}.md が存在するか
+   ```
+
+2. **YAML 構文チェック**:
+   ```bash
+   python3 -c "import yaml; yaml.safe_load(open('action.yml'))"
+   ```
+
+3. **モック実行**:
+   - Claude CLI をモック化（`/usr/local/bin/claude` にシミュレーションスクリプトを配置）
+   - Action の実行フローをシミュレート
+   - 実際の commit/push は行わない
+
+### Dry Run の実装方法
+
+各 Action は、Dry Run 時に以下の動作を期待されます：
+
+- **検証モード検出**: 環境変数 `DRY_RUN=true` をチェック（実装推奨）
+- **commit/push のスキップ**: 実際の Git 操作は行わない
+- **ログ出力**: 実行するであろう操作をログに出力
+
+例（action.yml での実装パターン）：
+
+```yaml
+run: |
+  DRY_RUN="${{ inputs.dry-run }}"
+
+  if [ "$DRY_RUN" = "true" ]; then
+    echo "[DRY RUN] Would commit: $COMMIT_MSG"
+    echo "[DRY RUN] Would push to: $BRANCH"
+  else
+    git add .
+    git commit -m "$COMMIT_MSG"
+    git push
+  fi
+```
+
+### ローカルでのテスト
+
+PR を作成する前に、以下のコマンドでローカルテストを実行してください：
+
+```bash
+# 1. YAML 構文チェック
+find actions -name 'action.yml' -exec python3 -c "import yaml; yaml.safe_load(open('{}'))" \;
+
+# 2. 構造チェック
+for action in actions/*/; do
+  name=$(basename "$action")
+  echo "Checking $name:"
+  echo "  action.yml: $([ -f "$action/action.yml" ] && echo '✓' || echo '✗')"
+  echo "  templates/: $(ls "$action/templates/" 2>/dev/null | wc -l) files"
+  echo "  example: $([ -f "examples/${name}-example.yml" ] && echo '✓' || echo '✗')"
+  echo "  instruction: $([ -f "instructions/${name}.md" ] && echo '✓' || echo '✗')"
+done
+
+# 3. プレースホルダーの検証（オプション）
+grep -r "{[A-Z_]*}" actions/*/templates/ --color=always
+```
+
+### CI で検証が失敗した場合
+
+1. **ログを確認**: どのステップで失敗したか確認
+2. **エラーメッセージを読む**: YAML 構文エラーやファイル不在エラーを修正
+3. **ローカルで再現**: 上記のコマンドで同じエラーを再現
+4. **修正して Push**: 修正後、CI が再実行されます
+
+### 新しい Action を追加する際のチェックリスト
+
+Action を新規作成した場合、以下を確認してください：
+
+- [ ] `actions/{name}/action.yml` が存在し、YAML 構文が正しい
+- [ ] `actions/{name}/templates/*.txt` が存在する
+- [ ] `examples/{name}-example.yml` が存在し、`runs-on: self-hosted` を含む
+- [ ] `instructions/{name}.md` が存在し、Prerequisites/Setup/Usage を含む
+- [ ] プレースホルダーが `{VARIABLE_NAME}` 形式で統一されている
+- [ ] heredoc (`<< EOF`) を使用していない
+- [ ] CI がパスすることを確認（GitHub Actions のログを確認）
