@@ -41,7 +41,7 @@ runs:
           claude --version || true
         else
           echo "Installing Claude Code CLI..."
-          npm install -g @github/copilot
+          npm install -g @github/copilot || true
           # Get npm global bin path and add to PATH
           NPM_BIN=$(npm bin -g)
           export PATH="$PATH:$NPM_BIN"
