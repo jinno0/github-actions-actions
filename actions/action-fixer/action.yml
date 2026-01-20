@@ -27,9 +27,7 @@ runs:
     - name: Install yamllint
       shell: bash
       run: |
-        if ! command -v yamllint &> /dev/null; then
-          pip install yamllint
-        fi
+        pip install yamllint || true
 
     - name: Validate YAML files
       shell: bash
@@ -47,10 +45,6 @@ runs:
           exit 0
         fi
 
-        # Create temp directory for fixed files
-        TEMP_DIR=$(mktemp -d)
-        trap "rm -rf $TEMP_DIR" EXIT
-
         echo "$YAML_FILES" | while read -r file; do
           if [ ! -f "$file" ]; then
             continue
@@ -61,21 +55,7 @@ runs:
           # Check for common issues
           ISSUES=""
 
-          # Issue 1: Find validate YAML with broken xargs command
-          if grep -q 'find.*yml.*xargs.*I {} sh -c.*python.*yaml.safe_load.*open.*{}' "$file" 2>/dev/null; then
-            ISSUES="${ISSUES}  - Broken xargs YAML validation command detected\n"
-
-            # Auto-fix if enabled
-            if [ "${{ inputs.auto-fix }}" = "true" ]; then
-              echo "  Attempting to fix..."
-              # Replace with safer version
-              sed -i 's/find \. -name "\*\.yml" -o -name "\*\.yaml" | xargs -I {} sh -c .*/find . -name "*.yml" -o -name "*.yaml" | while read -r f; do echo "Validating $f" \&\& python -c "import yaml; yaml.safe_load(open(\"$f\"))"; done/' "$file"
-              FIXES=$((FIXES + 1))
-              echo "  Fixed: YAML validation command"
-            fi
-          fi
-
-          # Issue 2: Validate YAML syntax
+          # Issue 1: Validate YAML syntax
           if ! yamllint -d "{extends: default, rules: {line-length: {max: 200}, indentation: {spaces: 2}}}" "$file" 2>/dev/null; then
             # Try to parse with Python to get more details
             ERROR_OUTPUT=$(python -c "import yaml; yaml.safe_load(open('$file'))" 2>&1 || true)
@@ -84,18 +64,18 @@ runs:
             fi
           fi
 
-          # Issue 3: Check for common workflow mistakes
+          # Issue 2: Check for common workflow mistakes
           # Missing runs-on
           if grep -q 'jobs:' "$file" && ! grep -q 'runs-on:' "$file"; then
             ISSUES="${ISSUES}  - Missing 'runs-on' in job\n"
           fi
 
-          # Issue 4: Check for deprecated actions
+          # Issue 3: Check for deprecated actions
           if grep -q 'actions/checkout@v1' "$file" || grep -q 'actions/checkout@v2' "$file"; then
             ISSUES="${ISSUES}  - Using deprecated checkout action version\n"
           fi
 
-          # Issue 5: Check for missing permissions
+          # Issue 4: Check for missing permissions
           if grep -q 'jobs:' "$file" && ! grep -q 'permissions:' "$file"; then
             ISSUES="${ISSUES}  - Warning: Missing 'permissions' (recommended for security)\n"
           fi
