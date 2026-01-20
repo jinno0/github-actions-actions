@@ -32,17 +32,19 @@ outputs:
 runs:
   using: 'composite'
   steps:
-    - name: Install Claude CLI
+    - name: Check for Claude CLI
       shell: bash
       run: |
-        # Check if claude is already installed (for self-hosted runners)
+        # Check if claude is already installed (self-hosted runners only)
         if command -v claude &> /dev/null; then
-          echo "✓ Claude CLI already available"
+          echo "✓ Claude CLI available (self-hosted runner)"
           claude --version || true
+          echo "CLAUDE_AVAILABLE=true" >> $GITHUB_ENV
           echo "CLAUDE_CMD=claude" >> $GITHUB_ENV
         else
-          echo "Claude CLI not found, will use npx"
-          echo "CLAUDE_CMD=npx @github/copilot" >> $GITHUB_ENV
+          echo "⚠️ Claude CLI not found. Conflict resolution requires self-hosted runner with claude command."
+          echo "CLAUDE_AVAILABLE=false" >> $GITHUB_ENV
+          echo "CLAUDE_CMD=" >> $GITHUB_ENV
         fi
 
     - name: Checkout PR
@@ -172,6 +174,17 @@ runs:
 
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "🤖 Asking Claude Code CLI to resolve conflicts..." >> $GITHUB_STEP_SUMMARY
+
+        # Check if Claude CLI is available
+        if [ "$CLAUDE_AVAILABLE" != "true" ]; then
+          echo "❌ Claude CLI not available. Cannot resolve conflicts automatically." >> $GITHUB_STEP_SUMMARY
+          echo "This action requires a self-hosted runner with 'claude' command installed." >> $GITHUB_STEP_SUMMARY
+          git rebase --abort 2>/dev/null || true
+          echo "rebased=false" >> $GITHUB_OUTPUT
+          echo "conflicts_resolved=false" >> $GITHUB_OUTPUT
+          echo "conflict_count=$CONFLICT_COUNT" >> $GITHUB_OUTPUT
+          exit 1
+        fi
 
         # Run Claude in interactive mode (without -p) so it can use tools
         # Give it a simple prompt to resolve the rebase conflicts
