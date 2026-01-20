@@ -37,7 +37,7 @@ permissions:
 jobs:
   setup:
     name: 'Setup Test Environment'
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
       should-run: ${{ steps.check.outputs.should-run }}
@@ -56,57 +56,33 @@ jobs:
             echo 'matrix=["review-and-merge","spec-to-code","action-fixer","auto-refactor","auto-document","release-notes-ai"]' >> $GITHUB_OUTPUT
           fi
 
-      - name: Check if running on self-hosted
+      - name: Check Claude CLI availability
         id: check
         run: |
-          # For now, we'll run on ubuntu-latest with mocked claude command
-          # In production, this should run on self-hosted with real Claude Code CLI
-          echo 'should-run=true' >> $GITHUB_OUTPUT
+          # Check if claude command is available on self-hosted runner
+          if command -v claude &> /dev/null; then
+            echo "Claude CLI found: $(claude --version 2>&1 || echo 'version unknown')"
+            echo 'should-run=true' >> $GITHUB_OUTPUT
+          else
+            echo "::warning::Claude CLI not found. Please install on self-hosted runner."
+            echo 'should-run=false' >> $GITHUB_OUTPUT
+          fi
 
   # Test review-and-merge
   test-review-and-merge:
     name: 'Test review-and-merge'
     needs: setup
     if: needs.setup.outputs.should-run == 'true'
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Mock Claude CLI
-        run: |
-          # Create mock claude command that simulates successful execution
-          sudo tee /usr/local/bin/claude > /dev/null << 'EOF'
-          #!/bin/bash
-          echo "Mock Claude Code CLI (dry-run mode)"
-          echo "Model: ${MODEL:-sonnet}"
-          echo "Task: Review and fix code"
-
-          # Simulate output based on input
-          if echo "$@" | grep -q "fix"; then
-            echo '{"verdict":"LGTM","confidence":10,"summary":"Dry run: Code looks good, no fixes needed"}'
-          else
-            echo '{"verdict":"LGTM","confidence":9,"summary":"Dry run: Review completed successfully"}'
-          fi
-          exit 0
-          EOF
-          sudo chmod +x /usr/local/bin/claude
-
-      - name: Create test PR
-        run: |
-          # Create a test branch
-          git checkout -b test/review-dry-run
-          echo "# Test File" > test-file.md
-          git add test-file.md
-          git config user.email "test@example.com"
-          git config user.name "Test User"
-          git commit -m "test: add test file for dry-run validation"
-          git push origin test/review-dry-run || echo "Branch may already exist"
 
       - name: Run review-and-merge (dry-run)
         id: test-action
         env:
           GH_TOKEN: ${{ github.token }}
+          DRY_RUN: true
         run: |
           echo "::group::Running review-and-merge in dry-run mode"
           echo "Action path: ${{ github.action_path }}"
@@ -155,40 +131,16 @@ jobs:
     name: 'Test spec-to-code'
     needs: setup
     if: needs.setup.outputs.should-run == 'true'
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Mock Claude CLI
-        run: |
-          sudo tee /usr/local/bin/claude > /dev/null << 'EOF'
-          #!/bin/bash
-          echo "Mock Claude Code CLI (dry-run mode)"
-          echo "Model: ${MODEL:-sonnet}"
-          echo "Task: Generate code from spec"
-          echo '{"status":"success","filesGenerated":1,"message":"Dry run: Code generation simulated"}'
-          exit 0
-          EOF
-          sudo chmod +x /usr/local/bin/claude
-
-      - name: Create test spec
-        run: |
-          cat > /tmp/test-spec.md << 'SPEC'
-          # Test Specification
-
-          ## Overview
-          This is a test specification for dry-run validation.
-
-          ## Requirements
-          - Function: helloWorld
-          - Returns: "Hello, World!"
-          SPEC
 
       - name: Run spec-to-code (dry-run)
         id: test-action
         env:
           GH_TOKEN: ${{ github.token }}
+          DRY_RUN: true
         run: |
           echo "::group::Running spec-to-code in dry-run mode"
 
@@ -225,41 +177,16 @@ jobs:
     name: 'Test action-fixer'
     needs: setup
     if: needs.setup.outputs.should-run == 'true'
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Mock Claude CLI
-        run: |
-          sudo tee /usr/local/bin/claude > /dev/null << 'EOF'
-          #!/bin/bash
-          echo "Mock Claude Code CLI (dry-run mode)"
-          echo "Model: ${MODEL:-sonnet}"
-          echo "Task: Fix workflow issues"
-          echo '{"fixesApplied":0,"message":"Dry run: No issues found"}'
-          exit 0
-          EOF
-          sudo chmod +x /usr/local/bin/claude
-
-      - name: Create test workflow with issues
-        run: |
-          mkdir -p .github/workflows
-          cat > .github/workflows/test-workflow.yml << 'EOF'
-          name: 'Test Workflow'
-          on: push
-          jobs:
-            test:
-              runs-on: ubuntu-latest
-              steps:
-                - uses: actions/checkout@v2
-                - run: echo "test"
-          EOF
 
       - name: Run action-fixer (dry-run)
         id: test-action
         env:
           GH_TOKEN: ${{ github.token }}
+          DRY_RUN: true
         run: |
           echo "::group::Running action-fixer in dry-run mode"
 
@@ -296,27 +223,16 @@ jobs:
     name: 'Test auto-refactor'
     needs: setup
     if: needs.setup.outputs.should-run == 'true'
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Mock Claude CLI
-        run: |
-          sudo tee /usr/local/bin/claude > /dev/null << 'EOF'
-          #!/bin/bash
-          echo "Mock Claude Code CLI (dry-run mode)"
-          echo "Model: ${MODEL:-sonnet}"
-          echo "Task: Refactor code"
-          echo '{"refactoringApplied":false,"message":"Dry run: Refactoring simulated"}'
-          exit 0
-          EOF
-          sudo chmod +x /usr/local/bin/claude
 
       - name: Run auto-refactor (dry-run)
         id: test-action
         env:
           GH_TOKEN: ${{ github.token }}
+          DRY_RUN: true
         run: |
           echo "::group::Running auto-refactor in dry-run mode"
 
@@ -353,27 +269,16 @@ jobs:
     name: 'Test auto-document'
     needs: setup
     if: needs.setup.outputs.should-run == 'true'
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Mock Claude CLI
-        run: |
-          sudo tee /usr/local/bin/claude > /dev/null << 'EOF'
-          #!/bin/bash
-          echo "Mock Claude Code CLI (dry-run mode)"
-          echo "Model: ${MODEL:-sonnet}"
-          echo "Task: Update documentation"
-          echo '{"documentationUpdated":false,"message":"Dry run: Documentation update simulated"}'
-          exit 0
-          EOF
-          sudo chmod +x /usr/local/bin/claude
 
       - name: Run auto-document (dry-run)
         id: test-action
         env:
           GH_TOKEN: ${{ github.token }}
+          DRY_RUN: true
         run: |
           echo "::group::Running auto-document in dry-run mode"
 
@@ -410,27 +315,16 @@ jobs:
     name: 'Test release-notes-ai'
     needs: setup
     if: needs.setup.outputs.should-run == 'true'
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Mock Claude CLI
-        run: |
-          sudo tee /usr/local/bin/claude > /dev/null << 'EOF'
-          #!/bin/bash
-          echo "Mock Claude Code CLI (dry-run mode)"
-          echo "Model: ${MODEL:-sonnet}"
-          echo "Task: Generate release notes"
-          echo '{"releaseNotes":"# Release Notes\\n\\nDry run: Release notes simulated"}'
-          exit 0
-          EOF
-          sudo chmod +x /usr/local/bin/claude
 
       - name: Run release-notes-ai (dry-run)
         id: test-action
         env:
           GH_TOKEN: ${{ github.token }}
+          DRY_RUN: true
         run: |
           echo "::group::Running release-notes-ai in dry-run mode"
 
@@ -467,7 +361,7 @@ jobs:
     name: 'Test Summary'
     needs: [setup, test-review-and-merge, test-spec-to-code, test-action-fixer, test-auto-refactor, test-auto-document, test-release-notes-ai]
     if: always()
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Generate summary
         run: |
@@ -486,5 +380,5 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## Test Mode" >> $GITHUB_STEP_SUMMARY
           echo "- **Dry Run**: Enabled (no actual changes made)" >> $GITHUB_STEP_SUMMARY
-          echo "- **Claude CLI**: Mocked (simulates responses)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Claude CLI**: Uses pre-configured command on self-hosted runner" >> $GITHUB_STEP_SUMMARY
           echo "- **Commit/Push**: Skipped" >> $GITHUB_STEP_SUMMARY
