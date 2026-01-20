@@ -9,7 +9,7 @@
   "conflicts_open": 0,
   "ambiguities_high": 1,
   "decisions_lines": 53,
-  "claims_lines": 74,
+  "claims_lines": 73,
   "invariants_total": 10,
   "invariants_hard": 7,
   "invariants_soft": 3,
@@ -18,5 +18,5 @@
   "ambiguities_expired": 1,
   "ambiguities_superseded": 1,
   "conflicts_total": 2,
-  "updated_at": "2026-01-20T09:58:38Z"
+  "updated_at": "2026-01-20T15:33:25Z"
 }
