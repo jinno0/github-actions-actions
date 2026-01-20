@@ -39,15 +39,10 @@ runs:
         if command -v claude &> /dev/null; then
           echo "✓ Claude CLI already available"
           claude --version || true
+          echo "CLAUDE_CMD=claude" >> $GITHUB_ENV
         else
-          echo "Installing Claude Code CLI..."
-          npm install -g @github/copilot || true
-          # Get npm global bin path and add to PATH
-          NPM_BIN=$(npm bin -g)
-          export PATH="$PATH:$NPM_BIN"
-          echo "PATH=$PATH" >> $GITHUB_ENV
-          echo "✓ Claude CLI installed to $NPM_BIN"
-          claude --version || true
+          echo "Claude CLI not found, will use npx"
+          echo "CLAUDE_CMD=npx @github/copilot" >> $GITHUB_ENV
         fi
 
     - name: Checkout PR
@@ -195,7 +190,7 @@ runs:
         echo "" >> /tmp/claude_prompt.txt
         echo "DO NOT commit. Just resolve the conflicts and save the files." >> /tmp/claude_prompt.txt
 
-        claude --dangerously-skip-permissions --model "$MODEL" < /tmp/claude_prompt.txt
+        $CLAUDE_CMD --dangerously-skip-permissions --model "$MODEL" < /tmp/claude_prompt.txt
 
         # Show Claude output in summary
         echo "" >> $GITHUB_STEP_SUMMARY
