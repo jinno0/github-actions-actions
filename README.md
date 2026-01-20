@@ -28,13 +28,9 @@ Self-hosted runner上で動作する **Claude Code CLI** を活用し、文脈�
 
 ## 🏗 前提条件
 
-これらの Action を利用するには、以下の環境が必要です。
+これらの Action を利用するには、**Self-hosted Runner** 上で **Claude Code CLI** が実行可能である必要があります。
 
-- **Self-hosted Runner**: 組織またはリポジトリで設定されたセルフホストランナー。
-- **Claude Code CLI**: ランナー上で `claude` コマンドが実行可能であること。
-- **GitHub CLI**: `gh` コマンドが実行可能であること。
-
-詳細なセットアップ方法は、各 Action のガイドを参照してください。
+詳細な環境要件や仕組みについては、[AGENTS.md](./AGENTS.md#実行環境と-claude-code-cli) を参照してください。
 
 ## 📜 開発者向けガイド
 
@@ -43,42 +39,9 @@ Self-hosted runner上で動作する **Claude Code CLI** を活用し、文脈�
 
 ## 🧪 検証・テスト
 
-全ての AI Actions は **Dry Run モード** で自動検証されます。
+全ての AI Actions は **Dry Run モード** で自動検証されます。PR 作成時や Main ブランチへの Push 時に、構造チェック・YAML 構文・モック実行が行われます。
 
-### 自動テスト（CI）
-
-このリポジトリでは、以下のタイミングで自動テストが実行されます：
-
-- **PR 作成時**: Actions やテンプレートを変更した場合
-- **Main ブランチへの Push**: 変更をマージした場合
-- **手動実行**: GitHub Actions の UI からいつでも実行可能
-
-### テスト内容
-
- Dry Run テストでは以下を検証します：
-
-- ✅ **構造チェック**: `action.yml`、テンプレートファイル、例ワークフロー、説明ドキュメントが存在するか
-- ✅ **YAML 構文**: 全ての YAML ファイルの構文が正しいか
-- ✅ **プレースホルダー**: テンプレート内の `{VARIABLE}` 形式のプレースホルダーが正しく定義されているか
-- ✅ **モック実行**: Claude CLI をモック化して、Action の実行フローをシミュレート
-
-**重要**: Dry Run モードでは実際の commit/push は行われません。PR マージ直前までの挙動を検証します。
-
-### 手動でテストを実行する
-
-```bash
-# YAML 構文チェック
-find actions -name 'action.yml' -exec python3 -c "import yaml; yaml.safe_load(open('{}'))" \;
-
-# 構造チェック
-for action in actions/*/; do
-  name=$(basename "$action")
-  echo "Checking $name:"
-  echo "  action.yml: $([ -f "$action/action.yml" ] && echo '✓' || echo '✗')"
-  echo "  example: $([ -f "examples/${name}-example.yml" ] && echo '✓' || echo '✗')"
-  echo "  instruction: $([ -f "instructions/${name}.md" ] && echo '✓' || echo '✗')"
-done
-```
+開発者向けの詳細なテスト方法については、[AGENTS.md](./AGENTS.md#dry-run-検証testing) を参照してください。
 
 ## 🎯 プロジェクトの目的
 
