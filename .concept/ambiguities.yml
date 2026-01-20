@@ -1,32 +1,37 @@
-updated_at: "2026-01-20T09:58:38Z"
+updated_at: "2026-01-20T12:51:25Z"
 ambiguities:
   - id: "AMB-001"
     term: "ReviewAndMergeAction"
     topic: "Action refactoring completeness"
-    severity: "medium"
-    uncertainty: 0.45
+    severity: "low"
+    uncertainty: 0.10
     candidates:
       - "review-fix should replace review-and-merge completely"
       - "review-and-merge should remain as composite action"
-    missing_info:
-      - "Are the old review-and-merge references still valid?"
-      - "Should examples/review-and-merge-example.yml be updated to use the new split actions?"
+    missing_info: []
     linked_conflicts: []
     auto_decision:
-      status: "expired"
-      decision_key: "AUTO:ReviewAndMergeAction.refactoring_strategy"
-      chosen: "ReviewAndFixAction replaces ReviewAndMergeAction; new split actions follow single responsibility"
-      policy: "single_responsibility + clarity"
-      confidence_auto: 0.70
-      decided_at_run: "2026-01-18T14:21:00Z"
+      status: "applied"
+      decision_key: "AUTO:ReviewAndMergeAction.coexistence_strategy"
+      chosen: "ReviewAndMergeAction remains as stable action. Split actions (publish-pr, auto-merge) coexist for specific use cases. All actions comply with INV-005 (Standard Action Structure) and are actively used."
+      policy: "stability + single_responsibility"
+      confidence_auto: 0.90
+      decided_at_run: "2026-01-20T12:51:25Z"
       expires_after_runs: 20
       revert_triggers:
         - "user_explicit_feedback"
         - "breaking_change_detected"
-    last_touched_run: "2026-01-19T01:28:18Z"
+        - "usage_statistics_show_disuse"
+    last_touched_run: "2026-01-20T12:51:25Z"
     evidence:
       - source: "git log#b35a9c6"
         quote: "refactor: split review-and-merge into separate actions (publish, review-fix, merge)"
+      - source: "ontology.yml"
+        quote: "ReviewAndMergeAction: status=stable, definition='PRをAIがレビューし、問題を自動修正し、必要に応じてrebaseし、競合を解決した上で自動マージするAction'"
+      - source: "actions/review-and-merge/action.yml"
+        quote: "180 lines, actively maintained with auto-fix, rebase, conflict resolution, and merge"
+      - source: "structure_check"
+        quote: "All 13 actions have examples and instructions (INV-005 compliant)"
 
   - id: "AMB-002"
     term: "StandardActionStructure"

@@ -36,13 +36,13 @@
 - Linked: ReviewAutoMergeAction / AMB-003
 - Revert Triggers: user_requests_consolidation, similarity_increases_above_078
 
-## AUTO:ReviewAndFixAction.replaces_review_merge
+## AUTO:ReviewAndMergeAction.coexistence_strategy
 - Status: ACTIVE
-- Chosen: ReviewAndMergeActionの後継としてdraft扱い
-- Policy: evolutionary + conservative
-- Expires After Runs: 20 (created: 2026-01-18T14:21:00Z)
-- Linked: ReviewAndFixAction / ASM-REVIEWFIX-001
-- Revert Triggers: user_explicit_feedback, breaking_change
+- Chosen: ReviewAndMergeAction remains as stable action. Split actions (publish-pr, auto-merge) coexist for specific use cases. All actions comply with INV-005 (Standard Action Structure).
+- Policy: stability + single_responsibility
+- Expires After Runs: 20 (created: 2026-01-20T12:51:25Z)
+- Linked: ReviewAndMergeAction / AMB-001 (resolved)
+- Revert Triggers: user_explicit_feedback, breaking_change_detected, usage_statistics_show_disuse
 
 ## AUTO:ReviewAutoMergeAction.cohesive_workflow
 - Status: ACTIVE
