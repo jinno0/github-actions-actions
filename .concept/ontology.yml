@@ -316,13 +316,13 @@ canonical_terms:
     id: "TERM-REVIEW-AUTO-MERGE"
     layer: "domain"
     status: "stable"
-    definition: "PRを自動的にリベースし、リトライロジック付きでマージするAction（squash merge方式）"
+    definition: "PRをAIレビューとCIチェック合格後に自動マージするAction。リトライロジックと複数マージメソッド（squash/merge/rebase）でレースコンディション等のエッジケースに対処"
     synonyms: ["Review and Auto-Merge PR", "review-auto-merge", "auto-merge pr"]
     boundaries:
-      includes: ["自動rebase", "リトライロジック", "5秒delay", "max-attempts指定", "squash merge"]
-      excludes: ["マージ方法設定", "draft変換", "レビュー機能"]
-    lifecycle: ["CheckState", "Rebase", "Merge", "Retry"]
-    related_terms: ["AutoMergeAction", "CompositeAction", "ConflictResolution"]
+      includes: ["自動rebase", "リトライロジック（デフォルト5回）", "5秒delay", "max-attempts指定", "複数マージメソッド（squash→merge→rebase）", "状態検証", "ブランチ自動削除"]
+      excludes: ["マージ方法手動設定", "draft変換", "レビュー機能実行"]
+    lifecycle: ["CheckState", "Rebase", "Merge", "Retry", "Cleanup"]
+    related_terms: ["AutoMergeAction", "CompositeAction", "ConflictResolution", "StateVerification"]
     assumptions:
       - id: "ASM-REVIEWAUTOMERGE-001"
         text: "AUTO: rebase+mergeは単一のマージワークフローの一部として結合（単一責務違反ではない）"
@@ -333,8 +333,16 @@ canonical_terms:
         quote: "name: 'Review and Auto-Merge PR', description: 'Automatically rebase and merge PRs'"
       - source: "examples/review-auto-merge-example.yml"
         quote: "Complete workflow example with retry parameters"
-      - source: "instructions/review-auto-merge.md"
-        quote: "Comprehensive setup guide including retry logic"
+      - source: "instructions/review-auto-merge.md#L1-L10"
+        quote: "This action automatically merges pull requests after AI review and CI checks pass. It implements retry logic with multiple merge methods (squash, merge, rebase) to handle edge cases like race conditions."
+      - source: "instructions/review-auto-merge.md#L40-L45"
+        quote: "Retry Logic: Attempts merging up to max-attempts times (default: 5) with 5-second delays"
+      - source: "instructions/review-auto-merge.md#L47-L50"
+        quote: "Multiple Merge Methods: Tries squash → merge → rebase in order"
+      - source: "instructions/review-auto-merge.md#L51-L52"
+        quote: "Branch Cleanup: Automatically deletes the PR branch after successful merge"
+      - source: "instructions/review-auto-merge.md#L53-L54"
+        quote: "State Verification: Checks PR state before each attempt to avoid errors"
 
   AutoRebaseAction:
     id: "TERM-AUTO-REBASE"
@@ -356,4 +364,4 @@ canonical_terms:
       - source: "examples/auto-rebase-example.yml"
         quote: "Complete workflow example with rebase strategy and model configuration"
 
-updated_at: "2026-01-20T09:58:38Z"
+updated_at: "2026-01-20T17:56:45Z"
