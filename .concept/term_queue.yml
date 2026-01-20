@@ -1,47 +1,5 @@
-updated_at: "2026-01-20T15:33:25Z"
-queue:
-  - id: "TP-009"
-    proposed_canonical: "AutoRebaseAction"
-    proposed_layer: "domain"
-    term_raw_examples: ["Auto Rebase PR", "auto-rebase", "rebase action"]
-    reason: "New action that automatically rebases PRs against latest base branch with AI-powered conflict resolution preferring PR branch changes."
-    evidence:
-      - source: "actions/auto-rebase/action.yml"
-        quote: "name: 'Auto Rebase PR with Automatic Conflict Resolution', description: 'Automatically rebase a PR and resolve conflicts by preferring PR branch changes'"
-      - source: "examples/auto-rebase-example.yml"
-        quote: "Complete workflow example with rebase strategy and model configuration"
-    auto_merge_candidates:
-      - term: "BulkRebasePRsAction"
-        similarity: 0.58
-    decision: "pending"
-    expires_after_runs: 10
-    created_run: "2026-01-20T15:33:25Z"
-  - id: "TP-010"
-    proposed_canonical: "AIConflictResolution"
-    proposed_layer: "aux"
-    term_raw_examples: ["AI conflict resolution", "AI-assisted conflict resolution", "automatic conflict resolution"]
-    reason: "Technique where Claude Code CLI resolves git merge conflicts during rebase by preferring PR branch changes and removing conflict markers."
-    evidence:
-      - source: "actions/auto-rebase/action.yml#L85-L130"
-        quote: "Uses Claude Code CLI to resolve conflicts by preferring PR branch changes"
-    auto_merge_candidates: []
-    decision: "rejected"
-    reason: "Too generic (aux layer). This is a feature implementation detail of AutoRebaseAction, not a standalone business concept. Can be referenced as part of AutoRebaseAction definition."
-    expires_after_runs: 10
-    created_run: "2026-01-20T15:33:25Z"
-  - id: "TP-011"
-    proposed_canonical: "DryRunValidation"
-    proposed_layer: "aux"
-    term_raw_examples: ["Dry Run Validation", "dry-run validation", "action testing workflow"]
-    reason: "Testing workflow that validates action structure, YAML syntax, and template files without making actual changes. Triggers on action file changes."
-    evidence:
-      - source: ".github/workflows/test-all-actions.yml"
-        quote: "Run dry-run validation tests for all AI Actions in this repository"
-    auto_merge_candidates: []
-    decision: "rejected"
-    reason: "Too generic (aux layer). This is a testing infrastructure pattern, not a core business concept. Better referenced as part of quality assurance practices rather than as a canonical term."
-    expires_after_runs: 10
-    created_run: "2026-01-20T15:33:25Z"
+updated_at: "2026-01-20T09:58:38Z"
+queue: []
   - id: "TP-008"
     proposed_canonical: "BulkRebasePRsAction"
     proposed_layer: "domain"

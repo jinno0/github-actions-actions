@@ -351,5 +351,9 @@ canonical_terms:
     evidence:
       - source: "actions/auto-rebase/action.yml"
         quote: "name: 'Auto Rebase PR with Automatic Conflict Resolution', description: 'Automatically rebase a PR and resolve conflicts by preferring PR branch changes'"
+      - source: "instructions/auto-rebase.md#L1-L10"
+        quote: "PR（Pull Request）を自動的にリベースし、マージコンフリクトが発生した場合に Claude Code CLI を使って解決する GitHub Action です"
       - source: "examples/auto-rebase-example.yml"
         quote: "Complete workflow example with rebase strategy and model configuration"
+
+updated_at: "2026-01-20T09:58:38Z"
