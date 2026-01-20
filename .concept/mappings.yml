@@ -1,4 +1,4 @@
-updated_at: '2026-01-19T11:48:08Z'
+updated_at: '2026-01-20T15:33:25Z'
 mappings:
   CompositeAction:
     code_symbols: []
@@ -154,3 +154,11 @@ mappings:
     - actions/bulk-rebase-prs/action.yml
     - examples/bulk-rebase-prs-example.yml
     - instructions/bulk-rebase-prs.md
+  AutoRebaseAction:
+    code_symbols:
+    - actions/auto-rebase/action.yml
+    db: []
+    api: []
+    files:
+    - actions/auto-rebase/action.yml
+    - examples/auto-rebase-example.yml

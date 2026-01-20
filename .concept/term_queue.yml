@@ -1,122 +1,47 @@
-updated_at: "2026-01-19T13:01:00Z"
+updated_at: "2026-01-20T15:33:25Z"
 queue:
-  - id: "TP-001"
-    proposed_canonical: "PublishPrAction"
+  - id: "TP-009"
+    proposed_canonical: "AutoRebaseAction"
     proposed_layer: "domain"
-    term_raw_examples: ["Publish PR", "publish-pr", "publish action"]
-    reason: "New action split from review-and-merge. Focuses only on converting draft PR to ready."
+    term_raw_examples: ["Auto Rebase PR", "auto-rebase", "rebase action"]
+    reason: "New action that automatically rebases PRs against latest base branch with AI-powered conflict resolution preferring PR branch changes."
     evidence:
-      - source: "actions/publish-pr/action.yml"
-        quote: "name: 'Publish PR', description: 'Convert a draft pull request to ready for review'"
+      - source: "actions/auto-rebase/action.yml"
+        quote: "name: 'Auto Rebase PR with Automatic Conflict Resolution', description: 'Automatically rebase a PR and resolve conflicts by preferring PR branch changes'"
+      - source: "examples/auto-rebase-example.yml"
+        quote: "Complete workflow example with rebase strategy and model configuration"
     auto_merge_candidates:
-      - term: "ReviewAndMergeAction"
-        similarity: 0.45
-    decision: "accepted"
+      - term: "BulkRebasePRsAction"
+        similarity: 0.58
+    decision: "pending"
     expires_after_runs: 10
-    created_run: "2026-01-18T14:21:00Z"
-
-  - id: "TP-002"
-    proposed_canonical: "AutoMergeAction"
-    proposed_layer: "domain"
-    term_raw_examples: ["Auto Merge PR", "auto-merge", "merge action"]
-    reason: "New action split from review-and-merge. Focuses only on merging with configurable methods."
-    evidence:
-      - source: "actions/auto-merge/action.yml"
-        quote: "name: 'Auto Merge PR', description: 'Merge a pull request with specified method'"
-    auto_merge_candidates:
-      - term: "ReviewAndMergeAction"
-        similarity: 0.48
-    decision: "accepted"
-    expires_after_runs: 10
-    created_run: "2026-01-18T14:21:00Z"
-
-  - id: "TP-003"
-    proposed_canonical: "ReviewAndFixAction"
-    proposed_layer: "domain"
-    term_raw_examples: ["AI Review and Fix", "review-fix", "review and fix"]
-    reason: "Renamed from review-and-merge to reflect split. Now focuses only on review and fix phases."
-    evidence:
-      - source: "actions/review-and-merge/action.yml"
-        quote: "name: 'AI Review and Fix', description: 'Review and automatically fix code issues'"
-    auto_merge_candidates:
-      - term: "ReviewAndMergeAction"
-        similarity: 0.85
-    decision: "merged"
-    merge_target: "ReviewAndMergeAction"
-    reason: "High similarity (0.85) indicates this is the same concept as ReviewAndMergeAction, just in a refactored form. Will use ReviewAndMergeAction as canonical term."
-    expires_after_runs: 10
-    created_run: "2026-01-18T14:21:00Z"
-
-  - id: "TP-004"
-    proposed_canonical: "ActionSplitting"
+    created_run: "2026-01-20T15:33:25Z"
+  - id: "TP-010"
+    proposed_canonical: "AIConflictResolution"
     proposed_layer: "aux"
-    term_raw_examples: ["action splitting", "splitting actions", "refactor actions"]
-    reason: "Refactoring pattern where complex actions are split into simpler single-purpose actions."
+    term_raw_examples: ["AI conflict resolution", "AI-assisted conflict resolution", "automatic conflict resolution"]
+    reason: "Technique where Claude Code CLI resolves git merge conflicts during rebase by preferring PR branch changes and removing conflict markers."
     evidence:
-      - source: "git log"
-        quote: "refactor: split review-and-merge into separate actions (publish, review-fix, merge)"
+      - source: "actions/auto-rebase/action.yml#L85-L130"
+        quote: "Uses Claude Code CLI to resolve conflicts by preferring PR branch changes"
     auto_merge_candidates: []
     decision: "rejected"
-    reason: "Too generic (aux layer). Not a core business concept. This is a general refactoring pattern, not a domain-specific term."
+    reason: "Too generic (aux layer). This is a feature implementation detail of AutoRebaseAction, not a standalone business concept. Can be referenced as part of AutoRebaseAction definition."
     expires_after_runs: 10
-    created_run: "2026-01-18T14:21:00Z"
-  - id: "TP-005"
-    proposed_canonical: "PrReviewEnqueuerAction"
-    proposed_layer: "domain"
-    term_raw_examples: ["PR Review Enqueuer", "pr-review-enqueuer", "review enqueuer"]
-    reason: "New action that scans open PRs and adds /review comment to trigger review workflow with filtering capabilities."
+    created_run: "2026-01-20T15:33:25Z"
+  - id: "TP-011"
+    proposed_canonical: "DryRunValidation"
+    proposed_layer: "aux"
+    term_raw_examples: ["Dry Run Validation", "dry-run validation", "action testing workflow"]
+    reason: "Testing workflow that validates action structure, YAML syntax, and template files without making actual changes. Triggers on action file changes."
     evidence:
-      - source: "actions/pr-review-enqueuer/action.yml"
-        quote: "name: 'PR Review Enqueuer', description: 'Scans open PRs and adds /review comment to trigger review workflow'"
-      - source: "examples/pr-review-enqueuer-example.yml"
-        quote: "Complete workflow example with filter parameters"
-      - source: "instructions/pr-review-enqueuer.md"
-        quote: "Comprehensive setup and usage guide"
-    auto_merge_candidates:
-      - term: "ReviewAndMergeAction"
-        similarity: 0.52
-    decision: "accepted"
-    reason: "Similarity 0.52 < 0.78 threshold. Has complete examples and instructions (3 sources). Clear distinction: trigger mechanism for review workflow vs actual review/merge."
+      - source: ".github/workflows/test-all-actions.yml"
+        quote: "Run dry-run validation tests for all AI Actions in this repository"
+    auto_merge_candidates: []
+    decision: "rejected"
+    reason: "Too generic (aux layer). This is a testing infrastructure pattern, not a core business concept. Better referenced as part of quality assurance practices rather than as a canonical term."
     expires_after_runs: 10
-    created_run: "2026-01-19T01:28:18Z"
-  - id: "TP-006"
-    proposed_canonical: "ReviewAutoMergeAction"
-    proposed_layer: "domain"
-    term_raw_examples: ["Review and Auto-Merge PR", "review-auto-merge", "auto-merge pr"]
-    reason: "Action that automatically merges PRs with retry logic. Distinct from AutoMergeAction which focuses on merge method configuration."
-    evidence:
-      - source: "actions/review-auto-merge/action.yml"
-        quote: "name: 'Review and Auto-Merge PR', description: 'Automatically rebase and merge PRs'"
-      - source: "examples/review-auto-merge-example.yml"
-        quote: "Complete workflow example with retry parameters"
-      - source: "instructions/review-auto-merge.md"
-        quote: "Comprehensive setup guide including retry logic"
-    auto_merge_candidates:
-      - term: "AutoMergeAction"
-        similarity: 0.72
-    decision: "accepted"
-    reason: "Similarity 0.72 < 0.78 threshold. Has complete examples and instructions (3 sources). AUTO decision AMB-003 keeps separate: focuses on retry logic vs method configuration."
-    expires_after_runs: 10
-    created_run: "2026-01-19T01:28:18Z"
-  - id: "TP-007"
-    proposed_canonical: "BulkMergePRsAction"
-    proposed_layer: "domain"
-    term_raw_examples: ["Bulk Merge PRs", "bulk-merge-prs", "bulk merge"]
-    reason: "New action that merges multiple PRs that are ready (CLEAN status) in a single execution with optional limit and merge-method configuration."
-    evidence:
-      - source: "actions/bulk-merge-prs/action.yml"
-        quote: "name: 'Bulk Merge PRs', description: 'Merge multiple pull requests that are ready (CLEAN status)'"
-      - source: "instructions/bulk-merge-prs.md"
-        quote: "CIが通っている複数のPull Requestを一括でマージします"
-      - source: "examples/bulk-merge-prs-example.yml"
-        quote: "Complete workflow example with parameters"
-    auto_merge_candidates:
-      - term: "AutoMergeAction"
-        similarity: 0.68
-    decision: "accepted"
-    reason: "Similarity 0.68 < 0.78 threshold. Distinct from AutoMergeAction (handles multiple PRs vs single PR). Has complete examples and instructions (2+ sources). Mappings to action.yml, example, and instruction files."
-    expires_after_runs: 10
-    created_run: "2026-01-19T13:01:00Z"
+    created_run: "2026-01-20T15:33:25Z"
   - id: "TP-008"
     proposed_canonical: "BulkRebasePRsAction"
     proposed_layer: "domain"

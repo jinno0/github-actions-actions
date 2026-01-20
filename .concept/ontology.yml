@@ -1,5 +1,5 @@
 version: "0.3"
-updated_at: "2026-01-19T11:48:08Z"
+updated_at: "2026-01-20T15:33:25Z"
 
 canonical_terms:
   CompositeAction:
@@ -335,3 +335,21 @@ canonical_terms:
         quote: "Complete workflow example with retry parameters"
       - source: "instructions/review-auto-merge.md"
         quote: "Comprehensive setup guide including retry logic"
+
+  AutoRebaseAction:
+    id: "TERM-AUTO-REBASE"
+    layer: "domain"
+    status: "stable"
+    definition: "最新のbase branchに対してPRを自動リベースし、競合が発生した場合にはAI（Claude Code CLI）を使ってPR branchの変更を優先して解決するAction"
+    synonyms: ["Auto Rebase PR", "auto-rebase", "AI rebase action"]
+    boundaries:
+      includes: ["自動リベース", "AI競合解決（PR branch優先）", "interactive/force strategy", "claude-model指定"]
+      excludes: ["複数PR一括リベース", "マージ機能", "リベース後の自動pushなし"]
+    lifecycle: ["Checkout", "Rebase", "DetectConflicts", "AIResolve", "Continue", "Push"]
+    related_terms: ["BulkRebasePRsAction", "ConflictResolution", "ClaudeCodeCLI", "SelfHostedRunner"]
+    assumptions: []
+    evidence:
+      - source: "actions/auto-rebase/action.yml"
+        quote: "name: 'Auto Rebase PR with Automatic Conflict Resolution', description: 'Automatically rebase a PR and resolve conflicts by preferring PR branch changes'"
+      - source: "examples/auto-rebase-example.yml"
+        quote: "Complete workflow example with rebase strategy and model configuration"
