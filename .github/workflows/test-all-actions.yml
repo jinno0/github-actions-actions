@@ -29,6 +29,7 @@ on:
     paths:
       - 'actions/**/action.yml'
       - 'actions/**/templates/**'
+      - '.github/workflows/test-all-actions.yml'
 
 permissions:
   contents: read
