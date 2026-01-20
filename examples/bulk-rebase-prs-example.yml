@@ -21,7 +21,7 @@ jobs:
   bulk-rebase:
     runs-on: ubuntu-latest
     steps:
-      - uses: jinno0/github-actions-actions/actions/bulk-rebase-prs@main
+      - uses: ./actions/bulk-rebase-prs
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           limit: ${{ inputs.limit }}
