@@ -35,22 +35,18 @@ runs:
     - name: Install Claude CLI
       shell: bash
       run: |
-        # Check if this is a self-hosted runner or if claude is already installed
-        if echo "${{ runner.labels }}" | grep -q "self-hosted" || command -v claude &> /dev/null; then
-          if command -v claude &> /dev/null; then
-            echo "✓ Claude CLI already available (self-hosted or pre-installed)"
-            claude --version || true
-          else
-            echo "::warning::Self-hosted runner detected but claude command not found. Please install Claude Code CLI."
-            exit 1
-          fi
+        # Check if claude is already installed (for self-hosted runners)
+        if command -v claude &> /dev/null; then
+          echo "✓ Claude CLI already available"
+          claude --version || true
         else
-          echo "Installing Claude Code CLI for GitHub-hosted runner..."
+          echo "Installing Claude Code CLI..."
           npm install -g @github/copilot
-          # Update PATH for this session and subsequent steps
-          export PATH="$PATH:/usr/local/bin:$HOME/.npm-global/bin"
+          # Get npm global bin path and add to PATH
+          NPM_BIN=$(npm bin -g)
+          export PATH="$PATH:$NPM_BIN"
           echo "PATH=$PATH" >> $GITHUB_ENV
-          echo "✓ Claude CLI installed"
+          echo "✓ Claude CLI installed to $NPM_BIN"
           claude --version || true
         fi
 
