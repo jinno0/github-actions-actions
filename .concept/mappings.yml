@@ -1,0 +1,17 @@
+updated_at: '2026-01-20T21:34:56Z'
+mappings:
+  CompositeAction:
+    code_symbols:
+    - actions/review-and-merge/action.yml
+    - actions/spec-to-code/action.yml
+    - actions/action-fixer/action.yml
+    db: []
+    api: []
+  SelfHostedRunner:
+    code_symbols: []
+    db: []
+    api: []
+  ClaudeCodeCLI:
+    code_symbols: []
+    db: []
+    api: []

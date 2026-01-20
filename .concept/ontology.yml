@@ -1,0 +1,251 @@
+version: '0.3'
+updated_at: '2026-01-20T21:34:56Z'
+canonical_terms:
+  CompositeAction:
+    id: TERM-COMPOSITEACTION
+    layer: core
+    status: stable
+    definition: 'GitHub Actions construct combining multiple steps into one reusable
+      action using ''runs: using: composite'''
+    synonyms:
+    - Composite Action
+    - composite action
+    - Action
+    boundaries:
+      includes:
+      - multiple steps
+      - reusable
+      - YAML-based
+      - 'runs: using: composite'
+      excludes:
+      - Docker actions
+      - JavaScript actions
+      - reusable workflows
+      - shell script wrappers
+    lifecycle:
+    - defined
+    - versioned
+    - used
+    - deprecated
+    related_terms:
+    - GitHubActions
+    - SelfHostedRunner
+    - ClaudeCodeCLI
+    assumptions: []
+    evidence:
+    - source: SYSTEM_CONSTITUTION.md#L67-L82
+      quote: Composite Action combines multiple steps into one reusable action definition
+    - source: actions/review-and-merge/action.yml#L44
+      quote: 'runs: using: ''composite'''
+  SelfHostedRunner:
+    id: TERM-SELFHOSTEDRUNNER
+    layer: core
+    status: stable
+    definition: GitHub Actions runner hosted on organization infrastructure, providing
+      access to custom toolchains and Claude Code CLI
+    synonyms:
+    - self-hosted runner
+    - self-hosted
+    - custom runner
+    boundaries:
+      includes:
+      - custom toolchain access
+      - Claude Code CLI
+      - organization infrastructure
+      excludes:
+      - GitHub-hosted runners
+      - container-restricted environments
+    lifecycle:
+    - provisioned
+    - configured
+    - active
+    - decommissioned
+    related_terms:
+    - ClaudeCodeCLI
+    - CompositeAction
+    assumptions: []
+    evidence:
+    - source: PURPOSE.md#L6-L8
+      quote: Self-hosted runner上で動作するClaude Code CLIを活用し
+    - source: README.md#L6-L8
+      quote: Self-hosted runner上で動作するClaude Code CLIを活用し
+  ClaudeCodeCLI:
+    id: TERM-CLAUDECODECLI
+    layer: core
+    status: stable
+    definition: Command-line interface for Claude AI that enables semantic code understanding
+      and generation
+    synonyms:
+    - claude command
+    - Claude CLI
+    - Claude Code
+    boundaries:
+      includes:
+      - semantic code understanding
+      - code generation
+      - CLI interface
+      - Anthropic Claude
+      excludes:
+      - regex-based tools
+      - static analysis
+      - traditional linters
+    lifecycle:
+    - installed
+    - configured
+    - executed
+    related_terms:
+    - SelfHostedRunner
+    - CompositeAction
+    assumptions: []
+    evidence:
+    - source: PURPOSE.md#L6-L8
+      quote: Claude Code CLIを活用し、文脈を理解した高度な自動化を実現
+    - source: AGENTS.md#L4-L7
+      quote: self-hosted runner 上で動作する Claude Code CLI (`claude` コマンド)
+  AIAction:
+    id: TERM-AIACTION
+    layer: domain
+    status: stable
+    definition: Composite Action that leverages Claude Code CLI for AI-powered automation
+      tasks
+    synonyms:
+    - AI Action
+    - AI-native Action
+    - AI-powered action
+    boundaries:
+      includes:
+      - uses Claude Code CLI
+      - semantic understanding
+      - AI automation
+      excludes:
+      - traditional actions
+      - regex-based automation
+      - static analysis
+    lifecycle:
+    - designed
+    - implemented
+    - versioned
+    - adopted
+    related_terms:
+    - CompositeAction
+    - ClaudeCodeCLI
+    assumptions: []
+    evidence:
+    - source: PURPOSE.md#L52-L58
+      quote: Actions include review-and-merge, spec-to-code, action-fixer, auto-refactor,
+        auto-document, release-notes-ai
+    - source: README.md#L12-L22
+      quote: Six main AI Actions
+  TemplateFile:
+    id: TERM-TEMPLATEFILE
+    layer: domain
+    status: stable
+    definition: Text file containing prompt templates with {VARIABLE_NAME} placeholders
+      for dynamic content substitution
+    synonyms:
+    - template
+    - prompt template
+    - template file
+    boundaries:
+      includes:
+      - placeholders
+      - sed substitution
+      - '{VARIABLE_NAME} format'
+      excludes:
+      - hardcoded prompts in action.yml
+      - heredoc in YAML
+    lifecycle:
+    - created
+    - used
+    - replaced
+    related_terms:
+    - CompositeAction
+    assumptions: []
+    evidence:
+    - source: CLAUDE.md#L48-L62
+      quote: Template files should be in actions/{action-name}/templates/ directory
+        with {VARIABLE_NAME} placeholder format
+    - source: CLAUDE.md#L70-L86
+      quote: Avoid heredoc (<< EOF) in YAML action.yml files. Use echo or template
+        files instead.
+  VersionPinning:
+    id: TERM-VERSIONPINNING
+    layer: core
+    status: stable
+    definition: Practice of using specific version tags (v1, v2) instead of @main
+      when referencing actions to ensure stability
+    synonyms:
+    - version pinning
+    - tag-based versioning
+    boundaries:
+      includes:
+      - semantic versioning
+      - tags (v1, v2)
+      - breaking change detection
+      excludes:
+      - '@main references'
+      - floating versions
+    lifecycle: []
+    related_terms:
+    - CompositeAction
+    assumptions: []
+    evidence:
+    - source: SYSTEM_CONSTITUTION.md#L95-L110
+      quote: Version management uses tags (v1, v2), never @main
+    - source: AGENTS.md#L93-L97
+      quote: 'Use Git tags for versioning: v1.0.0, v1.1.0, v2.0.0'
+  StandardActionStructure:
+    id: TERM-STANDARDACTIONSTRUCTURE
+    layer: domain
+    status: stable
+    definition: 'Required structure for all Actions: (1) action.yml in actions/{name}/,
+      (2) {name}-example.yml in examples/, (3) {name}.md in instructions/'
+    synonyms:
+    - Action structure
+    - standard structure
+    boundaries:
+      includes:
+      - action.yml
+      - example workflow
+      - instruction guide
+      excludes:
+      - incomplete structures
+      - missing documentation
+    lifecycle:
+    - created
+    - validated
+    - published
+    related_terms:
+    - CompositeAction
+    assumptions: []
+    evidence:
+    - source: CLAUDE.md#L112-L140
+      quote: 'Every Action must have: (1) action implementation, (2) example workflow,
+        (3) instruction guide'
+  HumanInTheLoop:
+    id: TERM-HUMINTHELOOP
+    layer: core
+    status: stable
+    definition: Design principle where AI suggests/prepares but humans make final
+      decisions or set thresholds
+    synonyms:
+    - human-in-the-loop
+    - human oversight
+    - supervised AI
+    boundaries:
+      includes:
+      - AI suggestion
+      - human decision
+      - threshold-based automation
+      excludes:
+      - fully autonomous operation
+      - unsupervised automation
+    lifecycle: []
+    related_terms:
+    - AIAction
+    assumptions: []
+    evidence:
+    - source: PURPOSE.md#L27-L29
+      quote: AIはあくまで提案・準備を行い、最終決定権（マージ、デプロイ）は人間が持つ
+    - source: PURPOSE.md#L68-L70
+      quote: '非目標: 完全に無人での運用'

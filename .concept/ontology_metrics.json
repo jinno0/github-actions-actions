@@ -1,0 +1,20 @@
+{
+  "updated_at": "2026-01-20T21:34:56Z",
+  "total_terms": 8,
+  "terms_by_layer": {
+    "core": 5,
+    "domain": 3,
+    "aux": 0
+  },
+  "terms_by_status": {
+    "stable": 8,
+    "draft": 0
+  },
+  "draft_ratio": 0.0,
+  "invariants_count": 7,
+  "ambiguities_count": 0,
+  "conflicts_count": 0,
+  "queue_pending": 0,
+  "mappings_count": 3,
+  "claims_count": 20
+}
