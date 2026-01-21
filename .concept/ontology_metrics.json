@@ -9,18 +9,18 @@
   "conflicts_open": 0,
   "ambiguities_high": 0,
   "decisions_lines": 33,
-  "claims_lines": 56,
+  "claims_lines": 57,
   "invariants_count": 10,
-  "last_updated": "2026-01-22T05:26:15.000000Z",
+  "last_updated": "2026-01-22T06:39:33.000000Z",
   "notes": [
-    "Janitor hygiene run completed - all SoT files healthy",
-    "All AUTO decisions still active (run 10 of 20 TTL)",
-    "No deduplication needed: no ID duplicates or near-duplicates found",
-    "No GC needed: decisions.md (33 lines), claims.ndjson (56 lines)",
-    "No active conflicts or ambiguities",
-    "Ontology healthy: 9 terms, no duplicates, clean state",
-    "unmapped_ratio stable at 50% (acceptable for codebase)",
-    "Commit leak fixed: 5 modified SoT files staged for commit",
-    "Next GC review cycle: run 13 (aux TTL check) or run 20 (AUTO decision expiration)"
+    "Hygiene run 11 completed - all SoT files healthy",
+    "No GC needed: all metrics well within budget",
+    "AUTO decisions: 3 active (DryRun 11/20, CIWorkflow 11/20, TestSuite 11/20)",
+    "Claims: +1 line (system maintenance claim)",
+    "Ontology: 9 terms stable (5 core, 4 domain, 0 aux)",
+    "Decisions.md: 33/200 lines (16.5%) - healthy",
+    "No conflicts or ambiguities detected",
+    "Next AUTO decision expiration: run 20 (DryRun, CIWorkflow, TestSuite)",
+    "Next GC review cycle: run 20 (AUTO decision expiration review)"
   ]
 }
