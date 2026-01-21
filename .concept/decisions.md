@@ -1,6 +1,6 @@
 # Active AUTO Decisions (cache) — safe to delete
 
-_Last regenerated: 2026-01-21T03:23:06Z_
+_Last regenerated: 2026-01-22T00:30:00Z_
 
 ## AUTO:DryRun.term:accept_as_domain
 - Status: ACTIVE
@@ -22,3 +22,12 @@ _Last regenerated: 2026-01-21T03:23:06Z_
 - Expires After Runs: 20
 - Linked: TP-002
 - Revert Triggers: distinct_usage_patterns, structural_divergence
+
+## AUTO:TestSuite.term:merge_into_DryRun
+- Status: ACTIVE
+- Chosen: TestSuite merged into DryRun (0.68 similarity)
+- Policy: bloat_control + semantic_similarity
+- Rationale: Test scripts are implementation detail of DryRun validation, not distinct concept
+- Expires After Runs: 10
+- Linked: TP-003
+- Revert Triggers: test_becomes_independent_concept

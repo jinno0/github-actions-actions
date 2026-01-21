@@ -1,5 +1,5 @@
 version: '0.3'
-updated_at: '2026-01-21T03:23:06Z'
+updated_at: '2026-01-22T00:16:00Z'
 canonical_terms:
   CompositeAction:
     id: TERM-COMPOSITEACTION
@@ -199,29 +199,36 @@ canonical_terms:
     layer: domain
     status: stable
     definition: 'Required structure for all Actions: (1) action.yml in actions/{name}/,
-      (2) {name}-example.yml in examples/, (3) {name}.md in instructions/'
+      (2) templates/ directory with prompt templates, (3) {name}-example.yml in examples/,
+      (4) {name}.md in instructions/'
     synonyms:
     - Action structure
     - standard structure
     boundaries:
       includes:
       - action.yml
+      - templates/ directory
       - example workflow
       - instruction guide
       excludes:
       - incomplete structures
       - missing documentation
+      - hardcoded prompts in action.yml
     lifecycle:
     - created
     - validated
     - published
     related_terms:
     - CompositeAction
+    - TemplateFile
     assumptions: []
     evidence:
     - source: CLAUDE.md#L112-L140
       quote: 'Every Action must have: (1) action implementation, (2) example workflow,
         (3) instruction guide'
+    - source: test-action-fixer.sh#L53-L61
+      quote: Structure Tests validate: action.yml exists, templates directory exists,
+        template file exists, example file exists, instruction file exists
   HumanInTheLoop:
     id: TERM-HUMINTHELOOP
     layer: core
@@ -254,7 +261,8 @@ canonical_terms:
     layer: domain
     status: stable
     definition: Testing mode that validates action structure, YAML syntax, and performs
-      mock execution without actual commits or pushes
+      mock execution without actual commits or pushes. Implemented via test scripts
+      and CI workflows.
     synonyms:
     - dry-run mode
     - validation mode
@@ -264,6 +272,7 @@ canonical_terms:
       - structure validation
       - YAML syntax checking
       - mock execution
+      - comprehensive test scripts
       - no actual commits
       excludes:
       - production execution
@@ -275,6 +284,7 @@ canonical_terms:
     - validated
     related_terms:
     - CompositeAction
+    - StandardActionStructure
     assumptions: []
     evidence:
     - source: CLAUDE.md#L298-L324
@@ -284,3 +294,6 @@ canonical_terms:
       quote: 全ての AI Actions は Dry Run モードで自動検証されます
     - source: CLAUDE.md#L338-L367
       quote: CI workflow .github/workflows/test-all-actions.yml runs dry run tests
+    - source: test-action-fixer.sh#L1-L5
+      quote: test-action-fixer.sh is a comprehensive test script for validating
+        action structure, templates, examples, and instructions

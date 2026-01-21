@@ -1,39 +1,63 @@
+updated_at: '2026-01-22T00:16:00Z'
 queue:
-- auto_merge_candidates: []
-  created_run: '2026-01-21T08:11:42Z'
-  decision: accepted
-  evidence:
-  - quote: Dry Run mode validates action structure, YAML syntax, and mock execution
-    source: CLAUDE.md#L298-L324
-  - quote: 全ての AI Actions は Dry Run モードで自動検証されます
-    source: README.md#L43-L45
-  expires_after_runs: 10
-  id: TP-001
-  proposed_canonical: DryRun
-  proposed_layer: domain
-  reason: Testing mechanism for validating actions without actual execution. Accepted
-    with 2 evidence sources and clear boundaries.
-  term_raw_examples:
-  - Dry Run
-  - dry-run
-  - dry run mode
-- auto_merge_candidates:
-  - similarity: 0.72
-    term: CompositeAction
-  created_run: '2026-01-21T08:11:42Z'
-  decision: merged
-  evidence:
-  - quote: CI workflow .github/workflows/test-all-actions.yml runs dry run tests
-    source: CLAUDE.md#L338-L367
-  expires_after_runs: 10
-  id: TP-002
-  merged_into: CompositeAction
-  proposed_canonical: CIWorkflow
-  proposed_layer: aux
-  reason: CI workflow is essentially a CompositeAction for testing purposes. Merged
-    to avoid term proliferation.
-  term_raw_examples:
-  - CI workflow
-  - CI testing
-  - automated testing
-updated_at: '2026-01-21T03:23:06Z'
+  - auto_merge_candidates: []
+    created_run: '2026-01-21T08:11:42Z'
+    decision: accepted
+    evidence:
+      - quote: Dry Run mode validates action structure, YAML syntax, and mock execution
+        source: CLAUDE.md#L298-L324
+      - quote: 全ての AI Actions は Dry Run モードで自動検証されます
+        source: README.md#L43-L45
+    expires_after_runs: 10
+    id: TP-001
+    proposed_canonical: DryRun
+    proposed_layer: domain
+    reason: Testing mechanism for validating actions without actual execution. Accepted
+      with 2 evidence sources and clear boundaries.
+    term_raw_examples:
+      - Dry Run
+      - dry-run
+      - dry run mode
+  - auto_merge_candidates:
+      - similarity: 0.72
+        term: CompositeAction
+    created_run: '2026-01-21T08:11:42Z'
+    decision: merged
+    evidence:
+      - quote: CI workflow .github/workflows/test-all-actions.yml runs dry run tests
+        source: CLAUDE.md#L338-L367
+    expires_after_runs: 10
+    id: TP-002
+    merged_into: CompositeAction
+    proposed_canonical: CIWorkflow
+    proposed_layer: aux
+    reason: CI workflow is essentially a CompositeAction for testing purposes. Merged
+      to avoid term proliferation.
+    term_raw_examples:
+      - CI workflow
+      - CI testing
+      - automated testing
+  - id: TP-003
+    proposed_canonical: TestSuite
+    proposed_layer: aux
+    term_raw_examples:
+      - test suite
+      - comprehensive test script
+      - validation script
+    reason: Test scripts validate action structure, templates, examples, and instructions.
+      However, this is an implementation detail of DryRun validation, not a core
+      concept. MERGED into DryRun to avoid term proliferation (bloat control).
+    evidence:
+      - source: test-action-fixer.sh#L1-L5
+        quote: test-action-fixer.sh is a comprehensive test script for validating
+          action structure, templates, examples, and instructions
+      - source: CLAUDE.md#L298-L324
+        quote: Dry Run mode validates action structure, YAML syntax, and mock execution
+    auto_merge_candidates:
+      - term: DryRun
+        similarity: 0.68
+    decision: merged
+    merged_into: DryRun
+    expires_after_runs: 10
+    created_run: '2026-01-22T00:16:00Z'
+    processed_run: '2026-01-22T00:30:00Z'
