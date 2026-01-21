@@ -9,18 +9,18 @@
   "conflicts_open": 0,
   "ambiguities_high": 0,
   "decisions_lines": 33,
-  "claims_lines": 54,
+  "claims_lines": 55,
   "invariants_count": 10,
-  "last_updated": "2026-01-22T01:25:00.000000Z",
+  "last_updated": "2026-01-22T03:39:47.000000Z",
   "notes": [
-    "Hygiene run completed - no duplicates found",
+    "Hygiene run completed - duplicate invariants removed (INV-008, INV-009, INV-010 were duplicated)",
     "queue empty - all terms processed",
     "decisions.md well under 200 line limit (33 lines)",
-    "claims.ndjson well under limit (54 lines)",
+    "claims.ndjson well under limit (55 lines)",
     "no active conflicts or ambiguities",
     "ontology well under budget limits (9/80 terms)",
     "unmapped_ratio stable at 50% (acceptable)",
     "all SoT files tracked by git",
-    "metrics updated: 9 total terms (5 core, 4 domain, 0 aux)"
+    "metrics updated: 9 total terms (5 core, 4 domain, 0 aux), 10 invariants (deduped)"
   ]
 }
