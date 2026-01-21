@@ -1,5 +1,5 @@
 version: '0.3'
-updated_at: '2026-01-20T21:34:56Z'
+updated_at: '2026-01-21T03:23:06Z'
 canonical_terms:
   CompositeAction:
     id: TERM-COMPOSITEACTION
@@ -249,3 +249,38 @@ canonical_terms:
       quote: AIはあくまで提案・準備を行い、最終決定権（マージ、デプロイ）は人間が持つ
     - source: PURPOSE.md#L68-L70
       quote: '非目標: 完全に無人での運用'
+  DryRun:
+    id: TERM-DRYRUN
+    layer: domain
+    status: stable
+    definition: Testing mode that validates action structure, YAML syntax, and performs
+      mock execution without actual commits or pushes
+    synonyms:
+    - dry-run mode
+    - validation mode
+    - testing mode
+    boundaries:
+      includes:
+      - structure validation
+      - YAML syntax checking
+      - mock execution
+      - no actual commits
+      excludes:
+      - production execution
+      - actual git pushes
+      - destructive operations
+    lifecycle:
+    - configured
+    - executed
+    - validated
+    related_terms:
+    - CompositeAction
+    assumptions: []
+    evidence:
+    - source: CLAUDE.md#L298-L324
+      quote: Dry Run mode validates action structure, YAML syntax, and mock execution
+        without actual commits/pushes
+    - source: README.md#L43-L45
+      quote: 全ての AI Actions は Dry Run モードで自動検証されます
+    - source: CLAUDE.md#L338-L367
+      quote: CI workflow .github/workflows/test-all-actions.yml runs dry run tests

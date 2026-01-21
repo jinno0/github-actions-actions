@@ -1,5 +1,11 @@
-updated_at: '2026-01-21T08:11:42Z'
+updated_at: '2026-01-21T03:23:06Z'
 mappings:
+  DryRun:
+    code_symbols:
+    - .github/workflows/test-all-actions.yml
+    - CLAUDE.md#L298-L324
+    db: []
+    api: []
   CompositeAction:
     code_symbols:
     - actions/review-and-merge/action.yml

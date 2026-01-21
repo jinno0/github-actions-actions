@@ -4,11 +4,19 @@
   "domain": 3,
   "aux": 0,
   "draft_ratio": 0.0,
-  "unmapped_ratio": 0.51,
-  "queue_pending": 2,
+  "unmapped_ratio": 0.52,
+  "queue_pending": 0,
   "conflicts_open": 0,
   "ambiguities_high": 0,
-  "decisions_lines": 3,
-  "claims_lines": 38,
-  "last_updated": "2026-01-21T02:20:09.000000Z"
+  "decisions_lines": 24,
+  "claims_lines": 47,
+  "invariants_count": 10,
+  "last_updated": "2026-01-21T13:32:30.000000Z",
+  "notes": [
+    "unmapped_ratio exceeds 0.20 threshold (52%) - many claims reference __UNMAPPED__ terms",
+    "decisions.md well under 200 line limit (24 lines)",
+    "claims.ndjson well under 3000 line limit (47 lines)",
+    "no active conflicts or ambiguities",
+    "all SoT files tracked by git"
+  ]
 }
