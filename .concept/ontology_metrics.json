@@ -4,11 +4,11 @@
   "domain": 3,
   "aux": 0,
   "draft_ratio": 0.0,
-  "unmapped_ratio": 0.5,
+  "unmapped_ratio": 0.51,
   "queue_pending": 2,
   "conflicts_open": 0,
   "ambiguities_high": 0,
   "decisions_lines": 3,
-  "claims_lines": 34,
-  "last_updated": "2026-01-21T08:20:00Z"
+  "claims_lines": 37,
+  "last_updated": "2026-01-21T10:14:01.000000Z"
 }

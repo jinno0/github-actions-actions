@@ -70,7 +70,8 @@ milestones:
       - type: "invariant"
         target: "INV-005, INV-006 (TemplateFile)"
     priority: "P1"
-    status: "active"
+    status: "done"
+    completed_at: "2026-01-21T10:14:00Z"
     dependencies: ["MS-002"]
     risks:
       - "組織内プロジェクトでの導入障壁（教育が必要）"
