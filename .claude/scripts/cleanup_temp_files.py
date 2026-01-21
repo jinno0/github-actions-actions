@@ -50,6 +50,10 @@ PROTECTED_FILES = {
     'INTEGRATION_TESTING_GUIDE.md',
     'MAINTENANCE_OPERATIONS_GUIDE.md',
     'IMPLEMENTATION_SUMMARY.md',
+    # Important guides that should never be auto-deleted
+    'spec_workflow_guide.md',
+    'SKILL.md',
+    'CLAUDE.md',
     'package.json',
     'package-lock.json',
     'requirements.txt',
@@ -60,12 +64,13 @@ PROTECTED_FILES = {
 
 
 # Patterns that indicate temporary/generated files
+# NOTE: Be conservative with *_GUIDE.md as many guides are actively used documentation
 TEMP_PATTERNS = [
     '*_SUMMARY.md',
     '*_REPORT.md',
     '*_RESULTS.md',
     '*_RECOMMENDATIONS.md',
-    '*_GUIDE.md',
+    # '*_GUIDE.md',  # DISABLED: Too aggressive, many guides are active documentation
     '*_OPERATIONS*.md',
     'IMPLEMENTATION_*.md',
     'COMMIT_*.md',
@@ -76,6 +81,14 @@ TEMP_PATTERNS = [
     '*_coverage.xml',
     'coverage*.json',
     'test_results*.xml',
+    # Add more specific temporary patterns
+    'TEMP_*.md',
+    'TMP_*.md',
+    'DRAFT_*.md',
+    'OLD_*.md',
+    'BAK_*.md',
+    '*_backup.md',
+    '*_temp.md',
 ]
 
 
