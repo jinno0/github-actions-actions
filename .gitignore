@@ -67,6 +67,10 @@ debug.log
 # track .concept Source-of-Truth, ignore heavy archives
 .concept/archive/
 
+# Auto-generated framework outputs
+_bmad-output/
+.serena/
+
 # Python
 __pycache__/
 *.py[cod]
