@@ -1,10 +1,30 @@
-updated_at: '2026-01-20T21:34:56Z'
+updated_at: '2026-01-21T08:11:42Z'
 mappings:
   CompositeAction:
     code_symbols:
     - actions/review-and-merge/action.yml
     - actions/spec-to-code/action.yml
     - actions/action-fixer/action.yml
+    - actions/auto-refactor/action.yml
+    - actions/auto-document/action.yml
+    - actions/release-notes-ai/action.yml
+    - actions/auto-merge/action.yml
+    - actions/auto-rebase/action.yml
+    - actions/bulk-merge-prs/action.yml
+    - actions/bulk-rebase-prs/action.yml
+    - actions/pr-review-enqueuer/action.yml
+    - actions/publish-pr/action.yml
+    - actions/review-auto-merge/action.yml
+    db: []
+    api: []
+  AIAction:
+    code_symbols:
+    - actions/review-and-merge/action.yml
+    - actions/spec-to-code/action.yml
+    - actions/action-fixer/action.yml
+    - actions/auto-refactor/action.yml
+    - actions/auto-document/action.yml
+    - actions/release-notes-ai/action.yml
     db: []
     api: []
   SelfHostedRunner:
