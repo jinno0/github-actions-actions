@@ -9,18 +9,18 @@
   "conflicts_open": 0,
   "ambiguities_high": 0,
   "decisions_lines": 33,
-  "claims_lines": 55,
+  "claims_lines": 56,
   "invariants_count": 10,
-  "last_updated": "2026-01-22T03:39:47.000000Z",
+  "last_updated": "2026-01-22T05:26:15.000000Z",
   "notes": [
-    "Hygiene run completed - duplicate invariants removed (INV-008, INV-009, INV-010 were duplicated)",
-    "queue empty - all terms processed",
-    "decisions.md well under 200 line limit (33 lines)",
-    "claims.ndjson well under limit (55 lines)",
-    "no active conflicts or ambiguities",
-    "ontology well under budget limits (9/80 terms)",
-    "unmapped_ratio stable at 50% (acceptable)",
-    "all SoT files tracked by git",
-    "metrics updated: 9 total terms (5 core, 4 domain, 0 aux), 10 invariants (deduped)"
+    "Janitor hygiene run completed - all SoT files healthy",
+    "All AUTO decisions still active (run 10 of 20 TTL)",
+    "No deduplication needed: no ID duplicates or near-duplicates found",
+    "No GC needed: decisions.md (33 lines), claims.ndjson (56 lines)",
+    "No active conflicts or ambiguities",
+    "Ontology healthy: 9 terms, no duplicates, clean state",
+    "unmapped_ratio stable at 50% (acceptable for codebase)",
+    "Commit leak fixed: 5 modified SoT files staged for commit",
+    "Next GC review cycle: run 13 (aux TTL check) or run 20 (AUTO decision expiration)"
   ]
 }

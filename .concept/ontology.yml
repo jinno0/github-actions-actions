@@ -227,8 +227,7 @@ canonical_terms:
       quote: 'Every Action must have: (1) action implementation, (2) example workflow,
         (3) instruction guide'
     - source: test-action-fixer.sh#L53-L61
-      quote: Structure Tests validate: action.yml exists, templates directory exists,
-        template file exists, example file exists, instruction file exists
+      quote: 'Structure Tests validate: action.yml exists, templates directory exists, template file exists, example file exists, instruction file exists'
   HumanInTheLoop:
     id: TERM-HUMINTHELOOP
     layer: core
