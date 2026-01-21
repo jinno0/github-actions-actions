@@ -34,11 +34,9 @@ runs:
       id: validate
       run: |
         echo "Checking YAML files in .github/workflows/..."
-        ERRORS=0
-        FIXES=0
 
         # Find all YAML files
-        YAML_FILES=$(find .github -name "*.yml" -o -name "*.yaml" 2>/dev/null || true)
+        YAML_FILES=$(find .github -name "*.yml" -o -name "*.yaml" 2>/dev/null)
 
         if [ -z "$YAML_FILES" ]; then
           echo "No YAML files found in .github/"
@@ -58,7 +56,7 @@ runs:
           # Issue 1: Validate YAML syntax
           if ! yamllint -d "{extends: default, rules: {line-length: {max: 200}, indentation: {spaces: 2}}}" "$file" 2>/dev/null; then
             # Try to parse with Python to get more details
-            ERROR_OUTPUT=$(python -c "import yaml; yaml.safe_load(open('$file'))" 2>&1 || true)
+            ERROR_OUTPUT=$(python3 -c "import yaml; yaml.safe_load(open('$file'))" 2>&1 || true)
             if [ -n "$ERROR_OUTPUT" ]; then
               ISSUES="${ISSUES}  - YAML syntax error: ${ERROR_OUTPUT}\n"
             fi
@@ -83,7 +81,9 @@ runs:
           if [ -n "$ISSUES" ]; then
             echo "  Issues found:"
             echo -e "$ISSUES"
-            ERRORS=$((ERRORS + 1))
+
+            # Track errors using a temporary file for subshell communication
+            echo "1" >> /tmp/validation_errors.count
 
             # AI-powered fix if enabled
             if [ "${{ inputs.auto-fix }}" = "true" ]; then
@@ -108,7 +108,6 @@ runs:
               echo "$FIX_PROMPT" > /tmp/fix_prompt.txt
               if claude --dangerously-skip-permissions --model "${{ inputs.claude-model }}" < /tmp/fix_prompt.txt > /tmp/claude_fix.log 2>&1; then
                 echo "  AI-powered fix completed for $file"
-                FIXES=$((FIXES + 1))
               else
                 echo "  AI-powered fix failed for $file. Check /tmp/claude_fix.log"
               fi
@@ -117,6 +116,9 @@ runs:
             echo "  OK"
           fi
         done
+
+        # Count total errors
+        ERRORS=$(wc -l < /tmp/validation_errors.count 2>/dev/null || echo "0")
 
         # Output summary
         if [ $ERRORS -gt 0 ]; then
@@ -148,24 +150,22 @@ runs:
       if: inputs.auto-fix == 'true'
       shell: bash
       run: |
-        if git rev-parse --verify HEAD^{commit} >/dev/null 2>&1; then
-          if ! git diff --quiet origin/main...HEAD 2>/dev/null; then
-            BRANCH="action-fixer-auto-$(date +%s)"
-            git checkout -b "$BRANCH"
-            git push origin "$BRANCH"
+        if ! git diff --quiet origin/main...HEAD 2>/dev/null; then
+          BRANCH="action-fixer-auto-$(date +%s)"
+          git checkout -b "$BRANCH"
+          git push origin "$BRANCH"
 
-            # Create PR body
-            PR_BODY="This PR was automatically created by GitHub Actions Fixer to resolve workflow validation issues.
+          # Create PR body
+          PR_BODY="This PR was automatically created by GitHub Actions Fixer to resolve workflow validation issues.
 
-            **Changes:**
-            - Fixed YAML validation commands
-            - Corrected syntax errors
+          **Changes:**
+          - Fixed YAML validation commands
+          - Corrected syntax errors
 
-            Please review the changes before merging."
+          Please review the changes before merging."
 
-            gh pr create \
-              --title "fix: automated workflow validation fixes" \
-              --body "$PR_BODY" \
-              --base main
-          fi
+          gh pr create \
+            --title "fix: automated workflow validation fixes" \
+            --body "$PR_BODY" \
+            --base main
         fi
