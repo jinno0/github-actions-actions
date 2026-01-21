@@ -1,6 +1,10 @@
 name: 'GitHub Actions Fixer'
 description: 'Validate and auto-fix common GitHub Actions workflow errors'
 inputs:
+  github-token:
+    description: 'GitHub token (defaults to github.token)'
+    required: false
+    default: ''
   fail-on-error:
     description: 'Fail the action if errors are found (default: true)'
     required: false
