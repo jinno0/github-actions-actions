@@ -3,6 +3,16 @@
     "serena": {
       "type": "sse",
       "url": "http://localhost:9121/sse"
+    },
+    "mcp-filesystem": {
+      "args": [
+        "--directory",
+        "/home/jinno/mcp-filesystem",
+        "run",
+        "run_server.py",
+        "/home/jinno"
+      ],
+      "command": "/home/jinno/.local/bin/uv"
     }
   }
 }

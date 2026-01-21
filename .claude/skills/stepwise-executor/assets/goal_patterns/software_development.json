@@ -1,0 +1,59 @@
+{
+  "pattern_name": "software_development",
+  "description": "manga-mvvプロジェクトの小差分主義に基づく開発パターン",
+  "common_steps": [
+    {
+      "phase": "micro_planning",
+      "typical_steps": [
+        "現在のステータス確認",
+        "次の小さな目標設定（0.5〜1日単位）",
+        "実装範囲の明確化"
+      ]
+    },
+    {
+      "phase": "implementation",
+      "typical_steps": [
+        "最小限の実装（1ファイルずつ）",
+        "コミット単位で動作確認",
+        "ロールバック可能状態維持"
+      ]
+    },
+    {
+      "phase": "verification",
+      "typical_steps": [
+        "ユニットテスト実行",
+        "手動動作確認",
+        "ログ確認"
+      ]
+    },
+    {
+      "phase": "reflection",
+      "typical_steps": [
+        "変更差分サマリ",
+        "失敗タグ付け（missing-context / wrong-target / over-edit等）",
+        "次回改善案の記録"
+      ]
+    }
+  ],
+  "estimated_duration": {
+    "single_task": "0.5〜1日",
+    "small_feature": "1〜2日",
+    "medium_feature": "3〜5日",
+    "large_phase": "1〜2週間"
+  },
+  "key_considerations": [
+    "小差分主義（各フェーズ0.5〜1日単位）",
+    "MVV最優先（Minimum Viable Verification）",
+    "検証可能性（全パラメータを記録）",
+    "差し替え可能性（Provider抽象化）",
+    "教育的説明責任（Whyを明記）",
+    "Dockerファースト（本体はDockerで完結）"
+  ],
+  "prohibited_practices": [
+    "確信的断言（根拠なしの「これが最適」）",
+    "根拠なしの流行追従",
+    "無関係な大改修（「ついでにリファクタ」）",
+    "テストなしの「完成」宣言",
+    "Docker/secretsで長時間ハマる（30分で判断切り替え）"
+  ]
+}
