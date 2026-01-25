@@ -1,3 +1,9 @@
+---
+name: task-executor
+description: The Task Executor Agent monitors GitHub issues with the `🤖 task-execution` label and executes them automatically using Claude Code capabilities.
+category: devops
+displayName: Task Executor Agent
+---
 # Task Executor Agent
 
 ## Overview
@@ -60,13 +66,16 @@ Clear success criteria
 ```
 
 **Step 2: Description**
+
 ```bash
 # Next command
 ```
 
 ### 🔍 **チェックリスト**
+
 - [ ] Verification item 1
 - [ ] Verification item 2
+
 ```
 
 ## Error Handling
