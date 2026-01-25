@@ -9,19 +9,19 @@
   "conflicts_open": 0,
   "ambiguities_high": 0,
   "decisions_lines": 33,
-  "claims_lines": 59,
+  "claims_lines": 60,
   "invariants_count": 10,
-  "last_updated": "2026-01-22T09:52:00.000000Z",
+  "last_updated": "2026-01-25T11:53:00.000000Z",
   "notes": [
-    "Hygiene run 13 (external) completed - all SoT files healthy",
+    "Hygiene run 14 completed - all SoT files healthy",
     "No dedup or GC needed: all metrics well within budget",
-    "AUTO decisions: 3 active (DryRun 13/20, CIWorkflow 13/20, TestSuite 13/20)",
-    "Claims: +1 line (hygiene claim for run 13)",
+    "AUTO decisions: 3 active (DryRun 14/20, CIWorkflow 14/20, TestSuite 14/20)",
+    "Claims: +1 line (hygiene claim for run 14)",
     "Ontology: 9 terms stable (5 core, 4 domain, 0 aux)",
     "Decisions.md: 33/200 lines (16.5%) - healthy",
     "No conflicts or ambiguities detected",
     "Next AUTO decision expiration: run 20 (DryRun, CIWorkflow, TestSuite)",
-    "Next GC review cycle: run 20 (AUTO decision expiration review)",
-    "Commit leak fixed: 3 modified .concept/ files staged for commit"
+    "Recent changes: cleanup scripts, MCP Azure DevOps integration, task executor updates",
+    "All maintenance activities completed successfully"
   ]
 }
