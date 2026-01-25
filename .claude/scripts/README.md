@@ -38,19 +38,20 @@ python3 .claude/scripts/cleanup_temp_files.py --verbose
 ### Protected Files
 The following files are NEVER deleted:
 - Core documentation: `README.md`, `PURPOSE.md`, `SYSTEM_CONSTITUTION.md`, `AGENTS.md`
-- Important guides: `API_GUIDE.md`, `INTEGRATION_TESTING_GUIDE.md`, `MAINTENANCE_OPERATIONS_GUIDE.md`
-- Project summaries: `IMPLEMENTATION_SUMMARY.md`
-- Config files: `package.json`, `tsconfig.json`, `requirements.txt`, `pytest.ini`
-- Build configs: `docker-compose.yml`, `.gitignore`
+- Important guides: `spec_workflow_guide.md`, `SKILL.md`, `CLAUDE.md`
+- Config files: `package.json`, `tsconfig.json`, `requirements.txt`, `pyproject.toml`
+- Build configs: `.gitignore`
 
 ### Temporary File Patterns
 The script looks for these patterns (case-sensitive):
 - `*_SUMMARY.md`, `*_REPORT.md`, `*_RESULTS.md`
-- `*_RECOMMENDATIONS.md`, `*_GUIDE.md` (except protected ones)
+- `*_RECOMMENDATIONS.md`
 - `*_OPERATIONS*.md`, `IMPLEMENTATION_*.md`
 - `COMMIT_*.md`, `CLEANUP_*.md`, `MAINTENANCE_*.md`
 - `TEST_*.md`, `*_coverage.json`, `*_coverage.xml`
 - `coverage*.json`, `test_results*.xml`
+- `TEMP_*.md`, `TMP_*.md`, `DRAFT_*.md`, `OLD_*.md`
+- `BAK_*.md`, `*_backup.md`, `*_temp.md`
 
 ### Directories Targeted
 - `archive/` - Old archived files
@@ -67,13 +68,13 @@ The script looks for these patterns (case-sensitive):
 Add to crontab (`crontab -e`):
 ```cron
 # Run every Sunday at 2 AM, delete files older than 7 days
-0 2 * * 0 cd /path/to/manga-mvv && python3 .claude/scripts/cleanup_temp_files.py --max-age-hours 168 >> /var/log/manga-mvv-cleanup.log 2>&1
+0 2 * * 0 cd /path/to/your-project && python3 .claude/scripts/cleanup_temp_files.py --max-age-hours 168 >> /var/log/cleanup.log 2>&1
 ```
 
 #### Daily Cleanup (Aggressive)
 ```cron
 # Run every day at 3 AM, delete files older than 3 days
-0 3 * * * cd /path/to/manga-mvv && python3 .claude/scripts/cleanup_temp_files.py --max-age-hours 72 >> /var/log/manga-mvv-cleanup.log 2>&1
+0 3 * * * cd /path/to/your-project && python3 .claude/scripts/cleanup_temp_files.py --max-age-hours 72 >> /var/log/cleanup.log 2>&1
 ```
 
 ### Safety Tips

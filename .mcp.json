@@ -5,14 +5,27 @@
       "url": "http://localhost:9121/sse"
     },
     "mcp-filesystem": {
+      "command": "/home/jinno/.local/bin/uv",
       "args": [
         "--directory",
         "/home/jinno/mcp-filesystem",
         "run",
         "run_server.py",
         "/home/jinno"
+      ]
+    },
+    "azure-devops": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@azure-devops/mcp",
+        "tokyo-career-up"
       ],
-      "command": "/home/jinno/.local/bin/uv"
+      "env": {
+        "AZURE_DEVOPS_ORG": "https://dev.azure.com/jin5770808",
+        "AZURE_DEVOPS_PAT": "${env:AZURE_DEVOPS_EXT_PAT}"
+      }
     }
   }
 }
