@@ -64,8 +64,11 @@ git-rebase-todo
 debug.log
 *.debug
 
-# track .concept Source-of-Truth, ignore heavy archives
+# track .concept Source-of-Truth, ignore heavy archives and runtime tracking
 .concept/archive/
+.concept/claims.ndjson
+.concept/ontology_metrics.json
+.concept/run_state.json
 
 # Auto-generated framework outputs
 _bmad-output/
