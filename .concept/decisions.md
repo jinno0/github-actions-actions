@@ -1,9 +1,9 @@
 # Active AUTO Decisions (cache) — safe to delete
 
-_Last regenerated: 2026-01-28T07:43:00Z (Run 23)_
+_Last regenerated: 2026-01-28T08:37:00Z (Run 24)_
 
 ## Summary
-- Active AUTO Decisions: 3 (term acceptance and merges)
+- Active AUTO Decisions: 4 (term acceptance and merges)
 - All decisions within expiration window
 - No ambiguities requiring AUTO decisions
 - No conflicts requiring workarounds
@@ -49,3 +49,16 @@ _Last regenerated: 2026-01-28T07:43:00Z (Run 23)_
 - Expires After Runs: 20
 - Linked: TP-004
 - Revert Triggers: primary_evidence_contradiction, merge_threshold_breach
+
+## AUTO:ScriptExtraction.term:accept_as_aux
+- Status: ACTIVE
+- Chosen: ScriptExtraction accepted as aux term with 2 evidence sources
+- Policy: evidence_threshold + semantic_distinctness
+- Evidence:
+  - actions/review-and-merge/scripts/review-and-fix.sh#L1-L4 (actual implementation)
+  - commit b2f8f31 (refactoring rationale)
+- Rationale: Low merge similarity (max 0.52 < 0.78), distinct from TemplateFile and CompositeAction
+- Expires After Runs: 20
+- Linked: TP-005
+- Revert Triggers: primary_evidence_contradiction, merge_threshold_breach
+- Milestone: MS-003

@@ -333,3 +333,38 @@ canonical_terms:
     - source: test-action-fixer.sh#L1-L5
       quote: test-action-fixer.sh is a comprehensive test script for validating
         action structure, templates, examples, and instructions
+  ScriptExtraction:
+    id: TERM-SCRIPTEXTRACTION
+    layer: aux
+    status: stable
+    definition: Refactoring practice of extracting inline bash scripts from action.yml
+      into separate executable files in scripts/ directory
+    synonyms:
+    - script extraction
+    - extract bash scripts
+    - extracted scripts
+    boundaries:
+      includes:
+      - bash scripts in scripts/ directory
+      - executable script files
+      - logic separation from YAML
+      - independent testing capability
+      excludes:
+      - inline scripts in action.yml
+      - template files (prompts)
+      - heredoc in YAML
+    lifecycle:
+    - extracted
+    - tested
+    - maintained
+    related_terms:
+    - CompositeAction
+    - TemplateFile
+    assumptions: []
+    evidence:
+    - source: actions/review-and-merge/scripts/review-and-fix.sh#L1-L4
+      quote: Bash scripts can be extracted from action.yml into separate executable
+        files in scripts/ directory
+    - source: commit b2f8f31
+      quote: Extracting bash scripts from action.yml improves readability (181 to 82
+        lines), enables independent testing

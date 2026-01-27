@@ -20,6 +20,19 @@ queue:
       - term: CompositeAction
         similarity: 0.52
         rationale: ScriptExtraction is a practice within CompositeAction development, not a distinct architectural concept
-    decision: pending
+    decision: accepted
     expires_after_runs: 10
     created_run: '2026-01-28T08:30:00Z'
+    auto_decision:
+      id: AUTO-005
+      decision: Accept ScriptExtraction as aux term
+      rationale: |
+        1. Evidence strength: 2 sources (actual script file + commit message with clear rationale)
+        2. Low merge similarity: Highest candidate (CompositeAction) is 0.52 < 0.78 threshold
+        3. Semantic distinctness: ScriptExtraction is a refactoring practice, distinct from:
+           - TemplateFile (prompt text management)
+           - CompositeAction (architectural construct)
+        4. Auxiliary layer: Appropriate for refactoring best practices
+      milestone_ref: MS-003
+      status: applied
+      created_at: '2026-01-28T08:37:00Z'

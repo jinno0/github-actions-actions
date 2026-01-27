@@ -71,3 +71,9 @@ mappings:
     code_symbols: []
     db: []
     api: []
+  ScriptExtraction:
+    code_symbols:
+    - actions/review-and-merge/scripts/review-and-fix.sh
+    - actions/review-and-merge/scripts/post-comment.sh
+    db: []
+    api: []
