@@ -1,11 +1,10 @@
-updated_at: '2026-01-28T06:15:00Z'
+updated_at: '2026-01-28T06:54:31Z'
 mappings:
   CompositeAction:
     code_symbols:
     - .helpers/config/shared-config.yml
     - .helpers/config/template-helper.sh
     - .github/workflows/includes/git-setup.yml
-    - .helpers/config/REFACTORING_SUMMARY.md
     - actions/review-and-merge/action.yml
     - actions/spec-to-code/action.yml
     - actions/action-fixer/action.yml
