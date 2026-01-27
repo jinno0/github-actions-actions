@@ -208,6 +208,10 @@ runs:
         # Show Claude output in summary
         echo "" >> $GITHUB_STEP_SUMMARY
 
+        # Stage all resolved files (required for git rebase --continue)
+        echo "Staging resolved files..." >> $GITHUB_STEP_SUMMARY
+        git add -A
+
         # Check if all conflicts are resolved
         REMAINING=$(git diff --name-only --diff-filter=U | wc -l)
         if [ "$REMAINING" -gt 0 ]; then
@@ -223,6 +227,10 @@ runs:
         # Continue rebase after conflict resolution
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "Continuing rebase..." >> $GITHUB_STEP_SUMMARY
+
+        # Set GIT_EDITOR to prevent interactive prompts
+        export GIT_EDITOR=true
+        export GIT_SEQUENCE_EDITOR=true
 
         CONTINUE_OUTPUT=$(git rebase --continue 2>&1) || CONTINUE_EXIT_CODE=$?
         if [ -z "$CONTINUE_EXIT_CODE" ]; then
