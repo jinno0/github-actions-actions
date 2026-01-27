@@ -1,2 +1,25 @@
-updated_at: '2026-01-28T07:43:00Z'
-queue: []
+updated_at: '2026-01-28T08:30:00Z'
+queue:
+  - id: TP-005
+    proposed_canonical: ScriptExtraction
+    proposed_layer: aux
+    term_raw_examples:
+      - script extraction
+      - extract bash scripts
+      - extracted scripts
+    reason: Refactoring practice of extracting bash scripts from action.yml into scripts/ directory
+    evidence:
+      - source: actions/review-and-merge/scripts/review-and-fix.sh#L1-L4
+        quote: Bash scripts can be extracted from action.yml into separate executable files in scripts/ directory
+      - source: commit b2f8f31
+        quote: Extracting bash scripts from action.yml improves readability (181 to 82 lines), enables independent testing
+    auto_merge_candidates:
+      - term: TemplateFile
+        similarity: 0.45
+        rationale: Both relate to code organization, but TemplateFile is about prompts while ScriptExtraction is about logic separation
+      - term: CompositeAction
+        similarity: 0.52
+        rationale: ScriptExtraction is a practice within CompositeAction development, not a distinct architectural concept
+    decision: pending
+    expires_after_runs: 10
+    created_run: '2026-01-28T08:30:00Z'

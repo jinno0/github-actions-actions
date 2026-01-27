@@ -23,6 +23,8 @@ mappings:
   TemplateFile:
     code_symbols:
     - .helpers/config/template-helper.sh
+    - actions/review-and-merge/scripts/review-and-fix.sh
+    - actions/review-and-merge/scripts/post-comment.sh
     db: []
     api: []
   ExternalDispatch:
