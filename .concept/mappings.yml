@@ -2,10 +2,10 @@ updated_at: '2026-01-28T00:00:00Z'
 mappings:
   CompositeAction:
     code_symbols:
-    - actions/config/shared-config.yml
+    - .helpers/config/shared-config.yml
     - .github/workflows/includes/git-setup.yml
-    - actions/config/template-helper.sh
-    - actions/config/REFACTORING_SUMMARY.md
+    - .helpers/config/template-helper.sh
+    - .helpers/config/REFACTORING_SUMMARY.md
     - actions/review-and-merge/action.yml
     - actions/spec-to-code/action.yml
     - actions/action-fixer/action.yml
@@ -23,7 +23,7 @@ mappings:
     api: []
   TemplateFile:
     code_symbols:
-    - actions/config/template-helper.sh
+    - .helpers/config/template-helper.sh
     db: []
     api: []
   ExternalDispatch:
