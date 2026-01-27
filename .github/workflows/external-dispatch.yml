@@ -10,6 +10,8 @@ on:
       - bulk-merge          # Bulk merge multiple PRs
       - auto-rebase         # Rebase a PR
       - run-tests           # Run tests on demand
+      - enable-auto-merge   # Enable GitHub's auto-merge for a PR
+      - review-and-merge    # Combined: review + auto-merge enable
 
 permissions:
   pull-requests: write
@@ -182,3 +184,111 @@ jobs:
                 || echo "  ❌ YAML invalid" >> $GITHUB_STEP_SUMMARY
             fi
           done
+
+  # ============================================
+  # Enable GitHub's auto-merge for a PR
+  # (Replaces review-and-auto-merge.yml functionality)
+  # ============================================
+  enable-auto-merge:
+    if: github.event.action == 'enable-auto-merge'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Enable Auto-Merge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.client_payload.pr_number }}
+          MERGE_METHOD: ${{ github.event.client_payload.merge_method || 'squash' }}
+        run: |
+          echo "### Enabling Auto-Merge for PR #$PR_NUMBER" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Check PR status
+          STATE=$(gh pr view "$PR_NUMBER" --json state -q '.state')
+          if [ "$STATE" != "open" ]; then
+            echo "PR is not open (state: $STATE)" >> $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+
+          IS_DRAFT=$(gh pr view "$PR_NUMBER" --json isDraft -q '.isDraft')
+          if [ "$IS_DRAFT" = "true" ]; then
+            # Optionally make it ready
+            if [ "${{ github.event.client_payload.ready_draft }}" = "true" ]; then
+              gh pr ready "$PR_NUMBER"
+              echo "📝 Marked draft PR as ready" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "PR is a draft, skipping auto-merge" >> $GITHUB_STEP_SUMMARY
+              exit 0
+            fi
+          fi
+
+          # Enable GitHub's built-in auto-merge
+          if gh pr merge "$PR_NUMBER" --auto --"$MERGE_METHOD" --delete-branch 2>&1; then
+            echo "✅ Auto-merge enabled!" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "PR will automatically merge when CI checks pass." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ Could not enable auto-merge (may already be enabled or not allowed)" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  # ============================================
+  # Combined: AI Review + Auto-merge enable
+  # (Full replacement for review-and-auto-merge.yml)
+  # ============================================
+  review-and-merge:
+    if: github.event.action == 'review-and-merge'
+    runs-on: self-hosted
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.client_payload.ref || github.ref }}
+          fetch-depth: 0
+
+      - name: AI Review
+        id: review
+        uses: ./actions/review-and-merge
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          claude-model: ${{ github.event.client_payload.model || 'sonnet' }}
+          auto-fix: ${{ github.event.client_payload.auto_fix || 'true' }}
+          lgtm-threshold: ${{ github.event.client_payload.lgtm_threshold || '7' }}
+          pr-number: ${{ github.event.client_payload.pr_number }}
+
+      - name: Enable Auto-Merge if LGTM
+        if: steps.review.outputs.verdict == 'LGTM'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.client_payload.pr_number }}
+          MERGE_METHOD: ${{ github.event.client_payload.merge_method || 'squash' }}
+        run: |
+          echo "### Enabling Auto-Merge (Verdict: LGTM)" >> $GITHUB_STEP_SUMMARY
+
+          # Check if PR is still open
+          STATE=$(gh pr view "$PR_NUMBER" --json state -q '.state')
+          if [ "$STATE" != "open" ]; then
+            echo "PR is no longer open" >> $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+
+          # Enable auto-merge
+          if gh pr merge "$PR_NUMBER" --auto --"$MERGE_METHOD" --delete-branch 2>&1; then
+            echo "✅ Auto-merge enabled!" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ Could not enable auto-merge" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Report Result
+        if: always()
+        env:
+          PR_NUMBER: ${{ github.event.client_payload.pr_number }}
+          VERDICT: ${{ steps.review.outputs.verdict }}
+          CONFIDENCE: ${{ steps.review.outputs.confidence }}
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- PR: #$PR_NUMBER" >> $GITHUB_STEP_SUMMARY
+          echo "- Verdict: $VERDICT" >> $GITHUB_STEP_SUMMARY
+          echo "- Confidence: $CONFIDENCE" >> $GITHUB_STEP_SUMMARY
