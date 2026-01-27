@@ -108,12 +108,6 @@ AIエージェントは以下の場合に人間に報告してください：
 - TASKS.md に記載された制約とタスクが競合する場合
 - SYSTEM_CONSTITUTION.md に違反する変更を求められた場合
 
-## 自己更新ループ（将来）
-
-TBD
-将来的には、AIエージェントが自身で PURPOSE.md や POLICY.md を更新する仕組みを導入予定です。
-
----
 
 # GitHub Actions 開発ノウハウ
 

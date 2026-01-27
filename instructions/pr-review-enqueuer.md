@@ -47,15 +47,7 @@ jobs:
 
 #### `pr-filter` (default: `all`)
 
-Filter which PRs to process:
-
-| Value | Description |
-|-------|-------------|
-| `all` | Process all open PRs |
-| `drafts` | Only draft PRs |
-| `ready` | Only ready-for-review PRs (non-draft) |
-| `wip` | Only PRs with WIP-related labels |
-| `no-label` | Only PRs without any labels |
+Filter which PRs to process. Options: `all`, `drafts`, `ready`, `wip`, `no-label`.
 
 #### `label-filter` (default: empty)
 
@@ -201,29 +193,6 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           pr-filter: 'all'
           dry-run: 'true'  # Test mode - no actual comments
-```
-
-## Outputs
-
-The action provides two outputs:
-
-- `prs-reviewed`: Number of PRs that received `/review` comment
-- `logs-reviewed`: Number of PRs skipped (already had `/review`, too young, etc.)
-
-```yaml
-jobs:
-  enqueue:
-    runs-on: ubuntu-latest
-    steps:
-      - id: enqueue
-        uses: your-org/github-actions-actions/actions/pr-review-enqueuer@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Check results
-        run: |
-          echo "PRs enqueued: ${{ steps.enqueue.outputs.prs-reviewed }}"
-          echo "PRs skipped: ${{ steps.enqueue.outputs.prs-skipped }}"
 ```
 
 ## Permissions
