@@ -252,16 +252,22 @@ jobs:
           MERGE_METHOD: ${{ github.event.client_payload.merge_method || 'squash' }}
           READY_DRAFT: ${{ github.event.client_payload.ready_draft || 'false' }}
         run: |
+          set -x  # Enable debug output
           echo "### Direct Merge PR #$PR_NUMBER" >> $GITHUB_STEP_SUMMARY
+          echo "Starting direct-merge for PR #$PR_NUMBER"
 
           # Check PR status
+          echo "Checking PR state..."
           STATE=$(gh pr view "$PR_NUMBER" --json state -q '.state')
+          echo "PR state: $STATE"
           if [ "$STATE" != "open" ]; then
             echo "⏭️ PR is not open (state: $STATE)" >> $GITHUB_STEP_SUMMARY
             exit 0
           fi
 
+          echo "Checking draft status..."
           IS_DRAFT=$(gh pr view "$PR_NUMBER" --json isDraft -q '.isDraft')
+          echo "Is draft: $IS_DRAFT"
           if [ "$IS_DRAFT" = "true" ]; then
             if [ "$READY_DRAFT" = "true" ]; then
               gh pr ready "$PR_NUMBER"
@@ -273,17 +279,22 @@ jobs:
           fi
 
           # Check if PR is mergeable
+          echo "Checking mergeable status..."
           MERGEABLE=$(gh pr view "$PR_NUMBER" --json mergeable -q '.mergeable')
+          echo "Mergeable: $MERGEABLE"
           if [ "$MERGEABLE" != "MERGEABLE" ]; then
             echo "⚠️ PR is not mergeable (status: $MERGEABLE)" >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
 
           # Direct merge
-          if gh pr merge "$PR_NUMBER" --"$MERGE_METHOD" --delete-branch 2>&1; then
+          echo "Attempting merge..."
+          if gh pr merge "$PR_NUMBER" --"$MERGE_METHOD" --delete-branch; then
             echo "✅ PR merged successfully!" >> $GITHUB_STEP_SUMMARY
+            echo "Merge completed successfully"
           else
             echo "❌ Failed to merge PR" >> $GITHUB_STEP_SUMMARY
+            echo "Merge failed"
             exit 1
           fi
 
