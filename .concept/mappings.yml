@@ -1,5 +1,31 @@
-updated_at: '2026-01-27T17:08:22Z'
+updated_at: '2026-01-28T00:00:00Z'
 mappings:
+  CompositeAction:
+    code_symbols:
+    - actions/config/shared-config.yml
+    - .github/workflows/includes/git-setup.yml
+    - actions/config/template-helper.sh
+    - actions/config/REFACTORING_SUMMARY.md
+    - actions/review-and-merge/action.yml
+    - actions/spec-to-code/action.yml
+    - actions/action-fixer/action.yml
+    - actions/auto-refactor/action.yml
+    - actions/auto-document/action.yml
+    - actions/release-notes-ai/action.yml
+    - actions/auto-merge/action.yml
+    - actions/auto-rebase/action.yml
+    - actions/bulk-merge-prs/action.yml
+    - actions/bulk-rebase-prs/action.yml
+    - actions/pr-review-enqueuer/action.yml
+    - actions/publish-pr/action.yml
+    - actions/review-auto-merge/action.yml
+    db: []
+    api: []
+  TemplateFile:
+    code_symbols:
+    - actions/config/template-helper.sh
+    db: []
+    api: []
   ExternalDispatch:
     code_symbols:
       - .github/workflows/external-dispatch.yml

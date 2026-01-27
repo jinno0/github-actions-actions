@@ -34,7 +34,10 @@ canonical_terms:
       - source: .github/workflows/external-dispatch.yml#L1-L5
         quote: External Dispatch Handler allows external control from a private repository while keeping secrets and automation logic private
       - source: .github/workflows/external-dispatch.yml#L7-L15
-        quote: repository_dispatch event types include: ai-review, bulk-merge, auto-rebase, run-tests, enable-auto-merge, direct-merge, review-and-merge, action-fixer, auto-document, auto-merge, auto-refactor, bulk-rebase-prs, pr-review-enqueuer, publish-pr, release-notes-ai, review-auto-merge, spec-to-code
+        quote: 'repository_dispatch event types include: ai-review, bulk-merge, auto-rebase,
+          run-tests, enable-auto-merge, direct-merge, review-and-merge, action-fixer,
+          auto-document, auto-merge, auto-refactor, bulk-rebase-prs, pr-review-enqueuer,
+          publish-pr, release-notes-ai, review-auto-merge, spec-to-code'
   CompositeAction:
     id: TERM-COMPOSITEACTION
     layer: core
