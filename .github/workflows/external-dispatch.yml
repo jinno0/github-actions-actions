@@ -330,3 +330,241 @@ jobs:
           echo "- PR: #$PR_NUMBER" >> $GITHUB_STEP_SUMMARY
           echo "- Verdict: $VERDICT" >> $GITHUB_STEP_SUMMARY
           echo "- Confidence: $CONFIDENCE" >> $GITHUB_STEP_SUMMARY
+
+  # ============================================
+  # Action Fixer - Validate and auto-fix workflow errors
+  # ============================================
+  action-fixer:
+    if: github.event.action == 'action-fixer'
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout github-actions-actions
+        uses: actions/checkout@v4
+        with:
+          repository: jinno0/github-actions-actions
+          path: .github-actions
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Action Fixer
+        uses: ./.github-actions/actions/action-fixer
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          auto-fix: ${{ github.event.client_payload.auto_fix || 'true' }}
+          claude-model: ${{ github.event.client_payload.model || 'claude-sonnet-4.5' }}
+
+  # ============================================
+  # Auto Document - Update documentation from code
+  # ============================================
+  auto-document:
+    if: github.event.action == 'auto-document'
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout github-actions-actions
+        uses: actions/checkout@v4
+        with:
+          repository: jinno0/github-actions-actions
+          path: .github-actions
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Auto Document
+        uses: ./.github-actions/actions/auto-document
+        with:
+          source-path: ${{ github.event.client_payload.source_path || 'src/' }}
+          doc-path: ${{ github.event.client_payload.doc_path || 'docs/' }}
+          claude-model: ${{ github.event.client_payload.model || 'claude-sonnet-4.5' }}
+
+  # ============================================
+  # Auto Merge - Merge a PR with specified method
+  # ============================================
+  auto-merge:
+    if: github.event.action == 'auto-merge'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout github-actions-actions
+        uses: actions/checkout@v4
+        with:
+          repository: jinno0/github-actions-actions
+          path: .github-actions
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Auto Merge
+        uses: ./.github-actions/actions/auto-merge
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pr-number: ${{ github.event.client_payload.pr_number }}
+          merge-method: ${{ github.event.client_payload.merge_method || 'squash' }}
+
+  # ============================================
+  # Auto Refactor - Refactor code using Claude
+  # ============================================
+  auto-refactor:
+    if: github.event.action == 'auto-refactor'
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout github-actions-actions
+        uses: actions/checkout@v4
+        with:
+          repository: jinno0/github-actions-actions
+          path: .github-actions
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Auto Refactor
+        uses: ./.github-actions/actions/auto-refactor
+        with:
+          path: ${{ github.event.client_payload.path || '.' }}
+          instruction: ${{ github.event.client_payload.instruction || 'Improve code quality and readability' }}
+          claude-model: ${{ github.event.client_payload.model || 'claude-sonnet-4.5' }}
+
+  # ============================================
+  # Bulk Rebase PRs - Rebase multiple PRs
+  # ============================================
+  bulk-rebase-prs:
+    if: github.event.action == 'bulk-rebase-prs'
+    runs-on: self-hosted
+    steps:
+      - name: Checkout github-actions-actions
+        uses: actions/checkout@v4
+        with:
+          repository: jinno0/github-actions-actions
+          path: .github-actions
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Bulk Rebase
+        uses: ./.github-actions/actions/bulk-rebase-prs
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          limit: ${{ github.event.client_payload.limit || '10' }}
+          label-filter: ${{ github.event.client_payload.label_filter || '' }}
+
+  # ============================================
+  # PR Review Enqueuer - Add /review to open PRs
+  # ============================================
+  pr-review-enqueuer:
+    if: github.event.action == 'pr-review-enqueuer'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout github-actions-actions
+        uses: actions/checkout@v4
+        with:
+          repository: jinno0/github-actions-actions
+          path: .github-actions
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run PR Review Enqueuer
+        uses: ./.github-actions/actions/pr-review-enqueuer
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          limit: ${{ github.event.client_payload.limit || '5' }}
+          label-filter: ${{ github.event.client_payload.label_filter || '' }}
+
+  # ============================================
+  # Publish PR - Convert draft to ready for review
+  # ============================================
+  publish-pr:
+    if: github.event.action == 'publish-pr'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout github-actions-actions
+        uses: actions/checkout@v4
+        with:
+          repository: jinno0/github-actions-actions
+          path: .github-actions
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Publish PR
+        uses: ./.github-actions/actions/publish-pr
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pr-number: ${{ github.event.client_payload.pr_number }}
+
+  # ============================================
+  # Release Notes AI - Generate release notes
+  # ============================================
+  release-notes-ai:
+    if: github.event.action == 'release-notes-ai'
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout github-actions-actions
+        uses: actions/checkout@v4
+        with:
+          repository: jinno0/github-actions-actions
+          path: .github-actions
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Release Notes AI
+        uses: ./.github-actions/actions/release-notes-ai
+        with:
+          base-ref: ${{ github.event.client_payload.base_ref || '' }}
+          head-ref: ${{ github.event.client_payload.head_ref || 'HEAD' }}
+          output-file: ${{ github.event.client_payload.output_file || 'RELEASE_NOTES.md' }}
+          claude-model: ${{ github.event.client_payload.model || 'claude-sonnet-4.5' }}
+
+  # ============================================
+  # Review Auto Merge - Auto rebase and merge PRs
+  # ============================================
+  review-auto-merge:
+    if: github.event.action == 'review-auto-merge'
+    runs-on: self-hosted
+    steps:
+      - name: Checkout github-actions-actions
+        uses: actions/checkout@v4
+        with:
+          repository: jinno0/github-actions-actions
+          path: .github-actions
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Review Auto Merge
+        uses: ./.github-actions/actions/review-auto-merge
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pr-number: ${{ github.event.client_payload.pr_number }}
+          merge-method: ${{ github.event.client_payload.merge_method || 'squash' }}
+
+  # ============================================
+  # Spec to Code - Generate code from specifications
+  # ============================================
+  spec-to-code:
+    if: github.event.action == 'spec-to-code'
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout github-actions-actions
+        uses: actions/checkout@v4
+        with:
+          repository: jinno0/github-actions-actions
+          path: .github-actions
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Spec to Code
+        uses: ./.github-actions/actions/spec-to-code
+        with:
+          spec-path: ${{ github.event.client_payload.spec_path }}
+          output-dir: ${{ github.event.client_payload.output_dir || 'src/' }}
+          language: ${{ github.event.client_payload.language || 'python' }}
+          claude-model: ${{ github.event.client_payload.model || 'claude-sonnet-4.5' }}
+
