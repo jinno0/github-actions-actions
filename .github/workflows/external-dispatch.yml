@@ -208,7 +208,7 @@ jobs:
 
           # Check PR status
           STATE=$(gh pr view "$PR_NUMBER" --json state -q '.state')
-          if [ "$STATE" != "open" ]; then
+          if [ "$STATE" != "OPEN" ]; then
             echo "PR is not open (state: $STATE)" >> $GITHUB_STEP_SUMMARY
             exit 0
           fi
@@ -260,7 +260,7 @@ jobs:
           echo "Checking PR state..."
           STATE=$(gh pr view "$PR_NUMBER" --json state -q '.state')
           echo "PR state: $STATE"
-          if [ "$STATE" != "open" ]; then
+          if [ "$STATE" != "OPEN" ]; then
             echo "⏭️ PR is not open (state: $STATE)" >> $GITHUB_STEP_SUMMARY
             exit 0
           fi
@@ -333,7 +333,7 @@ jobs:
 
           # Check if PR is still open
           STATE=$(gh pr view "$PR_NUMBER" --json state -q '.state')
-          if [ "$STATE" != "open" ]; then
+          if [ "$STATE" != "OPEN" ]; then
             echo "PR is no longer open" >> $GITHUB_STEP_SUMMARY
             exit 0
           fi
