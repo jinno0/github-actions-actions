@@ -8,9 +8,9 @@ inputs:
     description: 'PR number to rebase (optional, defaults to event context)'
     required: false
   claude-model:
-    description: 'Claude model to use (default: claude-sonnet-4.5)'
+    description: 'Claude model to use (default: sonnet)'
     required: false
-    default: 'claude-sonnet-4.5'
+    default: 'sonnet'
   rebase-strategy:
     description: 'Rebase strategy: interactive (ai-assisted) or force (always use ai)'
     required: false

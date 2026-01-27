@@ -1,0 +1,54 @@
+# Shared configuration for GitHub Actions
+# This file centralizes common configuration values to enforce the "1情報 = 1変数 = 1変数名" principle
+
+defaults:
+  # Default Claude model version for all AI-powered actions
+  claude-model: 'sonnet'
+
+  # Default Git user configuration for commits made by actions
+  git-user-email: 'github-actions[bot]@users.noreply.github.com'
+  git-user-name: 'github-actions[bot]'
+
+  # Default runner type
+  runs-on: 'self-hosted'
+
+# Standard variable naming conventions
+naming-conventions:
+  # Input variables in action.yml should use kebab-case
+  input-pattern: 'kebab-case'  # e.g., claude-model, github-token
+
+  # Local shell variables should use SCREAMING_SNAKE_CASE
+  local-pattern: 'SCREAMING_SNAKE_CASE'  # e.g., MODEL, GITHUB_TOKEN, PR_NUMBER
+
+  # Environment variables should use UPPER_SNAKE_CASE
+  env-pattern: 'UPPER_SNAKE_CASE'
+
+# Standard environment variable names
+environment-variables:
+  # GitHub token as environment variable (used for gh CLI)
+  # Note: Uses GH_TOKEN (not GITHUB_TOKEN) as it's the standard for GitHub CLI
+  github-token: 'GH_TOKEN'
+
+  # Claude model
+  claude-model: 'MODEL'
+
+  # PR number
+  pr-number: 'PR_NUMBER'
+
+  # Dry run flag
+  dry-run: 'DRY_RUN'
+
+# List of AI-powered actions that use Claude CLI
+ai-actions:
+  - review-and-merge
+  - spec-to-code
+  - action-fixer
+  - auto-refactor
+  - auto-document
+  - auto-rebase
+  - release-notes-ai
+  - pr-review-enqueuer
+  - bulk-rebase-prs
+  - bulk-merge-prs
+  - review-auto-merge
+  - publish-pr
