@@ -251,6 +251,7 @@ jobs:
           PR_NUMBER: ${{ github.event.client_payload.pr_number }}
           MERGE_METHOD: ${{ github.event.client_payload.merge_method || 'squash' }}
           READY_DRAFT: ${{ github.event.client_payload.ready_draft || 'false' }}
+          FORCE_MERGE: ${{ github.event.client_payload.force_merge || 'false' }}
         run: |
           echo "### Direct Merge PR #$PR_NUMBER" >> $GITHUB_STEP_SUMMARY
 
@@ -272,15 +273,21 @@ jobs:
             fi
           fi
 
-          # Check if PR is mergeable
-          MERGEABLE=$(gh pr view "$PR_NUMBER" --json mergeable -q '.mergeable')
-          if [ "$MERGEABLE" != "MERGEABLE" ]; then
-            echo "⚠️ PR is not mergeable (status: $MERGEABLE)" >> $GITHUB_STEP_SUMMARY
-            exit 1
+          # Check if PR is mergeable (skip check if force_merge)
+          if [ "$FORCE_MERGE" != "true" ]; then
+            MERGEABLE=$(gh pr view "$PR_NUMBER" --json mergeable -q '.mergeable')
+            if [ "$MERGEABLE" != "MERGEABLE" ]; then
+              echo "⚠️ PR is not mergeable (status: $MERGEABLE)" >> $GITHUB_STEP_SUMMARY
+              exit 1
+            fi
           fi
 
-          # Direct merge
-          if gh pr merge "$PR_NUMBER" --"$MERGE_METHOD" --delete-branch; then
+          # Direct merge (add --admin if force_merge)
+          ADMIN_FLAG=""
+          if [ "$FORCE_MERGE" = "true" ]; then
+            ADMIN_FLAG="--admin"
+          fi
+          if gh pr merge "$PR_NUMBER" --"$MERGE_METHOD" --delete-branch $ADMIN_FLAG; then
             echo "✅ PR merged successfully!" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ Failed to merge PR" >> $GITHUB_STEP_SUMMARY
