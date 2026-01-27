@@ -1,10 +1,10 @@
-updated_at: '2026-01-28T00:00:00Z'
+updated_at: '2026-01-28T06:15:00Z'
 mappings:
   CompositeAction:
     code_symbols:
     - .helpers/config/shared-config.yml
-    - .github/workflows/includes/git-setup.yml
     - .helpers/config/template-helper.sh
+    - .github/workflows/includes/git-setup.yml
     - .helpers/config/REFACTORING_SUMMARY.md
     - actions/review-and-merge/action.yml
     - actions/spec-to-code/action.yml
@@ -38,23 +38,6 @@ mappings:
     - CLAUDE.md#L298-L324
     db: []
     api: []
-  CompositeAction:
-    code_symbols:
-    - actions/review-and-merge/action.yml
-    - actions/spec-to-code/action.yml
-    - actions/action-fixer/action.yml
-    - actions/auto-refactor/action.yml
-    - actions/auto-document/action.yml
-    - actions/release-notes-ai/action.yml
-    - actions/auto-merge/action.yml
-    - actions/auto-rebase/action.yml
-    - actions/bulk-merge-prs/action.yml
-    - actions/bulk-rebase-prs/action.yml
-    - actions/pr-review-enqueuer/action.yml
-    - actions/publish-pr/action.yml
-    - actions/review-auto-merge/action.yml
-    db: []
-    api: []
   AIAction:
     code_symbols:
     - actions/review-and-merge/action.yml
@@ -65,11 +48,25 @@ mappings:
     - actions/release-notes-ai/action.yml
     db: []
     api: []
+  StandardActionStructure:
+    code_symbols:
+    - CLAUDE.md#L112-L140
+    - .helpers/config/
+    db: []
+    api: []
   SelfHostedRunner:
     code_symbols: []
     db: []
     api: []
   ClaudeCodeCLI:
+    code_symbols: []
+    db: []
+    api: []
+  VersionPinning:
+    code_symbols: []
+    db: []
+    api: []
+  HumanInTheLoop:
     code_symbols: []
     db: []
     api: []
