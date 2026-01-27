@@ -1,0 +1,184 @@
+name: External Dispatch Handler
+
+# This workflow allows external control from a private repository
+# Secrets and automation logic can be kept private while this repo stays public
+
+on:
+  repository_dispatch:
+    types:
+      - ai-review           # Trigger AI review for a PR
+      - bulk-merge          # Bulk merge multiple PRs
+      - auto-rebase         # Rebase a PR
+      - run-tests           # Run tests on demand
+
+permissions:
+  pull-requests: write
+  contents: write
+  checks: read
+
+jobs:
+  # ============================================
+  # AI Review triggered externally
+  # ============================================
+  ai-review:
+    if: github.event.action == 'ai-review'
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.client_payload.ref || github.ref }}
+          fetch-depth: 0
+
+      - name: AI Review and Fix
+        id: review
+        uses: ./actions/review-and-merge
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          claude-model: ${{ github.event.client_payload.model || 'sonnet' }}
+          auto-fix: ${{ github.event.client_payload.auto_fix || 'true' }}
+          lgtm-threshold: ${{ github.event.client_payload.lgtm_threshold || '7' }}
+          pr-number: ${{ github.event.client_payload.pr_number }}
+
+      - name: Report result
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.client_payload.pr_number }}
+          VERDICT: ${{ steps.review.outputs.verdict }}
+          CALLBACK_URL: ${{ github.event.client_payload.callback_url }}
+        run: |
+          echo "### AI Review Result" >> $GITHUB_STEP_SUMMARY
+          echo "- PR: #$PR_NUMBER" >> $GITHUB_STEP_SUMMARY
+          echo "- Verdict: $VERDICT" >> $GITHUB_STEP_SUMMARY
+
+          # Optional: callback to controller repo
+          if [ -n "$CALLBACK_URL" ]; then
+            curl -X POST "$CALLBACK_URL" \
+              -H "Content-Type: application/json" \
+              -d "{\"pr\": $PR_NUMBER, \"verdict\": \"$VERDICT\"}" || true
+          fi
+
+  # ============================================
+  # Bulk merge triggered externally
+  # ============================================
+  bulk-merge:
+    if: github.event.action == 'bulk-merge'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Bulk Merge PRs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LIMIT: ${{ github.event.client_payload.limit || '10' }}
+          MERGE_METHOD: ${{ github.event.client_payload.merge_method || 'squash' }}
+          LABEL_FILTER: ${{ github.event.client_payload.label_filter || '' }}
+        run: |
+          echo "### Bulk Merge Operation" >> $GITHUB_STEP_SUMMARY
+          echo "- Limit: $LIMIT" >> $GITHUB_STEP_SUMMARY
+          echo "- Method: $MERGE_METHOD" >> $GITHUB_STEP_SUMMARY
+
+          # Get mergeable PRs
+          QUERY=".[] | select(.mergeable == \"MERGEABLE\" and .mergeStateStatus == \"CLEAN\")"
+          if [ -n "$LABEL_FILTER" ]; then
+            QUERY="$QUERY | select(.labels[].name == \"$LABEL_FILTER\")"
+          fi
+
+          PRS=$(gh pr list --state open --json number,mergeable,mergeStateStatus,labels,isDraft \
+            --jq "$QUERY | .number" | head -n "$LIMIT")
+
+          MERGED=0
+          FAILED=0
+
+          for pr in $PRS; do
+            # Make draft PRs ready first
+            IS_DRAFT=$(gh pr view "$pr" --json isDraft -q '.isDraft')
+            if [ "$IS_DRAFT" = "true" ]; then
+              gh pr ready "$pr" || continue
+              sleep 2
+            fi
+
+            # Attempt merge
+            if gh pr merge "$pr" --"$MERGE_METHOD" --delete-branch 2>/dev/null; then
+              echo "✅ Merged PR #$pr" >> $GITHUB_STEP_SUMMARY
+              MERGED=$((MERGED + 1))
+            else
+              echo "❌ Failed to merge PR #$pr" >> $GITHUB_STEP_SUMMARY
+              FAILED=$((FAILED + 1))
+            fi
+            sleep 1
+          done
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Summary**: Merged $MERGED, Failed $FAILED" >> $GITHUB_STEP_SUMMARY
+
+  # ============================================
+  # Auto-rebase triggered externally
+  # ============================================
+  auto-rebase:
+    if: github.event.action == 'auto-rebase'
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Rebase PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.client_payload.pr_number }}
+          USE_AI: ${{ github.event.client_payload.use_ai || 'false' }}
+        run: |
+          echo "### Auto-Rebase PR #$PR_NUMBER" >> $GITHUB_STEP_SUMMARY
+
+          # Get PR branch info
+          PR_INFO=$(gh pr view "$PR_NUMBER" --json headRefName,baseRefName)
+          HEAD_BRANCH=$(echo "$PR_INFO" | jq -r '.headRefName')
+          BASE_BRANCH=$(echo "$PR_INFO" | jq -r '.baseRefName')
+
+          git fetch origin "$BASE_BRANCH" "$HEAD_BRANCH"
+          git checkout "$HEAD_BRANCH"
+
+          if git rebase "origin/$BASE_BRANCH"; then
+            git push --force-with-lease
+            echo "✅ Rebase successful" >> $GITHUB_STEP_SUMMARY
+          else
+            if [ "$USE_AI" = "true" ]; then
+              echo "⚠️ Conflicts detected, attempting AI resolution..." >> $GITHUB_STEP_SUMMARY
+              # Claude Code would handle conflict resolution here
+              git rebase --abort
+              echo "❌ AI conflict resolution not implemented in this action" >> $GITHUB_STEP_SUMMARY
+              exit 1
+            else
+              git rebase --abort
+              echo "❌ Rebase failed - conflicts detected" >> $GITHUB_STEP_SUMMARY
+              exit 1
+            fi
+          fi
+
+  # ============================================
+  # Run tests on demand
+  # ============================================
+  run-tests:
+    if: github.event.action == 'run-tests'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run Tests
+        run: |
+          echo "### Test Run" >> $GITHUB_STEP_SUMMARY
+
+          # Find and validate all action.yml files
+          for action_dir in actions/*/; do
+            action_name=$(basename "$action_dir")
+            echo "Testing: $action_name" >> $GITHUB_STEP_SUMMARY
+
+            if [ -f "$action_dir/action.yml" ]; then
+              python3 -c "import yaml; yaml.safe_load(open('$action_dir/action.yml'))" \
+                && echo "  ✅ YAML valid" >> $GITHUB_STEP_SUMMARY \
+                || echo "  ❌ YAML invalid" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
