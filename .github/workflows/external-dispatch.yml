@@ -11,6 +11,7 @@ on:
       - auto-rebase         # Rebase a PR
       - run-tests           # Run tests on demand
       - enable-auto-merge   # Enable GitHub's auto-merge for a PR
+      - direct-merge        # Directly merge a PR (no auto-merge)
       - review-and-merge    # Combined: review + auto-merge enable
 
 permissions:
@@ -231,6 +232,59 @@ jobs:
             echo "PR will automatically merge when CI checks pass." >> $GITHUB_STEP_SUMMARY
           else
             echo "⚠️ Could not enable auto-merge (may already be enabled or not allowed)" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  # ============================================
+  # Directly merge a PR (no auto-merge)
+  # For repos without auto-merge feature or for immediate merge
+  # ============================================
+  direct-merge:
+    if: github.event.action == 'direct-merge'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Direct Merge PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.client_payload.pr_number }}
+          MERGE_METHOD: ${{ github.event.client_payload.merge_method || 'squash' }}
+          READY_DRAFT: ${{ github.event.client_payload.ready_draft || 'false' }}
+        run: |
+          echo "### Direct Merge PR #$PR_NUMBER" >> $GITHUB_STEP_SUMMARY
+
+          # Check PR status
+          STATE=$(gh pr view "$PR_NUMBER" --json state -q '.state')
+          if [ "$STATE" != "open" ]; then
+            echo "⏭️ PR is not open (state: $STATE)" >> $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+
+          IS_DRAFT=$(gh pr view "$PR_NUMBER" --json isDraft -q '.isDraft')
+          if [ "$IS_DRAFT" = "true" ]; then
+            if [ "$READY_DRAFT" = "true" ]; then
+              gh pr ready "$PR_NUMBER"
+              echo "📝 Marked draft PR as ready" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "⏭️ PR is a draft, skipping" >> $GITHUB_STEP_SUMMARY
+              exit 0
+            fi
+          fi
+
+          # Check if PR is mergeable
+          MERGEABLE=$(gh pr view "$PR_NUMBER" --json mergeable -q '.mergeable')
+          if [ "$MERGEABLE" != "MERGEABLE" ]; then
+            echo "⚠️ PR is not mergeable (status: $MERGEABLE)" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+
+          # Direct merge
+          if gh pr merge "$PR_NUMBER" --"$MERGE_METHOD" --delete-branch 2>&1; then
+            echo "✅ PR merged successfully!" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Failed to merge PR" >> $GITHUB_STEP_SUMMARY
+            exit 1
           fi
 
   # ============================================
