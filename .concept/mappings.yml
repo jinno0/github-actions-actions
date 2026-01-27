@@ -1,5 +1,11 @@
-updated_at: '2026-01-21T03:23:06Z'
+updated_at: '2026-01-27T17:08:22Z'
 mappings:
+  ExternalDispatch:
+    code_symbols:
+      - .github/workflows/external-dispatch.yml
+    db: []
+    api:
+      - repository_dispatch event
   DryRun:
     code_symbols:
     - .github/workflows/test-all-actions.yml

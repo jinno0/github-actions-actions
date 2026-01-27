@@ -1,5 +1,26 @@
-updated_at: '2026-01-22T00:16:00Z'
+updated_at: '2026-01-27T17:08:22Z'
 queue:
+  - id: TP-004
+    proposed_canonical: ExternalDispatch
+    proposed_layer: domain
+    term_raw_examples:
+      - External Dispatch
+      - repository_dispatch
+      - external control
+    reason: CompositeAction pattern for remote control, allowing private repo to control public repo actions. 16 event types supported including AI actions and PR automation. ACCEPTED: 2 evidence sources, clear boundaries, similar but distinct from CompositeAction (0.65 similarity below merge threshold 0.78)
+    evidence:
+      - source: .github/workflows/external-dispatch.yml#L1-L5
+        quote: External Dispatch Handler allows external control from a private repository while keeping secrets and automation logic private
+      - source: .github/workflows/external-dispatch.yml#L7-L15
+        quote: repository_dispatch event types include: ai-review, bulk-merge, auto-rebase, run-tests, enable-auto-merge, direct-merge, review-and-merge, action-fixer, auto-document, auto-merge, auto-refactor, bulk-rebase-prs, pr-review-enqueuer, publish-pr, release-notes-ai, review-auto-merge, spec-to-code
+    auto_merge_candidates:
+      - term: CompositeAction
+        similarity: 0.65
+        rationale: ExternalDispatch is a CompositeAction with repository_dispatch trigger
+    decision: accepted
+    expires_after_runs: 10
+    created_run: '2026-01-27T17:08:22Z'
+    processed_run: '2026-01-27T17:08:22Z'
   - auto_merge_candidates: []
     created_run: '2026-01-21T08:11:42Z'
     decision: accepted
