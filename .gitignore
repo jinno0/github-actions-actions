@@ -71,6 +71,10 @@ debug.log
 _bmad-output/
 .serena/
 
+# BMAD workflow execution reports
+.bmad/workflows/*execution-report.md
+.bmad/workflows/*validation-report.md
+
 # Python
 __pycache__/
 *.py[cod]
