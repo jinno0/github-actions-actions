@@ -121,44 +121,21 @@ jobs:
     if: github.event.action == 'auto-rebase'
     runs-on: self-hosted
     steps:
-      - name: Checkout
+      - name: Checkout github-actions-actions
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          repository: jinno0/github-actions-actions
+          path: .github-actions
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Rebase PR
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.client_payload.pr_number }}
-          USE_AI: ${{ github.event.client_payload.use_ai || 'false' }}
-        run: |
-          echo "### Auto-Rebase PR #$PR_NUMBER" >> $GITHUB_STEP_SUMMARY
+      - name: Auto Rebase with AI Conflict Resolution
+        uses: ./.github-actions/actions/auto-rebase
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pr_number: ${{ github.event.client_payload.pr_number }}
+          claude-model: ${{ github.event.client_payload.model || 'claude-sonnet-4.5' }}
+          rebase-strategy: ${{ github.event.client_payload.strategy || 'interactive' }}
 
-          # Get PR branch info
-          PR_INFO=$(gh pr view "$PR_NUMBER" --json headRefName,baseRefName)
-          HEAD_BRANCH=$(echo "$PR_INFO" | jq -r '.headRefName')
-          BASE_BRANCH=$(echo "$PR_INFO" | jq -r '.baseRefName')
-
-          git fetch origin "$BASE_BRANCH" "$HEAD_BRANCH"
-          git checkout "$HEAD_BRANCH"
-
-          if git rebase "origin/$BASE_BRANCH"; then
-            git push --force-with-lease
-            echo "✅ Rebase successful" >> $GITHUB_STEP_SUMMARY
-          else
-            if [ "$USE_AI" = "true" ]; then
-              echo "⚠️ Conflicts detected, attempting AI resolution..." >> $GITHUB_STEP_SUMMARY
-              # Claude Code would handle conflict resolution here
-              git rebase --abort
-              echo "❌ AI conflict resolution not implemented in this action" >> $GITHUB_STEP_SUMMARY
-              exit 1
-            else
-              git rebase --abort
-              echo "❌ Rebase failed - conflicts detected" >> $GITHUB_STEP_SUMMARY
-              exit 1
-            fi
-          fi
 
   # ============================================
   # Run tests on demand
