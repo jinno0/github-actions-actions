@@ -78,6 +78,8 @@ _bmad-output/
 .bmad/workflows/*execution-report.md
 .bmad/workflows/*validation-report.md
 .bmad/workflows/*flow-report.md
+.bmad/*execution-summary.md
+.bmad/*flow-summary.md
 
 # Historical reports and documentation
 .docs/history/*_REPORT.md
