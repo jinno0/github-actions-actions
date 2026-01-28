@@ -128,3 +128,4 @@ venv/
 env/
 ENV/
 .venv
+.task-prompt.md
