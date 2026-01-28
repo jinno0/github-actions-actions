@@ -85,6 +85,8 @@ _bmad-output/
 *_FLOW_REPORT.md
 *_TEST_FLOW_REPORT.md
 *_COMPLETION_REPORT.md
+.bmad/*execution-summary.md
+.bmad/*flow-summary.md
 
 # Historical reports and documentation
 .docs/history/*_REPORT.md
