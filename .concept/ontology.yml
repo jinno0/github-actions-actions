@@ -93,7 +93,6 @@ canonical_terms:
       access to custom toolchains and Claude Code CLI
     synonyms:
     - self-hosted runner
-    - self-hosted
     - custom runner
     boundaries:
       includes:
@@ -233,7 +232,6 @@ canonical_terms:
       excludes:
       - '@main references'
       - floating versions
-    lifecycle: []
     related_terms:
     - CompositeAction
     assumptions: []
@@ -295,7 +293,6 @@ canonical_terms:
       excludes:
       - fully autonomous operation
       - unsupervised automation
-    lifecycle: []
     related_terms:
     - AIAction
     assumptions: []
