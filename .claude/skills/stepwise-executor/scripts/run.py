@@ -13,7 +13,6 @@ import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any
 
 
 def find_skill_root() -> Path:
