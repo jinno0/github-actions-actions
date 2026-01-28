@@ -10,10 +10,14 @@ from pathlib import Path
 from typing import Any
 
 
+# Constants
+MAX_PARENT_LEVELS = 8
+CLADE_TIMEOUT_SECONDS = 600
+
 # Setup common library path
 def find_claude_lib():
     current = Path(__file__).resolve()
-    for _ in range(8):
+    for _ in range(MAX_PARENT_LEVELS):
         claude_lib = current / ".claude" / "lib" / "python"
         if claude_lib.exists():
             return str(claude_lib)
@@ -36,16 +40,9 @@ def implement_feature(title: str, body: str, instructions: str) -> dict[str, Any
     """Generate feature implementation using Claude CLI"""
     # Check API Key presence to avoid hanging on auth prompt
     api_key = os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("CLAUDE_API_KEY")
-    obvious_placeholders = [
-        "your_api_key",
-        "placeholder",
-        "test_key",
-        "demo_key",
-        "example_key",
-    ]
 
-    if not api_key or any(p in api_key.lower() for p in obvious_placeholders):
-        return {"success": False, "error": "Missing or invalid ANTHROPIC_API_KEY"}
+    if not api_key:
+        return {"success": False, "error": "Missing ANTHROPIC_API_KEY or CLAUDE_API_KEY"}
 
     # Construct the prompt
     prompt = f"""
@@ -66,7 +63,7 @@ Body:
             text=True,
             env={**os.environ, "CI": "true"},
             stdin=subprocess.DEVNULL,
-            timeout=600,  # Longer timeout for features
+            timeout=CLADE_TIMEOUT_SECONDS,
         )
 
         if result.returncode != 0:
@@ -74,15 +71,11 @@ Body:
 
         response_text = result.stdout.strip()
 
-        # Extract JSON
-        if "```json" in response_text:
-            start = response_text.find("```json") + 7
-            end = response_text.find("```", start)
-            response_text = response_text[start:end].strip()
-        elif "```" in response_text:
-            start = response_text.find("```") + 3
-            end = response_text.find("```", start)
-            response_text = response_text[start:end].strip()
+        # Extract JSON from markdown code blocks
+        import re
+        json_match = re.search(r'```(?:json)?\s*\n(.*?)\n```', response_text, re.DOTALL)
+        if json_match:
+            response_text = json_match.group(1).strip()
 
         try:
             result_json = json.loads(response_text)
