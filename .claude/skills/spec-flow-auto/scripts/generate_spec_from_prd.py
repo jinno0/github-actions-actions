@@ -27,7 +27,6 @@ class PRDToSpecGenerator:
         sections = {}
 
         # 見出しを抽出
-        re.findall(r"^(#{1,6})\s+(.+)$", content, re.MULTILINE)
         current_section = None
         current_content = []
 
