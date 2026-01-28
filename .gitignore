@@ -138,3 +138,6 @@ env/
 ENV/
 .venv
 .task-prompt.md
+
+# System analytics data
+.analytics/
