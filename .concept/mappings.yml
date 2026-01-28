@@ -40,7 +40,7 @@ mappings:
   DryRun:
     code_symbols:
     - .github/workflows/test-all-actions.yml
-    - CLAUDE.md#L298-L324
+    - AGENTS.md#L298-L324
     db: []
     api: []
   AIAction:
@@ -55,7 +55,7 @@ mappings:
     api: []
   StandardActionStructure:
     code_symbols:
-    - CLAUDE.md#L112-L140
+    - AGENTS.md#L112-L140
     - .helpers/config/
     db: []
     api: []

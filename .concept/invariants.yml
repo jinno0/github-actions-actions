@@ -58,7 +58,7 @@ invariants:
   rationale: Maintainability and customization
   assumptions: []
   evidence:
-  - source: CLAUDE.md#L48-L62
+  - source: AGENTS.md#L48-L62
     quote: action.yml 内にプロンプトや文章をハードコーディングするのではなく、テンプレートファイルとして切り出します
   checks: []
 - id: INV-006
@@ -70,7 +70,7 @@ invariants:
   rationale: YAML parsing compatibility
   assumptions: []
   evidence:
-  - source: CLAUDE.md#L70-L86
+  - source: AGENTS.md#L70-L86
     quote: Avoid heredoc (<< EOF) in YAML action.yml files
   checks: []
 - id: INV-007
@@ -82,7 +82,7 @@ invariants:
   rationale: Documentation-Driven Development
   assumptions: []
   evidence:
-  - source: CLAUDE.md#L112-L140
+  - source: AGENTS.md#L112-L140
     quote: 'Action構造標準: action.yml + examples/ + instructions/'
   checks: []
 - id: INV-008
