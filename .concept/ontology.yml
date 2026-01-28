@@ -62,6 +62,7 @@ canonical_terms:
       - JavaScript actions
       - reusable workflows
       - shell script wrappers
+      - 再利用可能Workflowテンプレート
     lifecycle:
     - defined
     - versioned
@@ -300,6 +301,8 @@ canonical_terms:
     - source: PURPOSE.md#L27-L29
       quote: AIはあくまで提案・準備を行い、最終決定権（マージ、デプロイ）は人間が持つ
     - source: PURPOSE.md#L68-L70
+      quote: '非目標: 完全に無人での運用'
+    - source: PURPOSE.md#L63-L65
       quote: '非目標: 完全に無人での運用'
   DryRun:
     id: TERM-DRYRUN
