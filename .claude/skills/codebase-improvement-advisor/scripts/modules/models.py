@@ -27,7 +27,6 @@ class FunctionInfo:
     args: list[str]
     body_hash: str
     body_lines: int
-    complexity: int = 0
 
 
 @dataclass
@@ -40,7 +39,6 @@ class ClassInfo:
     methods: list[str]
     body_hash: str
     body_lines: int
-    complexity: int = 0
 
 
 @dataclass
