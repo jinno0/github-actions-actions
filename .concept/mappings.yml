@@ -1,4 +1,4 @@
-updated_at: '2026-01-28T06:54:31Z'
+updated_at: '2026-01-28T01:16:12Z'
 mappings:
   CompositeAction:
     code_symbols:
@@ -23,8 +23,12 @@ mappings:
   TemplateFile:
     code_symbols:
     - .helpers/config/template-helper.sh
-    - actions/review-and-merge/scripts/review-and-fix.sh
-    - actions/review-and-merge/scripts/post-comment.sh
+    - actions/review-and-merge/templates/
+    - actions/action-fixer/templates/
+    - actions/spec-to-code/templates/
+    - actions/auto-refactor/templates/
+    - actions/auto-document/templates/
+    - actions/release-notes-ai/templates/
     db: []
     api: []
   ExternalDispatch:
