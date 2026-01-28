@@ -34,15 +34,47 @@ This action is typically used as the final step in an AI-powered PR pipeline:
 
 ### Features
 
-- **Retry Logic**: Attempts merging up to `max-attempts` times (default: 5) with 5-second delays
+- **Pre-flight Checks**: Automatically skips draft PRs and PRs with WIP labels (configurable)
+- **Retry Logic**: Attempts merging up to `max-attempts` times (default: 10) with 5-second delays
 - **Multiple Merge Methods**: Tries squash → merge → rebase in order
 - **Branch Cleanup**: Automatically deletes the PR branch after successful merge
 - **State Verification**: Checks PR state before each attempt to avoid errors
+- **CI Validation**: Waits for CI checks to complete and verifies they passed before merging
 
 ### Configuration Options
 
-- **`max-attempts`**: Number of merge attempts (default: 5). Increase if you frequently encounter race conditions.
+### Environment Variables
+
+You can configure the workflow behavior by setting environment variables in the `env` section of your workflow file:
+
+- **`SKIP_DRAFT`**: Skip draft PRs (default: `true`)
+  - Set to `'true'` to skip auto-merge for draft PRs
+  - Set to `'false'` to process draft PRs like regular PRs
+
+- **`SKIP_WIP`**: Skip PRs with WIP labels (default: `true`)
+  - Set to `'true'` to skip auto-merge for PRs marked as work-in-progress
+  - Set to `'false'` to ignore WIP labels
+
+- **`WIP_LABELS`**: Comma-separated list of WIP labels to check (default: `'WIP,Work in Progress,Do not merge,dont merge,wip'`)
+  - Customize this list to match your team's workflow
+  - Labels are case-insensitive
+
+### Workflow Configuration
+
+- **`max-attempts`**: Number of merge attempts (default: 10). Increase if you frequently encounter race conditions.
 - **Concurrency**: Set up concurrency control in your workflow to ensure only one workflow runs per PR at a time.
+
+### Example Configuration
+
+```yaml
+env:
+  # Skip draft PRs
+  SKIP_DRAFT: 'true'
+  # Skip PRs with WIP labels
+  SKIP_WIP: 'true'
+  # Custom WIP labels
+  WIP_LABELS: 'WIP,Work in Progress,Do not merge,dont merge,wip,IN PROGRESS'
+```
 
 ### Example Pipeline
 

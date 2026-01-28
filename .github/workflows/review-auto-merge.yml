@@ -14,10 +14,73 @@ permissions:
   contents: write
   checks: read
 
+# Configuration
+env:
+  # Skip draft PRs (default: true)
+  SKIP_DRAFT: 'true'
+  # Skip PRs with WIP labels (default: true)
+  # Labels: WIP, Work in Progress, Do not merge
+  SKIP_WIP: 'true'
+  # Comma-separated list of WIP labels to check
+  WIP_LABELS: 'WIP,Work in Progress,Do not merge,dont merge,wip'
+
 jobs:
+  # Pre-flight checks to determine if PR should be processed
+  pre-flight:
+    runs-on: ubuntu-latest
+    outputs:
+      should-skip: ${{ steps.check.outputs.should_skip }}
+      skip-reason: ${{ steps.check.outputs.skip_reason }}
+
+    steps:
+      - name: Check PR status
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          SKIP_DRAFT: ${{ env.SKIP_DRAFT }}
+          SKIP_WIP: ${{ env.SKIP_WIP }}
+          WIP_LABELS: ${{ env.WIP_LABELS }}
+        run: |
+          echo "### Pre-flight Checks" >> $GITHUB_STEP_SUMMARY
+
+          # Check if PR is draft
+          IS_DRAFT=$(gh pr view "$PR_NUMBER" --json draft -q '.draft')
+          if [ "$IS_DRAFT" = "true" ] && [ "$SKIP_DRAFT" = "true" ]; then
+            echo "📝 Draft PR detected - skipping auto-merge" >> $GITHUB_STEP_SUMMARY
+            echo "should_skip=true" >> $GITHUB_OUTPUT
+            echo "skip_reason=draft" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Check for WIP labels
+          if [ "$SKIP_WIP" = "true" ]; then
+            LABELS=$(gh pr view "$PR_NUMBER" --json labels -q '.labels[].name' 2>/dev/null || echo "")
+            echo "PR labels: $LABELS" >> $GITHUB_STEP_SUMMARY
+
+            # Convert WIP_LABELS comma-separated to array
+            IFS=',' read -ra WIP_ARRAY <<< "$WIP_LABELS"
+            for WIP_LABEL in "${WIP_ARRAY[@]}"; do
+              # Trim whitespace
+              WIP_LABEL=$(echo "$WIP_LABEL" | xargs)
+              if echo "$LABELS" | grep -qi "^$WIP_LABEL$"; then
+                echo "🚧 WIP label detected ($WIP_LABEL) - skipping auto-merge" >> $GITHUB_STEP_SUMMARY
+                echo "should_skip=true" >> $GITHUB_OUTPUT
+                echo "skip_reason=wip_label" >> $GITHUB_OUTPUT
+                exit 0
+              fi
+            done
+          fi
+
+          echo "✅ Pre-flight checks passed" >> $GITHUB_STEP_SUMMARY
+          echo "should_skip=false" >> $GITHUB_OUTPUT
+          echo "skip_reason=" >> $GITHUB_OUTPUT
+
   # AI Review and Auto-fix using Claude Code CLI
   ai-review:
     runs-on: self-hosted
+    needs: pre-flight
+    if: needs.pre-flight.outputs.should-skip != 'true'
     outputs:
       verdict: ${{ steps.review.outputs.verdict }}
       confidence: ${{ steps.review.outputs.confidence }}
@@ -42,7 +105,8 @@ jobs:
   # Wait for CI checks to complete
   wait-for-ci:
     runs-on: ubuntu-latest
-    needs: ai-review
+    needs: [pre-flight, ai-review]
+    if: needs.pre-flight.outputs.should-skip != 'true'
 
     steps:
       - name: Wait for CI checks
@@ -92,9 +156,10 @@ jobs:
   # Auto-merge PR if review and CI pass
   auto-merge:
     runs-on: ubuntu-latest
-    needs: [ai-review, wait-for-ci]
+    needs: [pre-flight, ai-review, wait-for-ci]
     if: |
       always() &&
+      needs.pre-flight.outputs.should-skip != 'true' &&
       needs.ai-review.result == 'success' &&
       needs.wait-for-ci.result == 'success'
 
