@@ -38,13 +38,9 @@ runs:
         echo "" >> $GITHUB_STEP_SUMMARY
 
         # Get PRs to rebase
-        if [ -z "$STATUS" ]; then
-          PRS=$(gh pr list --state open --limit 100 --json number,title,mergeStateStatus \
-            --jq '.[] | select(.mergeStateStatus == "BEHIND") | .number' | tr '\n' ' ')
-        else
-          PRS=$(gh pr list --state open --limit 100 --json number,title,mergeStateStatus \
-            --jq "[.[] | select(.mergeStateStatus == \"${STATUS}\")] | .[].number" | tr '\n' ' ')
-        fi
+        STATUS_FILTER="${STATUS:-BEHIND}"
+        PRS=$(gh pr list --state open --limit 100 --json number,title,mergeStateStatus \
+          --jq "[.[] | select(.mergeStateStatus == \"${STATUS_FILTER}\")] | .[].number" | tr '\n' ' ')
 
         if [ -z "$PRS" ]; then
           echo "No PRs found matching criteria." >> $GITHUB_STEP_SUMMARY
