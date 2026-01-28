@@ -49,6 +49,6 @@ _Last regenerated: 2026-01-30T13:00:00Z (Run 26)_
   - actions/review-and-merge/scripts/review-and-fix.sh (implementation)
   - commit b2f8f31 (refactoring rationale)
 - Rationale: Low merge similarity (max 0.52 < 0.78), distinct from TemplateFile and CompositeAction
-- Expires After Runs: 20
+- Expires After Runs: 20 (created Run 27, expires Run 47)
 - Linked: TP-005
 - Revert Triggers: primary_evidence_contradiction, merge_threshold_breach
