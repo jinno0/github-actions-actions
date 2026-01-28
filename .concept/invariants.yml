@@ -1,4 +1,4 @@
-updated_at: '2026-01-28T03:00:00Z'
+updated_at: '2026-01-28T21:41:08Z'
 invariants:
 - id: INV-001
   related_terms:
@@ -109,7 +109,7 @@ invariants:
   assumptions: []
   evidence:
   - source: actions/action-fixer/action.yml#L72-L75
-    quote: "Warning: Missing 'permissions' (recommended for security)"
+    quote: 'Warning: Missing ''permissions'' (recommended for security)'
   checks:
   - type: validation
     target: actions/action-fixer
@@ -127,4 +127,16 @@ invariants:
   checks:
   - type: validation
     target: actions/action-fixer
-updated_at: '2026-01-22T03:39:47Z'
+- id: INV-011
+  related_terms:
+  - CompositeAction
+  status: stable
+  strength: hard
+  statement: Secrets are NEVER in code - required secrets are passed from caller via
+    inputs
+  rationale: Security-first principle - prevent credential leakage
+  assumptions: []
+  evidence:
+  - source: SYSTEM_CONSTITUTION.md#L60-L67
+    quote: 秘匿情報や安全でない操作を扱わない。必要なSecretは呼び出し元から受け取る
+  checks: []
