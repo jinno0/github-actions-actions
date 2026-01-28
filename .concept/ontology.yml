@@ -209,10 +209,10 @@ canonical_terms:
     - CompositeAction
     assumptions: []
     evidence:
-    - source: CLAUDE.md#L48-L62
+    - source: AGENTS.md#L48-L62
       quote: Template files should be in actions/{action-name}/templates/ directory
         with {VARIABLE_NAME} placeholder format
-    - source: CLAUDE.md#L70-L86
+    - source: AGENTS.md#L70-L86
       quote: Avoid heredoc (<< EOF) in YAML action.yml files. Use echo or template
         files instead.
   VersionPinning:
@@ -269,7 +269,7 @@ canonical_terms:
     - TemplateFile
     assumptions: []
     evidence:
-    - source: CLAUDE.md#L112-L140
+    - source: AGENTS.md#L112-L140
       quote: 'Every Action must have: (1) action implementation, (2) example workflow,
         (3) instruction guide'
     - source: test-action-fixer.sh#L53-L61
@@ -332,12 +332,12 @@ canonical_terms:
     - StandardActionStructure
     assumptions: []
     evidence:
-    - source: CLAUDE.md#L298-L324
+    - source: AGENTS.md#L298-L324
       quote: Dry Run mode validates action structure, YAML syntax, and mock execution
         without actual commits/pushes
     - source: README.md#L43-L45
       quote: 全ての AI Actions は Dry Run モードで自動検証されます
-    - source: CLAUDE.md#L338-L367
+    - source: AGENTS.md#L338-L367
       quote: CI workflow .github/workflows/test-all-actions.yml runs dry run tests
     - source: test-action-fixer.sh#L1-L5
       quote: test-action-fixer.sh is a comprehensive test script for validating action
