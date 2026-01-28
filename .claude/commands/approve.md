@@ -278,16 +278,9 @@ approval_policies:
 ### 3. 承認Analytics
 平均承認時間、承認率、ボトルネック分析などのメトリクスを収集する。
 
-## トラブルシューティング
-
-トラブルシューティングは実装時に問題が発生してから追記する。
-
 ## 関連ドキュメント
 
-- [DEPLOY.md](../../DEPLOYMENT.md) - デプロイ手順
-- [qa_review.md](../../docs/QA_REVIEW_GUIDELINES.md) - QAレビュー基準
-- [src/components/approval/](../../src/computer_use_web/src/components/approval/) - UIコンポーネント
-- [src/core/approval/](../../src/core/approval/) - バックエンドロジック
+関連ドキュメントは開発プロセスに合わせて追記する。
 
 ---
 
