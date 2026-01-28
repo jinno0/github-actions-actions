@@ -109,7 +109,7 @@ invariants:
   assumptions: []
   evidence:
   - source: actions/action-fixer/action.yml#L72-L75
-    quote: Warning: Missing 'permissions' (recommended for security)
+    quote: "Warning: Missing 'permissions' (recommended for security)"
   checks:
   - type: validation
     target: actions/action-fixer
