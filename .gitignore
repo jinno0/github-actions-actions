@@ -92,9 +92,12 @@ _bmad-output/
 
 # Test and validation scripts
 test_*.sh
+test-*.sh
 test_*.py
 *_test.py
 *_test.sh
+quick-test.*
+verify-*.md
 
 # Python
 __pycache__/
