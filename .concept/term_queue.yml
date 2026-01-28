@@ -1,4 +1,4 @@
-updated_at: '2026-01-28T08:30:00Z'
+updated_at: '2026-01-28T23:35:00Z'
 queue:
   - id: TP-005
     proposed_canonical: ScriptExtraction
@@ -36,3 +36,44 @@ queue:
       milestone_ref: MS-003
       status: applied
       created_at: '2026-01-28T08:37:00Z'
+  - id: TP-006
+    proposed_canonical: ApprovalScreen
+    proposed_layer: aux
+    term_raw_examples:
+      - 統合审批屏幕
+      - approval screen
+      - 承認画面
+    reason: Integrated approval UI system for QA, Deploy, PR, and CodeReview approvals with unified interface
+    evidence:
+      - source: .claude/commands/approve.md#L1-L3
+        quote: '統合审批屏幕 - QA、Deploy、PR、CodeReviewなど'
+      - source: .claude/commands/approve.md#L5-L7
+        quote: 承認が必要な操作のための統合UI画面を提供します
+    auto_merge_candidates:
+      - term: HumanInTheLoop
+        similarity: 0.62
+        rationale: Both relate to human oversight, but HumanInTheLoop is a principle while ApprovalScreen is a UI implementation
+      - term: AIAction
+        similarity: 0.48
+        rationale: ApprovalScreen may be used by AI actions but is a distinct UI component
+    decision: pending
+    expires_after_runs: 10
+    created_run: '2026-01-28T23:35:00Z'
+    auto_decision:
+      id: AUTO-006
+      decision: Keep ApprovalScreen pending - require implementation evidence
+      rationale: |
+        1. Evidence strength: 2 sources but both are spec/doc (approve.md), not implemented code
+        2. Merge similarity: Low (0.62 with HumanInTheLoop < 0.78 threshold) - distinct concept
+        3. Missing requirements for acceptance:
+           - No clear boundaries (includes/excludes)
+           - No mappings to actual code/API
+           - Only specification, no implementation
+        4. AUTO Decision: Keep as pending with aux layer classification
+           - This is a proposed feature/command, not an implemented concept yet
+           - Should be accepted only when:
+             * Implementation exists (code evidence)
+             * Clear mappings to code/API endpoints
+             * Test coverage exists
+      status: applied
+      created_at: '2026-01-28T23:35:00Z'
