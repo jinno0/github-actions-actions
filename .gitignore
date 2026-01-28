@@ -86,6 +86,16 @@ _bmad-output/
 *_TEST_FLOW_REPORT.md
 *_COMPLETION_REPORT.md
 
+# Historical reports and documentation
+.docs/history/*_REPORT.md
+.docs/history/*_report.md
+
+# Test and validation scripts
+test_*.sh
+test_*.py
+*_test.py
+*_test.sh
+
 # Python
 __pycache__/
 *.py[cod]
