@@ -13,19 +13,6 @@
         "run_server.py",
         "/home/jinno"
       ]
-    },
-    "azure-devops": {
-      "type": "stdio",
-      "command": "npx",
-      "args": [
-        "-y",
-        "@azure-devops/mcp",
-        "tokyo-career-up"
-      ],
-      "env": {
-        "AZURE_DEVOPS_ORG": "https://dev.azure.com/jin5770808",
-        "AZURE_DEVOPS_PAT": "${env:AZURE_DEVOPS_EXT_PAT}"
-      }
     }
   }
 }
