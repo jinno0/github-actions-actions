@@ -26,7 +26,7 @@ jobs:
         with:
           spec-path: ${{ github.event.inputs.spec-path || 'specs/example.md' }}
           output-dir: 'src'
-          language: 'TypeScript'
+          language: 'TypeScript'  # Options: TypeScript, Python, JavaScript, etc.
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Commit and Push generated code
@@ -34,5 +34,6 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add src/
+          # Customize commit message as needed for your project
           git commit -m "feat: generate code from specification [skip ci]" || echo "No changes to commit"
           git push
