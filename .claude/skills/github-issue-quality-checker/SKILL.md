@@ -132,14 +132,6 @@ python scripts/main.py
 - テキスト形式の出力フォーマット
 - Markdownレポートのテンプレート構造
 
-## Quality Criteria Reference
-
-詳細な品質評価基準は `references/quality_criteria.md` を参照してください。
-
-## GitHub API Usage
-
-GitHub APIの詳細な使用方法は `references/github_api_usage.md` を参照してください。
-
 ---
 
 **Dependencies:** Python 3.7+, requests library

@@ -5,7 +5,7 @@ Self-hosted runner上で動作する **Claude Code CLI** を活用し、文脈�
 
 ## 🚀 提供している AI Actions
 
-現在、以下の6つの主要な AI Actions を提供しています。
+現在、以下の主要な AI Actions を提供しています（代表的な6件）。
 
 | Action | 概要 | セットアップガイド |
 |--------|------|-------------------|
