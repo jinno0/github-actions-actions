@@ -105,41 +105,14 @@
 ## 設定ファイル
 
 ### review_config.json
-```json
-{
-  "security": {
-    "blocked_patterns": [
-      "password\\s*=",
-      "api_key\\s*=",
-      "secret\\s*=",
-      "token\\s*=",
-      "eval\\s*\\(",
-      "exec\\s*\\(",
-      "shell=True"
-    ]
-  },
-  "quality": {
-    "max_function_lines": 50,
-    "max_line_length": 120,
-    "warn_patterns": [
-      "console\\.log",
-      "print\\s*\\(",
-      "TODO:",
-      "FIXME:",
-      "HACK:"
-    ]
-  },
-  "complexity": {
-    "max_cyclomatic_complexity": 10,
-    "max_nesting_depth": 4
-  },
-  "thresholds": {
-    "test_coverage_min": 70,
-    "test_coverage_recommended": 80,
-    "max_lint_warnings": 5
-  }
-}
-```
+
+設定ファイルは `review_config.json` を参照してください。
+
+このJSONファイルには以下の設定が含まれています：
+- セキュリティチェックのブロックパターン
+- コード品質のしきい値
+- 複雑度の制限
+- テストカバレッジの基準値
 
 ## エラーハンドリング
 
