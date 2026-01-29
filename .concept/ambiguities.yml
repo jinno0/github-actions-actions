@@ -1,3 +1,35 @@
 version: '0.3'
-updated_at: '2026-01-30T03:48:00Z'
-ambiguities: []
+updated_at: '2026-01-29T22:15:00Z'
+ambiguities:
+  - id: AMB-SECURITY-001
+    term: SecurityVulnerability
+    topic: Relationship between security tests and actual vulnerabilities
+    severity: high
+    uncertainty: 0.65
+    candidates:
+      - "Security tests verify prevention of attacks"
+      - "Vulnerabilities exist despite tests claiming to verify prevention"
+    missing_info:
+      - "Are the security tests structural (pattern matching) or behavioral (actual execution)?"
+      - "If structural tests only, they may pass even when vulnerabilities are present"
+      - "Need behavioral security tests with actual exploitation attempts"
+    linked_conflicts: []
+    auto_decision:
+      status: applied
+      decision_key: AUTO:SecurityVulnerability.testing_gap:structural_vs_behavioral
+      chosen: "Tests are structural (pattern-based) and may pass despite vulnerabilities. Gap exists between test claims and actual security posture."
+      policy: safety_first + transparency
+      confidence_auto: 0.75
+      decided_at_run: "2026-01-29T22:15:00Z"
+      expires_after_runs: 20
+      revert_triggers:
+        - behavioral_security_tests_added
+        - security_audit_passes_with_exploitation_testing
+    last_touched_run: "2026-01-29T22:15:00Z"
+    evidence:
+      - source: CODE_REVIEW_SUMMARY.md#L16-L20
+        quote: Critical Issues: Path traversal in spec-to-code and auto-refactor actions, Python code injection in action-fixer, Command injection via shell substitution
+      - source: PROJECT_STATUS.md#L59-L61
+        quote: Tests are structural (file existence, pattern matching) rather than behavioral (execution testing)
+      - source: CODE_REVIEW_SUMMARY.md#L84-L87
+        quote: Path traversal vulnerabilities exist in spec-to-code and auto-refactor actions allowing symlink attacks and workspace escape

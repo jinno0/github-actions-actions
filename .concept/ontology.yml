@@ -333,7 +333,11 @@ canonical_terms:
     related_terms:
     - CompositeAction
     - StandardActionStructure
-    assumptions: []
+    assumptions:
+      - id: ASM-DRYRUN-001
+        text: "AUTO: DryRun tests are structural (file existence, pattern matching) not behavioral (execution testing). May pass despite vulnerabilities."
+        decision_key: AUTO:DryRun.test_gap:structural_only
+        expires_after_runs: 20
     evidence:
     - source: AGENTS.md#L298-L324
       quote: Dry Run mode validates action structure, YAML syntax, and mock execution
