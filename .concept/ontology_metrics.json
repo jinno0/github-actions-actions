@@ -9,12 +9,14 @@
   "queue_accepted": 2,
   "queue_merged": 2,
   "conflicts_open": 0,
-  "ambiguities_high": 1,
+  "conflicts_resolved": 1,
+  "ambiguities_high": 0,
   "ambiguities_total": 1,
+  "ambiguities_superseded": 1,
   "decisions_lines": 119,
   "decisions_active": 8,
-  "claims_lines": 64,
-  "updated_at": "2026-01-29T22:58:12Z",
+  "claims_lines": 65,
+  "updated_at": "2026-01-30T08:37:00Z",
   "budget_utilization": {
     "total": 16.25,
     "core": 25.0,
@@ -22,12 +24,17 @@
     "aux": 3.33
   },
   "last_run_type": "janitor_concept",
+  "last_run_index": 20,
   "system_health": "healthy",
   "total_invariants": 14,
   "total_mappings": 11,
   "bloat_status": "healthy",
   "bloat_percentage": 16.25,
   "gc_actions_taken": [
-    "janitor_check_2026-01-29T22:58:12Z: no_issues_found"
+    "janitor_check_2026-01-30T08:37:00Z: no_commit_leaks",
+    "janitor_check_2026-01-30T08:37:00Z: no_duplicates_found",
+    "janitor_check_2026-01-30T08:37:00Z: decisions_md_119_lines_under_limit",
+    "janitor_check_2026-01-30T08:37:00Z: claims_ndjson_65_lines_under_limit",
+    "janitor_check_2026-01-30T08:37:00Z: reference_integrity_ok"
   ]
 }
