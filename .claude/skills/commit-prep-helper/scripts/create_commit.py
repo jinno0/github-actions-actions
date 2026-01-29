@@ -8,6 +8,7 @@ Conventional Commits準拠のコミットメッセージを生成し、コミッ
 import json
 import os
 import subprocess
+import sys
 from typing import Any
 
 
@@ -141,9 +142,6 @@ def load_script_results() -> dict[str, Any]:
     script_dir = os.path.dirname(os.path.abspath(__file__))
     temp_dir = os.path.join(script_dir, "..", "temp")
 
-    # Ensure temp directory exists
-    os.makedirs(temp_dir, exist_ok=True)
-
     results = {
         "lint_result": {"overall_success": True, "tools": []},
         "test_result": {"success": True, "total_tests": 0, "coverage_percentage": 0},
@@ -159,8 +157,8 @@ def load_script_results() -> dict[str, Any]:
         try:
             with open(lint_file) as f:
                 results["lint_result"] = json.load(f)
-        except (OSError, json.JSONDecodeError):
-            pass
+        except (OSError, json.JSONDecodeError) as e:
+            print(f"Warning: Failed to load lint results: {e}", file=sys.stderr)
 
     # Try to load test results
     test_file = os.path.join(temp_dir, "test_results.json")
@@ -168,8 +166,8 @@ def load_script_results() -> dict[str, Any]:
         try:
             with open(test_file) as f:
                 results["test_result"] = json.load(f)
-        except (OSError, json.JSONDecodeError):
-            pass
+        except (OSError, json.JSONDecodeError) as e:
+            print(f"Warning: Failed to load test results: {e}", file=sys.stderr)
 
     # Try to load review results
     review_file = os.path.join(temp_dir, "review_results.json")
@@ -177,8 +175,8 @@ def load_script_results() -> dict[str, Any]:
         try:
             with open(review_file) as f:
                 results["review_result"] = json.load(f)
-        except (OSError, json.JSONDecodeError):
-            pass
+        except (OSError, json.JSONDecodeError) as e:
+            print(f"Warning: Failed to load review results: {e}", file=sys.stderr)
 
     return results
 

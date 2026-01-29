@@ -24,12 +24,7 @@ First, discover what validation commands are available:
 4. Check README.md for any additional validation instructions
 
 #### Discovery with Immediate Categorization
-Run all discovered quality checks in parallel using Bash. Capture full output including file paths, line numbers, and error messages:
-- Linting (ESLint, Prettier, Ruff, etc.)
-- Type checking (TypeScript, mypy, etc.)
-- Tests (Jest, pytest, go test, etc.)
-- Build verification
-- Custom project checks
+Run all discovered quality checks in parallel using Bash. Capture full output including file paths, line numbers, and error messages.
 
 Immediately categorize findings by:
 - **CRITICAL**: Security issues, breaking changes, data loss risk
@@ -75,13 +70,6 @@ Immediately categorize findings by:
 - Accept 100% success in each phase before proceeding
 - If phase fails, diagnose and provide specific next steps
 
-#### Task Distribution
-Create detailed task plans where each agent gets:
-- A specific, focused objective (e.g., "Fix all TypeScript errors in src/components/")
-- Exact file paths and line numbers to modify
-- Clear success criteria (e.g., "Ensure the project's type checking command passes for these files")
-- Any relevant context about dependencies or patterns to follow
-
 ### 4. Parallel Execution
 Launch multiple agents concurrently for independent, parallelizable tasks:
 - **CRITICAL**: Include multiple Task tool calls in a SINGLE message ONLY when tasks can be done in parallel
@@ -97,7 +85,6 @@ Launch multiple agents concurrently for independent, parallelizable tasks:
 - Each agent verifies their fixes work before completing
 - Track progress with TodoWrite
 - Execute phases sequentially: complete Phase 1 before Phase 2, etc.
-- Create checkpoint after each successful phase
 
 ### 5. Final Verification
 After all agents complete:
