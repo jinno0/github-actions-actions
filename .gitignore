@@ -96,6 +96,14 @@ _bmad-output/
 .docs/history/*_REPORT.md
 .docs/history/*_report.md
 
+# Test execution reports and temporary validation files
+TEST_EXECUTION_REPORT.md
+TEST_*_REPORT.md
+*_EXECUTION_REPORT.md
+*_VALIDATION_REPORT.md
+*_ANALYTICS.md
+*_STATUS_REPORT.md
+
 # Test and validation scripts
 test_*.sh
 test-*.sh
