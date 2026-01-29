@@ -39,7 +39,7 @@ python scripts/apply_improvements.py --repo owner/repo --dry-run apply --improve
 
 ### 環境設定
 
-**方法1: .envファイルを使用（推奨）**
+**.envファイルを使用（推奨）**
 ```bash
 # .envファイルを作成
 echo "GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxx" >> .env
@@ -47,15 +47,7 @@ echo "GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxx" >> .env
 # .envファイルは自動的に読み込まれます
 ```
 
-**方法2: 環境変数**
-```bash
-export GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxx
-```
-
-**方法3: 直接指定**
-```bash
-python scripts/issue_improver.py --repo owner/repo --issue 123 --token your_token
-```
+その他の方法（環境変数、直接指定）も使用可能です。詳細は `--help` オプションを参照してください。
 
 ### 🆕 新機能
 
@@ -247,32 +239,6 @@ done
 ```
 
 ### 4. CI/CD連携
-GitHub Actionsでの自動実行が可能。詳細は `scripts/` 内のサンプルを参照。## Error Handling
-
-### 共通エラーと対策
-
-**401 Unauthorized**
-- 原因: GITHUB_TOKENが無効または期限切れ
-- 対策: 新しいPATを生成して設定
-
-**403 Rate Limit Exceeded**
-- 原因: APIレート制限超過
-- 対策: 1時間待機するか、認証済みトークンを使用
-
-**404 Not Found**
-- 原因: リポジトリまたはIssueが存在しない
-- 対策: リポジトリ名とIssue番号を確認
-
-### トラブルシューティング
-
-```bash
-# デバッグ用詳細出力
-python scripts/issue_improver.py --repo owner/repo --issue 123 --output json
-
-# 接続テスト
-python scripts/github_client.py --repo owner/repo --issue 123 --action get
-```
-
----
+GitHub Actionsでの自動実行が可能。詳細は `scripts/` 内のサンプルを参照。---
 
 このスキルを使うことで、GitHub Issueの品質が大幅に向上し、開発チームの作業効率が改善されます。特にAIによるIssue処理の前処理として最適です。

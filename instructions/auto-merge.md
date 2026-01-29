@@ -28,13 +28,7 @@ This action merges a pull request using the specified merge method (squash, merg
 
 ## Merge Methods
 
-This action supports three merge methods:
-
-| Method | Description | When to Use |
-|--------|-------------|-------------|
-| `squash` | Commits are squashed into a single commit (default) | Most projects, clean history |
-| `merge` | Creates a merge commit | Projects that preserve branch history |
-| `rebase` | Replays commits onto the base branch | Projects requiring linear history |
+This action supports three merge methods: `squash` (default), `merge`, and `rebase`. See [GitHub's documentation](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/about-merge-methods-on-github) for details on each method.
 
 ## Inputs
 
