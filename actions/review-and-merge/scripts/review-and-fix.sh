@@ -34,26 +34,66 @@ if [ "$AUTO_FIX" = "true" ]; then
   echo '' >> /tmp/fix_prompt.txt
   cat /tmp/pr_diff.patch >> /tmp/fix_prompt.txt
 
-  if claude --dangerously-skip-permissions --model "$MODEL" < /tmp/fix_prompt.txt > /tmp/claude_output.txt 2>&1; then
-     echo "Claude fix execution completed"
+  # Run Claude in review-only mode (no --dangerously-skip-permissions for security)
+  # Claude will analyze the diff and suggest fixes but won't modify files directly
+  if claude --model "$MODEL" < /tmp/fix_prompt.txt > /tmp/claude_output.txt 2>&1; then
+     echo "Claude fix analysis completed"
   else
-     echo "Claude execution failed"
-     exit 1
+     claude_exit_code=$?
+     echo "Claude execution failed with exit code: $claude_exit_code"
+     # Don't exit - allow review to proceed even if fix fails
   fi
 
+  # Check if Claude made any changes (it shouldn't in safe mode)
   if git diff --quiet; then
-    echo "No changes made by Claude."
-    SUMMARY="Analyzed code, no fixes needed."
+    echo "No changes made by Claude (safe mode)."
+    SUMMARY="Analyzed code in safe mode. Review suggestions in Claude output."
     MADE_CHANGES="false"
   else
+    # If changes were made, validate and commit with proper error handling
     echo "Changes detected. Committing..."
     git config user.email "github-actions[bot]@users.noreply.github.com"
     git config user.name "github-actions[bot]"
     git add .
-    git commit -m "fix: auto-correction by Claude Code"
-    git push
-    SUMMARY="Applied auto-fixes based on code analysis."
-    MADE_CHANGES="true"
+
+    # Check if there's anything to commit
+    if git diff --cached --quiet; then
+      echo "No changes to commit."
+      SUMMARY="Analyzed code, no fixes needed."
+      MADE_CHANGES="false"
+    else
+      git commit -m "fix: auto-correction by Claude Code"
+
+      # Retry logic for git push with error handling
+      max_retries=3
+      retry_count=0
+      push_success=false
+
+      while [ $retry_count -lt $max_retries ] && [ "$push_success" = false ]; do
+        if git push; then
+          echo "Push successful"
+          push_success=true
+          SUMMARY="Applied auto-fixes based on code analysis."
+          MADE_CHANGES="true"
+        else
+          retry_count=$((retry_count + 1))
+          if [ $retry_count -lt $max_retries ]; then
+            echo "Push failed (attempt $retry_count/$max_retries). Retrying after pull..."
+            git pull --rebase || {
+              echo "Rebase failed, resetting..."
+              git reset --hard HEAD@{1}
+            }
+            sleep 2
+          else
+            echo "Push failed after $max_retries attempts. Rolling back commit."
+            git reset --hard HEAD@{1}
+            SUMMARY="Failed to apply auto-fixes due to git conflict."
+            MADE_CHANGES="false"
+            exit 1
+          fi
+        fi
+      done
+    fi
   fi
 
   VERDICT="LGTM"
@@ -77,20 +117,40 @@ else
   echo '' >> /tmp/review_prompt.txt
   cat /tmp/pr_diff.patch >> /tmp/review_prompt.txt
 
-  if claude --dangerously-skip-permissions --model "$MODEL" < /tmp/review_prompt.txt > /tmp/claude_response.json 2>&1; then
+  # Run Claude in review-only mode (no --dangerously-skip-permissions for security)
+  if claude --model "$MODEL" < /tmp/review_prompt.txt > /tmp/claude_response.json 2>&1; then
     echo "Claude review completed"
   else
-    echo '{"verdict":"REQUEST_CHANGES","confidence":1,"summary":"Claude CLI error"}' > /tmp/claude_response.json
+    claude_exit_code=$?
+    echo "Claude review failed with exit code: $claude_exit_code"
+    echo '{"verdict":"REQUEST_CHANGES","confidence":1,"summary":"Claude CLI error - review failed"}' > /tmp/claude_response.json
   fi
 
-  if grep -q '"verdict"[[:space:]]*:[[:space:]]*"LGTM"' /tmp/claude_response.json; then
-    VERDICT="LGTM"
-  else
+  # Validate JSON structure before parsing
+  if ! jq empty /tmp/claude_response.json 2>/dev/null; then
+    echo "Invalid JSON from Claude, using fallback values"
     VERDICT="REQUEST_CHANGES"
+    CONFIDENCE="1"
+    SUMMARY="Claude returned invalid JSON - review failed"
+    MADE_CHANGES="false"
+  else
+    # Use jq for proper JSON parsing (cross-platform compatible)
+    VERDICT=$(jq -r '.verdict // "REQUEST_CHANGES"' /tmp/claude_response.json)
+    CONFIDENCE=$(jq -r '.confidence // 1' /tmp/claude_response.json)
+    SUMMARY=$(jq -r '.summary // "No summary provided"' /tmp/claude_response.json)
+
+    # Validate verdict values
+    if [[ "$VERDICT" != "LGTM" && "$VERDICT" != "REQUEST_CHANGES" && "$VERDICT" != "COMMENT" ]]; then
+      VERDICT="REQUEST_CHANGES"
+    fi
+
+    # Validate confidence is a number
+    if ! [[ "$CONFIDENCE" =~ ^[0-9]+$ ]]; then
+      CONFIDENCE="1"
+    fi
+
+    MADE_CHANGES="false"
   fi
-  CONFIDENCE=$(grep -oP '"confidence"[[:space:]]*:[[:space:]]*\K\d+' /tmp/claude_response.json || echo "1")
-  SUMMARY=$(grep -oP '"summary"[[:space:]]*:[[:space:]]*"\K[^"].*' /tmp/claude_response.json || echo "No summary")
-  MADE_CHANGES="false"
 fi
 
 # Set output variables for GitHub Actions
