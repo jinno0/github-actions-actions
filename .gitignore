@@ -87,6 +87,10 @@ _bmad-output/
 *_COMPLETION_REPORT.md
 .bmad/*execution-summary.md
 .bmad/*flow-summary.md
+.bmad/CODE_REVIEW_FINDINGS.md
+.bmad/IMPLEMENTATION_SUMMARY.md
+.bmad/TEST_DOCUMENTATION.md
+.bmad/TRACEABILITY_MATRIX.md
 
 # Historical reports and documentation
 .docs/history/*_REPORT.md
