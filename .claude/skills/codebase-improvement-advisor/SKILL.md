@@ -71,7 +71,7 @@ description: >
 このスキルは以下の手順で実行します：
 1. `scripts/codebase_analyzer.py` を実行して全ファイルをスキャン
 2. 各種問題をカテゴリ別に分類
-3. `assets/improvement_template.md` を使用してタスクリストを生成
+3. 改善タスクリストをマークダウン形式で生成
 
 ### Example 2: セキュリティ特化分析
 ```
