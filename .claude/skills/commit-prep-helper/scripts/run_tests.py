@@ -6,10 +6,18 @@ Run Tests
 """
 
 import json
+import logging
 import os
 import re
 import subprocess
 from typing import Any
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Test execution timeout in seconds (5 minutes)
+TEST_TIMEOUT = 300
 
 
 def detect_test_framework() -> str:
@@ -46,7 +54,7 @@ def run_jest_tests(coverage: bool = True) -> dict[str, Any]:
             cmd,
             capture_output=True,
             text=True,
-            timeout=300,  # 5分タイムアウト
+            timeout=TEST_TIMEOUT,
         )
 
         # Parse Jest output
@@ -101,7 +109,7 @@ def run_vitest_tests(coverage: bool = True) -> dict[str, Any]:
         cmd.append("--coverage")
 
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=TEST_TIMEOUT)
 
         # Parse Vitest output
         passed_tests = 0
@@ -138,7 +146,7 @@ def run_pytest_tests(coverage: bool = True) -> dict[str, Any]:
         cmd.extend(["--cov=.", "--cov-report=term-missing"])
 
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=TEST_TIMEOUT)
 
         # Parse pytest output
         passed_tests = 0
@@ -198,8 +206,9 @@ def save_results(result: dict[str, Any]) -> None:
     try:
         with open(temp_file, "w") as f:
             json.dump(result, f, indent=2)
-    except OSError:
-        pass  # Continue execution even if saving fails
+    except OSError as e:
+        logger.warning(f"Failed to save test results to {temp_file}: {e}")
+        # Continue execution even if saving fails
 
 
 def main():

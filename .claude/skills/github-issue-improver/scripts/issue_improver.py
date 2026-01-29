@@ -26,6 +26,8 @@ def find_claude_lib():
 
 
 claude_lib_path = find_claude_lib()
+COMMON_LIB_AVAILABLE = False
+
 if claude_lib_path:
     python_lib_path = Path(claude_lib_path) / "python"
     if python_lib_path.exists():
@@ -40,21 +42,9 @@ if claude_lib_path:
 
         COMMON_LIB_AVAILABLE = True
     except ImportError as e:
-        # Fallback to legacy behavior
-        print(f"Warning: Common library import failed: {e}", file=sys.stderr)
-        try:
-            from env_utils import load_env_files, setup_python_path
-        except ImportError:
-            # Create minimal implementations
-            def load_env_files(*args, **kwargs):
-                return []
-
-            def setup_python_path(*args, **kwargs):
-                pass
-
-        COMMON_LIB_AVAILABLE = False
-
         # Define fallback SkillBase class
+        print(f"Warning: Common library import failed: {e}", file=sys.stderr)
+
         class SkillBase:
             def __init__(self, skill_name: str, start_path: Path | None = None):
                 self.skill_name = skill_name
@@ -69,6 +59,22 @@ if claude_lib_path:
 
             def is_initialized(self) -> bool:
                 return True
+else:
+    # Define fallback SkillBase class when lib is not found
+    class SkillBase:
+        def __init__(self, skill_name: str, start_path: Path | None = None):
+            self.skill_name = skill_name
+            self.start_path = start_path or Path(__file__).resolve().parent
+
+        def ensure_env_var(self, var_name: str, required: bool = True) -> str | None:
+            value = os.environ.get(var_name)
+            if required and not value:
+                msg = f"Required environment variable '{var_name}' is not set"
+                raise ValueError(msg)
+            return value
+
+        def is_initialized(self) -> bool:
+            return True
 
 
 from github_client import GitHubClient
