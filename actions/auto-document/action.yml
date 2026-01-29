@@ -41,12 +41,16 @@ runs:
           TEMPLATE_FILE="${{ github.action_path }}/templates/doc_prompt.txt"
         fi
 
-        # Read template and replace placeholders
-        DOC_PROMPT=$(sed -e "s#{SOURCE_PATH}#$SOURCE_PATH#g" \
-                          -e "s#{DOC_PATH}#$DOC_PATH#g" \
-                          "$TEMPLATE_FILE")
+        # Read template and replace placeholders safely using awk
+        DOC_PROMPT=$(awk -v source_path="$SOURCE_PATH" \
+                         -v doc_path="$DOC_PATH" \
+                         '{
+                           gsub(/\{SOURCE_PATH\}/, source_path)
+                           gsub(/\{DOC_PATH\}/, doc_path)
+                           print
+                         }' "$TEMPLATE_FILE")
 
         echo "$DOC_PROMPT" > /tmp/doc_prompt.txt
 
-        # Run Claude Code CLI
-        claude --dangerously-skip-permissions --model "$MODEL" < /tmp/doc_prompt.txt
+        # Run Claude Code CLI in safe mode (no --dangerously-skip-permissions)
+        claude --model "$MODEL" < /tmp/doc_prompt.txt

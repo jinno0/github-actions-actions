@@ -200,7 +200,8 @@ runs:
         echo "" >> /tmp/claude_prompt.txt
         echo "DO NOT commit. Just resolve the conflicts and save the files." >> /tmp/claude_prompt.txt
 
-        $CLAUDE_CMD --dangerously-skip-permissions --model "$MODEL" < /tmp/claude_prompt.txt
+        # Run Claude in safe mode (no --dangerously-skip-permissions)
+        $CLAUDE_CMD --model "$MODEL" < /tmp/claude_prompt.txt
 
         # Show Claude output in summary
         echo "" >> $GITHUB_STEP_SUMMARY

@@ -50,13 +50,18 @@ runs:
           TEMPLATE_FILE="${{ github.action_path }}/templates/release_prompt.txt"
         fi
 
-        # Read template and replace placeholders
-        RELEASE_PROMPT=$(sed -e "s#{GIT_LOG}#$GIT_LOG#g" \
-                              -e "s#{PRS}#$PRS#g" \
-                              -e "s#{OUTPUT}#$OUTPUT#g" \
-                              "$TEMPLATE_FILE")
+        # Read template and replace placeholders safely using awk
+        RELEASE_PROMPT=$(awk -v git_log="$GIT_LOG" \
+                             -v prs="$PRS" \
+                             -v output="$OUTPUT" \
+                             '{
+                               gsub(/\{GIT_LOG\}/, git_log)
+                               gsub(/\{PRS\}/, prs)
+                               gsub(/\{OUTPUT\}/, output)
+                               print
+                             }' "$TEMPLATE_FILE")
 
         echo "$RELEASE_PROMPT" > /tmp/release_prompt.txt
 
-        # Run Claude Code CLI
-        claude --dangerously-skip-permissions --model "$MODEL" < /tmp/release_prompt.txt
+        # Run Claude in safe mode (no --dangerously-skip-permissions)
+        claude --model "$MODEL" < /tmp/release_prompt.txt
