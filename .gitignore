@@ -78,6 +78,12 @@ _bmad-output/
 .bmad/workflows/*execution-report.md
 .bmad/workflows/*validation-report.md
 .bmad/workflows/*flow-report.md
+.bmad/workflows/*completion-report.md
+
+# Temporary workflow/completion report files in root
+*_FLOW_REPORT.md
+*_TEST_FLOW_REPORT.md
+*_COMPLETION_REPORT.md
 
 # Python
 __pycache__/
