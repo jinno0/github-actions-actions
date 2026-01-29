@@ -364,7 +364,7 @@ jobs:
           echo "✓ All template files exist"
           echo "✓ YAML syntax is valid"
 
-  # Test auto-merge (utility action - no templates)
+  # Test auto-merge
   test-auto-merge:
     name: 'Test auto-merge'
     needs: setup
@@ -376,6 +376,9 @@ jobs:
 
       - name: Run auto-merge (dry-run)
         id: test-action
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DRY_RUN: true
         run: |
           echo "::group::Running auto-merge in dry-run mode"
 
@@ -400,7 +403,7 @@ jobs:
           echo "✓ Action executed without errors"
           echo "✓ YAML syntax is valid"
 
-  # Test auto-rebase (utility action with AI template)
+  # Test auto-rebase
   test-auto-rebase:
     name: 'Test auto-rebase'
     needs: setup
@@ -412,6 +415,9 @@ jobs:
 
       - name: Run auto-rebase (dry-run)
         id: test-action
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DRY_RUN: true
         run: |
           echo "::group::Running auto-rebase in dry-run mode"
 
@@ -443,7 +449,7 @@ jobs:
           echo "✓ All template files exist"
           echo "✓ YAML syntax is valid"
 
-  # Test bulk-merge-prs (utility action - no templates)
+  # Test bulk-merge-prs
   test-bulk-merge-prs:
     name: 'Test bulk-merge-prs'
     needs: setup
@@ -455,6 +461,9 @@ jobs:
 
       - name: Run bulk-merge-prs (dry-run)
         id: test-action
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DRY_RUN: true
         run: |
           echo "::group::Running bulk-merge-prs in dry-run mode"
 
@@ -479,7 +488,7 @@ jobs:
           echo "✓ Action executed without errors"
           echo "✓ YAML syntax is valid"
 
-  # Test bulk-rebase-prs (utility action - no templates)
+  # Test bulk-rebase-prs
   test-bulk-rebase-prs:
     name: 'Test bulk-rebase-prs'
     needs: setup
@@ -491,6 +500,9 @@ jobs:
 
       - name: Run bulk-rebase-prs (dry-run)
         id: test-action
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DRY_RUN: true
         run: |
           echo "::group::Running bulk-rebase-prs in dry-run mode"
 
@@ -515,7 +527,7 @@ jobs:
           echo "✓ Action executed without errors"
           echo "✓ YAML syntax is valid"
 
-  # Test pr-review-enqueuer (utility action - no templates)
+  # Test pr-review-enqueuer
   test-pr-review-enqueuer:
     name: 'Test pr-review-enqueuer'
     needs: setup
@@ -527,6 +539,9 @@ jobs:
 
       - name: Run pr-review-enqueuer (dry-run)
         id: test-action
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DRY_RUN: true
         run: |
           echo "::group::Running pr-review-enqueuer in dry-run mode"
 
@@ -551,7 +566,7 @@ jobs:
           echo "✓ Action executed without errors"
           echo "✓ YAML syntax is valid"
 
-  # Test publish-pr (utility action - no templates)
+  # Test publish-pr
   test-publish-pr:
     name: 'Test publish-pr'
     needs: setup
@@ -563,6 +578,9 @@ jobs:
 
       - name: Run publish-pr (dry-run)
         id: test-action
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DRY_RUN: true
         run: |
           echo "::group::Running publish-pr in dry-run mode"
 
@@ -587,7 +605,7 @@ jobs:
           echo "✓ Action executed without errors"
           echo "✓ YAML syntax is valid"
 
-  # Test review-auto-merge (utility action - no templates)
+  # Test review-auto-merge
   test-review-auto-merge:
     name: 'Test review-auto-merge'
     needs: setup
@@ -599,6 +617,9 @@ jobs:
 
       - name: Run review-auto-merge (dry-run)
         id: test-action
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DRY_RUN: true
         run: |
           echo "::group::Running review-auto-merge in dry-run mode"
 
