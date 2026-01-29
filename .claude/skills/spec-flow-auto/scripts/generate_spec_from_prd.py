@@ -56,13 +56,13 @@ class PRDToSpecGenerator:
 ## Functional Requirements
 
 ### FR-001: Core Functionality
-{self._extract_functional_requirements(sections)}
+主要な機能要件をここに記載
 
 ### FR-002: User Interface
-{self._extract_ui_requirements(sections)}
+ユーザーインターフェース要件をここに記載
 
 ### FR-003: Data Management
-{self._extract_data_requirements(sections)}
+データ管理要件をここに記載
 
 ## Non-Functional Requirements
 
@@ -340,40 +340,6 @@ graph TD
 - セキュリティ専門家によるレビュー
 - 外部APIモックでの事前検証
 """
-
-    def _extract_functional_requirements(self, sections: dict) -> str:
-        """機能要件を抽出"""
-        # セクションから機能要件に関連する内容を抽出
-        for section_name, content in sections.items():
-            if any(
-                keyword in section_name.lower()
-                for keyword in ["機能", "feature", "requirement"]
-            ):
-                return content[:500] + "..." if len(content) > 500 else content
-
-        return "主要な機能要件をここに記載"
-
-    def _extract_ui_requirements(self, sections: dict) -> str:
-        """UI要件を抽出"""
-        for section_name, content in sections.items():
-            if any(
-                keyword in section_name.lower()
-                for keyword in ["ui", "interface", "画面"]
-            ):
-                return content[:300] + "..." if len(content) > 300 else content
-
-        return "ユーザーインターフェース要件をここに記載"
-
-    def _extract_data_requirements(self, sections: dict) -> str:
-        """データ要件を抽出"""
-        for section_name, content in sections.items():
-            if any(
-                keyword in section_name.lower()
-                for keyword in ["data", "database", "データ"]
-            ):
-                return content[:300] + "..." if len(content) > 300 else content
-
-        return "データ管理要件をここに記載"
 
     def generate_spec(self) -> None:
         """SPEC一式を生成"""

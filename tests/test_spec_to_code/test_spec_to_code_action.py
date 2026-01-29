@@ -1,9 +1,6 @@
 """Tests for the spec-to-code GitHub Action."""
 
 import pytest
-import subprocess
-import tempfile
-import shutil
 from pathlib import Path
 
 
