@@ -153,8 +153,14 @@ ENV/
 
 # System analytics data
 .analytics/
+# System analytics data
+.analytics/
 
 # Concept Sync runtime files (not committed per autopilot.yml policy)
 .concept/claims.ndjson
 .concept/ontology_metrics.json
 .concept/run_state.json
+
+# Temporary analysis and review files
+CODE_REVIEW_SUMMARY.md
+cleanup-analysis.md
