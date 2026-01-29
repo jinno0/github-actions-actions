@@ -1,4 +1,4 @@
-updated_at: '2026-01-28T01:16:12Z'
+updated_at: '2026-01-29T20:46:00Z'
 mappings:
   CompositeAction:
     code_symbols:
@@ -33,10 +33,10 @@ mappings:
     api: []
   ExternalDispatch:
     code_symbols:
-      - .github/workflows/external-dispatch.yml
+    - .github/workflows/external-dispatch.yml
     db: []
     api:
-      - repository_dispatch event
+    - repository_dispatch event
   DryRun:
     code_symbols:
     - .github/workflows/test-all-actions.yml
@@ -81,3 +81,19 @@ mappings:
     - actions/review-and-merge/scripts/post-comment.sh
     db: []
     api: []
+  SecurityVulnerability:
+    code_symbols:
+    - actions/spec-to-code/action.yml#L90-L110::Validate Spec Path step
+    - actions/review-and-merge/scripts/review-and-fix.sh::security fix comments
+    db: []
+    api: []
+    commits:
+    - 9dd956a
+  InputSanitization:
+    code_symbols:
+    - actions/spec-to-code/action.yml#L90-L110::path validation and envsubst usage
+    - actions/review-and-merge/scripts/review-and-fix.sh::jq parsing instead of grep
+    db: []
+    api: []
+    commits:
+    - 9dd956a

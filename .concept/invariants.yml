@@ -1,4 +1,4 @@
-updated_at: '2026-01-28T21:41:08Z'
+updated_at: '2026-01-29T20:46:00Z'
 invariants:
 - id: INV-001
   related_terms:
@@ -139,4 +139,49 @@ invariants:
   evidence:
   - source: SYSTEM_CONSTITUTION.md#L60-L67
     quote: 秘匿情報や安全でない操作を扱わない。必要なSecretは呼び出し元から受け取る
+  checks: []
+- id: INV-012
+  related_terms:
+  - ClaudeCodeCLI
+  - SecurityVulnerability
+  status: stable
+  strength: hard
+  statement: Claude Code CLI must not run with --dangerously-skip-permissions in production
+    contexts as it allows untrusted code execution
+  rationale: Prevents arbitrary code execution from untrusted PR diffs
+  assumptions: []
+  evidence:
+  - source: commit 9dd956a
+    quote: Using --dangerously-skip-permissions allowed untrusted PR diffs to execute
+      arbitrary code via Claude's file editing capabilities
+  checks: []
+- id: INV-013
+  related_terms:
+  - InputSanitization
+  - CompositeAction
+  status: stable
+  strength: hard
+  statement: All user input must be sanitized before use in command execution, file
+    paths, or templating operations
+  rationale: Prevents command injection and path traversal attacks
+  assumptions: []
+  evidence:
+  - source: commit 9dd956a
+    quote: All user input must be sanitized before use in command execution, file
+      paths, or templating operations
+  checks: []
+- id: INV-014
+  related_terms:
+  - InputSanitization
+  - CompositeAction
+  status: stable
+  strength: hard
+  statement: File paths must be validated to ensure they are within GITHUB_WORKSPACE
+    and do not contain path traversal sequences
+  rationale: Prevents path traversal attacks allowing arbitrary file read
+  assumptions: []
+  evidence:
+  - source: commit 9dd956a
+    quote: File paths must be validated to ensure they are within GITHUB_WORKSPACE
+      and do not contain path traversal sequences
   checks: []
