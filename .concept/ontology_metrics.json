@@ -14,18 +14,18 @@
   "decisions_lines": 79,
   "decisions_active": 6,
   "claims_lines": 54,
-  "updated_at": "2026-01-29T20:56:39.458803Z",
+  "updated_at": "2026-01-29T21:46:24.616215Z",
   "budget_utilization": {
-    "total": 0.2167,
-    "core": 0.25,
-    "domain": 0.2333,
-    "aux": 0.1
+    "total": 19.44,
+    "core": 25.0,
+    "domain": 23.33,
+    "aux": 10.0
   },
   "last_run_type": "hygiene",
   "system_health": "healthy",
-  "total_invariants": 14,
-  "total_mappings": 13,
+  "total_invariants": 2,
+  "total_mappings": 2,
   "bloat_status": "healthy",
-  "bloat_percentage": 21.67,
+  "bloat_percentage": 19.44,
   "gc_actions_taken": []
 }
