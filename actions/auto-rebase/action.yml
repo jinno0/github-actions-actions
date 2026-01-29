@@ -67,15 +67,18 @@ runs:
         echo "Checking out PR #$PR_NUMBER..."
         gh pr checkout $PR_NUMBER
 
-        # Get base branch name and save to file for later steps
-        gh pr view "$PR_NUMBER" --json baseRefName -q '.baseRefName' > /tmp/base_branch.txt
+        # Get base branch name
+        BASE_BRANCH=$(gh pr view "$PR_NUMBER" --json baseRefName -q '.baseRefName')
+
+        # Save to env file for later steps
+        echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+        echo "BASE_BRANCH=$BASE_BRANCH" >> $GITHUB_ENV
 
     - name: Fetch latest base branch
       shell: bash
       env:
         GH_TOKEN: ${{ inputs.github-token }}
       run: |
-        BASE_BRANCH=$(cat /tmp/base_branch.txt)
         echo "Fetching latest $BASE_BRANCH..."
         git fetch origin "$BASE_BRANCH:origin/$BASE_BRANCH"
 
@@ -84,22 +87,16 @@ runs:
       id: rebase
       env:
         GH_TOKEN: ${{ inputs.github-token }}
+        PR_NUMBER: ${{ env.PR_NUMBER }}
+        BASE_BRANCH: ${{ env.BASE_BRANCH }}
       run: |
         # Don't exit on error - we need to handle rebase conflicts
         set +e
-
-        # Determine PR number from event or inputs
-        if [ -n "${{ inputs.pr_number }}" ]; then
-          PR_NUMBER=${{ inputs.pr_number }}
-        else
-          PR_NUMBER=${{ github.event.pull_request.number }}
-        fi
 
         MODEL="${{ inputs.claude-model }}"
         STRATEGY="${{ inputs.rebase-strategy }}"
         CUSTOM_TEMPLATE="${{ inputs.conflict-resolution-prompt-template }}"
 
-        BASE_BRANCH=$(cat /tmp/base_branch.txt)
         CURRENT_BRANCH=$(git branch --show-current)
 
         echo "### Attempting to rebase PR #$PR_NUMBER" >> $GITHUB_STEP_SUMMARY
