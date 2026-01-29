@@ -98,10 +98,7 @@ def generate_commit_message(
     # Add scope if identifiable
     if len(files_info["files"]) == 1:
         file_path = files_info["files"][0]
-        if "src/" in file_path:
-            scope = file_path.split("/")[1]
-            message = f"{commit_type}({scope}): {message.split(': ', 1)[1]}"
-        elif "test" in file_path:
+        if "test" in file_path.lower():
             message = f"{commit_type}(tests): {message.split(': ', 1)[1]}"
 
     # Add body with details
@@ -137,46 +134,45 @@ def create_commit(message: str) -> dict[str, Any]:
         return {"success": False, "message": message, "error": e.stderr}
 
 
+def _load_json_file(
+    temp_dir: str, filename: str, result_key: str, default_value: dict[str, Any]
+) -> dict[str, Any]:
+    """Helper function to load a JSON result file"""
+    file_path = os.path.join(temp_dir, filename)
+    if os.path.exists(file_path):
+        try:
+            with open(file_path) as f:
+                return json.load(f)
+        except (OSError, json.JSONDecodeError) as e:
+            print(f"Warning: Failed to load {result_key}: {e}", file=sys.stderr)
+    return default_value
+
+
 def load_script_results() -> dict[str, Any]:
     """Load results from other scripts via temporary files"""
     script_dir = os.path.dirname(os.path.abspath(__file__))
     temp_dir = os.path.join(script_dir, "..", "temp")
 
     results = {
-        "lint_result": {"overall_success": True, "tools": []},
-        "test_result": {"success": True, "total_tests": 0, "coverage_percentage": 0},
-        "review_result": {
-            "total_issues": 0,
-            "severity_breakdown": {"high": 0, "medium": 0, "low": 0},
-        },
+        "lint_result": _load_json_file(
+            temp_dir,
+            "lint_results.json",
+            "lint results",
+            {"overall_success": True, "tools": []},
+        ),
+        "test_result": _load_json_file(
+            temp_dir,
+            "test_results.json",
+            "test results",
+            {"success": True, "total_tests": 0, "coverage_percentage": 0},
+        ),
+        "review_result": _load_json_file(
+            temp_dir,
+            "review_results.json",
+            "review results",
+            {"total_issues": 0, "severity_breakdown": {"high": 0, "medium": 0, "low": 0}},
+        ),
     }
-
-    # Try to load lint results
-    lint_file = os.path.join(temp_dir, "lint_results.json")
-    if os.path.exists(lint_file):
-        try:
-            with open(lint_file) as f:
-                results["lint_result"] = json.load(f)
-        except (OSError, json.JSONDecodeError) as e:
-            print(f"Warning: Failed to load lint results: {e}", file=sys.stderr)
-
-    # Try to load test results
-    test_file = os.path.join(temp_dir, "test_results.json")
-    if os.path.exists(test_file):
-        try:
-            with open(test_file) as f:
-                results["test_result"] = json.load(f)
-        except (OSError, json.JSONDecodeError) as e:
-            print(f"Warning: Failed to load test results: {e}", file=sys.stderr)
-
-    # Try to load review results
-    review_file = os.path.join(temp_dir, "review_results.json")
-    if os.path.exists(review_file):
-        try:
-            with open(review_file) as f:
-                results["review_result"] = json.load(f)
-        except (OSError, json.JSONDecodeError) as e:
-            print(f"Warning: Failed to load review results: {e}", file=sys.stderr)
 
     return results
 
