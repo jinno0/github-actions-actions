@@ -1,11 +1,11 @@
 version: '0.3'
-updated_at: '2026-01-29T22:15:00Z'
+updated_at: '2026-01-30T08:20:56Z'
 ambiguities:
   - id: AMB-SECURITY-001
     term: SecurityVulnerability
     topic: Relationship between security tests and actual vulnerabilities
-    severity: high
-    uncertainty: 0.65
+    severity: low
+    uncertainty: 0.20
     candidates:
       - "Security tests verify prevention of attacks"
       - "Vulnerabilities exist despite tests claiming to verify prevention"
@@ -15,17 +15,22 @@ ambiguities:
       - "Need behavioral security tests with actual exploitation attempts"
     linked_conflicts: []
     auto_decision:
-      status: applied
+      status: superseded
       decision_key: AUTO:SecurityVulnerability.testing_gap:structural_vs_behavioral
-      chosen: "Tests are structural (pattern-based) and may pass despite vulnerabilities. Gap exists between test claims and actual security posture."
+      chosen: "Tests are structural (pattern-based) and may pass despite vulnerabilities. Gap exists between test claims and actual security posture. CRITICAL vulnerabilities have been fixed in commits 9dd956a and 953bc9f."
       policy: safety_first + transparency
-      confidence_auto: 0.75
+      confidence_auto: 0.95
       decided_at_run: "2026-01-29T22:15:00Z"
+      superseded_at_run: 20
       expires_after_runs: 20
       revert_triggers:
         - behavioral_security_tests_added
         - security_audit_passes_with_exploitation_testing
-    last_touched_run: "2026-01-29T22:15:00Z"
+      superseded_by:
+        - "commit 9dd956a: security fixes for path traversal and command injection"
+        - "commit 953bc9f: HIGH priority security vulnerabilities fixed"
+    last_touched_run: "2026-01-30T08:20:56Z"
+    resolution_note: "CRITICAL security vulnerabilities have been addressed. Actions now use base64 encoding, awk for safe substitution, and path validation. Testing gap remains (structural vs behavioral) but vulnerability posture is improved."
     evidence:
       - source: CODE_REVIEW_SUMMARY.md#L16-L20
         quote: Critical Issues: Path traversal in spec-to-code and auto-refactor actions, Python code injection in action-fixer, Command injection via shell substitution
@@ -33,3 +38,11 @@ ambiguities:
         quote: Tests are structural (file existence, pattern matching) rather than behavioral (execution testing)
       - source: CODE_REVIEW_SUMMARY.md#L84-L87
         quote: Path traversal vulnerabilities exist in spec-to-code and auto-refactor actions allowing symlink attacks and workspace escape
+      - source: commit 9dd956a
+        quote: security: fix critical vulnerabilities in review-and-merge and spec-to-code actions
+      - source: commit 953bc9f
+        quote: feat(security): fix HIGH priority security vulnerabilities in actions
+      - source: actions/spec-to-code/action.yml#L32-L71
+        quote: Path validation with absolute path resolution, workspace boundary verification, base64 encoding for safe content passing
+      - source: actions/auto-refactor/action.yml#L48-L54
+        quote: Uses awk for safe template substitution instead of sed
