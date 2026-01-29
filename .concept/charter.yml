@@ -1,6 +1,5 @@
 version: "1.0"
 updated_at: "2026-01-21T00:00:00Z"
-note: "推定 - AIによって自動生成された charter。ユーザーの確認が必要。"
 
 product_goal:
   north_star: "組織全体の開発効率と品質を向上させるための「AIネイティブなGitHub Actions」を提供するハブとなること"
