@@ -71,8 +71,10 @@ debug.log
 # Heavy log files (claims.ndjson is tracked but archived when too large)
 # .concept/claims.ndjson is tracked per policy A
 
-# NOTE: run_state.json and ontology_metrics.json are Source-of-Truth files
-# and should be tracked, not ignored
+# Temporary runtime state files (auto-generated, should not be tracked)
+.concept/run_state.json
+.concept/ontology_metrics.json
+.concept/claims.ndjson
 
 # Auto-generated framework outputs
 _bmad-output/
