@@ -1,13 +1,14 @@
 {
-  "total_terms": 13,
+  "total_terms": 14,
   "core": 5,
   "domain": 7,
   "aux": 1,
   "draft_ratio": 0.0,
-  "unmapped_ratio": 0.0,
+  "unmapped_ratio": 0.286,
   "queue_pending": 0,
   "conflicts_open": 0,
   "ambiguities_high": 0,
   "decisions_lines": 119,
-  "claims_lines": 0
+  "claims_lines": 0,
+  "last_updated": "2026-01-30T15:46:00Z"
 }
