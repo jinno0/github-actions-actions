@@ -20,18 +20,22 @@ except (subprocess.TimeoutExpired, FileNotFoundError):
 @dataclass
 class JSCPDConfig:
     """jscpd設定"""
+    js_ts_extensions: set = None
+    default_ignore_patterns: list = None
+    threshold: int = 0
+    timeout_seconds: int = 300
 
-    def __init__(self):
-        self.js_ts_extensions = {".js", ".jsx", ".ts", ".tsx"}
-        self.default_ignore_patterns = [
-            "**/node_modules/**",
-            "**/dist/**",
-            "**/build/**",
-            "**/coverage/**",
-            "**/.git/**",
-        ]
-        self.threshold = 0
-        self.timeout_seconds = 300
+    def __post_init__(self):
+        if self.js_ts_extensions is None:
+            self.js_ts_extensions = {".js", ".jsx", ".ts", ".tsx"}
+        if self.default_ignore_patterns is None:
+            self.default_ignore_patterns = [
+                "**/node_modules/**",
+                "**/dist/**",
+                "**/build/**",
+                "**/coverage/**",
+                "**/.git/**",
+            ]
 
 
 class JSCPDAnalyzer:
@@ -91,8 +95,8 @@ class JSCPDAnalyzer:
         if not isinstance(jscpd_result, dict):
             return duplications
 
-        dup_key = "duplication" if "duplication" in jscpd_result else "duplications"
-        if dup_key not in jscpd_result:
+        dup_key = next((k for k in ("duplication", "duplications") if k in jscpd_result), None)
+        if dup_key is None:
             return duplications
 
         duplication_list = jscpd_result[dup_key]

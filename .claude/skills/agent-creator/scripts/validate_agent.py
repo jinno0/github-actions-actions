@@ -24,6 +24,19 @@ def find_claude_lib():
     return None  # Not found
 
 
+def find_claude_subdir(subdir_name: str, max_levels: int = 10):
+    """Find a .claude subdirectory by searching up the filesystem tree."""
+    current = Path.cwd()
+    for _ in range(max_levels):
+        target_dir = current / ".claude" / subdir_name
+        if target_dir.exists():
+            return target_dir
+        current = current.parent
+        if current == current.parent:  # Filesystem root reached
+            break
+    return None
+
+
 class AgentValidator:
     """Validates agent definition files"""
 
@@ -322,15 +335,9 @@ def main():
                 agent_path = Path(args.directory) / agent_path
             else:
                 # Look in .claude/agents
-                current = Path.cwd()
-                for _ in range(10):
-                    agents_dir = current / ".claude" / "agents"
-                    if agents_dir.exists():
-                        agent_path = agents_dir / agent_path
-                        break
-                    current = current.parent
-                    if current == current.parent:
-                        break
+                agents_dir = find_claude_subdir("agents")
+                if agents_dir:
+                    agent_path = agents_dir / agent_path
 
         validator = AgentValidator()
         success = validator.validate_agent_file(agent_path)
@@ -342,17 +349,7 @@ def main():
             agents_dir = Path(args.directory)
         else:
             # Find .claude/agents directory
-            current = Path.cwd()
-            agents_dir = None
-            for _ in range(10):
-                found_agents_dir = current / ".claude" / "agents"
-                if found_agents_dir.exists():
-                    agents_dir = found_agents_dir
-                    break
-                current = current.parent
-                if current == current.parent:
-                    break
-
+            agents_dir = find_claude_subdir("agents")
             if not agents_dir:
                 print("❌ Could not find .claude/agents directory")
                 print("Use --directory to specify the path")
