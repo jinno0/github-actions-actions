@@ -39,6 +39,21 @@ runs:
         MODEL="${{ inputs.claude-model }}"
         GEN_PROMPT_TEMPLATE="${{ inputs.gen-prompt-template }}"
 
+        # Resolve absolute paths within workspace (prevent path traversal)
+        SPEC_PATH="$(cd "${GITHUB_WORKSPACE}/${{ inputs.spec-path }}" 2>/dev/null && pwd)/${{ inputs.spec-path }}"
+        OUTPUT_DIR="$(cd "${GITHUB_WORKSPACE}/${{ inputs.output-dir }}" 2>/dev/null && pwd)/${{ inputs.output-dir }}"
+
+        # Ensure paths are within workspace
+        case "$SPEC_PATH" in
+          "$GITHUB_WORKSPACE"*) ;;
+          *) echo "::error::Spec path must be within repository: $SPEC_PATH"; exit 1 ;;
+        esac
+
+        case "$OUTPUT_DIR" in
+          "$GITHUB_WORKSPACE"*) ;;
+          *) echo "::error::Output dir must be within repository: $OUTPUT_DIR"; exit 1 ;;
+        esac
+
         if [ ! -f "$SPEC_PATH" ]; then
           echo "::error::Specification file not found: $SPEC_PATH"
           exit 1
@@ -56,10 +71,19 @@ runs:
           TEMPLATE_FILE="${{ github.action_path }}/templates/gen_prompt.txt"
         fi
 
-        # Read template and replace placeholders
-        GEN_PROMPT=$(sed -e "s#{LANG}#$LANG#g" \
-                          -e "s#{SPEC_CONTENT}#$SPEC_CONTENT#g" \
-                          -e "s#{OUTPUT_DIR}#$OUTPUT_DIR#g" \
+        # Read template and replace placeholders (safe: use awk for untrusted input)
+        # Escape special characters for safe replacement
+        SPEC_ESCAPED=$(printf '%s\n' "$SPEC_CONTENT" | sed 's/[&/\]/\\&/g')
+        OUTPUT_ESCAPED=$(printf '%s\n' "$OUTPUT_DIR" | sed 's/[&/\]/\\&/g')
+        LANG_ESCAPED=$(printf '%s\n' "$LANG" | sed 's/[&/\]/\\&/g')
+
+        GEN_PROMPT=$(awk -v lang="$LANG_ESCAPED" \
+                          -v spec="$SPEC_ESCAPED" \
+                          -v output="$OUTPUT_ESCAPED" \
+                          '{gsub(/\{LANG\}/, lang);
+                            gsub(/\{SPEC_CONTENT\}/, spec);
+                            gsub(/\{OUTPUT_DIR\}/, output);
+                            print}' \
                           "$TEMPLATE_FILE")
 
         echo "$GEN_PROMPT" > /tmp/gen_prompt.txt

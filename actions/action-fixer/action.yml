@@ -102,11 +102,20 @@ runs:
                 TEMPLATE_FILE="${{ github.action_path }}/templates/fix_prompt.txt"
               fi
 
-              # Read template and replace placeholders
+              # Read template and replace placeholders (safe: use awk for untrusted input)
               CURRENT_CONTENT=$(cat "$file")
-              FIX_PROMPT=$(sed -e "s#{FILE}#$file#g" \
-                                -e "s#{ISSUES}#$ISSUES#g" \
-                                -e "s#{CURRENT_CONTENT}#$CURRENT_CONTENT#g" \
+              # Escape special characters for safe replacement
+              FILE_ESCAPED=$(printf '%s\n' "$file" | sed 's/[&/\]/\\&/g')
+              ISSUES_ESCAPED=$(printf '%s\n' "$ISSUES" | sed 's/[&/\]/\\&/g')
+              CONTENT_ESCAPED=$(printf '%s\n' "$CURRENT_CONTENT" | sed 's/[&/\]/\\&/g')
+
+              FIX_PROMPT=$(awk -v file="$FILE_ESCAPED" \
+                                -v issues="$ISSUES_ESCAPED" \
+                                -v content="$CONTENT_ESCAPED" \
+                                '{gsub(/\{FILE\}/, file);
+                                  gsub(/\{ISSUES\}/, issues);
+                                  gsub(/\{CURRENT_CONTENT\}/, content);
+                                  print}' \
                                 "$TEMPLATE_FILE")
 
               echo "$FIX_PROMPT" > /tmp/fix_prompt.txt
@@ -140,14 +149,15 @@ runs:
       if: inputs.auto-fix == 'true' && steps.validate.outputs.errors != '0'
       shell: bash
       run: |
-        # Use centralized git user configuration
+        # Use centralized git user configuration with workflow traceability
+        RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         git add .github/
         if git diff --staged --quiet; then
           echo "No changes to commit"
         else
-          git commit -m "${{ inputs.commit-message }}"
+          git commit -m "${{ inputs.commit-message }}" -m "Workflow: $RUN_URL"
           echo "Created commit with auto-fixes"
         fi
 
