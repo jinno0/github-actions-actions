@@ -64,7 +64,8 @@ git-rebase-todo
 debug.log
 *.debug
 
-# track .concept Source-of-Truth, ignore heavy archives
+# track .concept Source-of-Truth, ignore heavy archives only
+.concept/archived/
 .concept/archive/
 
 # BMAD sprint management
