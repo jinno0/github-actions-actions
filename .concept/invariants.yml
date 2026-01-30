@@ -1,4 +1,4 @@
-updated_at: '2026-01-29T20:46:00Z'
+updated_at: '2026-01-31T03:30:00Z'
 invariants:
 - id: INV-001
   related_terms:
@@ -143,7 +143,7 @@ invariants:
 - id: INV-012
   related_terms:
   - ClaudeCodeCLI
-  - SecurityVulnerability
+  - CompositeAction
   status: stable
   strength: hard
   statement: Claude Code CLI must not run with --dangerously-skip-permissions in production
@@ -157,7 +157,6 @@ invariants:
   checks: []
 - id: INV-013
   related_terms:
-  - InputSanitization
   - CompositeAction
   status: stable
   strength: hard
@@ -172,7 +171,6 @@ invariants:
   checks: []
 - id: INV-014
   related_terms:
-  - InputSanitization
   - CompositeAction
   status: stable
   strength: hard

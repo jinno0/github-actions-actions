@@ -1,4 +1,4 @@
-updated_at: '2026-01-29T21:46:00Z'
+updated_at: '2026-01-31T03:30:00Z'
 mappings:
   CompositeAction:
     code_symbols:
@@ -81,35 +81,3 @@ mappings:
     - actions/review-and-merge/scripts/post-comment.sh
     db: []
     api: []
-  SecurityVulnerability:
-    code_symbols:
-    - actions/spec-to-code/action.yml#L90-L110::Validate Spec Path step
-    - actions/review-and-merge/scripts/review-and-fix.sh::security fix comments
-    tests:
-    - tests/test_review_and_merge/test_review_security.py::TestPathTraversal
-    - tests/test_review_and_merge/test_review_security.py::TestCommandInjection
-    - tests/test_spec_to_code/test_spec_security.py::TestPathTraversal
-    - tests/test_spec_to_code/test_spec_security.py::TestCommandInjection
-    - tests/test_spec_to_code/test_spec_security.py::TestCodeInjection
-    db: []
-    api: []
-    commits:
-    - 9dd956a
-    docs:
-    - TEST_EXECUTION_REPORT.md#L149-L161
-  InputSanitization:
-    code_symbols:
-    - actions/spec-to-code/action.yml#L90-L110::path validation and envsubst usage
-    - actions/review-and-merge/scripts/review-and-fix.sh::jq parsing instead of grep
-    tests:
-    - tests/test_review_and_merge/test_review_security.py::TestPathTraversal
-    - tests/test_review_and_merge/test_review_security.py::TestCommandInjection
-    - tests/test_spec_to_code/test_spec_security.py::TestPathTraversal
-    - tests/test_spec_to_code/test_spec_security.py::TestCommandInjection
-    - tests/test_spec_to_code/test_spec_security.py::TestTemplateSecurity
-    db: []
-    api: []
-    commits:
-    - 9dd956a
-    docs:
-    - TEST_EXECUTION_REPORT.md#L156-L161
