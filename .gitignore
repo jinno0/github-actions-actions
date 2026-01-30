@@ -70,6 +70,9 @@ debug.log
 .concept/ontology_metrics.json
 .concept/run_state.json
 
+# BMAD sprint management
+.bmad/sprint/archive/
+
 # Auto-generated framework outputs
 _bmad-output/
 .serena/
@@ -79,6 +82,7 @@ _bmad-output/
 .bmad/workflows/*validation-report.md
 .bmad/workflows/*flow-report.md
 .bmad/workflows/*completion-report.md
+.bmad/reports/
 
 # Temporary workflow/completion report files in root
 *_FLOW_REPORT.md
