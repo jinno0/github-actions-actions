@@ -1,4 +1,4 @@
-updated_at: '2026-01-30T09:10:00Z'
+updated_at: '2026-01-30T13:00:00Z'
 queue:
   - id: TP-006
     proposed_canonical: SecurityVulnerability
@@ -17,7 +17,18 @@ queue:
       - term: CompositeAction
         similarity: 0.35
         rationale: Security issues affect CompositeAction but are a distinct concern
-    decision: pending
+    decision: rejected
+    auto_decision:
+      decision_key: AUTO:TP-006:reject
+      chosen: rejected
+      policy: semantic_subsumption
+      rationale: Security vulnerabilities are quality concerns within CompositeAction development, not a distinct canonical concept. The term is subsumed by CompositeAction with quality attributes.
+      confidence_auto: 0.82
+      decided_at_run: '2026-01-30T13:00:00Z'
+      expires_after_runs: 20
+      revert_triggers:
+        - primary_evidence_contradiction
+        - security_domain_emergence
     expires_after_runs: 10
     created_run: '2026-01-30T09:10:00Z'
   - id: TP-007
@@ -37,7 +48,18 @@ queue:
       - term: CompositeAction
         similarity: 0.42
         rationale: Code duplication is a quality issue within CompositeAction, not a distinct concept
-    decision: pending
+    decision: rejected
+    auto_decision:
+      decision_key: AUTO:TP-007:reject
+      chosen: rejected
+      policy: semantic_subsumption
+      rationale: Code duplication is a quality metric and implementation concern within CompositeAction development, not a distinct canonical concept.
+      confidence_auto: 0.79
+      decided_at_run: '2026-01-30T13:00:00Z'
+      expires_after_runs: 20
+      revert_triggers:
+        - primary_evidence_contradiction
+        - quality_metrics_domain_emergence
     expires_after_runs: 10
     created_run: '2026-01-30T09:10:00Z'
   - id: TP-008
@@ -57,6 +79,17 @@ queue:
       - term: CompositeAction
         similarity: 0.55
         rationale: SharedLibraryInfrastructure is an architectural pattern within CompositeAction development
-    decision: pending
+    decision: rejected
+    auto_decision:
+      decision_key: AUTO:TP-008:reject
+      chosen: rejected
+      policy: semantic_subsumption
+      rationale: Shared library infrastructure is an implementation solution pattern within CompositeAction development, not a distinct canonical concept. It's an architectural approach, not a domain term.
+      confidence_auto: 0.71
+      decided_at_run: '2026-01-30T13:00:00Z'
+      expires_after_runs: 20
+      revert_triggers:
+        - primary_evidence_contradiction
+        - architecture_domain_emergence
     expires_after_runs: 10
     created_run: '2026-01-30T09:10:00Z'

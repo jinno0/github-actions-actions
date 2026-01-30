@@ -1,13 +1,47 @@
 # Active AUTO Decisions (cache) — safe to delete
 
-_Last regenerated: 2026-01-30T09:10:00Z (Run 25)_
+_Last regenerated: 2026-01-30T13:00:00Z (Run 26)_
 
 ## Summary
-- Active AUTO Decisions: 5 (term acceptance and merges)
+- Active AUTO Decisions: 8 (term acceptance and queue rejections)
 - No ambiguities requiring AUTO decisions
 - No conflicts requiring workarounds
 
-## AUTO:ScriptExtraction.term:accept_as_aux
+## Queue AUTO Decisions (Run 26)
+
+### AUTO:TP-006:reject
+- Status: ACTIVE
+- Chosen: REJECTED - SecurityVulnerability merged into CompositeAction
+- Policy: semantic_subsumption
+- Rationale: Security vulnerabilities are quality concerns within CompositeAction development, not a distinct canonical concept
+- Confidence: 0.82
+- Evidence: 2 sources (code review report, completion report)
+- Expires After Runs: 20
+- Revert Triggers: primary_evidence_contradiction, security_domain_emergence
+
+### AUTO:TP-007:reject
+- Status: ACTIVE
+- Chosen: REJECTED - CodeDuplication merged into CompositeAction
+- Policy: semantic_subsumption
+- Rationale: Code duplication is a quality metric within CompositeAction development, not a distinct canonical concept
+- Confidence: 0.79
+- Evidence: 2 sources (completion report, code review report)
+- Expires After Runs: 20
+- Revert Triggers: primary_evidence_contradiction, quality_metrics_domain_emergence
+
+### AUTO:TP-008:reject
+- Status: ACTIVE
+- Chosen: REJECTED - SharedLibraryInfrastructure merged into CompositeAction
+- Policy: semantic_subsumption
+- Rationale: Shared library infrastructure is an implementation solution pattern within CompositeAction development, not a distinct canonical concept
+- Confidence: 0.71
+- Evidence: 2 sources (completion report, code review report)
+- Expires After Runs: 20
+- Revert Triggers: primary_evidence_contradiction, architecture_domain_emergence
+
+## Previous AUTO Decisions
+
+### AUTO:ScriptExtraction.term:accept_as_aux
 - Status: ACTIVE
 - Chosen: ScriptExtraction accepted as aux term with 2 evidence sources
 - Policy: evidence_threshold + semantic_distinctness
@@ -18,8 +52,3 @@ _Last regenerated: 2026-01-30T09:10:00Z (Run 25)_
 - Expires After Runs: 20
 - Linked: TP-005
 - Revert Triggers: primary_evidence_contradiction, merge_threshold_breach
-
-## Pending Queue Items (3)
-- TP-006: SecurityVulnerability (aux) - 2 evidence sources, pending evaluation
-- TP-007: CodeDuplication (aux) - 2 evidence sources, similarity 0.42 to CompositeAction
-- TP-008: SharedLibraryInfrastructure (domain) - 2 evidence sources, similarity 0.55 to CompositeAction
