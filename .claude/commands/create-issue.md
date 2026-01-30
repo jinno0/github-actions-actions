@@ -271,74 +271,6 @@ Agent自動実行:
 - ラベル自動付与
 - Agent実行設定をその場で決定
 
-## バッチ作成
-
-複数Issueを一度に作成する場合は、YAMLファイルから読み込み可能:
-
-### issues.yaml
-
-```yaml
-issues:
-  - title: ユーザー認証機能
-    type: feature
-    requirements:
-      - ログイン画面
-      - JWT認証
-    priority: high
-    autoExecute: true
-
-  - title: プロフィール編集
-    type: feature
-    requirements:
-      - 編集画面UI
-      - 更新API
-    priority: medium
-    autoExecute: true
-
-  - title: パフォーマンス改善
-    type: performance
-    requirements:
-      - バンドルサイズ削減
-      - 遅延読み込み実装
-    priority: low
-    autoExecute: false
-```
-
-### バッチ実行
-
-```bash
-# Claude Code内で
-/create-issue --batch issues.yaml
-```
-
-**期待される出力**:
-
-```
-🤖 Batch Issue Creator
-
-issues.yaml を読み込み中...
-3件のIssueを作成します
-
-1/3: ユーザー認証機能
-   ✅ Issue #125 作成
-   🤖 Agent実行開始
-
-2/3: プロフィール編集
-   ✅ Issue #126 作成
-   🤖 Agent実行開始
-
-3/3: パフォーマンス改善
-   ✅ Issue #127 作成
-   ⏸️  手動実行待ち
-
-✅ バッチ作成完了
-作成数: 3件
-Agent自動実行: 2件
-手動実行待ち: 1件
-
-詳細: .ai/issues/batch-2025-10-08.json
-```
-
 ## 設定
 
 ### .claude/settings.local.json
@@ -360,7 +292,7 @@ Agent自動実行: 2件
 
 ## トラブルシューティング
 
-### Q1: `gh` コマンドが見つからない
+### `gh` コマンドが見つからない場合
 
 ```bash
 # GitHub CLI インストール
@@ -372,25 +304,15 @@ npm install -g @github/cli
 gh auth login
 ```
 
-### Q2: Issue作成権限エラー
+### Issue作成権限エラー
 
-```
-Error: Resource not accessible by personal access token
+GitHub Token に `repo` スコープが必要です。`.env` ファイルの `GITHUB_TOKEN` を確認してください。
 
-対処法:
-1. GitHub Token の権限確認
-   - repo スコープが必要
-2. .env ファイルの GITHUB_TOKEN を確認
-```
+### Agent が自動実行されない場合
 
-### Q3: Agent が自動実行されない
-
-```
-確認事項:
-1. 🤖agent-execute ラベルが付与されているか確認
-2. GitHub Actions Workflow が有効か確認
-3. ANTHROPIC_API_KEY が Secrets に設定されているか確認
-```
+- 🤖agent-execute ラベルが付与されているか確認
+- GitHub Actions Workflow が有効か確認
+- ANTHROPIC_API_KEY が Secrets に設定されているか確認
 
 ## 関連ドキュメント
 

@@ -38,79 +38,18 @@ const approvalScreen = await ApprovalScreen.launch({
 
 ### 2. 承認タイプ別のUI
 
-#### QA承認画面
-```typescript
-interface QAApprovalData {
-  id: string;
-  title: string;
-  description: string;
-  testResults: TestResult[];
-  coverage: number;
-  criticalIssues: number;
-  reviewer: string;
-  status: 'pending' | 'approved' | 'rejected';
-  createdAt: Date;
-  deadline?: Date;
-}
-```
-
-#### デプロイ承認画面
-```typescript
-interface DeployApprovalData {
-  id: string;
-  environment: 'staging' | 'production';
-  version: string;
-  changes: Change[];
-  riskLevel: 'low' | 'medium' | 'high' | 'critical';
-  approvals: Approval[];
-  checklist: ChecklistItem[];
-  rollbackPlan: string;
-  estimatedDowntime: number;
-}
-```
-
-#### PR承認画面
-```typescript
-interface PRApprovalData {
-  id: string;
-  title: string;
-  description: string;
-  author: string;
-  reviewers: Reviewer[];
-  changes: FileChange[];
-  conflicts: Conflict[];
-  checks: StatusCheck[];
-  discussion: Comment[];
-  mergeable: boolean;
-}
-```
+承認タイプに応じて、以下の情報を表示します:
+- **QA承認**: テスト結果、カバレッジ、クリティカル問題数
+- **デプロイ承認**: 環境、バージョン、変更内容、リスクレベル、ロールバック計画
+- **PR承認**: タイトル、説明、作成者、レビュアー、変更内容、コンフリクト、ステータスチェック
 
 ### 3. 承認フロー
 
-```mermaid
-graph TD
-    A[/approve実行] --> B{タイプ指定}
-    B -->|qa| C[QA承認画面]
-    B -->|deploy| D[デプロイ承認画面]
-    B -->|pr| E[PR承認画面]
-    B -->|省略| F[承認待ちリスト]
-
-    C --> G[詳細情報表示]
-    D --> H[リスク評価表示]
-    E --> I[変更内容表示]
-
-    G --> J[承認/拒否選択]
-    H --> J
-    I --> J
-
-    J -->|承認| K[承認処理実行]
-    J -->|拒否| L[拒否理由入力]
-    J -->|保留| M[コメント追加]
-
-    K --> N[結果通知]
-    L --> N
-    M --> N
-```
+1. `/approve` コマンド実行
+2. タイプ指定または承認待ちリスト表示
+3. 各タイプの詳細情報表示
+4. 承認/拒否/保留の選択
+5. 結果通知
 
 ## UIコンポーネント構成
 
@@ -266,17 +205,6 @@ approval_policies:
     auto_merge: false
     conflict_check: true
 ```
-
-## 拡張機能
-
-### 1. 承認テンプレート
-承認依頼のテンプレート（タイトル、説明、チェックリスト）を用意する。
-
-### 2. 自動承認ルール
-低リスク変更、信頼済み担当者、テスト合格等の条件で自動承認できるようにする。
-
-### 3. 承認Analytics
-平均承認時間、承認率、ボトルネック分析などのメトリクスを収集する。
 
 ## 関連ドキュメント
 

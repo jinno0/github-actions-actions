@@ -58,6 +58,7 @@ cd web && npm run test:coverage
 ## 失敗時の対処
 
 ### Pythonテスト失敗
+
 ```bash
 # 詳細モードで実行
 cd api && pytest -v
@@ -69,18 +70,13 @@ cd api && pytest tests/test_page_composition_api.py
 cd api && pytest tests/test_page_composition_api.py::TestPageComposition::test_compose_page_success
 ```
 
-### TypeScriptエラー
+### TypeScriptエラー・テスト失敗
+
 ```bash
 # エラー詳細確認
 cd web && npm run typecheck
 
-# 型定義確認
-cd web && cat tsconfig.json
-```
-
-### TypeScriptテスト失敗
-```bash
-# 詳細モードで実行
+# 詳細モードでテスト実行
 cd web && npm test -- --reporter=verbose
 
 # 特定のテストファイルのみ
