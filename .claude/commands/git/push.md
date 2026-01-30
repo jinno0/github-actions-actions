@@ -39,9 +39,18 @@ Parse output to check:
    - Force push needed: Warn strongly, require confirmation
    - Protected branch: Remind about PR workflow
 
-Example concise output:
-- Skip: "Let me check if it's safe to push"
-- Skip: "I'll analyze your branch status"
-- Skip: "Ready to push X commits"
-- Skip: "Executing push..."
-- Just show the push result directly
+## Communication Style
+
+**Avoid verbose chatter** - Don't say:
+- "Let me check if it's safe to push"
+- "I'll analyze your branch status"
+- "Ready to push X commits"
+- "Executing push..."
+
+**Just show the result directly** - Example output:
+```
+✅ Pushed 3 commits to main (origin/main)
+   a1b2c3d Fix authentication bug
+   d4e5f6g Add new feature
+   h7i8j9k Update documentation
+```

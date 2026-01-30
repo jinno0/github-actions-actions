@@ -82,8 +82,6 @@ runs:
               FAILED=$((FAILED + 1))
             fi
           fi
-
-          sleep 1
         done
 
         echo "" >> $GITHUB_STEP_SUMMARY
