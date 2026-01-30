@@ -71,6 +71,10 @@ debug.log
 # Concept Sync: claims.ndjson only (policy: non-commit per autopilot.yml)
 .concept/claims.ndjson
 
+# Concept runtime state files (frequently changed, not suitable for version control)
+.concept/ontology_metrics.json
+.concept/run_state.json
+
 # Auto-generated framework outputs
 _bmad-output/
 .serena/
