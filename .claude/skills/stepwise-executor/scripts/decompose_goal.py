@@ -23,8 +23,9 @@ def load_env_file():
     """
     current = Path.cwd()
 
-    # カレントディレクトリと親ディレクトリ（最大5階層）で.envファイルを探す
-    for _ in range(5):
+    # カレントディレクトリと親ディレクトリ（最大3階層）で.envファイルを探す
+    # 通常、プロジェクトルートは2-3階層以内にあるため、これで十分
+    for _ in range(3):
         env_file = current / ".env"
         if env_file.exists():
             try:
@@ -35,8 +36,12 @@ def load_env_file():
                             key, value = line.split("=", 1)
                             os.environ.setdefault(key.strip(), value.strip())
                 return  # 読み込み成功
-            except Exception:
-                pass  # 読み込み失敗は無視
+            except Exception as e:
+                # 読み込み失敗は無視（別の場所の.envファイルを試す）
+                # デバッグ時は以下のコメントを外して詳細を表示可能
+                # import warnings
+                # warnings.warn(f".env読み込み失敗: {env_file}: {e}")
+                pass
         parent = current.parent
         if parent == current:  # ファイルシステムルートに到達
             break
@@ -182,8 +187,10 @@ def decompose_with_claude(prompt: str) -> dict[str, Any]:
     print(f"\n🎯 目標を分解中...")
 
     try:
+        # モデルは環境変数から取得（デフォルト: claude-sonnet-4-20250514）
+        model = os.environ.get("CLAUDE_MODEL", "claude-sonnet-4-20250514")
         response = client.messages.create(
-            model="claude-sonnet-4-20250514",
+            model=model,
             max_tokens=4096,
             messages=[{"role": "user", "content": prompt}],
         )
