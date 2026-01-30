@@ -16,15 +16,15 @@
   "decisions_lines": 119,
   "decisions_active": 8,
   "claims_lines": 72,
-  "updated_at": "2026-01-30T01:56:34Z",
+  "updated_at": "2026-01-30T11:56:00Z",
   "budget_utilization": {
     "total": 16.25,
     "core": 25.0,
     "domain": 23.33,
     "aux": 3.33
   },
-  "last_run_type": "janitor_concept",
-  "last_run_index": 22,
+  "last_run_type": "concept_sync_system",
+  "last_run_index": 23,
   "system_health": "healthy",
   "total_invariants": 14,
   "total_mappings": 11,
@@ -39,6 +39,7 @@
     "concept_sync_2026-01-30T01:09:25Z: documentation_cleanup_claims_added",
     "concept_sync_2026-01-30T01:09:25Z: claims_ndjson_72_lines_under_limit",
     "concept_sync_2026-01-30T01:09:25Z: no_ontology_changes_required",
-    "janitor_2026-01-30T01:56:34Z: hygiene_check_no_changes_needed"
+    "janitor_2026-01-30T01:56:34Z: hygiene_check_no_changes_needed",
+    "concept_sync_2026-01-30T11:56:00Z: routine_maintenance_cycle_no_changes_needed"
   ]
 }
