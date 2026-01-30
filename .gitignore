@@ -64,12 +64,15 @@ git-rebase-todo
 debug.log
 *.debug
 
-# track .concept Source-of-Truth, ignore heavy archives only
+# track .concept Source-of-Truth, ignore archives and runtime cache
 .concept/archived/
 .concept/archive/
 
-# BMAD sprint management
-.bmad/sprint/archive/
+# Runtime cache and state files
+.concept/ontology_metrics.json
+.concept/run_state.json
+.concept/claims.ndjson
+.concept/term_queue.yml
 
 # Auto-generated framework outputs
 _bmad-output/
@@ -165,3 +168,8 @@ ENV/
 # Temporary analysis and review files
 CODE_REVIEW_SUMMARY.md
 cleanup-analysis.md
+# Runtime cache and state files
+.concept/ontology_metrics.json
+.concept/run_state.json
+.concept/claims.ndjson
+.concept/term_queue.yml
