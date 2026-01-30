@@ -1,15 +1,17 @@
 version: '0.3'
-updated_at: '2026-01-30T12:21:22Z'
+updated_at: '2026-01-30T15:23:06Z'
 canonical_terms:
   ExternalDispatch:
     id: TERM-EXTERNALDISPATCH
     layer: domain
     status: stable
-    definition: CompositeAction pattern allowing external control from private repository via repository_dispatch events, keeping secrets and automation logic private while public repo remains accessible
+    definition: CompositeAction pattern allowing external control from private repository
+      via repository_dispatch events, keeping secrets and automation logic private
+      while public repo remains accessible
     synonyms:
-      - External Dispatch
-      - repository_dispatch
-      - external control
+    - External Dispatch
+    - repository_dispatch
+    - external control
     boundaries:
       includes:
       - repository_dispatch trigger
@@ -21,23 +23,24 @@ canonical_terms:
       - public webhook endpoints
       - local-only workflows
     lifecycle:
-      - defined
-      - configured
-      - triggered
-      - executed
+    - defined
+    - configured
+    - triggered
+    - executed
     related_terms:
-      - CompositeAction
-      - AIAction
-      - SelfHostedRunner
+    - CompositeAction
+    - AIAction
+    - SelfHostedRunner
     assumptions: []
     evidence:
-      - source: .github/workflows/external-dispatch.yml#L1-L5
-        quote: External Dispatch Handler allows external control from a private repository while keeping secrets and automation logic private
-      - source: .github/workflows/external-dispatch.yml#L7-L15
-        quote: 'repository_dispatch event types include: ai-review, bulk-merge, auto-rebase,
-          run-tests, enable-auto-merge, direct-merge, review-and-merge, action-fixer,
-          auto-document, auto-merge, auto-refactor, bulk-rebase-prs, pr-review-enqueuer,
-          publish-pr, release-notes-ai, review-auto-merge, spec-to-code'
+    - source: .github/workflows/external-dispatch.yml#L1-L5
+      quote: External Dispatch Handler allows external control from a private repository
+        while keeping secrets and automation logic private
+    - source: .github/workflows/external-dispatch.yml#L7-L15
+      quote: 'repository_dispatch event types include: ai-review, bulk-merge, auto-rebase,
+        run-tests, enable-auto-merge, direct-merge, review-and-merge, action-fixer,
+        auto-document, auto-merge, auto-refactor, bulk-rebase-prs, pr-review-enqueuer,
+        publish-pr, release-notes-ai, review-auto-merge, spec-to-code'
   CompositeAction:
     id: TERM-COMPOSITEACTION
     layer: core
@@ -73,6 +76,15 @@ canonical_terms:
       quote: Composite Action combines multiple steps into one reusable action definition
     - source: actions/review-and-merge/action.yml#L44
       quote: 'runs: using: ''composite'''
+    - source: _bmad-output/workflow-execution-summary.md#L102-L106
+      quote: 'Security Issues: 0 - No eval/exec calls found, No hardcoded secrets,
+        Proper token handling'
+    - source: _bmad-output/workflow-execution-summary.md#L107-L112
+      quote: 'Code Quality: Excellent - YAML syntax: 100% valid, Structure compliance:
+        100% (13/13 actions)'
+    - source: _bmad-output/workflow-execution-summary.md#L226-L228
+      quote: 'Overall Result: PASS - The project is production-ready with complete
+        implementation, comprehensive testing, and high code quality'
   SelfHostedRunner:
     id: TERM-SELFHOSTEDRUNNER
     layer: core
@@ -263,7 +275,8 @@ canonical_terms:
       quote: 'Every Action must have: (1) action implementation, (2) example workflow,
         (3) instruction guide'
     - source: test-action-fixer.sh#L53-L61
-      quote: 'Structure Tests validate: action.yml exists, templates directory exists, template file exists, example file exists, instruction file exists'
+      quote: 'Structure Tests validate: action.yml exists, templates directory exists,
+        template file exists, example file exists, instruction file exists'
   HumanInTheLoop:
     id: TERM-HUMINTHELOOP
     layer: core
@@ -330,8 +343,10 @@ canonical_terms:
     - source: CLAUDE.md#L338-L367
       quote: CI workflow .github/workflows/test-all-actions.yml runs dry run tests
     - source: test-action-fixer.sh#L1-L5
-      quote: test-action-fixer.sh is a comprehensive test script for validating
-        action structure, templates, examples, and instructions
+      quote: test-action-fixer.sh is a comprehensive test script for validating action
+        structure, templates, examples, and instructions
+    - source: _bmad-output/workflow-execution-summary.md#L130-L137
+      quote: 'Test Coverage: 100% - Total test jobs: 15, Actions with tests: 13'
   ScriptExtraction:
     id: TERM-SCRIPTEXTRACTION
     layer: aux
@@ -365,5 +380,5 @@ canonical_terms:
       quote: Bash scripts can be extracted from action.yml into separate executable
         files in scripts/ directory
     - source: commit b2f8f31
-      quote: Extracting bash scripts from action.yml improves readability (181 to 82
-        lines), enables independent testing
+      quote: Extracting bash scripts from action.yml improves readability (181 to
+        82 lines), enables independent testing

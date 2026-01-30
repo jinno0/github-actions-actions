@@ -1,2 +1,16 @@
-conflicts: []
-updated_at: '2026-01-28T08:30:00Z'
+updated_at: '2026-01-30T15:22:12Z'
+conflicts:
+  - id: CFLT-COMPOSITEACTION-001
+    term: CompositeAction
+    about: invariant
+    severity: low
+    nli: contradiction
+    items:
+      - claim: "Critical security vulnerabilities exist: unvalidated inputs, command injection, no shared libraries, missing version management. Security score 42/100"
+        source: ".bmad/reports/2-implementation-test-flow-completion-report.md#L74-L76 (Run 2026-01-30T09:10:00Z)"
+      - claim: "Security Issues: 0 - No eval/exec calls found, No hardcoded secrets, Proper token handling"
+        source: "_bmad-output/workflow-execution-summary.md#L102-L106 (Run 2026-01-30T15:22:12Z)"
+    status: resolved
+    active_workaround:
+      decision_key: AUTO:CompositeAction.security:timeline_resolution
+      summary: "RESOLVED: Earlier report captured pre-fix state (56 issues), later summary shows post-fix state (0 issues). Security fixes were applied in commit f60cbf9 between the two reports"
