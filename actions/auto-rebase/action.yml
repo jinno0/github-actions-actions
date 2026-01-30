@@ -90,6 +90,12 @@ runs:
         PR_NUMBER: ${{ env.PR_NUMBER }}
         BASE_BRANCH: ${{ env.BASE_BRANCH }}
       run: |
+        # Cleanup function for temporary files
+        cleanup_temp_files() {
+          rm -f /tmp/conflict_prompt.txt /tmp/claude_prompt.txt 2>/dev/null || true
+        }
+        trap cleanup_temp_files EXIT
+
         # Don't exit on error - we need to handle rebase conflicts
         set +e
 
