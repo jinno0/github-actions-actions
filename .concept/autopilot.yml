@@ -28,3 +28,8 @@ budget:
   max_loc_del: 800
 
 mode: "dry_run"  # pr|commit|dry_run
+
+concept_policy:
+  claims_commit: false  # claims.ndjson not committed (see .gitignore)
+  metrics_commit: false  # ontology_metrics.json not committed (see .gitignore)
+  runstate_commit: false  # run_state.json not committed (see .gitignore)

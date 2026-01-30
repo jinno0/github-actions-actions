@@ -1,5 +1,5 @@
 version: '0.3'
-updated_at: '2026-01-30T09:10:00Z'
+updated_at: '2026-01-30T12:21:22Z'
 canonical_terms:
   ExternalDispatch:
     id: TERM-EXTERNALDISPATCH
@@ -65,7 +65,6 @@ canonical_terms:
     - used
     - deprecated
     related_terms:
-    - GitHubActions
     - SelfHostedRunner
     - ClaudeCodeCLI
     assumptions: []

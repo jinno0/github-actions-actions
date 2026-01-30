@@ -10,9 +10,9 @@ queue:
     reason: Security issues identified in code review (8 critical issues)
     evidence:
       - source: .bmad/reports/2-implementation-test-flow-code-review-report.md
-        quote: Critical security vulnerabilities: unvalidated client_payload processing, command injection via sed, unrestricted git operations
+        quote: 'Critical security vulnerabilities: unvalidated client_payload processing, command injection via sed, unrestricted git operations'
       - source: .bmad/reports/2-implementation-test-flow-completion-report.md#L170-L184
-        quote: Security Vulnerabilities (Must Fix): 1. Unvalidated client_payload Processing, 2. Command Injection via sed, 3. Unrestricted Git Operations
+        quote: 'Security Vulnerabilities (Must Fix): 1. Unvalidated client_payload Processing, 2. Command Injection via sed, 3. Unrestricted Git Operations'
     auto_merge_candidates:
       - term: CompositeAction
         similarity: 0.35
@@ -30,7 +30,7 @@ queue:
     reason: 40% code duplication identified, need shared library infrastructure
     evidence:
       - source: .bmad/reports/2-implementation-test-flow-completion-report.md#L186-L190
-        quote: No Shared Library Infrastructure: 40% code duplication across actions, security patches require synchronized updates
+        quote: 'No Shared Library Infrastructure: 40% code duplication across actions, security patches require synchronized updates'
       - source: .bmad/reports/2-implementation-test-flow-code-review-report.md
         quote: Massive code duplication (no shared libraries)
     auto_merge_candidates:
@@ -50,7 +50,7 @@ queue:
     reason: Recommended solution for code duplication (40% across actions)
     evidence:
       - source: .bmad/reports/2-implementation-test-flow-completion-report.md#L186-L191
-        quote: Fix: Create lib/ directory with shared utilities. 40% code duplication across actions
+        quote: 'Fix: Create lib/ directory with shared utilities. 40% code duplication across actions'
       - source: .bmad/reports/2-implementation-test-flow-code-review-report.md
         quote: Create shared library infrastructure to eliminate code duplication
     auto_merge_candidates:
