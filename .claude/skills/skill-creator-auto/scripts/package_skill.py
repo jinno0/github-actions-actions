@@ -70,8 +70,8 @@ def package_skill(skill_path, output_dir=None):
             # Walk through the skill directory
             for file_path in skill_path.rglob("*"):
                 if file_path.is_file():
-                    # Calculate the relative path within the zip
-                    arcname = file_path.relative_to(skill_path.parent)
+                    # Calculate the relative path within the zip (skill folder as root)
+                    arcname = file_path.relative_to(skill_path)
                     zipf.write(file_path, arcname)
                     print(f"  Added: {arcname}")
 
