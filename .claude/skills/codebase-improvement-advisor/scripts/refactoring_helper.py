@@ -3,8 +3,8 @@
 Refactoring Helper - リファクタリング支援ツール
 
 使用方法:
-python refactoring_helper.py --file path/to/file.ts --action extract-function --start-line 10 --end-line 25
-python refactoring_helper.py --project-path /path/to/project --action suggest-refactoring
+python refactoring_helper.py --file path/to/file.ts --output refactoring_suggestions.md
+python refactoring_helper.py --project-path /path/to/project
 
 主な機能:
 - 関数抽出の提案
@@ -109,7 +109,6 @@ class RefactoringHelper:
         suggestions = []
 
         # マジックナンバーを検出
-        re.findall(r"\b(?:[1-9]\d{2,}|10[0-9]{2,})\b", content)
         for i, line in enumerate(lines, 1):
             numbers = re.findall(r"\b(?:[1-9]\d{2,}|10[0-9]{2,})\b", line)
             for num in numbers:
@@ -254,8 +253,6 @@ class RefactoringHelper:
             r"(\w+)\s*:\s*\([^)]*\)\s*=>\s*\{([^}]*(?:\{[^}]*\}[^}]*)*)\}",
         ]
 
-        content.split("\n")
-
         for pattern in patterns:
             matches = re.finditer(pattern, content, re.MULTILINE | re.DOTALL)
             for match in matches:
@@ -378,13 +375,8 @@ def main():
     parser.add_argument("--file", help="分析するファイル")
     parser.add_argument("--project-path", help="分析するプロジェクトパス")
     parser.add_argument(
-        "--action", choices=["analyze", "suggest-refactoring"], default="analyze"
-    )
-    parser.add_argument(
         "--output", default="refactoring_suggestions.md", help="出力ファイル"
     )
-    parser.add_argument("--start-line", type=int, help="開始行")
-    parser.add_argument("--end-line", type=int, help="終了行")
 
     args = parser.parse_args()
 
@@ -394,11 +386,10 @@ def main():
 
     helper = RefactoringHelper(args.file, args.project_path)
 
-    if args.action == "analyze":
-        suggestions = helper.analyze_file_for_refactoring()
-        generate_refactoring_report(suggestions, args.output)
-        print(f"✅ リファクタリング提案を生成しました: {args.output}")
-        print(f"   {len(suggestions)}件の提案があります")
+    suggestions = helper.analyze_file_for_refactoring()
+    generate_refactoring_report(suggestions, args.output)
+    print(f"✅ リファクタリング提案を生成しました: {args.output}")
+    print(f"   {len(suggestions)}件の提案があります")
 
 
 if __name__ == "__main__":
