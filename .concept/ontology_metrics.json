@@ -40,6 +40,7 @@
     "concept_sync_2026-01-30T01:09:25Z: claims_ndjson_72_lines_under_limit",
     "concept_sync_2026-01-30T01:09:25Z: no_ontology_changes_required",
     "janitor_2026-01-30T01:56:34Z: hygiene_check_no_changes_needed",
-    "concept_sync_2026-01-30T11:56:00Z: routine_maintenance_cycle_no_changes_needed"
+    "concept_sync_2026-01-30T11:56:00Z: routine_maintenance_cycle_no_changes_needed",
+    "janitor_2026-01-30T12:43:00Z: concept_hygiene_check_no_duplicates_no_gc_needed_reference_integrity_ok"
   ]
 }
