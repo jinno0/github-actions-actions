@@ -14,11 +14,5 @@ The Self-Healing Expert monitors the autonomous development loop, identifies run
 - **Infrastructure Repair**: Modifies `runtime.ts`, Python scripts, and Agent definitions to resolve issues.
 - **Optimization**: Improves the robustness of the loop (e.g., adding retries, improving regex for JSON extraction).
 
-## Achievements
-- Fixed `IssueImproverAgent` JSON parsing by redirecting `issue_improver.py` logs to stderr.
-- Prevented recursive title prefixing ("Implement: Implement:") by adding deduplication logic.
-- Resolved `AutoFixAgent` hanging by implementing smart fallback to mock mode when API keys are missing.
-- Hardened `SkillExecutor` to ensure robust fallback strategies.
-
 ## Usage
 This agent is implicitly active when the user (Cascade) intervenes to fix the loop.

@@ -16,7 +16,6 @@ inputs:
   doc-prompt-template:
     description: 'Path to custom doc prompt template (optional, uses built-in template if not specified)'
     required: false
-    default: ''
   github-token:
     description: 'GitHub token'
     required: true
@@ -50,7 +49,5 @@ runs:
                            print
                          }' "$TEMPLATE_FILE")
 
-        echo "$DOC_PROMPT" > /tmp/doc_prompt.txt
-
         # Run Claude Code CLI in safe mode (no --dangerously-skip-permissions)
-        claude --model "$MODEL" < /tmp/doc_prompt.txt
+        claude --model "$MODEL" <<< "$DOC_PROMPT"
