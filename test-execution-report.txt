@@ -1,0 +1,57 @@
+============================= test session starts ==============================
+platform linux -- Python 3.14.2, pytest-9.0.2, pluggy-1.6.0 -- /home/jinno/.local/share/mise/installs/python/3.14.2/bin/python
+cachedir: .pytest_cache
+rootdir: /home/jinno/github-actions-actions
+configfile: pytest.ini
+plugins: black-0.6.0, anyio-4.12.0, cov-7.0.0, asyncio-1.3.0, ruff-0.5
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 45 items
+
+tests/test_review_and_merge/test_review_action.py::TestReviewAction::test_action_yaml_exists PASSED [  2%]
+tests/test_review_and_merge/test_review_action.py::TestReviewAction::test_action_required_inputs PASSED [  4%]
+tests/test_review_and_merge/test_review_action.py::TestReviewAction::test_action_optional_inputs PASSED [  6%]
+tests/test_review_and_merge/test_review_action.py::TestReviewAction::test_action_outputs PASSED [  8%]
+tests/test_review_and_merge/test_review_action.py::TestReviewAction::test_review_script_exists PASSED [ 11%]
+tests/test_review_and_merge/test_review_action.py::TestReviewAction::test_post_comment_script_exists PASSED [ 13%]
+tests/test_review_and_merge/test_review_action.py::TestReviewAction::test_review_prompt_template_exists PASSED [ 15%]
+tests/test_review_and_merge/test_review_action.py::TestReviewAction::test_fix_prompt_template_exists PASSED [ 17%]
+tests/test_review_and_merge/test_review_action.py::TestReviewAction::test_comment_template_exists PASSED [ 20%]
+tests/test_review_and_merge/test_review_action.py::TestReviewAction::test_review_script_has_error_handling PASSED [ 22%]
+tests/test_review_and_merge/test_review_action.py::TestReviewAction::test_review_script_handles_auto_fix_mode PASSED [ 24%]
+tests/test_review_and_merge/test_review_action.py::TestReviewAction::test_review_script_handles_git_operations PASSED [ 26%]
+tests/test_review_and_merge/test_review_action.py::TestReviewAction::test_review_script_validates_json PASSED [ 28%]
+tests/test_review_and_merge/test_review_action.py::TestReviewAction::test_review_script_validates_verdict_values PASSED [ 31%]
+tests/test_review_and_merge/test_review_action.py::TestReviewAction::test_review_script_sets_github_outputs PASSED [ 33%]
+tests/test_review_and_merge/test_review_action.py::TestReviewActionIntegration::test_action_yaml_syntax PASSED [ 35%]
+tests/test_review_and_merge/test_review_action.py::TestReviewActionIntegration::test_review_prompt_template_content PASSED [ 37%]
+tests/test_review_and_merge/test_review_action.py::TestReviewActionIntegration::test_fix_prompt_template_content PASSED [ 40%]
+tests/test_review_and_merge/test_review_action.py::TestReviewActionIntegration::test_comment_template_content PASSED [ 42%]
+tests/test_review_and_merge/test_review_action.py::TestReviewActionIntegration::test_action_directory_structure PASSED [ 44%]
+tests/test_review_and_merge/test_review_action.py::TestReviewActionIntegration::test_all_templates_readable PASSED [ 46%]
+tests/test_review_and_merge/test_review_action.py::TestReviewActionIntegration::test_all_scripts_executable PASSED [ 48%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeAction::test_action_yaml_exists PASSED [ 51%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeAction::test_action_required_inputs PASSED [ 53%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeAction::test_action_optional_inputs_with_defaults PASSED [ 55%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeAction::test_action_has_path_validation PASSED [ 57%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeAction::test_action_has_security_checks PASSED [ 60%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeAction::test_action_validates_spec_file PASSED [ 62%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeAction::test_action_uses_base64_encoding PASSED [ 64%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeAction::test_action_uses_envsubst PASSED [ 66%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeAction::test_action_supports_custom_template PASSED [ 68%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeAction::test_action_invokes_claude_cli PASSED [ 71%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeAction::test_action_sets_environment_variables PASSED [ 73%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeAction::test_action_has_error_handling PASSED [ 75%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeAction::test_generation_prompt_template_exists PASSED [ 77%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeAction::test_generation_prompt_template_content PASSED [ 80%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeIntegration::test_action_yaml_syntax PASSED [ 82%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeIntegration::test_action_directory_structure PASSED [ 84%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeIntegration::test_template_readable PASSED [ 86%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeIntegration::test_spec_validation_workflow PASSED [ 88%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeIntegration::test_supported_languages_documented PASSED [ 91%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeIntegration::test_action_handles_special_characters PASSED [ 93%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeIntegration::test_output_directory_handling PASSED [ 95%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeIntegration::test_claude_model_parameter PASSED [ 97%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeIntegration::test_workflow_step_sequence PASSED [100%]
+
+--- generated xml file: /home/jinno/github-actions-actions/test-results.xml ----
+============================== 45 passed in 0.05s ==============================
