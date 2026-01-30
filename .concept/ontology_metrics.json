@@ -1,0 +1,16 @@
+{
+  "total_terms": 11,
+  "core": 5,
+  "domain": 5,
+  "aux": 1,
+  "draft_ratio": 0.0,
+  "unmapped_ratio": 0.0,
+  "queue_pending": 0,
+  "queue_rejected": 3,
+  "conflicts_open": 0,
+  "ambiguities_high": 0,
+  "decisions_lines": 54,
+  "claims_lines": 8,
+  "last_run": "2026-01-31T05:07:00Z",
+  "runs_since_last_gc": 0
+}

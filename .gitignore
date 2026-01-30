@@ -68,11 +68,8 @@ debug.log
 .concept/archived/
 .concept/archive/
 
-# Concept Sync runtime files (not committed per autopilot.yml policy)
+# Concept Sync: claims.ndjson only (policy: non-commit per autopilot.yml)
 .concept/claims.ndjson
-.concept/ontology_metrics.json
-.concept/run_state.json
-.concept/term_queue.yml
 
 # Auto-generated framework outputs
 _bmad-output/

@@ -31,5 +31,6 @@ mode: "dry_run"  # pr|commit|dry_run
 
 concept_policy:
   claims_commit: false  # claims.ndjson not committed (see .gitignore)
-  metrics_commit: false  # ontology_metrics.json not committed (see .gitignore)
-  runstate_commit: false  # run_state.json not committed (see .gitignore)
+  metrics_commit: true  # ontology_metrics.json IS committed (Source of Truth)
+  runstate_commit: true  # run_state.json IS committed (Source of Truth)
+  term_queue_commit: true  # term_queue.yml IS committed (Source of Truth)
