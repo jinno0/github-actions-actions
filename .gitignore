@@ -64,11 +64,8 @@ git-rebase-todo
 debug.log
 *.debug
 
-# track .concept Source-of-Truth, ignore heavy archives and runtime tracking
+# track .concept Source-of-Truth, ignore heavy archives
 .concept/archive/
-.concept/claims.ndjson
-.concept/ontology_metrics.json
-.concept/run_state.json
 
 # BMAD sprint management
 .bmad/sprint/archive/
