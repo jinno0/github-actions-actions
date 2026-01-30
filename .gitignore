@@ -68,13 +68,11 @@ debug.log
 .concept/archived/
 .concept/archive/
 
-# Heavy log files (claims.ndjson is tracked but archived when too large)
-# .concept/claims.ndjson is tracked per policy A
-
-# Temporary runtime state files (auto-generated, should not be tracked)
-.concept/run_state.json
-.concept/ontology_metrics.json
+# Concept Sync runtime files (not committed per autopilot.yml policy)
 .concept/claims.ndjson
+.concept/ontology_metrics.json
+.concept/run_state.json
+.concept/term_queue.yml
 
 # Auto-generated framework outputs
 _bmad-output/
@@ -86,7 +84,6 @@ _bmad-output/
 .bmad/workflows/*validation-report.md
 .bmad/workflows/*flow-report.md
 .bmad/workflows/*completion-report.md
-.bmad/reports/
 
 # Temporary workflow/completion report files in root
 *_FLOW_REPORT.md
@@ -160,19 +157,7 @@ ENV/
 
 # System analytics data
 .analytics/
-# System analytics data
-.analytics/
-
-# Concept Sync runtime files (not committed per autopilot.yml policy)
-.concept/claims.ndjson
-.concept/ontology_metrics.json
-.concept/run_state.json
 
 # Temporary analysis and review files
 CODE_REVIEW_SUMMARY.md
 cleanup-analysis.md
-# Runtime cache and state files
-.concept/ontology_metrics.json
-.concept/run_state.json
-.concept/claims.ndjson
-.concept/term_queue.yml
