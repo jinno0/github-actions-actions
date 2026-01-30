@@ -64,14 +64,15 @@ git-rebase-todo
 debug.log
 *.debug
 
-# track .concept Source-of-Truth, ignore archives and runtime cache
+# track .concept Source-of-Truth, ignore archives and heavy files
 .concept/archived/
 .concept/archive/
 
-# Runtime cache files (claims.ndjson is heavy)
-.concept/claims.ndjson
-.concept/run_state.json
-.concept/ontology_metrics.json
+# Heavy log files (claims.ndjson is tracked but archived when too large)
+# .concept/claims.ndjson is tracked per policy A
+
+# NOTE: run_state.json and ontology_metrics.json are Source-of-Truth files
+# and should be tracked, not ignored
 
 # Auto-generated framework outputs
 _bmad-output/

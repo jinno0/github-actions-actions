@@ -1,0 +1,14 @@
+{
+  "run_index": 1,
+  "last_run_id": "2026-01-30T22:54:00Z",
+  "last_cycle_summary": "Cycle 0: Boot complete - all milestones done, quality gates passing, repo in maintenance mode",
+  "claims_retained_lines": 0,
+  "active_milestone": null,
+  "consecutive_failures": 0,
+  "budget_used": {
+    "cycles": 0,
+    "files_changed": 0,
+    "loc_add": 0,
+    "loc_del": 0
+  }
+}

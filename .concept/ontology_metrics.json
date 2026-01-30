@@ -1,0 +1,21 @@
+{
+  "generated_at": "2026-01-30T14:40:44Z",
+  "total_terms": 13,
+  "core": 5,
+  "domain": 7,
+  "aux": 1,
+  "draft_ratio": 0.0,
+  "unmapped_ratio": 0.0,
+  "unmapped_count": 0,
+  "queue_pending": 0,
+  "conflicts_open": 0,
+  "ambiguities_high": 0,
+  "decisions_lines": 119,
+  "decisions_within_limit": true,
+  "claims_lines": 0,
+  "claims_within_limit": true,
+  "tombstones_count": 0,
+  "invariants_count": 14,
+  "mapped_terms_count": 13,
+  "invariant_terms_count": 7
+}
