@@ -7,8 +7,7 @@ import re
 from dataclasses import dataclass
 from enum import Enum
 
-import anthropic
-from anthropic import Anthropic
+from anthropic import Anthropic, AuthenticationError, APIConnectionError
 
 
 class IssueType(Enum):
@@ -132,7 +131,7 @@ class IssueAnalyzer:
                     temperature=0,
                 )
                 self.use_claude = True
-            except (anthropic.AuthenticationError, anthropic.APIConnectionError, Exception) as e:
+            except (AuthenticationError, APIConnectionError, Exception) as e:
                 error_type = type(e).__name__
                 if not fallback_to_keywords:
                     raise ValueError(f"Claude API initialization failed ({error_type}): {e}")
@@ -309,11 +308,11 @@ Respond with valid JSON only:
         suggested_body = self._validate_output(suggested_body)
 
         # Validate title length too
-        if len(suggested_title) > 200:
+        if len(suggested_title) > self.MAX_TITLE_LENGTH:
             print(
                 f"Warning: Title length ({len(suggested_title)}) is excessive, truncating..."
             )
-            suggested_title = suggested_title[:200] + "..."
+            suggested_title = suggested_title[:self.MAX_TITLE_LENGTH] + "..."
 
         # Calculate confidence
         confidence_score = self._calculate_confidence(title, body, issue_type)
