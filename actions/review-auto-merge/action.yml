@@ -11,10 +11,16 @@ inputs:
     required: false
     default: '5'
 
+outputs:
+  merged:
+    description: 'Whether the PR was successfully merged'
+    value: ${{ steps.merge.outputs.merged }}
+
 runs:
   using: 'composite'
   steps:
     - name: Merge PR
+      id: merge
       shell: bash
       env:
         GH_TOKEN: ${{ inputs.github-token }}
