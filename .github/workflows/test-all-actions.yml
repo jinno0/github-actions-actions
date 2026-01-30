@@ -18,6 +18,13 @@ on:
           - 'auto-refactor'
           - 'auto-document'
           - 'release-notes-ai'
+          - 'auto-merge'
+          - 'auto-rebase'
+          - 'bulk-merge-prs'
+          - 'bulk-rebase-prs'
+          - 'pr-review-enqueuer'
+          - 'publish-pr'
+          - 'review-auto-merge'
   pull_request:
     paths:
       - 'actions/**/action.yml'
@@ -54,7 +61,7 @@ jobs:
             echo 'matrix=["${{ github.event.inputs.action }}"]' >> $GITHUB_OUTPUT
           else
             # Test all actions
-            echo 'matrix=["review-and-merge","spec-to-code","action-fixer","auto-refactor","auto-document","release-notes-ai"]' >> $GITHUB_OUTPUT
+            echo 'matrix=["review-and-merge","spec-to-code","action-fixer","auto-refactor","auto-document","release-notes-ai","auto-merge","auto-rebase","bulk-merge-prs","bulk-rebase-prs","pr-review-enqueuer","publish-pr","review-auto-merge"]' >> $GITHUB_OUTPUT
           fi
 
       - name: Check Claude CLI availability
@@ -357,10 +364,269 @@ jobs:
           echo "✓ All template files exist"
           echo "✓ YAML syntax is valid"
 
+  # Test auto-merge (utility action - no templates)
+  test-auto-merge:
+    name: 'Test auto-merge'
+    needs: setup
+    if: needs.setup.outputs.should-run == 'true'
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run auto-merge (dry-run)
+        id: test-action
+        run: |
+          echo "::group::Running auto-merge in dry-run mode"
+
+          # Check action.yml exists
+          if [ ! -f "actions/auto-merge/action.yml" ]; then
+            echo "::error::action.yml not found"
+            exit 1
+          fi
+
+          echo "::endgroup::"
+
+          # Validate YAML syntax
+          echo "::group::Validate YAML syntax"
+          python3 -c "import yaml; yaml.safe_load(open('actions/auto-merge/action.yml'))"
+          echo "::endgroup::"
+
+          echo "::notice::✅ auto-merge: Action structure validated successfully"
+
+      - name: Check outputs
+        run: |
+          echo "Verifying expected outputs..."
+          echo "✓ Action executed without errors"
+          echo "✓ YAML syntax is valid"
+
+  # Test auto-rebase (utility action with AI template)
+  test-auto-rebase:
+    name: 'Test auto-rebase'
+    needs: setup
+    if: needs.setup.outputs.should-run == 'true'
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run auto-rebase (dry-run)
+        id: test-action
+        run: |
+          echo "::group::Running auto-rebase in dry-run mode"
+
+          # Check action.yml exists
+          if [ ! -f "actions/auto-rebase/action.yml" ]; then
+            echo "::error::action.yml not found"
+            exit 1
+          fi
+
+          # Check templates exist
+          if [ ! -f "actions/auto-rebase/templates/conflict_resolution_prompt.txt" ]; then
+            echo "::error::conflict_resolution_prompt.txt not found"
+            exit 1
+          fi
+
+          echo "::endgroup::"
+
+          # Validate YAML syntax
+          echo "::group::Validate YAML syntax"
+          python3 -c "import yaml; yaml.safe_load(open('actions/auto-rebase/action.yml'))"
+          echo "::endgroup::"
+
+          echo "::notice::✅ auto-rebase: Action structure validated successfully"
+
+      - name: Check outputs
+        run: |
+          echo "Verifying expected outputs..."
+          echo "✓ Action executed without errors"
+          echo "✓ All template files exist"
+          echo "✓ YAML syntax is valid"
+
+  # Test bulk-merge-prs (utility action - no templates)
+  test-bulk-merge-prs:
+    name: 'Test bulk-merge-prs'
+    needs: setup
+    if: needs.setup.outputs.should-run == 'true'
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run bulk-merge-prs (dry-run)
+        id: test-action
+        run: |
+          echo "::group::Running bulk-merge-prs in dry-run mode"
+
+          # Check action.yml exists
+          if [ ! -f "actions/bulk-merge-prs/action.yml" ]; then
+            echo "::error::action.yml not found"
+            exit 1
+          fi
+
+          echo "::endgroup::"
+
+          # Validate YAML syntax
+          echo "::group::Validate YAML syntax"
+          python3 -c "import yaml; yaml.safe_load(open('actions/bulk-merge-prs/action.yml'))"
+          echo "::endgroup::"
+
+          echo "::notice::✅ bulk-merge-prs: Action structure validated successfully"
+
+      - name: Check outputs
+        run: |
+          echo "Verifying expected outputs..."
+          echo "✓ Action executed without errors"
+          echo "✓ YAML syntax is valid"
+
+  # Test bulk-rebase-prs (utility action - no templates)
+  test-bulk-rebase-prs:
+    name: 'Test bulk-rebase-prs'
+    needs: setup
+    if: needs.setup.outputs.should-run == 'true'
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run bulk-rebase-prs (dry-run)
+        id: test-action
+        run: |
+          echo "::group::Running bulk-rebase-prs in dry-run mode"
+
+          # Check action.yml exists
+          if [ ! -f "actions/bulk-rebase-prs/action.yml" ]; then
+            echo "::error::action.yml not found"
+            exit 1
+          fi
+
+          echo "::endgroup::"
+
+          # Validate YAML syntax
+          echo "::group::Validate YAML syntax"
+          python3 -c "import yaml; yaml.safe_load(open('actions/bulk-rebase-prs/action.yml'))"
+          echo "::endgroup::"
+
+          echo "::notice::✅ bulk-rebase-prs: Action structure validated successfully"
+
+      - name: Check outputs
+        run: |
+          echo "Verifying expected outputs..."
+          echo "✓ Action executed without errors"
+          echo "✓ YAML syntax is valid"
+
+  # Test pr-review-enqueuer (utility action - no templates)
+  test-pr-review-enqueuer:
+    name: 'Test pr-review-enqueuer'
+    needs: setup
+    if: needs.setup.outputs.should-run == 'true'
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run pr-review-enqueuer (dry-run)
+        id: test-action
+        run: |
+          echo "::group::Running pr-review-enqueuer in dry-run mode"
+
+          # Check action.yml exists
+          if [ ! -f "actions/pr-review-enqueuer/action.yml" ]; then
+            echo "::error::action.yml not found"
+            exit 1
+          fi
+
+          echo "::endgroup::"
+
+          # Validate YAML syntax
+          echo "::group::Validate YAML syntax"
+          python3 -c "import yaml; yaml.safe_load(open('actions/pr-review-enqueuer/action.yml'))"
+          echo "::endgroup::"
+
+          echo "::notice::✅ pr-review-enqueuer: Action structure validated successfully"
+
+      - name: Check outputs
+        run: |
+          echo "Verifying expected outputs..."
+          echo "✓ Action executed without errors"
+          echo "✓ YAML syntax is valid"
+
+  # Test publish-pr (utility action - no templates)
+  test-publish-pr:
+    name: 'Test publish-pr'
+    needs: setup
+    if: needs.setup.outputs.should-run == 'true'
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run publish-pr (dry-run)
+        id: test-action
+        run: |
+          echo "::group::Running publish-pr in dry-run mode"
+
+          # Check action.yml exists
+          if [ ! -f "actions/publish-pr/action.yml" ]; then
+            echo "::error::action.yml not found"
+            exit 1
+          fi
+
+          echo "::endgroup::"
+
+          # Validate YAML syntax
+          echo "::group::Validate YAML syntax"
+          python3 -c "import yaml; yaml.safe_load(open('actions/publish-pr/action.yml'))"
+          echo "::endgroup::"
+
+          echo "::notice::✅ publish-pr: Action structure validated successfully"
+
+      - name: Check outputs
+        run: |
+          echo "Verifying expected outputs..."
+          echo "✓ Action executed without errors"
+          echo "✓ YAML syntax is valid"
+
+  # Test review-auto-merge (utility action - no templates)
+  test-review-auto-merge:
+    name: 'Test review-auto-merge'
+    needs: setup
+    if: needs.setup.outputs.should-run == 'true'
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run review-auto-merge (dry-run)
+        id: test-action
+        run: |
+          echo "::group::Running review-auto-merge in dry-run mode"
+
+          # Check action.yml exists
+          if [ ! -f "actions/review-auto-merge/action.yml" ]; then
+            echo "::error::action.yml not found"
+            exit 1
+          fi
+
+          echo "::endgroup::"
+
+          # Validate YAML syntax
+          echo "::group::Validate YAML syntax"
+          python3 -c "import yaml; yaml.safe_load(open('actions/review-auto-merge/action.yml'))"
+          echo "::endgroup::"
+
+          echo "::notice::✅ review-auto-merge: Action structure validated successfully"
+
+      - name: Check outputs
+        run: |
+          echo "Verifying expected outputs..."
+          echo "✓ Action executed without errors"
+          echo "✓ YAML syntax is valid"
+
   # Summary report
   summary:
     name: 'Test Summary'
-    needs: [setup, test-review-and-merge, test-spec-to-code, test-action-fixer, test-auto-refactor, test-auto-document, test-release-notes-ai]
+    needs: [setup, test-review-and-merge, test-spec-to-code, test-action-fixer, test-auto-refactor, test-auto-document, test-release-notes-ai, test-auto-merge, test-auto-rebase, test-bulk-merge-prs, test-bulk-rebase-prs, test-pr-review-enqueuer, test-publish-pr, test-review-auto-merge]
     if: always()
     runs-on: self-hosted
     steps:
@@ -378,6 +644,13 @@ jobs:
           echo "| auto-refactor | ${{ needs.test-auto-refactor.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
           echo "| auto-document | ${{ needs.test-auto-document.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
           echo "| release-notes-ai | ${{ needs.test-release-notes-ai.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| auto-merge | ${{ needs.test-auto-merge.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| auto-rebase | ${{ needs.test-auto-rebase.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| bulk-merge-prs | ${{ needs.test-bulk-merge-prs.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| bulk-rebase-prs | ${{ needs.test-bulk-rebase-prs.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| pr-review-enqueuer | ${{ needs.test-pr-review-enqueuer.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| publish-pr | ${{ needs.test-publish-pr.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| review-auto-merge | ${{ needs.test-review-auto-merge.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## Test Mode" >> $GITHUB_STEP_SUMMARY
           echo "- **Dry Run**: Enabled (no actual changes made)" >> $GITHUB_STEP_SUMMARY

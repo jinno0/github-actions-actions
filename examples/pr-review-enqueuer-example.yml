@@ -13,7 +13,7 @@ permissions:
 jobs:
   enqueue-prs-for-review:
     name: Scan and Enqueue PRs
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Enqueue all open PRs for review
