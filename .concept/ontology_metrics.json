@@ -4,12 +4,12 @@
   "domain": 5,
   "aux": 1,
   "draft_ratio": 0.0,
-  "unmapped_ratio": 0.43,
+  "unmapped_ratio": 0.33,
   "queue_pending": 0,
   "queue_rejected": 3,
   "conflicts_open": 0,
   "ambiguities_high": 0,
   "decisions_lines": 54,
-  "claims_lines": 9,
-  "updated_at": "2026-01-30T19:40:00Z"
+  "claims_lines": 12,
+  "updated_at": "2026-01-30T11:36:27Z"
 }
