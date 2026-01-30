@@ -70,6 +70,8 @@ debug.log
 
 # Runtime cache files (claims.ndjson is heavy)
 .concept/claims.ndjson
+.concept/run_state.json
+.concept/ontology_metrics.json
 
 # Auto-generated framework outputs
 _bmad-output/
