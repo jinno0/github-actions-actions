@@ -78,6 +78,7 @@ _bmad-output/
 .serena/
 
 # BMAD workflow execution reports
+.bmad/reports/
 .bmad/workflows/*execution-report.md
 .bmad/workflows/*validation-report.md
 .bmad/workflows/*flow-report.md
