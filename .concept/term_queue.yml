@@ -29,12 +29,11 @@ queue:
       with quality attributes.
     confidence_auto: 0.82
     decided_at_run: '2026-01-30T13:00:00Z'
-    expires_after_runs: 20
     revert_triggers:
     - primary_evidence_contradiction
     - security_domain_emergence
-  expires_after_runs: 10
-  created_run: '2026-01-30T09:10:00Z'
+    expires_after_runs: 20
+    created_run: '2026-01-30T09:10:00Z'
 - id: TP-007
   proposed_canonical: CodeDuplication
   proposed_layer: aux
@@ -63,12 +62,11 @@ queue:
       CompositeAction development, not a distinct canonical concept.
     confidence_auto: 0.79
     decided_at_run: '2026-01-30T13:00:00Z'
-    expires_after_runs: 20
     revert_triggers:
     - primary_evidence_contradiction
     - quality_metrics_domain_emergence
-  expires_after_runs: 10
-  created_run: '2026-01-30T09:10:00Z'
+    expires_after_runs: 20
+    created_run: '2026-01-30T09:10:00Z'
 - id: TP-008
   proposed_canonical: SharedLibraryInfrastructure
   proposed_layer: domain
@@ -98,9 +96,8 @@ queue:
       architectural approach, not a domain term.
     confidence_auto: 0.71
     decided_at_run: '2026-01-30T13:00:00Z'
-    expires_after_runs: 20
     revert_triggers:
     - primary_evidence_contradiction
     - architecture_domain_emergence
-  expires_after_runs: 10
-  created_run: '2026-01-30T09:10:00Z'
+    expires_after_runs: 20
+    created_run: '2026-01-30T09:10:00Z'
