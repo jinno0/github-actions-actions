@@ -68,11 +68,8 @@ debug.log
 .concept/archived/
 .concept/archive/
 
-# Runtime cache and state files
-.concept/ontology_metrics.json
-.concept/run_state.json
+# Runtime cache files (claims.ndjson is heavy)
 .concept/claims.ndjson
-.concept/term_queue.yml
 
 # Auto-generated framework outputs
 _bmad-output/
