@@ -1,38 +1,62 @@
-updated_at: '2026-01-28T08:30:00Z'
+updated_at: '2026-01-30T09:10:00Z'
 queue:
-  - id: TP-005
-    proposed_canonical: ScriptExtraction
+  - id: TP-006
+    proposed_canonical: SecurityVulnerability
     proposed_layer: aux
     term_raw_examples:
-      - script extraction
-      - extract bash scripts
-      - extracted scripts
-    reason: Refactoring practice of extracting bash scripts from action.yml into scripts/ directory
+      - security vulnerabilities
+      - command injection
+      - unvalidated inputs
+    reason: Security issues identified in code review (8 critical issues)
     evidence:
-      - source: actions/review-and-merge/scripts/review-and-fix.sh#L1-L4
-        quote: Bash scripts can be extracted from action.yml into separate executable files in scripts/ directory
-      - source: commit b2f8f31
-        quote: Extracting bash scripts from action.yml improves readability (181 to 82 lines), enables independent testing
+      - source: .bmad/reports/2-implementation-test-flow-code-review-report.md
+        quote: Critical security vulnerabilities: unvalidated client_payload processing, command injection via sed, unrestricted git operations
+      - source: .bmad/reports/2-implementation-test-flow-completion-report.md#L170-L184
+        quote: Security Vulnerabilities (Must Fix): 1. Unvalidated client_payload Processing, 2. Command Injection via sed, 3. Unrestricted Git Operations
     auto_merge_candidates:
-      - term: TemplateFile
-        similarity: 0.45
-        rationale: Both relate to code organization, but TemplateFile is about prompts while ScriptExtraction is about logic separation
       - term: CompositeAction
-        similarity: 0.52
-        rationale: ScriptExtraction is a practice within CompositeAction development, not a distinct architectural concept
-    decision: accepted
+        similarity: 0.35
+        rationale: Security issues affect CompositeAction but are a distinct concern
+    decision: pending
     expires_after_runs: 10
-    created_run: '2026-01-28T08:30:00Z'
-    auto_decision:
-      id: AUTO-005
-      decision: Accept ScriptExtraction as aux term
-      rationale: |
-        1. Evidence strength: 2 sources (actual script file + commit message with clear rationale)
-        2. Low merge similarity: Highest candidate (CompositeAction) is 0.52 < 0.78 threshold
-        3. Semantic distinctness: ScriptExtraction is a refactoring practice, distinct from:
-           - TemplateFile (prompt text management)
-           - CompositeAction (architectural construct)
-        4. Auxiliary layer: Appropriate for refactoring best practices
-      milestone_ref: MS-003
-      status: applied
-      created_at: '2026-01-28T08:37:00Z'
+    created_run: '2026-01-30T09:10:00Z'
+  - id: TP-007
+    proposed_canonical: CodeDuplication
+    proposed_layer: aux
+    term_raw_examples:
+      - code duplication
+      - shared libraries
+      - code reuse
+    reason: 40% code duplication identified, need shared library infrastructure
+    evidence:
+      - source: .bmad/reports/2-implementation-test-flow-completion-report.md#L186-L190
+        quote: No Shared Library Infrastructure: 40% code duplication across actions, security patches require synchronized updates
+      - source: .bmad/reports/2-implementation-test-flow-code-review-report.md
+        quote: Massive code duplication (no shared libraries)
+    auto_merge_candidates:
+      - term: CompositeAction
+        similarity: 0.42
+        rationale: Code duplication is a quality issue within CompositeAction, not a distinct concept
+    decision: pending
+    expires_after_runs: 10
+    created_run: '2026-01-30T09:10:00Z'
+  - id: TP-008
+    proposed_canonical: SharedLibraryInfrastructure
+    proposed_layer: domain
+    term_raw_examples:
+      - shared library
+      - lib/ directory
+      - common utilities
+    reason: Recommended solution for code duplication (40% across actions)
+    evidence:
+      - source: .bmad/reports/2-implementation-test-flow-completion-report.md#L186-L191
+        quote: Fix: Create lib/ directory with shared utilities. 40% code duplication across actions
+      - source: .bmad/reports/2-implementation-test-flow-code-review-report.md
+        quote: Create shared library infrastructure to eliminate code duplication
+    auto_merge_candidates:
+      - term: CompositeAction
+        similarity: 0.55
+        rationale: SharedLibraryInfrastructure is an architectural pattern within CompositeAction development
+    decision: pending
+    expires_after_runs: 10
+    created_run: '2026-01-30T09:10:00Z'
