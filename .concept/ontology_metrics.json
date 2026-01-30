@@ -8,9 +8,27 @@
   "queue_pending": 0,
   "queue_rejected": 3,
   "conflicts_open": 0,
+  "conflicts_resolved": 1,
   "ambiguities_high": 0,
+  "ambiguities_total": 0,
   "decisions_lines": 54,
+  "decisions_limit": 200,
+  "decisions_utilization": 0.27,
   "claims_lines": 0,
-  "last_run": "2026-01-31T06:18:15Z",
-  "runs_since_last_gc": 0
+  "last_run": "2026-01-30T22:18:16Z",
+  "run_index": 33,
+  "runs_since_last_gc": 1,
+  "health_status": "optimal",
+  "budget_utilization": {
+    "total_terms": 0.1375,
+    "core": 0.25,
+    "domain": 0.1667,
+    "aux": 0.0333
+  },
+  "active_auto_decisions": 4,
+  "expired_auto_decisions": 0,
+  "term_queue_age_runs": {
+    "oldest_pending": null,
+    "newest_rejected": 6
+  }
 }
