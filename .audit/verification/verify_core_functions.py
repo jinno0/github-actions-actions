@@ -67,7 +67,8 @@ def verify_cf001_review_and_merge() -> VerificationResult:
     # 3. Verify YAML syntax
     try:
         import yaml
-        yaml.safe_load(action_yml)
+        with open(action_yml) as f:
+            yaml.safe_load(f)
     except Exception as e:
         return VerificationResult(
             function_id="CF-001",

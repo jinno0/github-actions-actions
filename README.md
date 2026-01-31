@@ -5,16 +5,45 @@ Self-hosted runner上で動作する **Claude Code CLI** を活用し、文脈�
 
 ## 🚀 提供している AI Actions
 
-現在、以下の主要な AI Actions を提供しています（代表的な6件）。
+現在、以下の AI Actions を提供しています（全13件）。
+
+### コア開発ワークフロー (Core Development)
 
 | Action | 概要 | セットアップガイド |
 |--------|------|-------------------|
-| `review-and-merge` | AIがコードを自動修正し、そのまま自動マージ（Auto-Fix標準装備） | [Guide](./instructions/review-and-merge.md) |
+| `review-and-merge` | AIがコードをレビューし自動マージ（Auto-Fix標準装備） | [Guide](./instructions/review-and-merge.md) |
 | `spec-to-code` | Markdown仕様書からコードを自動生成 | [Guide](./instructions/spec-to-code.md) |
 | `action-fixer` | Workflowのエラーを検知し、AIが自動修正 | [Guide](./instructions/action-fixer.md) |
 | `auto-refactor` | 自然言語の指示に基づき、既存コードをリファクタリング | [Guide](./instructions/auto-refactor.md) |
+
+### ドキュメント自動化 (Documentation)
+
+| Action | 概要 | セットアップガイド |
+|--------|------|-------------------|
 | `auto-document` | コードの変更を検知し、README等のドキュメントを自動更新 | [Guide](./instructions/auto-document.md) |
 | `release-notes-ai` | コミット履歴から人間が読みやすいリリースノートを生成 | [Guide](./instructions/release-notes-ai.md) |
+
+### PR マージ自動化 (Automation)
+
+| Action | 概要 | セットアップガイド |
+|--------|------|-------------------|
+| `auto-merge` | PRが条件を満たす場合に自動マージ（squash/merge/rebase対応） | [Guide](./instructions/auto-merge.md) |
+| `auto-rebase` | PRの競合をAIが自動解決しながらリベース | [Guide](./instructions/auto-rebase.md) |
+| `review-auto-merge` | AIレビュー後、CIパス時に自動マージ（リトライ機能付き） | [Guide](./instructions/review-auto-merge.md) |
+| `publish-pr` | ドラフトPRを自動的にレビュー準備完了に変更 | [Guide](./instructions/publish-pr.md) |
+
+### 一括操作 (Bulk Operations)
+
+| Action | 概要 | セットアップガイド |
+|--------|------|-------------------|
+| `bulk-merge-prs` | 複数のPRを一括マージ | [Guide](./instructions/bulk-merge-prs.md) |
+| `bulk-rebase-prs` | 複数のPRを一括リベース | [Guide](./instructions/bulk-rebase-prs.md) |
+
+### ワークフロー補助 (Workflow Helpers)
+
+| Action | 概要 | セットアップガイド |
+|--------|------|-------------------|
+| `pr-review-enqueuer` | PRをスキャンし、AIレビューキューに自動登録 | [Guide](./instructions/pr-review-enqueuer.md) |
 
 ## 🛠 使い方
 

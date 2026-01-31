@@ -1,0 +1,56 @@
+{
+  "run_id": "2026-01-31T12:36:16Z",
+  "timestamp": "2026-01-31T12:36:16Z",
+  "phase": "before_improvement",
+  "metrics": {
+    "total_actions": 13,
+    "readme_line_count": 52,
+    "readme_documented_actions": 6,
+    "readme_coverage_percent": 46.15,
+    "actions_with_templates": 9,
+    "template_coverage_percent": 69.23,
+    "verification_scripts_count": 1,
+    "core_function_pass_rate": 0.833,
+    "core_functions_passed": 5,
+    "core_functions_total": 6
+  },
+  "core_function_results": [
+    {
+      "id": "CF-001",
+      "name": "review-and-merge",
+      "passed": false,
+      "error": "action.yml has syntax errors (script bug - false positive)"
+    },
+    {
+      "id": "CF-002",
+      "name": "spec-to-code",
+      "passed": true
+    },
+    {
+      "id": "CF-003",
+      "name": "action-fixer",
+      "passed": true
+    },
+    {
+      "id": "CF-004",
+      "name": "auto-refactor",
+      "passed": true
+    },
+    {
+      "id": "CF-005",
+      "name": "auto-document",
+      "passed": true
+    },
+    {
+      "id": "CF-006",
+      "name": "release-notes-ai",
+      "passed": true
+    }
+  ],
+  "gaps_identified": {
+    "critical": 1,
+    "high": 3,
+    "medium": 2,
+    "low": 1
+  }
+}
