@@ -4,6 +4,7 @@
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -56,7 +57,6 @@ Body:
 
     try:
         # Use Claude CLI via subprocess
-        print("DEBUG: Calling claude CLI for feature implementation", file=sys.stderr)
         result = subprocess.run(
             ["claude", "-p", prompt, "--setting-sources", "user"],
             capture_output=True,
@@ -72,7 +72,6 @@ Body:
         response_text = result.stdout.strip()
 
         # Extract JSON from markdown code blocks
-        import re
         json_match = re.search(r'```(?:json)?\s*\n(.*?)\n```', response_text, re.DOTALL)
         if json_match:
             response_text = json_match.group(1).strip()
