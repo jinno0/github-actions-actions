@@ -5,7 +5,6 @@ import os
 import subprocess
 import sys
 from dataclasses import dataclass
-from pathlib import Path
 
 import yaml
 
@@ -37,12 +36,6 @@ class IssueConfig:
 
 class IssueCreator:
     """GitHub Issue作成クラス"""
-
-    # 定数定義
-    MIN_TITLE_LENGTH = 10
-    TEMP_BODY_FILE = "/tmp/issue_body.md"
-    QUALITY_SCORE_THRESHOLD = 80
-    TEST_COVERAGE_THRESHOLD = 80
 
     def _create_issue_config_from_dict(
         self, issue_config: dict
@@ -118,20 +111,6 @@ class IssueCreator:
         except subprocess.CalledProcessError:
             return "owner/repo"
 
-    def _get_priority_info(self, priority: str) -> dict:
-        """
-        優先度情報を取得（ヘルパーメソッド）
-
-        Args:
-            priority: 優先度キー（high/medium/low）
-
-        Returns:
-            優先度情報辞書
-        """
-        return next(
-            (v for k, v in self.PRIORITIES.items() if v["key"] == priority),
-            self.PRIORITIES["2"],  # デフォルト: medium
-        )
 
     def _create_issue_body(self, config: IssueConfig) -> str:
         """Issue本文を生成"""
@@ -158,16 +137,16 @@ class IssueCreator:
 
         body += "## 📊 成功条件\n\n"
         body += f"- [ ] TypeScript エラー: 0件\n"
-        body += f"- [ ] テストカバレッジ: ≥{self.TEST_COVERAGE_THRESHOLD}%\n"
-        body += f"- [ ] 品質スコア: ≥{self.QUALITY_SCORE_THRESHOLD}点\n"
         body += "- [ ] セキュリティスキャン: 脆弱性0件\n\n"
 
         body += "## 🤖 Agent実行設定\n\n"
         body += f"- **自動実行**: {'有効' if config.auto_execute else '無効'}\n"
 
-        priority_info = self._get_priority_info(config.priority)
-        body += f"- **優先度**: {priority_info['emoji']} {config.priority.capitalize()}\n"
-        body += "- **期待実行時間**: 3-5分\n\n"
+        priority_info = next(
+            (v for k, v in self.PRIORITIES.items() if v["key"] == config.priority),
+            self.PRIORITIES["2"],
+        )
+        body += f"- **優先度**: {priority_info['emoji']} {config.priority.capitalize()}\n\n"
 
         body += "---\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)"
 
@@ -187,7 +166,10 @@ class IssueCreator:
                 labels.append("enhancement")
 
         # 優先度ラベル
-        priority_info = self._get_priority_info(config.priority)
+        priority_info = next(
+            (v for k, v in self.PRIORITIES.items() if v["key"] == config.priority),
+            self.PRIORITIES["2"],
+        )
         labels.append(priority_info["label"])
 
         # Agent実行ラベル
@@ -198,28 +180,7 @@ class IssueCreator:
 
     def _create_github_issue(self, issue_data: IssueData) -> dict:
         """GitHub Issueを作成"""
-        # Validate issue data before creating GitHub issue
-        if not issue_data.title or issue_data.title.strip() == "":
-            return {
-                "success": False,
-                "error": "Title cannot be empty",
-                "message": "❌ Issueのタイトルは必須です",
-            }
-
-        if len(issue_data.title.strip()) < self.MIN_TITLE_LENGTH and (
-            not issue_data.body or len(issue_data.body.strip()) == 0
-        ):
-            return {
-                "success": False,
-                "error": "Title too short and no body provided",
-                "message": "❌ タイトルが短すぎます。10文字以上のタイトルか、詳細な本文が必要です",
-            }
-
         try:
-            # 一時ファイルに本文を書き込み
-            body_file = Path(self.TEMP_BODY_FILE)
-            body_file.write_text(issue_data.body, encoding="utf-8")
-
             # ghコマンドを構築
             cmd = [
                 "gh",
@@ -228,7 +189,7 @@ class IssueCreator:
                 "--title",
                 issue_data.title,
                 "--body",
-                f"@{body_file}",
+                issue_data.body,
                 "--repo",
                 self.repo,
             ]
@@ -244,9 +205,6 @@ class IssueCreator:
 
             # コマンド実行
             result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-
-            # 一時ファイルを削除
-            body_file.unlink(missing_ok=True)
 
             # 結果を解析
             output = result.stdout.strip()
@@ -392,6 +350,7 @@ class IssueCreator:
 
             issues = data["issues"]
             results = []
+            configs = []  # Store configs for summary calculation
 
             print("🤖 Batch Issue Creator")
             print(f"\n{yaml_file} を読み込み中...")
@@ -402,6 +361,7 @@ class IssueCreator:
 
                 # IssueConfigを作成（共通メソッドを使用）
                 config = self._create_issue_config_from_dict(issue_config)
+                configs.append(config)  # Store for later
 
                 # Issueデータを作成
                 issue_data = IssueData(
@@ -426,8 +386,8 @@ class IssueCreator:
             success_count = sum(1 for r in results if r["success"])
             auto_count = sum(
                 1
-                for i, r in enumerate(results)
-                if r["success"] and issues[i].get("autoExecute", False)
+                for config, result in zip(configs, results)
+                if result["success"] and config.auto_execute
             )
 
             print("\n✅ バッチ作成完了")
