@@ -1,7 +1,7 @@
 {
-  "run_index": 35,
-  "last_run_id": "2026-01-31T09:47:13Z",
+  "run_index": 36,
+  "last_run_id": "2026-01-31T01:11:11Z",
   "claims_retained_lines": 0,
   "claims_archived_until_run_id": null,
-  "last_cycle_activities": "Janitor Agent Run 35 - Concept Hygiene: All checks passed. No commit leaks detected. No duplicates found. decisions.md at 27% capacity (54/200 lines). claims.ndjson at 0% capacity (0/3000 lines). Ontology integrity verified (11 terms, 0 duplicate IDs). Reference integrity maintained. Health status: optimal. Unmapped ratio: 36.4% (below 20% threshold - monitoring recommended)."
+  "last_cycle_activities": "Ontology Sync Run 36 - Maintenance mode. No new inputs to process. All systems optimal. Budget well within limits (11/80 terms, 13.75%). 4 AUTO decisions active (expires runs 46-47). No ambiguities or conflicts. decisions.md at 27% capacity. No GC required. Health status: optimal."
 }
