@@ -76,8 +76,7 @@ python .claude/skills/spec-flow-auto/scripts/run_sdd_pipeline.py \
 │   ├── spec_workflow_guide.md     # SpecWorkflowMcpガイド
 │   ├── task_breakdown_patterns.md  # タスク分解パターン
 │   └── sdd_integration_rules.md   # Miyabi連携ルール
-└── assets/                 # テンプレート・チェックリスト
-    ├── sample_prd.md               # PRDサンプル
+└── assets/                 # チェックリスト
     └── validation_checklists/      # 品質チェックリスト
         ├── prd_validation.md
         ├── spec_validation.md

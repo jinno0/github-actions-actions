@@ -174,7 +174,6 @@ SDDプロセスを支援するドキュメントとガイド。
 SDDプロセスで使用されるテンプレートやチェックリスト。
 
 **主要リソース:**
-- `sample_prd.md` - 高品質PRDのサンプル
 - `validation_checklists/` - 各種品質チェックリスト
   - `prd_validation.md` - PRD品質チェックリスト
   - `spec_validation.md` - SPEC品質チェックリスト
