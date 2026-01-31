@@ -1,0 +1,56 @@
+[
+  {
+    "function_id": "CF-001",
+    "scenario_name": "review-and-merge YAML validation",
+    "passed": false,
+    "actual_output": "'PosixPath' object has no attribute 'read'",
+    "expected_output": "Valid YAML",
+    "error_message": "YAML syntax error",
+    "interpretation": "action.yml has syntax errors"
+  },
+  {
+    "function_id": "CF-002",
+    "scenario_name": "spec-to-code structure check",
+    "passed": true,
+    "actual_output": "action.yml and template exist",
+    "expected_output": "Properly structured action",
+    "error_message": null,
+    "interpretation": "✅ spec-to-code action structure is valid"
+  },
+  {
+    "function_id": "CF-003",
+    "scenario_name": "action-fixer structure check",
+    "passed": true,
+    "actual_output": "Files exist",
+    "expected_output": "Complete action structure",
+    "error_message": null,
+    "interpretation": "✅ action-fixer action structure is valid"
+  },
+  {
+    "function_id": "CF-004",
+    "scenario_name": "auto-refactor structure check",
+    "passed": true,
+    "actual_output": "Files exist",
+    "expected_output": "Complete action structure",
+    "error_message": null,
+    "interpretation": "✅ auto-refactor action structure is valid"
+  },
+  {
+    "function_id": "CF-005",
+    "scenario_name": "auto-document structure check",
+    "passed": true,
+    "actual_output": "Files exist",
+    "expected_output": "Complete action structure",
+    "error_message": null,
+    "interpretation": "✅ auto-document action structure is valid"
+  },
+  {
+    "function_id": "CF-006",
+    "scenario_name": "release-notes-ai structure check",
+    "passed": true,
+    "actual_output": "Files exist",
+    "expected_output": "Complete action structure",
+    "error_message": null,
+    "interpretation": "✅ release-notes-ai action structure is valid"
+  }
+]

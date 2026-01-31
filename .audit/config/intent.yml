@@ -1,0 +1,125 @@
+version: "2.0"
+updated_at: "2026-01-31T21:15:00Z"
+updated_by: "audit-run-20260131-211500"
+
+# === Mission ===
+mission:
+  target_user: "開発チームとDevOpsエンジニア"
+  provided_value: "文脈を理解したAIネイティブなGitHub Actionsを提供し、コードレビュー、修正、ドキュメント生成などの高度な自動化を実現"
+  desired_state: "組織内の複数リポジトリでActionsが採用され、AIに任せられる雑務が増え、人間が本質的な設計や意思決定に集中できる時間が増加している状態"
+
+# === Assumptions ===
+assumptions:
+  - id: "ASM-001"
+    field: "mission.target_user"
+    value: "GitHub Actionsを使用する開発チーム"
+    reason: "README.mdで「GitHub組織全体の開発効率と品質を向上させる」と記載されている"
+    confidence: "high"
+  
+  - id: "ASM-002"
+    field: "quality_attributes.testing"
+    value: "Dry Runモードでの検証が必須"
+    reason: "AGENTS.mdですべてのActionがDry Runモードで自動検証されると明記されている"
+    confidence: "high"
+  
+  - id: "ASM-003"
+    field: "quality_attributes.documentation_coverage"
+    value: "各Actionはaction.yml, example.yml, instruction.mdの3点セットが必須"
+    reason: "AGENTS.mdで「Action構造標準」として定義されている"
+    confidence: "high"
+  
+  - id: "ASM-004"
+    field: "runtime.requirements"
+    value: "Self-hosted runner上でClaude Code CLIが実行可能である必要がある"
+    reason: "README.mdとAGENTS.mdで明記されている前提条件"
+    confidence: "high"
+
+# === Core Functions（存在意義） ===
+core_functions:
+  - id: "CF-001"
+    claim: "review-and-merge: AIがコードをレビューし自動マージできる"
+    source: "README.md:12, PURPOSE.md:42"
+    testable: true
+  
+  - id: "CF-002"
+    claim: "spec-to-code: Markdown仕様書からコードを自動生成できる"
+    source: "README.md:13"
+    testable: true
+  
+  - id: "CF-003"
+    claim: "action-fixer: Workflowのエラーを検知しAIが自動修正できる"
+    source: "README.md:14, PURPOSE.md:49"
+    testable: true
+  
+  - id: "CF-004"
+    claim: "auto-refactor: 自然言語の指示に基づき既存コードをリファクタリングできる"
+    source: "README.md:15, PURPOSE.md:52"
+    testable: true
+  
+  - id: "CF-005"
+    claim: "auto-document: コードの変更を検知しREADME等のドキュメントを自動更新できる"
+    source: "README.md:16, PURPOSE.md:57"
+    testable: true
+  
+  - id: "CF-006"
+    claim: "release-notes-ai: コミット履歴から人間が読みやすいリリースノートを生成できる"
+    source: "README.md:17, PURPOSE.md:60"
+    testable: true
+
+# === Quality Attributes ===
+quality_attributes:
+  - id: "QA-001"
+    name: "Dry Run検証カバレッジ"
+    target: "100%"
+    verification:
+      type: "measurement"
+      command: "find actions -name 'action.yml' | wc -l"
+      criteria:
+        operator: "="
+        value: 100
+        unit: "%"
+      interpretation:
+        success_means: "すべてのActionがDry Runモードで検証されている"
+        failure_means: "検証されていないActionが存在する"
+        warning: "AIのハルシネーションリスクを考慮し、Dry Runは必須"
+
+  - id: "QA-002"
+    name: "Action構造標準準拠"
+    target: "100%"
+    verification:
+      type: "structural"
+      command: |
+        for action in actions/*/; do
+          name=$(basename "$action")
+          [ -f "$action/action.yml" ] && [ -f "examples/${name}-example.yml" ] && [ -f "instructions/${name}.md" ]
+        done
+      criteria:
+        operator: "="
+        value: 100
+        unit: "%"
+      interpretation:
+        success_means: "すべてのActionが3点セット（action.yml, example.yml, instruction.md）を備えている"
+        failure_means: "構成が不十分なActionが存在する"
+        warning: "AGENTS.mdのAction構造標準に違反している"
+
+  - id: "QA-003"
+    name: "YAML構文妥当性"
+    target: "0 errors"
+    verification:
+      type: "syntax_check"
+      command: "find actions -name 'action.yml' -exec python3 -c \"import yaml; yaml.safe_load(open('{}'))\" \\;"
+      criteria:
+        operator: "="
+        value: 0
+        unit: "errors"
+      interpretation:
+        success_means: "すべてのYAMLファイルが構文的に正しい"
+        failure_means: "YAML構文エラーが存在する"
+        warning: "構文エラーはAction実行の失敗を引き起こす"
+
+# === Non-Goals ===
+non_goals:
+  - "単なるシェルスクリプトラッパー（既存Actionsで十分なもの）"
+  - "完全に無人での運用（AIハルシネーションリスク考慮）"
+  - "特定プロダクトに強く結合しすぎたロジック（再利用性重視）"
+  - "Claude Code CLI以外のランタイムでの動作"
