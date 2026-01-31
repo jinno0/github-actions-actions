@@ -15,11 +15,11 @@
   "decisions_limit": 200,
   "decisions_utilization": 0.27,
   "claims_lines": 0,
-  "last_run": "2026-01-31T13:00:29.000000Z",
-  "run_index": 41,
-  "runs_since_last_gc": 1,
+  "last_run": "2026-01-31T04:55:19.000000Z",
+  "run_index": 43,
+  "runs_since_last_gc": 3,
   "health_status": "optimal",
-  "last_hygiene_run": "2026-01-31T13:36:35.000000Z",
+  "last_hygiene_run": "2026-01-31T04:55:19.000000Z",
   "budget_utilization": {
     "total_terms": 0.1375,
     "core": 0.25,
@@ -30,18 +30,18 @@
   "expired_auto_decisions": 0,
   "term_queue_age_runs": {
     "oldest_pending": null,
-    "newest_rejected": 15
+    "newest_rejected": 17
   },
   "auto_decision_expiration": {
     "ScriptExtraction": {
       "created_run": 27,
       "expires_run": 47,
-      "runs_remaining": 6
+      "runs_remaining": 4
     },
     "queue_rejections": {
       "created_run": 26,
       "expires_run": 46,
-      "runs_remaining": 5
+      "runs_remaining": 3
     }
   },
   "hygiene_summary": {
