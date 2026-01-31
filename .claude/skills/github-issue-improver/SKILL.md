@@ -49,23 +49,6 @@ echo "GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxx" >> .env
 
 その他の方法（環境変数、直接指定）も使用可能です。詳細は `--help` オプションを参照してください。
 
-### 🆕 新機能
-
-#### 1. 自動.envファイル読み込み
-- `.env`ファイルを複数の場所から自動検出
-- スクリプト実行ディレクトリ、カレントディレクトリ、プロジェクトルート
-- python-dotenvがなくても動作（推奨）
-
-#### 2. 完全なDry-runモード
-- `--dry-run`で完全にオフラインで動作
-- GitHub APIコールなしで改善案を生成
-- Token不要でテスト可能
-
-#### 3. JSONベースの一括改善
-- `apply_improvements.py`でJSONファイルから改善を適用
-- 改善テンプレートの生成機能
-- レビューと承認ワークフローに対応
-
 ## Core Capabilities
 
 ### 1. Issue自動分析
@@ -201,20 +184,6 @@ Issue種類ごとのテンプレートと品質ガイドライン。
 - タイトル命名規則
 - ラベル付けガイドライン
 - 品質チェックリスト
-
-## Integration with Miyabi Framework
-
-このスキルはMiyabiフレームワークの識学理論65ラベル体系と連携可能：
-
-### 自動ラベル分類
-- IssueAgentのラベル体系準拠
-- `type:*`, `priority:*`, `state:*` ラベルの自動付与
-- カテゴリー別自動分類：`frontend`, `backend`, `infra`
-
-### Agent連携
-- **IssueAgent**: Issue作成時の自動分析とラベル付与
-- **CodeGenAgent**: 改善されたIssueからのコード生成
-- **PRAgent**: Issue改善履歴を含むPR自動生成
 
 ## Use Cases
 
