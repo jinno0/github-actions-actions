@@ -115,12 +115,6 @@ python scripts/main.py
 - 具体的な計算例
 - 品質判断の目安
 
-**github_api_usage.md** - GitHub API使用ガイド
-- APIエンドポイント詳細
-- 認証方法と権限
-- レート制限情報
-- セキュリティ考慮事項
-
 **api_reference.md** - クイックリファレンス
 - 環境変数一覧
 - コマンドライン使用法
