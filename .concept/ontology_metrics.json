@@ -15,11 +15,11 @@
   "decisions_limit": 200,
   "decisions_utilization": 0.27,
   "claims_lines": 0,
-  "last_run": "2026-01-31T16:26:00.000000Z",
-  "run_index": 45,
-  "runs_since_last_gc": 2,
+  "last_run": "2026-01-31T08:05:54.000000Z",
+  "run_index": 46,
+  "runs_since_last_gc": 3,
   "health_status": "optimal",
-  "last_hygiene_run": "2026-01-31T16:26:00.000000Z",
+  "last_hygiene_run": "2026-01-31T08:05:54.000000Z",
   "budget_utilization": {
     "total_terms": 0.1375,
     "core": 0.25,
@@ -49,7 +49,7 @@
     "gc_performed": false,
     "integrity_fixes": 0,
     "commit_leaks_fixed": 0,
-    "reason": "Ontology Sync Run 45 - Maintenance mode. All quality gates passed. Concept health optimal. ScriptExtraction (aux) retained with active mappings despite GC eligibility (aux 10+ runs no update). Validated through recent file modification (2026-01-31).",
+    "reason": "Concept Hygiene Run 46 - Maintenance mode. No duplicates found, no broken references, all cache files within limits. Concept health optimal. All quality gates passed.",
     "warnings": [
       "unmapped_ratio exceeds 0.20 threshold (current: 0.36)",
       "4 terms have no code_symbols mappings (SelfHostedRunner, ClaudeCodeCLI, VersionPinning, HumanInTheLoop)"
