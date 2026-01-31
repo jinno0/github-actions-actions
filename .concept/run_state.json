@@ -1,7 +1,7 @@
 {
-  "run_index": 39,
-  "last_run_id": "2026-01-31T02:46:31Z",
+  "run_index": 40,
+  "last_run_id": "2026-01-31T03:03:43Z",
   "claims_retained_lines": 0,
   "claims_archived_until_run_id": null,
-  "last_cycle_activities": "Concept Hygiene Run 39 - Full validation completed. No deduplication needed (0 duplicates). No GC needed (decisions.md: 54/200 lines, claims.ndjson: 0 lines). Reference integrity verified. Metrics updated. Health status: optimal."
+  "last_cycle_activities": "Concept Hygiene Run 40 - Maintenance mode. No new claims (cleanup commits only). AUTO decisions validated: 4 active, 0 expired (ScriptExtraction expires Run 47, queue rejections expire Run 46). No GC needed. Health status: optimal."
 }
