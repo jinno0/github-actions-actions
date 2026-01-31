@@ -134,15 +134,6 @@ python scripts/refactoring_helper.py --file path/to/file.ts --action analyze
 - リファクタリングパターンと実装例
 - プロジェクト固有のコーディング基準
 
-### assets/
-レポート生成用のテンプレートと雛形
-
-**主要ファイル:**
-- `improvement_template.md`: 改善タスクリストのテンプレート
-
-**使用方法:**
-分析結果に基づいてこのテンプレートを自動的に埋め、優先度付きタスクリストを生成します。
-
 ## Output Format
 
 ### 生成されるレポートの構造
