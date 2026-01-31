@@ -1,7 +1,7 @@
 {
-  "run_index": 46,
-  "last_run_id": "2026-01-31T16:30:00Z",
+  "run_index": 47,
+  "last_run_id": "2026-01-31T20:32:00Z",
   "claims_retained_lines": 0,
   "claims_archived_until_run_id": null,
-  "last_cycle_activities": "Concept Sync Run 46 - Maintenance mode. Fixed missing instruction files for auto-document and publish-pr actions. Renamed review-and-auto-merge-workflow.md to review-auto-merge.md for consistency. All quality gates passed (yamllint, structure-check). All actions now have complete StandardActionStructure compliance (13/13 actions with action.yml + templates/ + example/ + instruction/). All milestones complete (MS-001, MS-002, MS-003). Concept health: optimal."
+  "last_cycle_activities": "Concept Hygiene Run 47 - Janitor Agent execution. Verified .concept/ directory health: no duplicates found (ontology: 11 unique terms, ambiguities: 0, conflicts: 1 resolved, term_queue: 3 rejected, tombstones: 0). No garbage collection needed (decisions.md: 54/200 lines, claims.ndjson: 0 lines per policy B). Reference integrity verified (no broken references). Updated ontology_metrics.json and run_state.json. All SoT files tracked and committed. Concept health optimal."
 }

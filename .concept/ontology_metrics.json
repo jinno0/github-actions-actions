@@ -15,11 +15,11 @@
   "decisions_limit": 200,
   "decisions_utilization": 0.27,
   "claims_lines": 0,
-  "last_run": "2026-01-31T08:05:54.000000Z",
-  "run_index": 46,
-  "runs_since_last_gc": 3,
+  "last_run": "2026-01-31T20:32:00.000000Z",
+  "run_index": 47,
+  "runs_since_last_gc": 1,
   "health_status": "optimal",
-  "last_hygiene_run": "2026-01-31T08:05:54.000000Z",
+  "last_hygiene_run": "2026-01-31T20:32:00.000000Z",
   "budget_utilization": {
     "total_terms": 0.1375,
     "core": 0.25,
@@ -30,18 +30,18 @@
   "expired_auto_decisions": 0,
   "term_queue_age_runs": {
     "oldest_pending": null,
-    "newest_rejected": 18
+    "newest_rejected": 19
   },
   "auto_decision_expiration": {
     "ScriptExtraction": {
       "created_run": 27,
       "expires_run": 47,
-      "runs_remaining": 2
+      "runs_remaining": 1
     },
     "queue_rejections": {
       "created_run": 26,
       "expires_run": 46,
-      "runs_remaining": 1
+      "runs_remaining": 0
     }
   },
   "hygiene_summary": {
@@ -49,7 +49,7 @@
     "gc_performed": false,
     "integrity_fixes": 0,
     "commit_leaks_fixed": 0,
-    "reason": "Concept Hygiene Run 46 - Maintenance mode. No duplicates found, no broken references, all cache files within limits. Concept health optimal. All quality gates passed.",
+    "reason": "Concept Hygiene Run 47 - Janitor Agent execution. No duplicates found in ontology, ambiguities, conflicts, term_queue, or tombstones. No broken references detected. All cache files within limits (decisions.md: 54/200 lines, claims.ndjson: 0 lines). Concept health optimal. All quality gates passed.",
     "warnings": [
       "unmapped_ratio exceeds 0.20 threshold (current: 0.36)",
       "4 terms have no code_symbols mappings (SelfHostedRunner, ClaudeCodeCLI, VersionPinning, HumanInTheLoop)"
