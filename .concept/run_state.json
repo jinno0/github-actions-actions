@@ -1,7 +1,7 @@
 {
-  "run_index": 45,
-  "last_run_id": "2026-01-31T16:26:00Z",
+  "run_index": 46,
+  "last_run_id": "2026-01-31T16:30:00Z",
   "claims_retained_lines": 0,
   "claims_archived_until_run_id": null,
-  "last_cycle_activities": "Concept Sync Run 45 - Maintenance mode. All quality gates passed. All milestones complete (MS-001, MS-002, MS-003). Concept health: optimal (11 terms, 0 conflicts, 0 ambiguities). AUTO decisions: 4 active, 0 expired. ScriptExtraction (aux) validated - actively used despite 18 runs since creation, mappings validated. decisions.md at 27% utilization (54/200 lines). No changes required."
+  "last_cycle_activities": "Concept Sync Run 46 - Maintenance mode. Fixed missing instruction files for auto-document and publish-pr actions. Renamed review-and-auto-merge-workflow.md to review-auto-merge.md for consistency. All quality gates passed (yamllint, structure-check). All actions now have complete StandardActionStructure compliance (13/13 actions with action.yml + templates/ + example/ + instruction/). All milestones complete (MS-001, MS-002, MS-003). Concept health: optimal."
 }
