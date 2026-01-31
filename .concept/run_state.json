@@ -1,7 +1,7 @@
 {
-  "run_index": 47,
-  "last_run_id": "2026-01-31T20:32:00Z",
+  "run_index": 48,
+  "last_run_id": "2026-01-31T23:59:00Z",
   "claims_retained_lines": 0,
   "claims_archived_until_run_id": null,
-  "last_cycle_activities": "Concept Hygiene Run 47 - Janitor Agent execution. Verified .concept/ directory health: no duplicates found (ontology: 11 unique terms, ambiguities: 0, conflicts: 1 resolved, term_queue: 3 rejected, tombstones: 0). No garbage collection needed (decisions.md: 54/200 lines, claims.ndjson: 0 lines per policy B). Reference integrity verified (no broken references). Updated ontology_metrics.json and run_state.json. All SoT files tracked and committed. Concept health optimal."
+  "last_cycle_activities": "Concept Sync Run 48 - Maintenance run with AUTO decision expiration. Processed 4 expired AUTO decisions (ScriptExtraction acceptance, 3 queue rejections). decisions.md regenerated to reflect expiration (reduced from 54 to 32 lines). System health optimal: 11 terms (13.75% budget), 0 ambiguities, 0 open conflicts, 0 pending queue items. No new claims extracted (no new inputs). All TTL expirations processed cleanly."
 }
