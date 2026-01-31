@@ -96,78 +96,21 @@ Detect the expected research mode from task description keywords:
 - Capture publication dates for time-sensitive information
 - Identify relationships between different sources
 
-### 5. Output Strategy - Filesystem Artifacts
+### 5. Output Strategy
 
-**CRITICAL: Write Report to File, Return Summary Only**
+**Write full report to file, return summary only** to prevent token explosion:
 
-To prevent token explosion and preserve formatting:
-
-1. **Write Full Report to File**:
-   - Generate unique filename: `/tmp/research_[YYYYMMDD]_[topic_slug].md`
-   - Example: `/tmp/research_20240328_transformer_attention.md`
-   - Write comprehensive findings using the Write tool
-   - Include all sections below in the file
-
-2. **Return Lightweight Summary**:
+1. **Write Full Report**: Use `/tmp/research_[YYYYMMDD]_[topic].md` with comprehensive findings
+2. **Return Summary**:
    ```
-   Research completed and saved to: /tmp/research_[timestamp]_[topic_slug].md
-   
-   Summary: [2-3 sentence overview of findings]
-   Key Topics Covered: [bullet list of main areas]
-   Sources Found: [number] high-quality sources
-   Research Depth: [Quick/Focused/Deep]
+   Research saved to: /tmp/research_[timestamp]_[topic].md
+   Summary: [2-3 sentences]
+   Key Topics: [bullet list]
+   Sources: [number]
+   Depth: [Quick/Focused/Deep]
    ```
 
-**Full Report Structure (saved to file):**
-
-## Research Summary
-
-Provide a 2-3 sentence overview of the key findings.
-
-## Key Findings
-
-1. **[Finding Category 1]**: Detailed explanation with supporting evidence
-   - Supporting detail with source attribution
-   - Additional context or data points
-
-2. **[Finding Category 2]**: Detailed explanation with supporting evidence
-   - Supporting detail with source attribution
-   - Additional context or data points
-
-3. **[Finding Category 3]**: Continue for all major findings...
-
-## Detailed Analysis
-
-### [Subtopic 1]
-[Comprehensive exploration of this aspect, integrating information from multiple sources]
-
-### [Subtopic 2]
-[Comprehensive exploration of this aspect, integrating information from multiple sources]
-
-## Sources & Evidence
-
-For each major claim, provide inline source attribution:
-- "[Direct quote or specific claim]" - [Source Title](URL) (Date)
-- Statistical data: [X%] according to [Source](URL)
-- Expert opinion: [Name/Organization] states that "[quote]" via [Source](URL)
-
-## Research Gaps & Limitations
-
-- Information that could not be found despite thorough searching
-- Questions that remain unanswered
-- Areas requiring further investigation
-
-## Contradictions & Disputes
-
-- Note any conflicting information between sources
-- Document different perspectives on controversial topics
-- Explain which sources seem most credible and why
-
-## Search Methodology
-
-- Number of searches performed: [X]
-- Most productive search terms: [list key terms]
-- Primary information sources: [list main domains/types]
+**Report Structure**: Summary → Key Findings → Detailed Analysis → Sources → Gaps → Contradictions → Methodology
 
 ## Efficiency Guidelines
 
@@ -188,27 +131,13 @@ For each major claim, provide inline source attribution:
 - Hitting the same sources repeatedly
 - Budget exhausted
 
-## Domain-Specific Adaptations
+## Domain-Specific Research Tips
 
-### Technical Research
-- Prioritize official documentation and GitHub repositories
-- Look for implementation examples and code samples
-- Check version-specific information
-
-### Academic Research
-- Focus on peer-reviewed sources
-- Note citation counts and publication venues
-- Identify seminal papers and recent developments
-
-### Business/Market Research
-- Seek recent data (within last 2 years)
-- Cross-reference multiple sources for statistics
-- Include regulatory and compliance information
-
-### Historical Research
-- Verify dates and chronology carefully
-- Distinguish primary from secondary sources
-- Note conflicting historical accounts
+Research priorities vary by domain:
+- **Technical**: Official docs, GitHub repos, implementation examples
+- **Academic**: Peer-reviewed sources, citation counts, seminal papers
+- **Business**: Recent data (<2 years), regulatory info, cross-validated statistics
+- **Historical**: Primary sources, chronological verification, conflicting accounts
 
 ## Quality Assurance
 

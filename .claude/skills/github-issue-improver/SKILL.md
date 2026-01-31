@@ -18,7 +18,10 @@ description: >
 ### 基本的な使い方
 
 ```bash
-# 単一のIssueを改善（コメントとして提案を追加）
+# 環境設定
+export GITHUB_TOKEN="ghp_xxx"
+
+# 単一のIssueを改善（コメントとして提案）
 python scripts/issue_improver.py --repo owner/repo --issue 123
 
 # Issueを直接更新
@@ -27,27 +30,11 @@ python scripts/issue_improver.py --repo owner/repo --issue 123 --mode update --u
 # 複数のIssueを一括改善
 python scripts/issue_improver.py --repo owner/repo --issues 123 124 125 --mode comment
 
-# どのような改善がされるか確認（実際には変更しない）
-python scripts/issue_improver.py --repo owner/repo --issue 123 --dry-run
-
 # JSONファイルから一括適用
 python scripts/apply_improvements.py --repo owner/repo apply --improvements-file improvements.json
-
-# JSONファイルから適用内容をプレビュー
-python scripts/apply_improvements.py --repo owner/repo --dry-run apply --improvements-file improvements.json
 ```
 
-### 環境設定
-
-**.envファイルを使用（推奨）**
-```bash
-# .envファイルを作成
-echo "GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxx" >> .env
-
-# .envファイルは自動的に読み込まれます
-```
-
-その他の方法（環境変数、直接指定）も使用可能です。詳細は `--help` オプションを参照してください。
+詳細は `--help` オプションを参照してください。
 
 ## Core Capabilities
 
@@ -119,50 +106,31 @@ echo "GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxx" >> .env
 - 環境情報の不足
 - 受け入れ条件の未設定
 
-## Workflow Decision Tree
+## Workflow
 
-### 1. 改善モードの選択
+### 改善モード
 
-**Commentモード（推奨）**
-- Issueに改善提案をコメントとして追加
-- 元の内容を保持しながら提案を提示
-- チームメンバーが改善内容を確認して適用可能
-
+**Commentモード（推奨）**: 改善提案をコメントとして追加
 ```bash
 python scripts/issue_improver.py --repo owner/repo --issue 123 --mode comment
 ```
 
-**Updateモード**
-- Issueを直接更新
-- 即座に改善が適用される
-- 注意：元の内容が変更されます
-
+**Updateモード**: Issueを直接更新
 ```bash
 python scripts/issue_improver.py --repo owner/repo --issue 123 --mode update --update-title --update-body
 ```
 
-### 2. 更新対象の選択
-
-- `--update-title`: タイトルを標準化
-- `--update-body`: 本文を構造化
-- `--update-labels`: ラベルを適切に設定
-- 何も指定しない場合: 分析結果のみを表示
-
-### 3. バッチ処理
-
-複数のIssueを一括処理：
-
+**バッチ処理**: 複数のIssueを一括処理
 ```bash
 python scripts/issue_improver.py --repo owner/repo --issues 123 124 125 --mode comment
 ```
 
-## Scripts Usage
+## Scripts
 
-### issue_improver.py
-メインの改善スクリプト。詳細は `--help` オプションを参照。### issue_analyzer.py
-Issue内容を分析し、改善案を生成。### github_client.py
-GitHub APIとの連携処理。### apply_improvements.py 🆕
-JSONファイルからの改善適用とテンプレート生成。
+- **issue_improver.py**: メインの改善スクリプト（詳細は `--help` を参照）
+- **issue_analyzer.py**: Issue内容を分析し、改善案を生成
+- **github_client.py**: GitHub APIとの連携処理
+- **apply_improvements.py**: JSONファイルからの改善適用とテンプレート生成
 
 ```bash
 # 改善テンプレートを生成
@@ -170,13 +138,9 @@ python scripts/apply_improvements.py --repo owner/repo template --issues 123 124
 
 # JSONファイルから改善を適用
 python scripts/apply_improvements.py --repo owner/repo apply --improvements-file improvements.json
-
-# プレビュー（dry-run）
-python scripts/apply_improvements.py --repo owner/repo --dry-run apply --improvements-file improvements.json
 ```
 
-#### テスト用スクリプト
-各スクリプトの詳細は `--help` オプションまたはソースコードを参照。## References
+## References
 
 ### references/issue_templates.md
 Issue種類ごとのテンプレートと品質ガイドライン。
@@ -187,27 +151,11 @@ Issue種類ごとのテンプレートと品質ガイドライン。
 
 ## Use Cases
 
-### 1. 新規Issueの品質向上
-```bash
-# 新しく作られた雑なIssueを改善
-python scripts/issue_improver.py --repo myorg/myrepo --issue 456 --mode update --update-title --update-body
-```
+- **新規Issueの品質向上**: 新しく作られた雑なIssueを改善
+- **バックログの一括整理**: 古い未整理Issueを一括改善
+- **Issueテンプレートの適用**: プロジェクトでIssue標準化を実施
+- **CI/CD連携**: GitHub Actionsでの自動実行が可能
 
-### 2. バックログの一括整理
-```bash
-# 古い未整理Issueを一括改善
-python scripts/issue_improver.py --repo myorg/myrepo --issues 100 101 102 103 --mode comment
-```
-
-### 3. Issueテンプレートの適用
-```bash
-# 特定のプロジェクトでIssue標準化を実施
-for issue in $(gh issue list --repo myorg/myrepo --state open --limit 20 --json number | jq -r '.[].number'); do
-  python scripts/issue_improver.py --repo myorg/myrepo --issue $issue --mode update --update-labels
-done
-```
-
-### 4. CI/CD連携
-GitHub Actionsでの自動実行が可能。詳細は `scripts/` 内のサンプルを参照。---
+---
 
 このスキルを使うことで、GitHub Issueの品質が大幅に向上し、開発チームの作業効率が改善されます。特にAIによるIssue処理の前処理として最適です。
