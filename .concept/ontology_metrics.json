@@ -11,15 +11,17 @@
   "conflicts_resolved": 1,
   "ambiguities_high": 0,
   "ambiguities_total": 0,
-  "decisions_lines": 22,
+  "decisions_lines": 23,
   "decisions_limit": 200,
-  "decisions_utilization": 0.11,
+  "decisions_utilization": 0.115,
   "claims_lines": 7,
-  "last_run": "2026-02-01T05:43:35Z",
+  "claims_limit": 3000,
+  "claims_utilization": 0.0023,
+  "last_run": "2026-02-01T06:55:14Z",
   "run_index": 51,
   "runs_since_last_gc": 0,
   "health_status": "optimal",
-  "last_hygiene_run": "2026-02-01T05:20:49.990616Z",
+  "last_hygiene_run": "2026-02-01T06:55:14Z",
   "budget_utilization": {
     "total_terms": 0.1375,
     "core": 0.25,
@@ -38,7 +40,7 @@
     "gc_performed": false,
     "integrity_fixes": 0,
     "commit_leaks_fixed": 0,
-    "reason": "Concept Sync Run 51 - Maintenance cycle. Ingested 7 claims from dry-run testing and pytest coverage enhancements. No new ambiguities or conflicts. System health optimal.",
+    "reason": "Janitor Agent hygiene check - No deduplication needed (no duplicate IDs found), no garbage collection needed (decisions.md: 23 lines < 200 limit, claims.ndjson: 7 lines < 3000 limit), reference integrity verified, all SoT files tracked and committed.",
     "warnings": []
   }
 }
