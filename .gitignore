@@ -169,3 +169,6 @@ CLEANUP_VERIFICATION_REPORT.md
 
 # Audit artifacts and logs
 .audit/
+# Universal Janitor analysis files
+CLEANUP_ANALYSIS.md
+cleanup-analysis.md
