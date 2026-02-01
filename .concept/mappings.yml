@@ -1,0 +1,177 @@
+updated_at: "2026-02-02T02:52:00Z"
+mappings:
+  AIPoweredAction:
+    code_symbols: []
+    db: []
+    api: []
+    docs:
+      - "PURPOSE.md"
+      - "ACTIONS.md"
+      - "charter.yml"
+
+  ClaudeCodeCLI:
+    code_symbols: []
+    db: []
+    api: []
+    docs:
+      - "ACTIONS.md"
+      - "PURPOSE.md"
+
+  SelfHostedRunner:
+    code_symbols: []
+    db: []
+    api: []
+    docs:
+      - "ACTIONS.md"
+      - "PURPOSE.md"
+
+  ReviewAndMergeAction:
+    code_symbols:
+      - "actions/review-and-merge/action.yml"
+      - "actions/review-and-merge/*"
+    db: []
+    api: []
+    docs:
+      - "ACTIONS.md"
+      - "PURPOSE.md"
+      - "instructions/review-and-merge.md"
+
+  SpecToCodeAction:
+    code_symbols:
+      - "actions/spec-to-code/action.yml"
+      - "actions/spec-to-code/*"
+    db: []
+    api: []
+    docs:
+      - "ACTIONS.md"
+      - "PURPOSE.md"
+      - "instructions/spec-to-code.md"
+
+  AutoRefactorAction:
+    code_symbols:
+      - "actions/auto-refactor/action.yml"
+      - "actions/auto-refactor/*"
+    db: []
+    api: []
+    docs:
+      - "ACTIONS.md"
+      - "PURPOSE.md"
+      - "instructions/auto-refactor.md"
+
+  AutoDocumentAction:
+    code_symbols:
+      - "actions/auto-document/action.yml"
+      - "actions/auto-document/*"
+    db: []
+    api: []
+    docs:
+      - "ACTIONS.md"
+      - "PURPOSE.md"
+      - "instructions/auto-document.md"
+
+  ReleaseNotesAiAction:
+    code_symbols:
+      - "actions/release-notes-ai/action.yml"
+      - "actions/release-notes-ai/*"
+    db: []
+    api: []
+    docs:
+      - "ACTIONS.md"
+      - "PURPOSE.md"
+      - "instructions/release-notes-ai.md"
+
+  ActionFixerAction:
+    code_symbols:
+      - "actions/action-fixer/action.yml"
+      - "actions/action-fixer/*"
+    db: []
+    api: []
+    docs:
+      - "ACTIONS.md"
+      - "PURPOSE.md"
+      - "instructions/action-fixer.md"
+
+  LGTM:
+    code_symbols: []
+    db: []
+    api: []
+    docs:
+      - "ACTIONS.md"
+      - "instructions/review-and-merge.md"
+
+  PRQualityGate:
+    code_symbols: []
+    db: []
+    api: []
+    docs:
+      - "ACTIONS.md"
+
+  SpecDrivenDevelopment:
+    code_symbols: []
+    db: []
+    api: []
+    docs:
+      - "ACTIONS.md"
+
+  ProjectPhase:
+    code_symbols: []
+    db: []
+    api: []
+    docs:
+      - "PURPOSE.md"
+      - "charter.yml"
+
+  Milestone:
+    code_symbols: []
+    db: []
+    api: []
+    docs:
+      - "charter.yml"
+      - "PURPOSE.md"
+
+  SuccessMetric:
+    code_symbols: []
+    db: []
+    api: []
+    docs:
+      - "charter.yml"
+      - "PURPOSE.md"
+
+  WorkPolicy:
+    code_symbols: []
+    db: []
+    api: []
+    docs:
+      - "charter.yml"
+      - "autopilot.yml"
+
+  GitHubToken:
+    code_symbols: []
+    db: []
+    api: []
+    docs:
+      - "ACTIONS.md"
+
+  ProductGoal:
+    code_symbols: []
+    db: []
+    api: []
+    docs:
+      - "charter.yml"
+      - "PURPOSE.md"
+
+  NonGoal:
+    code_symbols: []
+    db: []
+    api: []
+    docs:
+      - "charter.yml"
+      - "PURPOSE.md"
+
+  ConceptSync:
+    code_symbols: []
+    db: []
+    api: []
+    docs:
+      - ".task-prompt.md"
+      - "charter.yml"

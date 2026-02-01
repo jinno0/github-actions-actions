@@ -1,0 +1,145 @@
+updated_at: "2026-02-02T02:52:00Z"
+invariants:
+  - id: "INV-001"
+    related_terms: ["AIPoweredAction", "ClaudeCodeCLI"]
+    status: "stable"
+    strength: "hard"
+    statement: "All AI-Powered Actions MUST leverage Claude Code CLI as the primary AI execution engine"
+    rationale: "Consistency, maintainability, and leveraging Claude's context-aware capabilities"
+    assumptions: []
+    evidence:
+      - source: "PURPOSE.md#L3-L7"
+        quote: "Self-hosted runner上で動作するClaude Code CLIを活用し、従来の正規表現や静的解析では不可能な、文脈を理解した高度な自動化を実現する"
+    checks:
+      - type: "test"
+        target: "tests/actions/validate_claude_integration.test.ts"
+
+  - id: "INV-002"
+    related_terms: ["SelfHostedRunner", "ClaudeCodeCLI"]
+    status: "stable"
+    strength: "hard"
+    statement: "Claude Code CLI MUST be installed on self-hosted runners, not GitHub-hosted runners"
+    rationale: "Self-hosted runners provide custom tool access and Claude Code CLI availability that GitHub-hosted runners lack"
+    assumptions: []
+    evidence:
+      - source: "ACTIONS.md#L236-L239"
+        quote: "Runner must have access to Claude Code CLI... Recommended: Ubuntu 20.04+ or similar"
+      - source: "PURPOSE.md#L6"
+        quote: "Self-hosted runner上で動作するClaude Code CLI"
+    checks:
+      - type: "test"
+        target: "tests/infrastructure/validate_runner_config.test.sh"
+
+  - id: "INV-003"
+    related_terms: ["GitHubToken", "AIPoweredAction"]
+    status: "stable"
+    strength: "hard"
+    statement: "GitHub token MUST have contents:write, pull-requests:write, and issues:write permissions for actions to function"
+    rationale: "Actions need to commit changes, operate on PRs, and post comments"
+    assumptions:
+      - id: "ASM-INV-003"
+        text: "AUTO: Token permissions are validated at workflow runtime"
+        decision_key: "AUTO:GitHubToken.permissions:runtime_validation"
+        expires_after_runs: 20
+    evidence:
+      - source: "ACTIONS.md#L246-L250"
+        quote: "contents:write - For committing changes, pull-requests:write - For PR operations, issues:write - For commenting"
+    checks:
+      - type: "invariant"
+        target: "Workflow metadata validation"
+
+  - id: "INV-004"
+    related_terms: ["WorkPolicy", "ConceptSync"]
+    status: "stable"
+    strength: "hard"
+    statement: "All work MUST follow PR mode with iteration budget limits (max 5 cycles, 25 files, 800 LOC) and quality gates (lint, test must pass)"
+    rationale: "Controlled iteration and quality enforcement as defined in work_policy"
+    assumptions: []
+    evidence:
+      - source: "charter.yml#L82-L94"
+        quote: "work_policy: default_mode: pr, iteration_budget: max_cycles: 5, max_files_changed: 25, max_loc_add: 800, quality_gates: must_pass"
+    checks:
+      - type: "test"
+        target: "tests/policy/validate_work_policy.test.ts"
+
+  - id: "INV-005"
+    related_terms: ["ReviewAndMergeAction", "LGTM"]
+    status: "stable"
+    strength: "soft"
+    statement: "review-and-merge action SHOULD use confidence scoring (0-10 scale) and configurable LGTM threshold"
+    rationale: "Threshold-based approval provides consistent quality control while allowing flexibility"
+    assumptions:
+      - id: "ASM-INV-005"
+        text: "AUTO: LGTM threshold default is 7 on 0-10 scale"
+        decision_key: "AUTO:LGTM.threshold:default_7"
+        expires_after_runs: 20
+    evidence:
+      - source: "ACTIONS.md#L38-L40"
+        quote: "lgtm-threshold: '7'"
+      - source: "ACTIONS.md#L29-L31"
+        quote: "Intelligent code review with confidence scoring"
+    checks:
+      - type: "test"
+        target: "tests/actions/review_and_merge/test_lgtm_threshold.test.ts"
+
+  - id: "INV-006"
+    related_terms: ["NonGoal", "AIPoweredAction"]
+    status: "stable"
+    strength: "hard"
+    statement: "Actions MUST NOT be simple shell script wrappers or provide fully unmanned operation without human oversight"
+    rationale: "AI hallucination risk and project scope excludes trivial automation"
+    assumptions: []
+    evidence:
+      - source: "charter.yml#L16-L19"
+        quote: "non_goals: 単なるシェルスクリプトラッパー（既存Actionsで十分なもの）, 完全無人運用（AIハルシネーションリスク考慮）"
+      - source: "PURPOSE.md#L65-L66"
+        quote: "❌ 単なるシェルスクリプトのラッパー（既存のActionsで十分なもの）, ❌ 完全に無人での運用（AIのハルシネーションリスクを考慮）"
+    checks:
+      - type: "invariant"
+        target: "Action design review"
+
+  - id: "INV-007"
+    related_terms: ["SpecToCodeAction", "AIPoweredAction"]
+    status: "stable"
+    strength: "soft"
+    statement: "spec-to-code action SHOULD support multi-language code generation (Python, TypeScript, Go, etc.)"
+    rationale: "Organizational usage spans multiple programming languages"
+    assumptions: []
+    evidence:
+      - source: "ACTIONS.md#L54"
+        quote: "Multi-language support (Python, TypeScript, Go, etc.)"
+    checks:
+      - type: "test"
+        target: "tests/actions/spec_to_code/test_multi_language.test.ts"
+
+  - id: "INV-008"
+    related_terms: ["ConceptSync", "WorkPolicy"]
+    status: "stable"
+    strength: "hard"
+    statement: "Concept sync v0.3 MUST enforce bloat control as failure condition (ontology terms max 80, draft ratio max 0.30)"
+    rationale: "Unconstrained concept growth degrades system effectiveness"
+    assumptions: []
+    evidence:
+      - source: "charter.yml#L92-L94"
+        quote: "concept_policy: concept_sync_version: 0.3, bloat_is_failure: true"
+      - source: ".task-prompt.md#L47-L51"
+        quote: "v0.3 の設計方針: 肥大化を最優先で抑制... 入口制御＋予算＋GC（強制削除）を標準搭載する"
+    checks:
+      - type: "test"
+        target: "tests/concept/test_bloat_control.test.ts"
+
+  - id: "INV-009"
+    related_terms: ["AIPoweredAction", "ProductGoal"]
+    status: "stable"
+    strength: "soft"
+    statement: "Actions SHOULD maintain reusability across multiple repositories and avoid tight coupling to specific products"
+    rationale: "Project scope emphasizes reusability over product-specific customization"
+    assumptions: []
+    evidence:
+      - source: "charter.yml#L19"
+        quote: "特定プロダクトへの強結合（再利用性重視）"
+      - source: "PURPOSE.md#L66"
+        quote: "❌ 特定プロダクトに強く結合しすぎたロジック（再利用性を重視）"
+    checks:
+      - type: "review"
+        target: "Action design documentation review"

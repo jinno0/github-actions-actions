@@ -1,0 +1,355 @@
+version: "0.3"
+updated_at: "2026-02-02T02:52:00Z"
+
+canonical_terms:
+  AIPoweredAction:
+    id: "TERM-AI-ACTION"
+    layer: "core"
+    status: "stable"
+    definition: "GitHub Actions that leverage Claude Code CLI to provide intelligent automation capabilities including context-aware code review, generation, refactoring, and documentation"
+    synonyms: ["AIネイティブなGitHub Actions", "AI Action", "AI-Powered Action"]
+    boundaries:
+      includes: ["Claude Code CLI integration", "Context-aware analysis", "Intelligent automation"]
+      excludes: ["Simple shell script wrappers", "Static automation without AI", "Non-AI GitHub Actions"]
+    lifecycle: ["Designed", "Implemented", "Tested", "Deployed"]
+    related_terms: ["ClaudeCodeCLI", "SelfHostedRunner", "GitHubAction"]
+    assumptions: []
+    evidence:
+      - source: "PURPOSE.md#L3-L7"
+        quote: "AIネイティブなGitHub Actionsおよび標準化ツールを提供するハブとなること。特に、Self-hosted runner上で動作するClaude Code CLIを活用し"
+      - source: "ACTIONS.md#L1-L8"
+        quote: "Complete catalog of AI-powered GitHub Actions for automating development workflows with Claude Code CLI"
+
+  ClaudeCodeCLI:
+    id: "TERM-CLAUDE-CLI"
+    layer: "core"
+    status: "stable"
+    definition: "Command-line interface tool by Anthropic for executing AI-powered coding operations, installed globally on self-hosted runners"
+    synonyms: ["Claude CLI", "Claude Code", "Anthropic CLI"]
+    boundaries:
+      includes: ["AI code execution", "Context-aware operations", "npm global installation"]
+      excludes: ["Standard GitHub Actions runners", "Non-Anthropic AI tools"]
+    lifecycle: ["Install", "Configure", "Execute"]
+    related_terms: ["AIPoweredAction", "SelfHostedRunner"]
+    assumptions:
+      - id: "ASM-CLAUDE-001"
+        text: "AUTO: Claude Code CLI must be installed via npm globally on self-hosted runners"
+        decision_key: "AUTO:ClaudeCodeCLI.installation:npm_global"
+        expires_after_runs: 20
+    evidence:
+      - source: "ACTIONS.md#L241-L244"
+        quote: "npm install -g @anthropic-ai/claude-code-cli"
+      - source: "PURPOSE.md#L6"
+        quote: "Self-hosted runner上で動作するClaude Code CLIを活用し"
+
+  SelfHostedRunner:
+    id: "TERM-SELF-HOSTED"
+    layer: "core"
+    status: "stable"
+    definition: "GitHub Actions runner hosted on organization infrastructure with access to container tools and Claude Code CLI"
+    synonyms: ["Self-hosted GitHub runner", "On-premise runner"]
+    boundaries:
+      includes: ["Custom tool access", "Claude Code CLI availability", "Organization control"]
+      excludes: ["GitHub-hosted runners", "Standard runner limitations"]
+    lifecycle: ["Provision", "Configure", "Register", "Run"]
+    related_terms: ["ClaudeCodeCLI", "AIPoweredAction"]
+    assumptions: []
+    evidence:
+      - source: "PURPOSE.md#L6"
+        quote: "Self-hosted runner上で動作するClaude Code CLIを活用し"
+      - source: "ACTIONS.md#L236-L239"
+        quote: "Runner must have access to Claude Code CLI. Recommended: Ubuntu 20.04+ or similar"
+
+  ReviewAndMergeAction:
+    id: "TERM-REVIEW-MERGE"
+    layer: "domain"
+    status: "stable"
+    definition: "AI-powered action that reviews pull requests using Claude Code CLI with context-aware analysis, confidence scoring, and optional auto-merge"
+    synonyms: ["review-and-merge", "AI review action", "PR review action"]
+    boundaries:
+      includes: ["AI code review", "Confidence scoring", "LGTM detection", "Auto-fix capability"]
+      excludes: ["Simple lint checks", "Non-AI review"]
+    lifecycle: ["PR Opened", "Review Started", "Analysis Complete", "Comment Posted", "Optional Merge"]
+    related_terms: ["AIPoweredAction", "LGTM", "PRQualityGate"]
+    assumptions: []
+    evidence:
+      - source: "PURPOSE.md#L42-L44"
+        quote: "review-and-merge: PRの内容をAIがレビューし、LGTMなら自動マージ"
+      - source: "ACTIONS.md#L25-L34"
+        quote: "Automatically review pull requests using Claude Code CLI with context-aware analysis... Intelligent code review with confidence scoring"
+
+  SpecToCodeAction:
+    id: "TERM-SPEC-TO-CODE"
+    layer: "domain"
+    status: "stable"
+    definition: "AI-powered action that converts Markdown specifications into production-ready code with multi-language support and security-first design"
+    synonyms: ["spec-to-code", "Spec-driven code generation", "AI code generator"]
+    boundaries:
+      includes: ["Markdown parsing", "Code generation", "Multi-language support", "Path validation"]
+      excludes: ["Template-only generation", "Non-AI generation"]
+    lifecycle: ["Spec Changed", "Parse Spec", "Generate Code", "Validate Output"]
+    related_terms: ["AIPoweredAction", "SpecDrivenDevelopment"]
+    assumptions: []
+    evidence:
+      - source: "PURPOSE.md#L45-L46"
+        quote: "Issueや仕様書（Markdown）から、雛形コードやテストコードを生成する"
+      - source: "ACTIONS.md#L49-L58"
+        quote: "Convert Markdown specifications into production-ready code... Multi-language support (Python, TypeScript, Go, etc.)"
+
+  AutoRefactorAction:
+    id: "TERM-AUTO-REFACTOR"
+    layer: "domain"
+    status: "stable"
+    definition: "AI-powered action that intelligently refactors code to improve quality and maintainability with context-aware analysis"
+    synonyms: ["auto-refactor", "AI refactoring", "Intelligent refactoring"]
+    boundaries:
+      includes: ["Code quality improvement", "Readability enhancement", "Modern syntax update", "Context-aware analysis"]
+      excludes: ["Simple find-replace", "Non-context-aware refactoring"]
+    lifecycle: ["Target Selected", "Analyze Code", "Apply Refactoring", "Validate Changes"]
+    related_terms: ["AIPoweredAction", "PRQualityGate"]
+    assumptions: []
+    evidence:
+      - source: "PURPOSE.md#L52-L54"
+        quote: "指定されたファイルやディレクトリに対して、可読性向上や最新構文への書き換えをAIが実行"
+      - source: "ACTIONS.md#L73-L82"
+        quote: "Intelligently refactor code to improve quality and maintainability... Context-aware refactoring"
+
+  AutoDocumentAction:
+    id: "TERM-AUTO-DOCUMENT"
+    layer: "domain"
+    status: "stable"
+    definition: "AI-powered action that automatically updates and generates documentation to keep it synchronized with code changes"
+    synonyms: ["auto-document", "AI documentation", "Automatic documentation updater"]
+    boundaries:
+      includes: ["Code analysis", "Documentation generation", "Sync with code changes", "Multi-language support"]
+      excludes: ["Manual documentation", "Static documentation generators"]
+    lifecycle: ["Code Changed", "Analyze Changes", "Update Documentation", "Validate Output"]
+    related_terms: ["AIPoweredAction", "PRQualityGate"]
+    assumptions: []
+    evidence:
+      - source: "PURPOSE.md#L57-L58"
+        quote: "コードの変更を検知し、READMEやAPIドキュメント、JSDoc/Docstringを自動更新・生成"
+      - source: "ACTIONS.md#L98-L107"
+        quote: "Keep documentation synchronized with code changes automatically... Intelligent code analysis"
+
+  ReleaseNotesAiAction:
+    id: "TERM-RELEASE-NOTES"
+    layer: "aux"
+    status: "stable"
+    definition: "AI-powered action that generates comprehensive release notes from commit history and pull requests with categorization"
+    synonyms: ["release-notes-ai", "AI release notes", "Automatic changelog"]
+    boundaries:
+      includes: ["Commit history analysis", "PR summarization", "Change categorization", "Template generation"]
+      excludes: ["Manual changelog writing", "Simple git log dumps"]
+    lifecycle: ["Tag Created", "Analyze History", "Generate Notes", "Publish Release"]
+    related_terms: ["AIPoweredAction"]
+    assumptions: []
+    evidence:
+      - source: "PURPOSE.md#L59-L60"
+        quote: "コミットログとPRの内容をAIが要約し、わかりやすいリリースノートを生成"
+      - source: "ACTIONS.md#L120-L130"
+        quote: "Generate comprehensive release notes from commit history and PRs... AI-powered summarization"
+
+  ActionFixerAction:
+    id: "TERM-ACTION-FIXER"
+    layer: "domain"
+    status: "stable"
+    definition: "AI-powered action that automatically detects and fixes GitHub Actions workflow syntax errors with YAML validation and error correction"
+    synonyms: ["action-fixer", "Workflow fixer", "YAML syntax fixer"]
+    boundaries:
+      includes: ["YAML syntax validation", "Error detection", "Automatic correction", "Schema validation"]
+      excludes: ["Manual fixing", "Non-AI validation"]
+    lifecycle: ["Workflow Changed", "Detect Errors", "Apply Fixes", "Validate Result"]
+    related_terms: ["AIPoweredAction"]
+    assumptions: []
+    evidence:
+      - source: "PURPOSE.md#L49-L51"
+        quote: "現状: 静的解析によるWorkflowファイルの修正。将来: エラーログを解析し、AIが修正パッチを提案する"
+      - source: "ACTIONS.md#L145-L154"
+        quote: "Automatically detect and fix GitHub Actions workflow syntax errors... YAML syntax validation"
+
+  LGTM:
+    id: "TERM-LGTM"
+    layer: "domain"
+    status: "stable"
+    definition: "Looks Good To Me - a threshold-based approval mechanism for PR review with configurable confidence threshold values"
+    synonyms: ["LGTM", "Approval threshold", "Review confidence"]
+    boundaries:
+      includes: ["Confidence scoring", "Threshold-based approval", "Configurable values"]
+      excludes: ["Manual approval only", "Binary approve/reject"]
+    lifecycle: ["Review Complete", "Calculate Score", "Compare Threshold", "Approve or Reject"]
+    related_terms: ["ReviewAndMergeAction", "PRQualityGate"]
+    assumptions:
+      - id: "ASM-LGTM-001"
+        text: "AUTO: LGTM threshold is configurable via action input parameter (default 7-10 scale)"
+        decision_key: "AUTO:LGTM.threshold:configurable"
+        expires_after_runs: 20
+    evidence:
+      - source: "ACTIONS.md#L38-L40"
+        quote: "lgtm-threshold: '7'"
+      - source: "ACTIONS.md#L235-L242"
+        quote: "LGTM (Looks Good To Me) is a threshold-based approval mechanism for PR review"
+
+  PRQualityGate:
+    id: "TERM-PR-QUALITY-GATE"
+    layer: "aux"
+    status: "stable"
+    definition: "Workflow pattern ensuring code quality before merging by combining AI review, refactoring, and documentation updates"
+    synonyms: ["Quality Gate", "PR Quality Check", "Code quality workflow"]
+    boundaries:
+      includes: ["AI review", "Auto-refactoring", "Documentation update", "Pre-merge validation"]
+      excludes: ["Post-merge checks", "Manual quality gates"]
+    lifecycle: ["PR Opened", "Quality Check", "Optional Fixes", "Merge Decision"]
+    related_terms: ["ReviewAndMergeAction", "AutoRefactorAction", "AutoDocumentAction"]
+    assumptions: []
+    evidence:
+      - source: "ACTIONS.md#L261-L281"
+        quote: "Ensure code quality before merging... AI Review, Refactor if Needed, Update Docs"
+
+  SpecDrivenDevelopment:
+    id: "TERM-SPEC-DRIVEN-DEV"
+    layer: "aux"
+    status: "stable"
+    definition: "Workflow pattern where code and tests are automatically generated from Markdown specifications"
+    synonyms: ["Spec-Driven Development", "Documentation-driven development", "Spec-first workflow"]
+    boundaries:
+      includes: ["Spec file trigger", "Code generation", "Test generation", "Doc update"]
+      excludes: ["Code-first approach", "Manual implementation from specs"]
+    lifecycle: ["Spec Changed", "Generate Code", "Generate Tests", "Update Docs"]
+    related_terms: ["SpecToCodeAction", "AutoDocumentAction"]
+    assumptions: []
+    evidence:
+      - source: "ACTIONS.md#L291-L307"
+        quote: "Generate code from specifications... code and tests are generated from Markdown specifications"
+
+  ProjectPhase:
+    id: "TERM-PHASE"
+    layer: "aux"
+    status: "stable"
+    definition: "Project development phases: Phase 1 (Foundation & POC - COMPLETED), Phase 2 (AI Action Hub Implementation - COMPLETED), Phase 3 (Stabilization & Adoption - In Progress)"
+    synonyms: ["Development Phase", "Project Milestone", "Stage"]
+    boundaries:
+      includes: ["Specific deliverables", "Success criteria", "Timeline"]
+      excludes: ["Individual tasks", "Technical sprints"]
+    lifecycle: ["Planned", "Active", "Completed"]
+    related_terms: ["Milestone"]
+    assumptions: []
+    evidence:
+      - source: "PURPOSE.md#L10-L21"
+        quote: "Phase 1: Foundation & POC - COMPLETED... Phase 2: AI Action Hub Implementation - COMPLETED... Phase 3: Stabilization & Adoption (In Progress)"
+
+  Milestone:
+    id: "TERM-MILESTONE"
+    layer: "domain"
+    status: "stable"
+    definition: "Major project deliverables with MS-001 (Phase 3: Stabilization & Adoption - active), MS-002 (Phase 4: Quality & Performance - planned), MS-003 (Phase 5: Advanced Features - planned)"
+    synonyms: ["Project Milestone", "Major Deliverable", "MS"]
+    boundaries:
+      includes: ["Intent statement", "Deliverables", "Acceptance criteria", "Priority"]
+      excludes: ["Minor tasks", "Routine maintenance"]
+    lifecycle: ["Planned", "Active", "Completed"]
+    related_terms: ["ProjectPhase", "SuccessMetric"]
+    assumptions: []
+    evidence:
+      - source: "charter.yml#L22-L40"
+        quote: "milestones: MS-001 (Phase 3: Stabilization & Adoption - active), MS-002 (Phase 4: Quality & Performance - planned)"
+
+  SuccessMetric:
+    id: "TERM-SUCCESS-METRIC"
+    layer: "domain"
+    status: "stable"
+    definition: "Measurable success criteria including Action adoption count, AI suggestion quality (Acceptance Rate), and development efficiency (human focus time increase)"
+    synonyms: ["KPI", "Success Measure", "Quality Metric"]
+    boundaries:
+      includes: ["Quantitative measures", "Tracking capability", "Organizational impact"]
+      excludes: ["Qualitative assessments only", "Technical metrics without business value"]
+    lifecycle: ["Define", "Measure", "Analyze", "Improve"]
+    related_terms: ["Milestone", "ProductGoal"]
+    assumptions: []
+    evidence:
+      - source: "charter.yml#L6-L15"
+        quote: "success_metrics: Action導入数, AI提案品質, 開発効率"
+
+  WorkPolicy:
+    id: "TERM-WORK-POLICY"
+    layer: "core"
+    status: "stable"
+    definition: "Project work execution policy requiring PR mode, iteration budget limits (max 5 cycles, 25 files, 800 LOC), quality gates (lint, test must pass), and concept sync v0.3 with bloat control as failure condition"
+    synonyms: ["Work Execution Policy", "Development Policy", "Iteration Constraints"]
+    boundaries:
+      includes: ["PR mode requirement", "Budget limits", "Quality gates", "Concept sync"]
+      excludes: ["Direct commits to main", "Unlimited iterations", "Skipping quality checks"]
+    lifecycle: ["Policy Defined", "Enforced"]
+    related_terms: ["ConceptSync"]
+    assumptions: []
+    evidence:
+      - source: "charter.yml#L82-L94"
+        quote: "work_policy: default_mode: pr, iteration_budget: max_cycles: 5, quality_gates: must_pass, concept_policy: concept_sync_version: 0.3, bloat_is_failure: true"
+
+  GitHubToken:
+    id: "TERM-GITHUB-TOKEN"
+    layer: "core"
+    status: "stable"
+    definition: "GitHub authentication token requiring specific permissions (contents:write, pull-requests:write, issues:write) for action operations"
+    synonyms: ["GITHUB_TOKEN", "GitHub auth token", "Action permissions"]
+    boundaries:
+      includes: ["OAuth token", "Permission scopes", "Repository access"]
+      excludes: ["Personal access tokens", "Insufficient permissions"]
+    lifecycle: ["Issued", "Configured", "Used", "Expired"]
+    related_terms: ["AIPoweredAction"]
+    assumptions:
+      - id: "ASM-TOKEN-001"
+        text: "AUTO: GitHub token must have contents:write, pull-requests:write, and issues:write for actions to function"
+        decision_key: "AUTO:GitHubToken.permissions:required_scopes"
+        expires_after_runs: 20
+    evidence:
+      - source: "ACTIONS.md#L246-L250"
+        quote: "GitHub Token Permissions: contents:write - For committing changes, pull-requests:write - For PR operations, issues:write - For commenting"
+
+  ProductGoal:
+    id: "TERM-PRODUCT-GOAL"
+    layer: "core"
+    status: "stable"
+    definition: "North star goal to provide AI-native GitHub Actions hub using Claude Code CLI for organizational development efficiency and quality improvement"
+    synonyms: ["Mission", "North Star", "Product Vision"]
+    boundaries:
+      includes: ["Organizational impact", "AI integration", "Efficiency gains"]
+      excludes: ["Technical specifics", "Short-term goals"]
+    lifecycle: ["Defined", "Communicated", "Pursued"]
+    related_terms: ["SuccessMetric", "AIPoweredAction"]
+    assumptions: []
+    evidence:
+      - source: "charter.yml#L4-L5"
+        quote: "north_star: 組織全体の開発効率と品質を向上させるためのAIネイティブなGitHub Actionsを提供するハブとなる（Claude Code CLI活用）"
+
+  NonGoal:
+    id: "TERM-NON-GOAL"
+    layer: "aux"
+    status: "stable"
+    definition: "Explicitly excluded project goals including simple shell script wrappers, fully unmanned operation, and tight coupling to specific products"
+    synonyms: ["Exclusions", "Out of Scope", "Anti-goals"]
+    boundaries:
+      includes: ["Explicit exclusions", "Scope boundaries"]
+      excludes: ["In-scope features"]
+    lifecycle: ["Defined", "Enforced"]
+    related_terms: ["ProductGoal"]
+    assumptions: []
+    evidence:
+      - source: "charter.yml#L16-L19"
+        quote: "non_goals: 単なるシェルスクリプトラッパー（既存Actionsで十分なもの）, 完全無人運用（AIハルシネーションリスク考慮）, 特定プロダクトへの強結合（再利用性重視）"
+
+  ConceptSync:
+    id: "TERM-CONCEPT-SYNC"
+    layer: "core"
+    status: "stable"
+    definition: "Automated concept synchronization system v0.3 that maintains project ontology, detects ambiguities, makes AUTO decisions, and enforces bloat control"
+    synonyms: ["Concept Synchronization", "Ontology Sync", "Semantic Alignment"]
+    boundaries:
+      includes: ["Ontology management", "Claim extraction", "AUTO decisions", "Bloat control"]
+      excludes: ["Manual documentation only", "Unconstrained term growth"]
+    lifecycle: ["Extract Claims", "Canonicalize", "Semantic Check", "AUTO Decision", "Update SOT", "Bloat Control"]
+    related_terms: ["WorkPolicy", "Ontology"]
+    assumptions: []
+    evidence:
+      - source: ".task-prompt.md#L18-L24"
+        quote: "自動概念同期システム（Single Agent運用）v0.3... Bloat-Controlled / Decisionsは捨てられる（再生成前提）"

@@ -1,0 +1,91 @@
+{
+  "run_id": "2026-02-02T02:52:00Z",
+  "updated_at": "2026-02-02T02:52:00Z",
+  "ontology": {
+    "total_terms": 18,
+    "by_layer": {
+      "core": 7,
+      "domain": 7,
+      "aux": 4
+    },
+    "by_status": {
+      "stable": 18,
+      "draft": 0
+    },
+    "draft_ratio": 0.0,
+    "draft_ratio_limit": 0.30,
+    "within_limits": true
+  },
+  "invariants": {
+    "total": 9,
+    "by_strength": {
+      "hard": 6,
+      "soft": 3
+    }
+  },
+  "ambiguities": {
+    "total": 0,
+    "by_severity": {
+      "high": 0,
+      "medium": 0,
+      "low": 0
+    }
+  },
+  "conflicts": {
+    "total": 0,
+    "by_severity": {
+      "high": 0,
+      "medium": 0,
+      "low": 0
+    }
+  },
+  "claims": {
+    "total_lines": 20,
+    "retained_lines": 20,
+    "archived_lines": 0,
+    "run_limit": 300,
+    "within_limits": true
+  },
+  "mappings": {
+    "total_terms_mapped": 18,
+    "terms_with_code_mappings": 6,
+    "terms_with_doc_mappings": 18
+  },
+  "budget_status": {
+    "total_terms_max": 80,
+    "total_terms_current": 18,
+    "total_terms_usage": 0.225,
+    "core_max": 20,
+    "core_current": 7,
+    "core_usage": 0.35,
+    "domain_max": 30,
+    "domain_current": 7,
+    "domain_usage": 0.233,
+    "aux_max": 30,
+    "aux_current": 4,
+    "aux_usage": 0.133,
+    "within_budget": true
+  },
+  "queue": {
+    "pending": 0,
+    "merged": 0,
+    "rejected": 0,
+    "accepted": 0,
+    "limit": 50,
+    "within_limits": true
+  },
+  "decisions": {
+    "active_auto_decisions": 3,
+    "lines": 9,
+    "limit": 200,
+    "within_limits": true
+  },
+  "bloat_control": {
+    "actions_taken": {
+      "merged": 0,
+      "deleted": 0,
+      "deprecated": 0
+    },
+    "gc_triggered": false
+  }
+}
