@@ -2,8 +2,9 @@ name: 'AI Review and Fix'
 description: 'Review and automatically fix code issues using Claude Code CLI.'
 inputs:
   github-token:
-    description: 'GitHub token with repo permissions'
-    required: true
+    description: 'GitHub token for API operations'
+    required: false
+    default: ${{ github.token }}
   claude-model:
     description: 'Claude model to use (default: sonnet)'
     required: false

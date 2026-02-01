@@ -17,8 +17,9 @@ inputs:
     description: 'Path to custom doc prompt template (optional, uses built-in template if not specified)'
     required: false
   github-token:
-    description: 'GitHub token'
-    required: true
+    description: 'GitHub token for API operations'
+    required: false
+    default: ${{ github.token }}
 runs:
   using: 'composite'
   steps:
@@ -34,8 +35,24 @@ runs:
         DOC_PROMPT_TEMPLATE="${{ inputs.doc-prompt-template }}"
 
         # Use custom template if provided, otherwise use built-in
-        if [ -n "$DOC_PROMPT_TEMPLATE" ] && [ -f "$DOC_PROMPT_TEMPLATE" ]; then
-          TEMPLATE_FILE="$DOC_PROMPT_TEMPLATE"
+        if [ -n "$DOC_PROMPT_TEMPLATE" ]; then
+          # Validate path to prevent directory traversal
+          if [[ "$DOC_PROMPT_TEMPLATE" == *".."*"."* ]] || [[ "$DOC_PROMPT_TEMPLATE" == *"/"*".."* ]]; then
+            echo "::error::Path traversal detected in template path"
+            exit 1
+          fi
+          # Resolve to absolute path and ensure it's within allowed directories
+          RESOLVED_PATH=$(cd "$GITHUB_WORKSPACE" 2>/dev/null && cd "$(dirname "$DOC_PROMPT_TEMPLATE")" 2>/dev/null && pwd)/$(basename "$DOC_PROMPT_TEMPLATE") 2>/dev/null || echo ""
+          if [ -z "$RESOLVED_PATH" ] || [[ ! "$RESOLVED_PATH" == "$GITHUB_WORKSPACE"* ]] && [[ ! "$RESOLVED_PATH" == "${{ github.action_path }}"* ]]; then
+            echo "::error::Template path must be within workspace or action directory"
+            exit 1
+          fi
+          if [ -f "$RESOLVED_PATH" ]; then
+            TEMPLATE_FILE="$RESOLVED_PATH"
+          else
+            echo "::error::Template file not found: $DOC_PROMPT_TEMPLATE"
+            exit 1
+          fi
         else
           TEMPLATE_FILE="${{ github.action_path }}/templates/doc_prompt.txt"
         fi
@@ -48,6 +65,13 @@ runs:
                            gsub(/\{DOC_PATH\}/, doc_path)
                            print
                          }' "$TEMPLATE_FILE")
+
+        # Check Claude CLI availability before invoking
+        if ! command -v claude &> /dev/null; then
+          echo "::error::Claude CLI not found. Please install Claude CLI first."
+          echo "  Visit https://claude.ai/ for installation instructions."
+          exit 1
+        fi
 
         # Run Claude Code CLI in safe mode (no --dangerously-skip-permissions)
         claude --model "$MODEL" <<< "$DOC_PROMPT"

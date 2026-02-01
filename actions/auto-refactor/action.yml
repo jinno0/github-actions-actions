@@ -17,8 +17,9 @@ inputs:
     required: false
     default: ''
   github-token:
-    description: 'GitHub token'
-    required: true
+    description: 'GitHub token for API operations'
+    required: false
+    default: ${{ github.token }}
 runs:
   using: 'composite'
   steps:
@@ -38,8 +39,24 @@ runs:
         echo "Refactoring $TARGET_PATH with instructions: $INSTRUCTION"
 
         # Use custom template if provided, otherwise use built-in
-        if [ -n "$REFACTOR_PROMPT_TEMPLATE" ] && [ -f "$REFACTOR_PROMPT_TEMPLATE" ]; then
-          TEMPLATE_FILE="$REFACTOR_PROMPT_TEMPLATE"
+        if [ -n "$REFACTOR_PROMPT_TEMPLATE" ]; then
+          # Validate path to prevent directory traversal
+          if [[ "$REFACTOR_PROMPT_TEMPLATE" == *".."*"."* ]] || [[ "$REFACTOR_PROMPT_TEMPLATE" == *"/"*".."* ]]; then
+            echo "::error::Path traversal detected in template path"
+            exit 1
+          fi
+          # Resolve to absolute path and ensure it's within allowed directories
+          RESOLVED_PATH=$(cd "$GITHUB_WORKSPACE" 2>/dev/null && cd "$(dirname "$REFACTOR_PROMPT_TEMPLATE")" 2>/dev/null && pwd)/$(basename "$REFACTOR_PROMPT_TEMPLATE") 2>/dev/null || echo ""
+          if [ -z "$RESOLVED_PATH" ] || [[ ! "$RESOLVED_PATH" == "$GITHUB_WORKSPACE"* ]] && [[ ! "$RESOLVED_PATH" == "${{ github.action_path }}"* ]]; then
+            echo "::error::Template path must be within workspace or action directory"
+            exit 1
+          fi
+          if [ -f "$RESOLVED_PATH" ]; then
+            TEMPLATE_FILE="$RESOLVED_PATH"
+          else
+            echo "::error::Template file not found: $REFACTOR_PROMPT_TEMPLATE"
+            exit 1
+          fi
         else
           TEMPLATE_FILE="${{ github.action_path }}/templates/refactor_prompt.txt"
         fi
@@ -54,6 +71,13 @@ runs:
                              }' "$TEMPLATE_FILE")
 
         echo "$REFACTOR_PROMPT" > /tmp/refactor_prompt.txt
+
+        # Check Claude CLI availability before invoking
+        if ! command -v claude &> /dev/null; then
+          echo "::error::Claude CLI not found. Please install Claude CLI first."
+          echo "  Visit https://claude.ai/ for installation instructions."
+          exit 1
+        fi
 
         # Run Claude in safe mode (no --dangerously-skip-permissions)
         claude --model "$MODEL" < /tmp/refactor_prompt.txt

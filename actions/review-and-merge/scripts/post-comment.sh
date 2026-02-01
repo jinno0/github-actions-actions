@@ -2,7 +2,7 @@
 # Post Review Comment Script
 # This script posts review comments to PRs
 
-set -e
+set -euo pipefail
 
 # Inputs
 PR_NUMBER="${1}"
@@ -16,8 +16,24 @@ MODEL="${7}"
 ACTION_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TEMPLATE_DIR="${ACTION_PATH}/templates"
 
-if [ -n "$COMMENT_TEMPLATE" ] && [ -f "$COMMENT_TEMPLATE" ]; then
-  TEMPLATE_FILE="$COMMENT_TEMPLATE"
+if [ -n "$COMMENT_TEMPLATE" ]; then
+  # Validate path to prevent directory traversal
+  if [[ "$COMMENT_TEMPLATE" == *".."*"."* ]] || [[ "$COMMENT_TEMPLATE" == *"/"*".."* ]]; then
+    echo "::error::Path traversal detected in comment template path"
+    exit 1
+  fi
+  # Resolve to absolute path and ensure it's within allowed directories
+  RESOLVED_PATH=$(cd "$GITHUB_WORKSPACE" 2>/dev/null && cd "$(dirname "$COMMENT_TEMPLATE")" 2>/dev/null && pwd)/$(basename "$COMMENT_TEMPLATE") 2>/dev/null || echo ""
+  if [ -z "$RESOLVED_PATH" ] || [[ ! "$RESOLVED_PATH" == "$GITHUB_WORKSPACE"* ]] && [[ ! "$RESOLVED_PATH" == "${ACTION_PATH}"* ]]; then
+    echo "::error::Comment template path must be within workspace or action directory"
+    exit 1
+  fi
+  if [ -f "$RESOLVED_PATH" ]; then
+    TEMPLATE_FILE="$RESOLVED_PATH"
+  else
+    echo "::error::Comment template file not found: $COMMENT_TEMPLATE"
+    exit 1
+  fi
 else
   TEMPLATE_FILE="${TEMPLATE_DIR}/comment_template.txt"
 fi
@@ -28,12 +44,7 @@ else
   STATUS_MESSAGE="❌ This PR requires changes."
 fi
 
-COMMENT=$(sed -e "s#{VERDICT}#$VERDICT#g" \
-              -e "s#{CONFIDENCE}#$CONFIDENCE#g" \
-              -e "s#{THRESHOLD}#$THRESHOLD#g" \
-              -e "s#{SUMMARY}#$SUMMARY#g" \
-              -e "s#{STATUS_MESSAGE}#$STATUS_MESSAGE#g" \
-              -e "s#{MODEL}#${MODEL}#g" \
-              "$TEMPLATE_FILE")
+COMMENT=$(export VERDICT CONFIDENCE THRESHOLD SUMMARY STATUS_MESSAGE MODEL && \
+           envsubst '$VERDICT $CONFIDENCE $THRESHOLD $SUMMARY $STATUS_MESSAGE $MODEL' < "$TEMPLATE_FILE")
 
 gh pr comment $PR_NUMBER --body "$COMMENT"

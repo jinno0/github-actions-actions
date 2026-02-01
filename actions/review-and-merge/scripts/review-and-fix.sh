@@ -2,7 +2,7 @@
 # Review and Fix Script for Claude Code CLI
 # This script handles PR review and auto-fixing using Claude Code CLI
 
-set -e
+set -euo pipefail
 
 # Inputs (passed as environment variables)
 PR_NUMBER="${1}"
@@ -33,6 +33,13 @@ if [ "$AUTO_FIX" = "true" ]; then
 
   echo '' >> /tmp/fix_prompt.txt
   cat /tmp/pr_diff.patch >> /tmp/fix_prompt.txt
+
+  # Check Claude CLI availability before invoking
+  if ! command -v claude &> /dev/null; then
+    echo "::error::Claude CLI not found. Please install Claude CLI first."
+    echo "  Visit https://claude.ai/ for installation instructions."
+    exit 1
+  fi
 
   # Run Claude in review-only mode (no --dangerously-skip-permissions for security)
   # Claude will analyze the diff and suggest fixes but won't modify files directly
@@ -70,7 +77,8 @@ if [ "$AUTO_FIX" = "true" ]; then
       push_success=false
 
       while [ $retry_count -lt $max_retries ] && [ "$push_success" = false ]; do
-        if git push; then
+        # Use --force-with-lease for safer force push during concurrent operations
+        if git push --force-with-lease; then
           echo "Push successful"
           push_success=true
           SUMMARY="Applied auto-fixes based on code analysis."
@@ -79,11 +87,11 @@ if [ "$AUTO_FIX" = "true" ]; then
           retry_count=$((retry_count + 1))
           if [ $retry_count -lt $max_retries ]; then
             echo "Push failed (attempt $retry_count/$max_retries). Retrying after pull..."
-            git pull --rebase || {
+            git pull --rebase --strategy-option=theirs || {
               echo "Rebase failed, resetting..."
               git reset --hard HEAD@{1}
             }
-            sleep 2
+            sleep $((retry_count * 2))  # Exponential backoff
           else
             echo "Push failed after $max_retries attempts. Rolling back commit."
             git reset --hard HEAD@{1}
@@ -102,8 +110,24 @@ if [ "$AUTO_FIX" = "true" ]; then
 else
   # --- REVIEW MODE ---
   echo "Entering Review mode..."
-  if [ -n "$REVIEW_PROMPT_TEMPLATE" ] && [ -f "$REVIEW_PROMPT_TEMPLATE" ]; then
-    REVIEW_PROMPT_FILE="$REVIEW_PROMPT_TEMPLATE"
+  if [ -n "$REVIEW_PROMPT_TEMPLATE" ]; then
+    # Validate path to prevent directory traversal
+    if [[ "$REVIEW_PROMPT_TEMPLATE" == *".."*"."* ]] || [[ "$REVIEW_PROMPT_TEMPLATE" == *"/"*".."* ]]; then
+      echo "::error::Path traversal detected in review template path"
+      exit 1
+    fi
+    # Resolve to absolute path and ensure it's within allowed directories
+    RESOLVED_PATH=$(cd "$GITHUB_WORKSPACE" 2>/dev/null && cd "$(dirname "$REVIEW_PROMPT_TEMPLATE")" 2>/dev/null && pwd)/$(basename "$REVIEW_PROMPT_TEMPLATE") 2>/dev/null || echo ""
+    if [ -z "$RESOLVED_PATH" ] || [[ ! "$RESOLVED_PATH" == "$GITHUB_WORKSPACE"* ]] && [[ ! "$RESOLVED_PATH" == "${ACTION_PATH}"* ]]; then
+      echo "::error::Review template path must be within workspace or action directory"
+      exit 1
+    fi
+    if [ -f "$RESOLVED_PATH" ]; then
+      REVIEW_PROMPT_FILE="$RESOLVED_PATH"
+    else
+      echo "::error::Review template file not found: $REVIEW_PROMPT_TEMPLATE"
+      exit 1
+    fi
   else
     REVIEW_PROMPT_FILE="${TEMPLATE_DIR}/review_prompt.txt"
   fi

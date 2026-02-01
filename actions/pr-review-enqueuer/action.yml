@@ -74,7 +74,7 @@ runs:
             QUERY='is:pr is:open draft:false'
             ;;
           wip)
-            QUERY='is:pr is:open label:"wip,label:work in progress,label:do not merge"'
+            QUERY='is:pr is:open label:"wip" label:"work in progress" label:"do not merge"'
             ;;
           no-label)
             QUERY='is:pr is:open no:label'
