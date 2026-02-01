@@ -26,3 +26,12 @@
 - Linked: ASM-TOKEN-001, INV-003
 - Revert Triggers: primary_evidence_contradiction, security_risk
 - Evidence: ACTIONS.md#L246-L250
+
+## AUTO:VersionManagement.policy:stability
+- Status: ACTIVE
+- Chosen: Version management requires @main for development/testing, @v1 for production, NEVER @main in production
+- Policy: stability + safety
+- Expires After Runs: 20
+- Linked: ASM-VERSION-001
+- Revert Triggers: primary_evidence_contradiction, stability_risk
+- Evidence: pilot-workflow-template.yml#L11-L14

@@ -1,5 +1,5 @@
 version: "0.3"
-updated_at: "2026-02-02T02:52:00Z"
+updated_at: "2026-02-02T06:03:00Z"
 
 canonical_terms:
   AIPoweredAction:
@@ -353,3 +353,71 @@ canonical_terms:
     evidence:
       - source: ".task-prompt.md#L18-L24"
         quote: "自動概念同期システム（Single Agent運用）v0.3... Bloat-Controlled / Decisionsは捨てられる（再生成前提）"
+
+  AdoptionGuide:
+    id: "TERM-ADOPTION-GUIDE"
+    layer: "aux"
+    status: "stable"
+    definition: "Comprehensive documentation providing complete roadmap for teams to adopt AI Actions in their repositories including prerequisites, quick start, and troubleshooting"
+    synonyms: ["Adoption Guide", "Onboarding Guide", "導入ガイド"]
+    boundaries:
+      includes: ["Prerequisites checklist", "Setup instructions", "Troubleshooting", "Best practices"]
+      excludes: ["Technical implementation details", "API references"]
+    lifecycle: ["Published", "Used", "Updated"]
+    related_terms: ["AIPoweredAction"]
+    assumptions: []
+    evidence:
+      - source: "ADOPTION_GUIDE.md#L1-L7"
+        quote: "このガイドは、あなたのチーム/リポジトリで AI Actions を導入するための完全なロードマップを提供します"
+
+  DryRunMode:
+    id: "TERM-DRY-RUN"
+    layer: "domain"
+    status: "stable"
+    definition: "Execution mode where actions run without making actual changes to the repository, used for initial testing and validation"
+    synonyms: ["dry_run", "Test mode", "Safe execution mode"]
+    boundaries:
+      includes: ["No actual changes", "Validation", "Testing", "Configuration via dry_run: true"]
+      excludes: ["Production execution", "Actual file modifications"]
+    lifecycle: ["Enabled", "Executed", "Validated", "Disabled for production"]
+    related_terms: ["AIPoweredAction"]
+    assumptions: []
+    evidence:
+      - source: "ADOPTION_GUIDE.md#L88-L95"
+        quote: "Dry Run モード（実際には変更を保存しない）で動作確認"
+
+  VersionManagementPolicy:
+    id: "TERM-VERSION-POLICY"
+    layer: "domain"
+    status: "stable"
+    definition: "Version control policy requiring @main for development/testing, @v1 for production, and prohibiting @main in production for stability"
+    synonyms: ["Versioning policy", "Release versioning", "Action version management"]
+    boundaries:
+      includes: ["Local path for testing (./actions/)", "Version tags for production (@v1)", "Stability requirement"]
+      excludes: ["@main in production", "Unversioned references"]
+    lifecycle: ["Development", "Testing", "Production", "Version bump"]
+    related_terms: ["AIPoweredAction"]
+    assumptions:
+      - id: "ASM-VERSION-001"
+        text: "AUTO: Version management requires @main for development/testing, @v1 for production, NEVER @main in production"
+        decision_key: "AUTO:VersionManagement.policy:stability"
+        expires_after_runs: 20
+    evidence:
+      - source: "pilot-workflow-template.yml#L11-L14"
+        quote: "Version Management: - For development/testing: uses: ./actions/action-name - For production: @v1 - NEVER use @main in production"
+
+  ClaudeModelParameter:
+    id: "TERM-CLAUDE-MODEL"
+    layer: "domain"
+    status: "stable"
+    definition: "Required input parameter for AI actions specifying which Claude model to use (e.g., claude-sonnet-4-5-20250929)"
+    synonyms: ["claude-model", "Model parameter", "Claude version"]
+    boundaries:
+      includes: ["Model specification", "Required input", "Version identifier"]
+      excludes: ["Optional parameters", "Non-Claude models"]
+    lifecycle: ["Selected", "Configured", "Used"]
+    related_terms: ["AIPoweredAction", "ClaudeCodeCLI"]
+    assumptions: []
+    evidence:
+      - source: "ADOPTION_GUIDE.md#L78-L86"
+        quote: "claude-model: claude-sonnet-4-5-20250929"
