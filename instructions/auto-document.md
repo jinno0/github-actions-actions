@@ -10,6 +10,14 @@
 - カスタムプロンプトテンプレートのサポート
 - 柔軟なソースパス・ドキュメントパスの指定
 
+## Setup
+
+1. **Copy Example Configuration**:
+   Copy the workflow from [Auto Document Example](../examples/auto-document-example.yml).
+
+2. **Configure your workflow**:
+   Place the file in `.github/workflows/auto-document.yml`.
+
 ## 使用方法
 
 ### 基本的な使い方

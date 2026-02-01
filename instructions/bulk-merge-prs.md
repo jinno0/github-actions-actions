@@ -12,7 +12,14 @@ CIが通っている複数のPull Requestを一括でマージします。
 
 ## Setup
 
-1. ワークフローファイルを作成:
+1. **Copy Example Configuration**:
+   Copy the workflow from [Bulk Merge PRs Example](../examples/bulk-merge-prs-example.yml).
+
+2. **Configure your workflow**:
+   Place the file in `.github/workflows/bulk-merge-prs.yml`.
+
+3. **Customize parameters**:
+    Adjust the parameters as needed.
 ```yaml
 name: Bulk Merge PRs
 

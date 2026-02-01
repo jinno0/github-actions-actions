@@ -9,6 +9,14 @@
 - ドラフト PR の自動公開
 - `gh` CLI を使用したシンプルな操作
 
+## Setup
+
+1. **Copy Example Configuration**:
+   Copy the workflow from [Publish PR Example](../examples/publish-pr-example.yml).
+
+2. **Configure your workflow**:
+   Place the file in `.github/workflows/publish-pr.yml`.
+
 ## 使用方法
 
 ### 基本的な使い方
