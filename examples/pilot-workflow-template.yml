@@ -4,9 +4,14 @@
 # Usage:
 # 1. Copy this file to .github/workflows/ in your target repository
 # 2. Update the 'action' step to use the desired action (e.g., release-notes-ai)
-# 3. Configure required inputs (model, github_token, etc.)
+# 3. Configure required inputs (claude-model, github_token, etc.)
 # 4. Set dry_run: true for initial testing
 # 5. Run in test environment before production use
+#
+# Version Management:
+# - For development/testing: uses: ./actions/action-name (local path)
+# - For production: uses: your-org/github-actions-actions/actions/action-name@v1
+# - NEVER use @main in production (violates versioning policy for stability)
 
 name: AI Actions Pilot Test
 
@@ -36,11 +41,15 @@ jobs:
       # Choose ONE action to test for pilot
       # Examples: release-notes-ai, action-fixer, review-and-merge
 
+      # IMPORTANT: Replace 'your-org' with your actual organization name
+      # For local testing from same repo: uses: ./actions/action-name
+      # For production: uses: your-org/github-actions-actions/actions/action-name@v1
       - name: Run AI Action (Dry Run Mode)
-        uses: your-org/github-actions-actions/actions/release-notes-ai@main
+        uses: ./actions/release-notes-ai  # For local testing
+        # uses: your-org/github-actions-actions/actions/release-notes-ai@v1  # For production
         with:
           # Required: Claude model to use
-          model: claude-sonnet-4-5-20250929
+          claude-model: claude-sonnet-4-5-20250929
 
           # Required: GitHub token
           github_token: ${{ secrets.GITHUB_TOKEN }}
