@@ -408,31 +408,3 @@ class IssueCreator:
             return [{"success": False, "message": f"❌ YAML解析エラー: {str(e)}"}]
         except Exception as e:
             return [{"success": False, "message": f"❌ エラーが発生しました: {str(e)}"}]
-
-
-def main():
-    """メイン実行関数"""
-    if len(sys.argv) < 2:
-        print("Usage: python issue_creator.py [interactive|batch <yaml_file>]")
-        sys.exit(1)
-
-    command = sys.argv[1]
-    creator = IssueCreator()
-
-    if command == "interactive":
-        result = creator.create_interactive()
-        sys.exit(0 if result["success"] else 1)
-
-    elif command == "batch" and len(sys.argv) >= 3:
-        yaml_file = sys.argv[2]
-        results = creator.create_batch(yaml_file)
-        success_count = sum(1 for r in results if r["success"])
-        sys.exit(0 if success_count > 0 else 1)
-
-    else:
-        print("Usage: python issue_creator.py [interactive|batch <yaml_file>]")
-        sys.exit(1)
-
-
-if __name__ == "__main__":
-    main()
