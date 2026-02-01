@@ -1,5 +1,5 @@
 version: "1.0"
-updated_at: "2026-02-02T01:40:00Z"
+updated_at: "2026-02-02T04:40:00Z"
 
 product_goal:
   north_star: "組織全体の開発効率と品質を向上させるためのAIネイティブなGitHub Actionsを提供するハブとなる（Claude Code CLI活用）"
