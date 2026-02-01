@@ -68,10 +68,11 @@ jobs:
 
 ### Priority 2: Enable Test Coverage Measurement (ISS-004)
 **Status**: Ready to implement
-**Effort**: 1-2 hours
+**Effort**: 1 hour
 **Impact**: Medium - enables quality tracking
+**Updated**: 2026-02-01 - pytest-cov availability confirmed (J-002)
 
-#### PR-004: Enable pytest-cov and Establish Coverage Threshold
+#### PR-005: Enable Coverage Reporting
 
 **Objective**: Measure and improve test coverage for Python helper scripts
 
@@ -180,7 +181,7 @@ gh repo list --limit 1000 --json name | \
 ```
 Phase 2a (Immediate - Week 1):
   ├─ PR-002: Enhanced Dry-Run Validation (2-4 hours)
-  └─ PR-004: Enable pytest-cov (1-2 hours)
+  └─ PR-005: Enable Coverage Reporting (1 hour)
 
 Phase 2b (Short-term - Week 2-4):
   └─ Adoption Metrics Investigation (4-8 hours)
@@ -240,7 +241,7 @@ Phase 3 (Future - TBD):
 ## Next Steps
 
 1. **Immediate**: Execute PR-002 (Enhanced Dry-Run Validation)
-2. **Week 1**: Execute PR-004 (Enable pytest-cov)
+2. **Week 1**: Execute PR-005 (Enable Coverage Reporting)
 3. **Week 2**: Conduct adoption metrics investigation
 4. **Week 4**: Review Phase 2 results and plan Phase 3
 
