@@ -16,16 +16,15 @@ inputs:
   doc-prompt-template:
     description: 'Path to custom doc prompt template (optional, uses built-in template if not specified)'
     required: false
-  github-token:
-    description: 'GitHub token for API operations'
-    required: false
-    default: ${{ github.token }}
 runs:
   using: 'composite'
   steps:
     - name: Update Documentation with Claude Code CLI
       shell: bash
       run: |
+        # Source shared validation functions
+        source "${{ github.action_path }}/../_shared/scripts/validate-template-path.sh"
+
         SOURCE_PATH="${{ inputs.source-path }}"
         DOC_PATH="${{ inputs.doc-path }}"
         MODEL="${{ inputs.claude-model }}"
@@ -34,27 +33,10 @@ runs:
 
         DOC_PROMPT_TEMPLATE="${{ inputs.doc-prompt-template }}"
 
-        # Use custom template if provided, otherwise use built-in
-        if [ -n "$DOC_PROMPT_TEMPLATE" ]; then
-          # Validate path to prevent directory traversal
-          if [[ "$DOC_PROMPT_TEMPLATE" == *".."*"."* ]] || [[ "$DOC_PROMPT_TEMPLATE" == *"/"*".."* ]]; then
-            echo "::error::Path traversal detected in template path"
-            exit 1
-          fi
-          # Resolve to absolute path and ensure it's within allowed directories
-          RESOLVED_PATH=$(cd "$GITHUB_WORKSPACE" 2>/dev/null && cd "$(dirname "$DOC_PROMPT_TEMPLATE")" 2>/dev/null && pwd)/$(basename "$DOC_PROMPT_TEMPLATE") 2>/dev/null || echo ""
-          if [ -z "$RESOLVED_PATH" ] || [[ ! "$RESOLVED_PATH" == "$GITHUB_WORKSPACE"* ]] && [[ ! "$RESOLVED_PATH" == "${{ github.action_path }}"* ]]; then
-            echo "::error::Template path must be within workspace or action directory"
-            exit 1
-          fi
-          if [ -f "$RESOLVED_PATH" ]; then
-            TEMPLATE_FILE="$RESOLVED_PATH"
-          else
-            echo "::error::Template file not found: $DOC_PROMPT_TEMPLATE"
-            exit 1
-          fi
-        else
-          TEMPLATE_FILE="${{ github.action_path }}/templates/doc_prompt.txt"
+        # Validate and resolve template path using shared function
+        BUILTIN_TEMPLATE="${{ github.action_path }}/templates/doc_prompt.txt"
+        if ! validate_template_path "$DOC_PROMPT_TEMPLATE" "$BUILTIN_TEMPLATE" TEMPLATE_FILE; then
+          exit 1
         fi
 
         # Read template and replace placeholders safely using awk
@@ -66,12 +48,11 @@ runs:
                            print
                          }' "$TEMPLATE_FILE")
 
-        # Check Claude CLI availability before invoking
-        if ! command -v claude &> /dev/null; then
-          echo "::error::Claude CLI not found. Please install Claude CLI first."
-          echo "  Visit https://claude.ai/ for installation instructions."
+        # Check Claude CLI availability using shared function
+        if ! check_claude_cli; then
           exit 1
         fi
 
         # Run Claude Code CLI in safe mode (no --dangerously-skip-permissions)
         claude --model "$MODEL" <<< "$DOC_PROMPT"
+

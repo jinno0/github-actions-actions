@@ -39,7 +39,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-2. 必要に応じてパラメータを調整
+4. 必要に応じてパラメータを調整
 
 ## Parameters
 
