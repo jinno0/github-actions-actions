@@ -11,15 +11,15 @@
   "conflicts_resolved": 1,
   "ambiguities_high": 0,
   "ambiguities_total": 0,
-  "decisions_lines": 32,
+  "decisions_lines": 33,
   "decisions_limit": 200,
-  "decisions_utilization": 0.16,
+  "decisions_utilization": 0.165,
   "claims_lines": 0,
-  "last_run": "2026-01-31T23:59:00.000000Z",
-  "run_index": 48,
-  "runs_since_last_gc": 2,
+  "last_run": "2026-02-01T04:16:31.000000Z",
+  "run_index": 49,
+  "runs_since_last_gc": 3,
   "health_status": "optimal",
-  "last_hygiene_run": "2026-01-31T20:32:00.000000Z",
+  "last_hygiene_run": "2026-02-01T04:16:31.000000Z",
   "budget_utilization": {
     "total_terms": 0.1375,
     "core": 0.25,
@@ -30,7 +30,7 @@
   "expired_auto_decisions": 4,
   "term_queue_age_runs": {
     "oldest_pending": null,
-    "newest_rejected": 19
+    "newest_rejected": 20
   },
   "auto_decision_expiration": {
     "ScriptExtraction": {
@@ -51,7 +51,7 @@
     "gc_performed": false,
     "integrity_fixes": 0,
     "commit_leaks_fixed": 0,
-    "reason": "Concept Sync Run 48 - AUTO decision expiration maintenance. No new inputs, no claims extracted. Processed 4 expired AUTO decisions. decisions.md regenerated (32/200 lines). All quality gates passed.",
+    "reason": "Concept Sync Run 49 - Post-security-fix validation. Commit 75571a9 addressed critical vulnerabilities (shell injection via sed, path traversal, git race condition). Verified invariants INV-012, INV-013, INV-014 compliance. No new claims, no ambiguities, no conflicts. System optimal. decisions.md regenerated (33/200 lines).",
     "warnings": [
       "unmapped_ratio exceeds 0.20 threshold (current: 0.36)",
       "4 terms have no code_symbols mappings (SelfHostedRunner, ClaudeCodeCLI, VersionPinning, HumanInTheLoop)"
