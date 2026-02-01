@@ -1,6 +1,6 @@
 {
-  "run_id": "2026-02-02T02:52:00Z",
-  "updated_at": "2026-02-02T02:52:00Z",
+  "run_id": "2026-02-01T19:38:04Z",
+  "updated_at": "2026-02-01T19:38:04Z",
   "ontology": {
     "total_terms": 18,
     "by_layer": {
@@ -76,7 +76,7 @@
   },
   "decisions": {
     "active_auto_decisions": 3,
-    "lines": 9,
+    "lines": 29,
     "limit": 200,
     "within_limits": true
   },
