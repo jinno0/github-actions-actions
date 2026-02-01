@@ -10,15 +10,15 @@ This batch proposal addresses GAP-001 by creating README files for the remaining
 
 ## Actions Requiring READMEs
 
-1. **action-fixer** (PR-003)
-2. **auto-merge** (PR-004)
-3. **auto-rebase** (PR-005)
-4. **bulk-merge-prs** (PR-006)
-5. **bulk-rebase-prs** (PR-007)
-6. **pr-review-enqueuer** (PR-008)
-7. **publish-pr** (PR-009)
-8. **release-notes-ai** (PR-010)
-9. **review-auto-merge** (PR-011)
+1. **action-fixer** (PR-006)
+2. **auto-merge** (PR-007)
+3. **auto-rebase** (PR-008)
+4. **bulk-merge-prs** (PR-009)
+5. **bulk-rebase-prs** (PR-010)
+6. **pr-review-enqueuer** (PR-011)
+7. **publish-pr** (PR-012)
+8. **release-notes-ai** (PR-013)
+9. **review-auto-merge** (PR-014)
 
 ## Common Template Structure
 
@@ -153,7 +153,7 @@ rm actions/{action}/README.md
 ## Next Steps
 
 1. ✅ Approve this batch proposal
-2. Create PR-003 through PR-011
+2. Create PR-006 through PR-014
 3. Execute in parallel (if resources allow) or sequence
 4. Review and merge each PR
 5. Verify final state

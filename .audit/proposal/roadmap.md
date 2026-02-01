@@ -16,55 +16,55 @@
 
 ### Actions Required
 
-#### PR-003: Add README for action-fixer
+#### PR-006: Add README for action-fixer
 - **Status**: Proposed
 - **Impact**: High
 - **Effort**: Medium
 - **Estimated Time**: 30 minutes
 
-#### PR-004: Add README for auto-merge
+#### PR-007: Add README for auto-merge
 - **Status**: Proposed
 - **Impact**: High
 - **Effort**: Medium
 - **Estimated Time**: 30 minutes
 
-#### PR-005: Add README for auto-rebase
+#### PR-008: Add README for auto-rebase
 - **Status**: Proposed
 - **Impact**: High
 - **Effort**: Medium
 - **Estimated Time**: 30 minutes
 
-#### PR-006: Add README for bulk-merge-prs
+#### PR-009: Add README for bulk-merge-prs
 - **Status**: Proposed
 - **Impact**: High
 - **Effort**: Medium
 - **Estimated Time**: 30 minutes
 
-#### PR-007: Add README for bulk-rebase-prs
+#### PR-010: Add README for bulk-rebase-prs
 - **Status**: Proposed
 - **Impact**: High
 - **Effort**: Medium
 - **Estimated Time**: 30 minutes
 
-#### PR-008: Add README for pr-review-enqueuer
+#### PR-011: Add README for pr-review-enqueuer
 - **Status**: Proposed
 - **Impact**: High
 - **Effort**: Medium
 - **Estimated Time**: 30 minutes
 
-#### PR-009: Add README for publish-pr
+#### PR-012: Add README for publish-pr
 - **Status**: Proposed
 - **Impact**: High
 - **Effort**: Medium
 - **Estimated Time**: 30 minutes
 
-#### PR-010: Add README for release-notes-ai
+#### PR-013: Add README for release-notes-ai
 - **Status**: Proposed
 - **Impact**: High
 - **Effort**: Medium
 - **Estimated Time**: 30 minutes
 
-#### PR-011: Add README for review-auto-merge
+#### PR-014: Add README for review-auto-merge
 - **Status**: Proposed
 - **Impact**: High
 - **Effort**: Medium
@@ -72,7 +72,7 @@
 
 ## Priority 2: Enhance ACTIONS.md with Workflow Examples (High)
 
-### PR-012: Add workflow integration examples to ACTIONS.md
+### PR-015: Add workflow integration examples to ACTIONS.md
 - **Status**: Proposed
 - **Impact**: Medium
 - **Effort**: Low
@@ -93,12 +93,12 @@
 
 ## Execution Strategy
 
-### Phase 1: Batch README Creation (PR-003 to PR-011)
+### Phase 1: Batch README Creation (PR-006 to PR-014)
 - Create 9 READMEs in parallel
 - Follow the template established in PR-001
 - Ensure consistency in structure and quality
 
-### Phase 2: Enhance Central Reference (PR-012)
+### Phase 2: Enhance Central Reference (PR-015)
 - Add workflow examples to ACTIONS.md
 - Show common action combinations
 - Improve discoverability
@@ -124,8 +124,8 @@
 
 ## Next Steps
 
-1. Execute PR-003 to PR-011 in batch
+1. Execute PR-006 to PR-014 in batch
 2. Verify all tests pass
-3. Execute PR-012
+3. Execute PR-015
 4. Final verification
 5. Update this roadmap
