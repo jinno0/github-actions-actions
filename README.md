@@ -55,6 +55,9 @@ Self-hosted runner上で動作する **Claude Code CLI** を活用し、文脈�
 ### 2. 手順書を確認する
 [instructions/](./instructions/) ディレクトリにある各 Action のドキュメントに従って、必要な権限や環境を設定してください。
 
+### 3. 組織での導入を計画している方へ
+チーム全体で導入を進める場合は、[**ADOPTION_GUIDE.md**](./ADOPTION_GUIDE.md) を参照してください。パイロット導入から本番展開までの完全なロードマップを提供しています。
+
 ## 🏗 前提条件
 
 これらの Action を利用するには、**Self-hosted Runner** 上で **Claude Code CLI** が実行可能である必要があります。

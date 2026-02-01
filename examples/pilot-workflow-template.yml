@@ -1,0 +1,70 @@
+# AI Actions Pilot Workflow Template
+# This template is designed for pilot testing of AI Actions in your repository
+#
+# Usage:
+# 1. Copy this file to .github/workflows/ in your target repository
+# 2. Update the 'action' step to use the desired action (e.g., release-notes-ai)
+# 3. Configure required inputs (model, github_token, etc.)
+# 4. Set dry_run: true for initial testing
+# 5. Run in test environment before production use
+
+name: AI Actions Pilot Test
+
+on:
+  # Customize trigger based on your needs
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+  workflow_dispatch:  # Allow manual trigger for testing
+
+permissions:
+  contents: read
+  pull-requests: write  # Adjust based on action requirements
+
+jobs:
+  ai-action-pilot:
+    name: Test AI Action
+    runs-on: [self-hosted]  # Use your self-hosted runner
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # === CUSTOMIZE THIS SECTION ===
+      # Choose ONE action to test for pilot
+      # Examples: release-notes-ai, action-fixer, review-and-merge
+
+      - name: Run AI Action (Dry Run Mode)
+        uses: your-org/github-actions-actions/actions/release-notes-ai@main
+        with:
+          # Required: Claude model to use
+          model: claude-sonnet-4-5-20250929
+
+          # Required: GitHub token
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+          # IMPORTANT: Enable dry_run for pilot testing
+          # This will execute the action but not make actual changes
+          dry_run: true
+
+          # Optional: Additional parameters (action-specific)
+          # language: japanese
+          # max_commits: 50
+      # === END CUSTOMIZATION ===
+
+      - name: Verify execution
+        run: |
+          echo "AI Action pilot test completed"
+          echo "Check the logs above to verify:"
+          echo "  1. No errors occurred"
+          echo "  2. Expected outputs were generated"
+          echo "  3. Dry run mode worked correctly"
+
+      # Optional: Send notification to team channel
+      - name: Notify team
+        if: always()
+        run: |
+          echo "Pilot test status: ${{ job.status }}"
+          # Add Slack/Teams webhook here if needed
