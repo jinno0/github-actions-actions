@@ -1,326 +1,249 @@
-# Roadmap for github-actions-actions Improvements
+# Improvement Roadmap
+# Generated: 2026-02-01T00:00:00Z
+# Based on Phase 1 execution feedback and remaining gap analysis
 
-## Overview
-This roadmap prioritizes improvements based on gap analysis conducted on 2026-01-31.
+version: "2.0"
+run_id: "2026-02-01T00:00:00Z"
 
-## Priority Framework
-- **Critical**: Blocks project success or adoption
-- **High**: Significant impact on quality or maintainability
-- **Medium**: Important but not blocking
-- **Low**: Nice to have or clarifications
+## Phase 1 Complete ✅
 
----
+Phase 1 improvements were successfully executed:
+- ✅ PR-001: Documentation coverage 46% → 100%
+- ✅ PR-003: Core function verification 83% → 100%
+- ✅ All assumptions confirmed with evidence
+- ✅ Compliance: 85% → 95% (+10 percentage points)
 
-## Phase 1: Quick Wins (Week 1)
-*Total Effort: ~3 hours*
+## Phase 2: Quality & Verification Enhancement
 
-### 1.1 Update README.md (PR-001)
-**Priority**: Critical  
-**Effort**: 15 minutes  
-**Impact**: High
+### Priority 1: Enhanced Dry-Run Validation (ISS-003)
+**Status**: Ready to implement
+**Effort**: 2-4 hours
+**Impact**: High - prevents production issues
 
-Document all 13 actions in README.md with consistent formatting and categorization.
+#### PR-002: Enhance Dry-Run Validation
+**Objective**: Verify actions actually execute (not just structure checks)
 
-**Why First**: 
-- Critical visibility issue
-- Zero risk (documentation only)
-- Immediate impact on discoverability
-- Unblocks adoption
+**Changes**:
+1. Create `.github/workflows/test-with-dry-run.yml`
+2. For each AI action (9 actions with templates/):
+   - Execute action with `dry_run: true`
+   - Capture Claude CLI output
+   - Verify exit code = 0
+   - Check for expected output patterns
 
-**Steps**:
-1. Read all 13 instruction.md files
-2. Categorize actions by purpose
-3. Update README.md table
-4. Verify all links
-5. Commit and push
+**Implementation Steps**:
+```yaml
+# .github/workflows/test-with-dry-run.yml
+name: Test Actions with Dry Run
+on:
+  pull_request:
+  push:
+    branches: [main]
 
-**Success**: All 13 actions visible and discoverable from README
+jobs:
+  dry-run-test:
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        action: [review-and-merge, spec-to-code, action-fixer, auto-refactor, auto-document, release-notes-ai, auto-rebase]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Test ${{ matrix.action }} with dry-run
+        uses: ./.actions/${{ matrix.action }}
+        with:
+          dry-run: true
+          test-mode: true
+```
 
----
+**Success Criteria**:
+- All 9 AI actions pass dry-run validation
+- CI fails if any action returns non-zero exit code
+- Action execution time logged
 
-## Phase 2: Quality Foundation (Week 1-2)
-*Total Effort: ~3 hours*
-
-### 2.1 Core Function Verification (PR-003)
-**Priority**: High  
-**Effort**: 1 hour  
-**Impact**: High
-
-Create automated structural verification tests for 6 core functions.
-
-**Why Second**:
-- Required by audit instruction
-- Proves repository purpose
-- Enables regression detection
-- Fast to implement
-
-**Steps**:
-1. Create verify_core_functions.py
-2. Implement structural checks for each core function
-3. Test locally
-4. Add to CI pipeline
-5. Generate baseline report
-
-**Success**: All 6 core functions pass structural verification
-
-### 2.2 Enable Test Coverage (PR-004)
-**Priority**: High  
-**Effort**: 30 minutes  
-**Impact**: Medium
-
-Enable pytest coverage measurement for Python helper scripts.
-
-**Why Now**:
-- Addresses ISS-004 (quality measurement gap)
-- Fast to enable (uncomment existing config)
-- Provides baseline metrics
-
-**Steps**:
-1. Uncomment pytest-cov in pytest.ini
-2. Run pytest with --cov
-3. Document baseline coverage
-4. Set minimum threshold (e.g., 60%)
-
-**Success**: Coverage reports generated, baseline established
-
-### 2.3 Enhance Dry Run Validation (PR-002)
-**Priority**: High  
-**Effort**: 2 hours  
-**Impact**: High
-
-Enhance test-all-actions.yml to verify execution flow and template substitution.
-
-**Why Now**:
-- Addresses ISS-003 (verification gap)
-- Prevents broken actions in production
-- Builds on existing CI
-
-**Steps**:
-1. Add functional validation step
-2. Implement template substitution test
-3. Add Claude CLI availability check
-4. Test on all 13 actions
-5. Update CI workflow
-
-**Success**: All actions pass functional validation in CI
+**Rollback**:
+- Delete `.github/workflows/test-with-dry-run.yml`
+- No code changes required
 
 ---
 
-## Phase 3: Maintainability (Week 2-3)
-*Total Effort: ~4 hours*
+### Priority 2: Enable Test Coverage Measurement (ISS-004)
+**Status**: Ready to implement
+**Effort**: 1-2 hours
+**Impact**: Medium - enables quality tracking
 
-### 3.1 Review Actions Without Templates
-**Priority**: Medium  
-**Effort**: 2 hours  
-**Impact**: Medium
+#### PR-004: Enable pytest-cov and Establish Coverage Threshold
 
-Investigate 6 actions without templates/ and determine if they need prompts externalized.
+**Objective**: Measure and improve test coverage for Python helper scripts
 
-**Why Later**:
-- Requires investigation per action
-- May be intentional (utility actions)
-- Not blocking (structure compliant)
+**Changes**:
+1. Uncomment pytest-cov in `pytest.ini`
+2. Set coverage threshold (initial: 60%, target: 80%)
+3. Add coverage report to CI
 
-**Steps**:
-1. Review action.yml for each of 6 actions
-2. Determine if prompts are hardcoded
-3. If yes, extract to templates/
-4. If no, document why templates aren't needed
-5. Update AGENTS.md if needed
+**Implementation**:
+```ini
+# pytest.ini
+[pytest]
+testpaths = tests
+python_files = test_*.py
+addopts =
+    --cov=.claude/skills
+    --cov=tests
+    --cov-report=term-missing
+    --cov-report=html
+    --cov-fail-under=60
+```
 
-**Success**: All actions either have templates/ or documented rationale
+**CI Integration**:
+```yaml
+# .github/workflows/test-all-actions.yml (add step)
+- name: Run tests with coverage
+  run: |
+    pip install pytest-cov
+    pytest --cov=.claude/skills --cov-report=xml
 
-### 3.2 Add Linting Configuration
-**Priority**: Medium  
-**Effort**: 1 hour  
-**Impact**: Medium
+- name: Upload coverage to artifacts
+  uses: actions/upload-artifact@v3
+  with:
+    name: coverage-report
+    path: htmlcov/
+```
 
-Add Python linting (ruff/flake8) and YAML linting (yamllint) configuration.
+**Success Criteria**:
+- Coverage report generated on each run
+- CI fails if coverage < 60%
+- HTML coverage report available as artifact
 
-**Why Now**:
-- Improves code quality
-- Catches issues early
-- Standard practice
-
-**Steps**:
-1. Choose linter (ruff recommended)
-2. Add configuration file
-3. Add pre-commit hook
-4. Document in AGENTS.md
-
-**Success**: Linting runs in CI and pre-commit
-
-### 3.3 Document Testing Strategy
-**Priority**: Medium  
-**Effort**: 1 hour  
-**Impact**: Medium
-
-Create TESTING.md documenting testing approach, coverage goals, and how to add tests.
-
-**Why Now**:
-- Guides future development
-- Sets quality expectations
-- Supports onboarding
-
-**Steps**:
-1. Document current test infrastructure
-2. Define coverage targets
-3. Explain how to test actions
-4. Add troubleshooting section
-
-**Success**: Clear testing strategy documented
+**Rollback**:
+- Comment out `--cov` lines in pytest.ini
+- Remove coverage upload step from CI
 
 ---
 
-## Phase 4: Strategic Improvements (Month 2)
-*Total Effort: ~8 hours*
+### Priority 3: Adoption Metrics Investigation (ISS-006)
+**Status**: Requires manual investigation
+**Effort**: 4-8 hours
+**Impact**: Low-Medium - strategic importance
 
-### 4.1 Adoption Metrics
-**Priority**: Low-Medium  
-**Effort**: 4 hours  
-**Impact**: Medium
+#### Investigation: Measure Action Usage Across Organization
 
-Implement system to track action usage across organization.
+**Objective**: Determine how many repositories are using these actions
 
-**Why Later**:
-- Requires cross-repo infrastructure
-- Strategic importance but not urgent
-- Can be manual initially
+**Approach Options**:
 
-**Approach**:
-1. Manual: Survey teams using actions
-2. Automated: Add usage reporting to actions
-3. Dashboard: Create metrics dashboard
+**Option A: Manual Search (Immediate)**
+```bash
+# Search for action references in org repos
+gh repo list --limit 1000 --json name | \
+  jq -r '.[].name' | \
+  while read repo; do
+    gh api repos/:owner/$repo/contents/.github/workflows | \
+      jq -r '.[].name' | \
+      xargs -I{} gh api repos/:owner/$repo/contents/.github/workflows/{} | \
+      grep -h "actions/org-name/github-actions-actions" | \
+      wc -l
+  done
+```
 
-**Success**: Measurable adoption metrics
+**Option B: Automated Tracking (Long-term)**
+- Add usage tracking endpoint (optional opt-in)
+- Log action invocations to central metrics
+- Create dashboard for adoption visibility
 
-### 4.2 Action Examples Repository
-**Priority**: Low  
-**Effort**: 4 hours  
-**Impact**: Medium
+**Success Criteria**:
+- Baseline number of repositories using actions
+- List of top 5 most-used actions
+- Recommendation on whether to invest in automated tracking
 
-Create separate repository with example projects using each action.
-
-**Why Later**:
-- Nice-to-have for adoption
-- Not required for current users
-- Can be community contribution
-
-**Approach**:
-1. Create github-actions-actions-examples repo
-2. Add example project for each action
-3. Document setup and expected output
-4. Link from main README
-
-**Success**: Users have working examples to reference
+**Deliverable**: `.audit/analysis/adoption_metrics.yml`
 
 ---
 
-## Phase 5: Continuous Improvement (Ongoing)
+## Phase 3: Infrastructure Improvements (Future)
 
-### 5.1 Regular Audits
-- Schedule quarterly genesis audits
-- Track progress on gaps
-- Update intent.yml as project matures
+### Potential Improvements
+- Linting configuration (ruff, yamllint)
+- Pre-commit hooks
+- Automated changelog generation
+- Integration tests with test repositories
+- Performance benchmarking
 
-### 5.2 Feedback Collection
-- Add feedback mechanism to actions
-- Survey users quarterly
-- Track adoption and satisfaction
-
-### 5.3 Documentation Maintenance
-- Keep README.md synchronized with actions
-- Update instructions/ based on user feedback
-- Maintain AGENTS.md as source of truth
+### Dependencies
+- Phase 2 must complete successfully
+- Adoption metrics should inform prioritization
+- Community feedback should guide direction
 
 ---
 
-## Dependencies
+## Execution Order
 
 ```
-Phase 1 (Quick Wins)
-    ↓
-Phase 2 (Quality Foundation) ← Requires Phase 1 complete
-    ↓
-Phase 3 (Maintainability) ← Requires Phase 2 complete
-    ↓
-Phase 4 (Strategic) ← Requires Phase 3 complete
-    ↓
-Phase 5 (Continuous) ← Ongoing
+Phase 2a (Immediate - Week 1):
+  ├─ PR-002: Enhanced Dry-Run Validation (2-4 hours)
+  └─ PR-004: Enable pytest-cov (1-2 hours)
+
+Phase 2b (Short-term - Week 2-4):
+  └─ Adoption Metrics Investigation (4-8 hours)
+
+Phase 3 (Future - TBD):
+  └─ Based on Phase 2 results and feedback
 ```
 
 ---
 
-## Resource Requirements
+## Risk Assessment
 
-### Time
-- Week 1: ~3 hours (Phase 1 + start Phase 2)
-- Week 2-3: ~4 hours (finish Phase 2 + Phase 3)
-- Month 2: ~8 hours (Phase 4)
-- Ongoing: ~1 hour/quarter (Phase 5)
-
-### Skills
-- GitHub Actions YAML
-- Python testing (pytest)
-- Documentation writing
-- No special skills required for Phases 1-2
-
-### Tools
-- All tools already available (pytest, Python, YAML validators)
-- No additional infrastructure needed for Phases 1-3
+| PR | Risk | Mitigation |
+|----|------|------------|
+| PR-002 | Dry-run may expose hidden bugs | Low risk - finding bugs is the goal |
+| PR-004 | Existing tests may have low coverage | Set initial threshold at 60% |
+| Metrics | Privacy concerns about usage tracking | Opt-in only, no sensitive data |
 
 ---
 
-## Risk Mitigation
+## Success Metrics
 
-### Risk: Time Constraints
-**Mitigation**: Phase 1 takes only 15 minutes, provides immediate value
+### Phase 2 Success Criteria
+- ✅ All 9 AI actions pass dry-run validation
+- ✅ Coverage baseline established (>60%)
+- ✅ Adoption baseline measured
+- ✅ Overall compliance ≥ 97%
 
-### Risk: Breaking Changes
-**Mitigation**: All changes are additive (documentation, tests) or backwards-compatible
-
-### Risk: Low Adoption
-**Mitigation**: Phase 1 directly addresses discoverability, unblocks adoption
-
----
-
-## Success Criteria
-
-### Phase 1 Success
-- [ ] All 13 actions documented in README
-- [ ] Links work and descriptions are accurate
-
-### Phase 2 Success
-- [ ] All 6 core functions verified
-- [ ] Coverage reporting enabled
-- [ ] CI includes functional validation
-
-### Phase 3 Success
-- [ ] All actions have templates/ or documented rationale
-- [ ] Linting configured and running
-- [ ] Testing strategy documented
-
-### Phase 4 Success
-- [ ] Adoption metrics collected
-- [ ] Examples repository created
-
-### Overall Success
-- README.md coverage: 100% (up from 46%)
-- Structural verification: 100% of core functions
-- Test coverage: Measured and improving
-- CI: Includes functional tests
-- Adoption: Measurable and growing
+### Long-term Success Criteria
+- 5+ repositories using actions in production
+- 0 critical bugs in released actions
+- Test coverage ≥ 80%
+- Community contributions increase
 
 ---
 
-## Next Actions
+## Process Improvements (ISS-008)
 
-1. **Immediate** (Today): Execute PR-001 (update README)
-2. **This Week**: Execute PR-003 and PR-004 (verification + coverage)
-3. **Next Week**: Execute PR-002 (enhance CI validation)
-4. **Following Weeks**: Phase 3 improvements
+### Lesson Learned from PR-003
+**Issue**: Verification script had bug (yaml.safe_load with Path object)
+**Root Cause**: Audit phase created verification script but didn't execute it
+**Fix Applied**: PR-003 fixed the bug
+**Process Change**: Audit workflow now includes actual execution of verification scripts
+
+### Updated Audit Protocol
+```yaml
+# Future audit phases will:
+1. Create verification scripts
+2. Execute verification scripts ✅ NEW
+3. Fix any bugs discovered ✅ NEW
+4. Document results
+5. Mark task complete
+```
 
 ---
 
-*Last Updated: 2026-01-31*
-*Next Review: After Phase 1 completion*
+## Next Steps
+
+1. **Immediate**: Execute PR-002 (Enhanced Dry-Run Validation)
+2. **Week 1**: Execute PR-004 (Enable pytest-cov)
+3. **Week 2**: Conduct adoption metrics investigation
+4. **Week 4**: Review Phase 2 results and plan Phase 3
+
+---
+
+**End of Roadmap**

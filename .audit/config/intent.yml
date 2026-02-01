@@ -1,6 +1,6 @@
 version: "2.0"
-updated_at: "2026-01-31T21:15:00Z"
-updated_by: "audit-run-20260131-211500"
+updated_at: "2026-02-01T00:00:00Z"
+updated_by: "audit-run-20260201-000000"
 
 # === Mission ===
 mission:
@@ -12,27 +12,38 @@ mission:
 assumptions:
   - id: "ASM-001"
     field: "mission.target_user"
-    value: "GitHub Actionsを使用する開発チーム"
+    value: "開発チームとDevOpsエンジニア"
     reason: "README.mdで「GitHub組織全体の開発効率と品質を向上させる」と記載されている"
     confidence: "high"
-  
+    status: "confirmed"  # Confirmed by PR-001 execution (2026-01-31)
+
   - id: "ASM-002"
     field: "quality_attributes.testing"
     value: "Dry Runモードでの検証が必須"
     reason: "AGENTS.mdですべてのActionがDry Runモードで自動検証されると明記されている"
     confidence: "high"
-  
+    status: "confirmed"  # Confirmed by PR-003 execution (2026-01-31)
+
   - id: "ASM-003"
     field: "quality_attributes.documentation_coverage"
     value: "各Actionはaction.yml, example.yml, instruction.mdの3点セットが必須"
     reason: "AGENTS.mdで「Action構造標準」として定義されている"
     confidence: "high"
-  
+    status: "confirmed"  # Confirmed by PR-001 execution - all 13 actions have 3-component set
+
   - id: "ASM-004"
     field: "runtime.requirements"
     value: "Self-hosted runner上でClaude Code CLIが実行可能である必要がある"
     reason: "README.mdとAGENTS.mdで明記されている前提条件"
     confidence: "high"
+    status: "confirmed"  # Infrastructure requirement confirmed
+
+  - id: "ASM-005"
+    field: "structure.template_requirement"
+    value: "ユーティリティアクション（auto-merge等）はtemplates/不要"
+    reason: "6つのユーティリティアクションはgh CLIをラップするだけでAIプロンプト不要"
+    confidence: "high"
+    status: "confirmed"  # Confirmed by ISS-DISC-002 investigation (2026-02-01)
 
 # === Core Functions（存在意義） ===
 core_functions:
