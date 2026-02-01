@@ -1,10 +1,12 @@
 {
-  "last_run_id": "2026-01-31T12:36:16Z",
-  "total_runs": 1,
-  "total_prs_applied": 2,
+  "last_run_id": "2026-02-01T05:08:15Z",
+  "total_runs": 2,
+  "total_prs_applied": 4,
   "total_prs_rolled_back": 0,
-  "last_updated": "2026-01-31T12:36:16Z",
+  "last_updated": "2026-02-01T05:08:15Z",
   "overall_status": "success",
-  "gaps_closed": 2,
-  "gaps_remaining": 5
+  "gaps_closed": 4,
+  "gaps_remaining": 2,
+  "phase": "Phase 2 complete",
+  "next_phase": "Phase 2b (Adoption metrics)"
 }

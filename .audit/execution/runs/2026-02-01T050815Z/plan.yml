@@ -1,0 +1,66 @@
+run_id: "2026-02-01T050815Z"
+timestamp: "2026-02-01T05:08:15Z"
+phase: "Phase 2 - Quality & Verification Enhancement"
+
+# Execution Scope
+scope:
+  prs_to_apply:
+    - "PR-002"  # Enhanced Dry-Run Validation
+    - "PR-005"  # Enable Coverage Reporting
+  prs_deferred:
+    - "PR-004"  # Duplicate of PR-005, defer for clarity
+  total_prs: 2
+  estimated_time_minutes: 180
+
+# Success Criteria (from intent.yml)
+success_criteria:
+  - id: "SC-001"
+    name: "Enhanced Dry-Run Validation"
+    from: "intent.yml#quality_attributes[0]"
+    target: "All 9 AI actions pass dry-run execution test"
+    verification: "Create .github/workflows/test-with-dry-run.yml and validate execution"
+
+  - id: "SC-002"
+    name: "Coverage Reporting Enabled"
+    from: "intent.yml#quality_attributes"
+    target: "Coverage baseline measured and threshold set"
+    verification: "Enable pytest-cov in pytest.ini and run tests"
+
+  - id: "SC-003"
+    name: "Core Functions Maintained"
+    from: "intent.yml#core_functions"
+    target: "All 6 core functions remain verified"
+    verification: "Run verify_core_functions.py"
+
+# Rollback Triggers
+rollback_triggers:
+  - "Dry-run workflow causes CI failures for valid actions"
+  - "Coverage enablement breaks existing tests"
+  - "Core function verification regresses (6/6 → <6)"
+  - "Unexpected build or syntax errors"
+
+# Input Validation
+input_validation:
+  intent_yml_exists: true
+  proposal_changes_count: 6
+  verification_script_exists: true
+  previous_run_successful: true
+
+# Budget
+budget:
+  max_prs_per_run: 5
+  max_file_changes_per_pr: 10
+  max_execution_minutes: 180
+
+# Related Issues
+related_issues:
+  - "ISS-003"  # Functional testing infrastructure
+  - "ISS-004"  # Test coverage measurement
+  - "ISS-DISC-003"  # From previous feedback
+
+# Expected Outcomes
+expected_outcomes:
+  - "All 9 AI actions validated via dry-run execution"
+  - "Coverage baseline established (target: 70% initial threshold)"
+  - "CI enhanced with functional testing and coverage reporting"
+  - "Quality metrics become measurable and trackable"

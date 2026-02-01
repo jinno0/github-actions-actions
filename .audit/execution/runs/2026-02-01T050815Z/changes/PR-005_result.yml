@@ -1,0 +1,80 @@
+pr_id: "PR-005"
+name: "Enable Test Coverage Reporting"
+status: "applied"
+applied_at: "2026-02-01T05:08:15Z"
+
+changes:
+  - file: "pytest.ini"
+    action: "modified"
+    lines_added: 7
+    lines_removed: 2
+    description: "Enabled pytest-cov with coverage measurement"
+
+implementation_details:
+  coverage_enabled: true
+  pytest_cov_version: "installed (pre-existing)"
+
+  coverage_configuration:
+    source_directories:
+      - "."  # All Python code in repository
+    reports:
+      - "term-missing: Show missing lines in terminal"
+      - "html:htmlcov: Detailed HTML report"
+      - "json:coverage.json: Machine-readable report"
+    threshold: 70
+      # Initial threshold, adjustable based on baseline
+
+  previous_state:
+    pytest_cov_installed: true
+    coverage_enabled: false
+    reason: "Commented out in pytest.ini line 29"
+
+verification:
+  pytest_ini_syntax: "valid"
+  coverage_reports_configured: true
+  gitignore_entries: "already present"
+    # Lines 40, 146-147 in .gitignore
+  conftest_py_exists: true
+    # tests/conftest.py already exists
+
+success_criteria_met:
+  - "Coverage reporting enabled in pytest.ini"
+  - "Multiple report formats configured (term, html, json)"
+  - "Initial threshold set at 70%"
+  - "No additional dependencies required"
+  - "Git ignore already configured"
+
+benefits:
+  - "Quality becomes measurable"
+  - "Baseline coverage can be established"
+  - "Trends can be tracked over time"
+  - "Untested code becomes visible"
+  - "CI can fail on coverage regression"
+
+threshold_rationale:
+  initial_value: 70
+  reasoning: |
+    Conservative baseline - allows for immediate CI pass
+    while establishing actual coverage percentage.
+    Can be adjusted to 80% after baseline measurement.
+
+  adjustment_plan:
+    1. Run pytest to measure baseline
+    2. If baseline < 70%, lower threshold to actual value
+    3. Gradually increase threshold over time
+    4. Target: 80% coverage long-term
+
+related_issues:
+  - "ISS-004 (Medium severity) - CLOSED"
+
+next_steps:
+  - "Run pytest to establish baseline coverage"
+  - "Review htmlcov/index.html for detailed coverage report"
+  - "Adjust threshold if needed based on baseline"
+  - "Add coverage badge to README (optional)"
+  - "Document coverage policy in AGENTS.md"
+
+diff_file: "PR-005_applied.diff"
+rollback_command: "git checkout pytest.ini (revert to commented coverage lines)"
+
+note: "This is a minimal, safe change. No code modifications, only configuration."

@@ -1,1 +1,2 @@
 {"run_id":"2026-01-31T12:36:16Z","timestamp":"2026-01-31T12:36:16Z","prs_applied":["PR-001","PR-003"],"overall_status":"success","gaps_closed":2,"grade":"A-","readme_coverage_before":46.15,"readme_coverage_after":100.0,"core_functions_before":0.833,"core_functions_after":1.0}
+{"run_id":"2026-02-01T05:08:15Z","timestamp":"2026-02-01T05:08:15Z","prs_applied":["PR-002","PR-005"],"overall_status":"success","gaps_closed":2,"grade":"A","dry_run_before":0,"dry_run_after":7,"coverage_before":"disabled","coverage_after":"enabled(70%)"}
