@@ -1,0 +1,1125 @@
+{
+  "summary": {
+    "total_tests": 65,
+    "passed": 39,
+    "failed": 26,
+    "percentage": 60.0,
+    "verdict": "CONDITIONAL"
+  },
+  "categories": {
+    "yaml_syntax": {
+      "passed": 13,
+      "total": 13
+    },
+    "structure": {
+      "passed": 13,
+      "total": 13
+    },
+    "type": {
+      "passed": 13,
+      "total": 13
+    },
+    "documentation": {
+      "passed": 0,
+      "total": 13
+    },
+    "testing": {
+      "passed": 0,
+      "total": 13
+    }
+  },
+  "results": [
+    {
+      "function_id": "CF-YAML",
+      "function_name": "actions",
+      "category": "yaml_syntax",
+      "passed": true,
+      "score": 100,
+      "actual_output": "Valid YAML",
+      "expected_output": "Valid YAML",
+      "error_message": null,
+      "interpretation": "✅ actions/action.yml は有効なYAML構文",
+      "details": {}
+    },
+    {
+      "function_id": "CF-STRUCT",
+      "function_name": "actions",
+      "category": "structure",
+      "passed": true,
+      "score": 100,
+      "actual_output": "GitHub Actions Fixer",
+      "expected_output": "name, description present",
+      "error_message": null,
+      "interpretation": "✅ actions は必須フィールドをすべて持つ",
+      "details": {
+        "name": "GitHub Actions Fixer",
+        "description": "Validate and auto-fix common GitHub Actions workflow errors"
+      }
+    },
+    {
+      "function_id": "CF-TYPE",
+      "function_name": "actions",
+      "category": "type",
+      "passed": true,
+      "score": 100,
+      "actual_output": "composite with 4 steps",
+      "expected_output": "composite",
+      "error_message": null,
+      "interpretation": "✅ actions は正しいComposite Action（4 steps）",
+      "details": {
+        "steps_count": 4,
+        "has_steps": true
+      }
+    },
+    {
+      "function_id": "CF-DOC",
+      "function_name": "actions",
+      "category": "documentation",
+      "passed": false,
+      "score": 0,
+      "actual_output": {
+        "example": false,
+        "instruction": false
+      },
+      "expected_output": {
+        "example": true,
+        "instruction": true
+      },
+      "error_message": null,
+      "interpretation": "⚠️ actions はドキュメントが不完全（example:False, instruction:False）",
+      "details": {
+        "example_path": null,
+        "instruction_path": null
+      }
+    },
+    {
+      "function_id": "CF-TEST",
+      "function_name": "actions",
+      "category": "testing",
+      "passed": false,
+      "score": 0,
+      "actual_output": {
+        "has_test_dir": false,
+        "test_files_count": 0
+      },
+      "expected_output": {
+        "has_test_dir": true,
+        "test_files_count": ">= 1"
+      },
+      "error_message": null,
+      "interpretation": "❌ actions はテストがない",
+      "details": {
+        "test_dir_path": null,
+        "test_files": 0
+      }
+    },
+    {
+      "function_id": "CF-YAML",
+      "function_name": "actions",
+      "category": "yaml_syntax",
+      "passed": true,
+      "score": 100,
+      "actual_output": "Valid YAML",
+      "expected_output": "Valid YAML",
+      "error_message": null,
+      "interpretation": "✅ actions/action.yml は有効なYAML構文",
+      "details": {}
+    },
+    {
+      "function_id": "CF-STRUCT",
+      "function_name": "actions",
+      "category": "structure",
+      "passed": true,
+      "score": 100,
+      "actual_output": "Auto Document",
+      "expected_output": "name, description present",
+      "error_message": null,
+      "interpretation": "✅ actions は必須フィールドをすべて持つ",
+      "details": {
+        "name": "Auto Document",
+        "description": "Automatically update documentation based on code changes using Claude Code CLI"
+      }
+    },
+    {
+      "function_id": "CF-TYPE",
+      "function_name": "actions",
+      "category": "type",
+      "passed": true,
+      "score": 100,
+      "actual_output": "composite with 1 steps",
+      "expected_output": "composite",
+      "error_message": null,
+      "interpretation": "✅ actions は正しいComposite Action（1 steps）",
+      "details": {
+        "steps_count": 1,
+        "has_steps": true
+      }
+    },
+    {
+      "function_id": "CF-DOC",
+      "function_name": "actions",
+      "category": "documentation",
+      "passed": false,
+      "score": 0,
+      "actual_output": {
+        "example": false,
+        "instruction": false
+      },
+      "expected_output": {
+        "example": true,
+        "instruction": true
+      },
+      "error_message": null,
+      "interpretation": "⚠️ actions はドキュメントが不完全（example:False, instruction:False）",
+      "details": {
+        "example_path": null,
+        "instruction_path": null
+      }
+    },
+    {
+      "function_id": "CF-TEST",
+      "function_name": "actions",
+      "category": "testing",
+      "passed": false,
+      "score": 0,
+      "actual_output": {
+        "has_test_dir": false,
+        "test_files_count": 0
+      },
+      "expected_output": {
+        "has_test_dir": true,
+        "test_files_count": ">= 1"
+      },
+      "error_message": null,
+      "interpretation": "❌ actions はテストがない",
+      "details": {
+        "test_dir_path": null,
+        "test_files": 0
+      }
+    },
+    {
+      "function_id": "CF-YAML",
+      "function_name": "actions",
+      "category": "yaml_syntax",
+      "passed": true,
+      "score": 100,
+      "actual_output": "Valid YAML",
+      "expected_output": "Valid YAML",
+      "error_message": null,
+      "interpretation": "✅ actions/action.yml は有効なYAML構文",
+      "details": {}
+    },
+    {
+      "function_id": "CF-STRUCT",
+      "function_name": "actions",
+      "category": "structure",
+      "passed": true,
+      "score": 100,
+      "actual_output": "Auto Merge PR",
+      "expected_output": "name, description present",
+      "error_message": null,
+      "interpretation": "✅ actions は必須フィールドをすべて持つ",
+      "details": {
+        "name": "Auto Merge PR",
+        "description": "Merge a pull request with specified method"
+      }
+    },
+    {
+      "function_id": "CF-TYPE",
+      "function_name": "actions",
+      "category": "type",
+      "passed": true,
+      "score": 100,
+      "actual_output": "composite with 1 steps",
+      "expected_output": "composite",
+      "error_message": null,
+      "interpretation": "✅ actions は正しいComposite Action（1 steps）",
+      "details": {
+        "steps_count": 1,
+        "has_steps": true
+      }
+    },
+    {
+      "function_id": "CF-DOC",
+      "function_name": "actions",
+      "category": "documentation",
+      "passed": false,
+      "score": 0,
+      "actual_output": {
+        "example": false,
+        "instruction": false
+      },
+      "expected_output": {
+        "example": true,
+        "instruction": true
+      },
+      "error_message": null,
+      "interpretation": "⚠️ actions はドキュメントが不完全（example:False, instruction:False）",
+      "details": {
+        "example_path": null,
+        "instruction_path": null
+      }
+    },
+    {
+      "function_id": "CF-TEST",
+      "function_name": "actions",
+      "category": "testing",
+      "passed": false,
+      "score": 0,
+      "actual_output": {
+        "has_test_dir": false,
+        "test_files_count": 0
+      },
+      "expected_output": {
+        "has_test_dir": true,
+        "test_files_count": ">= 1"
+      },
+      "error_message": null,
+      "interpretation": "❌ actions はテストがない",
+      "details": {
+        "test_dir_path": null,
+        "test_files": 0
+      }
+    },
+    {
+      "function_id": "CF-YAML",
+      "function_name": "actions",
+      "category": "yaml_syntax",
+      "passed": true,
+      "score": 100,
+      "actual_output": "Valid YAML",
+      "expected_output": "Valid YAML",
+      "error_message": null,
+      "interpretation": "✅ actions/action.yml は有効なYAML構文",
+      "details": {}
+    },
+    {
+      "function_id": "CF-STRUCT",
+      "function_name": "actions",
+      "category": "structure",
+      "passed": true,
+      "score": 100,
+      "actual_output": "Auto Rebase PR with Automatic Conflict Resolution",
+      "expected_output": "name, description present",
+      "error_message": null,
+      "interpretation": "✅ actions は必須フィールドをすべて持つ",
+      "details": {
+        "name": "Auto Rebase PR with Automatic Conflict Resolution",
+        "description": "Automatically rebase a PR and resolve conflicts by preferring PR branch changes"
+      }
+    },
+    {
+      "function_id": "CF-TYPE",
+      "function_name": "actions",
+      "category": "type",
+      "passed": true,
+      "score": 100,
+      "actual_output": "composite with 4 steps",
+      "expected_output": "composite",
+      "error_message": null,
+      "interpretation": "✅ actions は正しいComposite Action（4 steps）",
+      "details": {
+        "steps_count": 4,
+        "has_steps": true
+      }
+    },
+    {
+      "function_id": "CF-DOC",
+      "function_name": "actions",
+      "category": "documentation",
+      "passed": false,
+      "score": 0,
+      "actual_output": {
+        "example": false,
+        "instruction": false
+      },
+      "expected_output": {
+        "example": true,
+        "instruction": true
+      },
+      "error_message": null,
+      "interpretation": "⚠️ actions はドキュメントが不完全（example:False, instruction:False）",
+      "details": {
+        "example_path": null,
+        "instruction_path": null
+      }
+    },
+    {
+      "function_id": "CF-TEST",
+      "function_name": "actions",
+      "category": "testing",
+      "passed": false,
+      "score": 0,
+      "actual_output": {
+        "has_test_dir": false,
+        "test_files_count": 0
+      },
+      "expected_output": {
+        "has_test_dir": true,
+        "test_files_count": ">= 1"
+      },
+      "error_message": null,
+      "interpretation": "❌ actions はテストがない",
+      "details": {
+        "test_dir_path": null,
+        "test_files": 0
+      }
+    },
+    {
+      "function_id": "CF-YAML",
+      "function_name": "actions",
+      "category": "yaml_syntax",
+      "passed": true,
+      "score": 100,
+      "actual_output": "Valid YAML",
+      "expected_output": "Valid YAML",
+      "error_message": null,
+      "interpretation": "✅ actions/action.yml は有効なYAML構文",
+      "details": {}
+    },
+    {
+      "function_id": "CF-STRUCT",
+      "function_name": "actions",
+      "category": "structure",
+      "passed": true,
+      "score": 100,
+      "actual_output": "Auto Refactor",
+      "expected_output": "name, description present",
+      "error_message": null,
+      "interpretation": "✅ actions は必須フィールドをすべて持つ",
+      "details": {
+        "name": "Auto Refactor",
+        "description": "Automatically refactor code using Claude Code CLI"
+      }
+    },
+    {
+      "function_id": "CF-TYPE",
+      "function_name": "actions",
+      "category": "type",
+      "passed": true,
+      "score": 100,
+      "actual_output": "composite with 1 steps",
+      "expected_output": "composite",
+      "error_message": null,
+      "interpretation": "✅ actions は正しいComposite Action（1 steps）",
+      "details": {
+        "steps_count": 1,
+        "has_steps": true
+      }
+    },
+    {
+      "function_id": "CF-DOC",
+      "function_name": "actions",
+      "category": "documentation",
+      "passed": false,
+      "score": 0,
+      "actual_output": {
+        "example": false,
+        "instruction": false
+      },
+      "expected_output": {
+        "example": true,
+        "instruction": true
+      },
+      "error_message": null,
+      "interpretation": "⚠️ actions はドキュメントが不完全（example:False, instruction:False）",
+      "details": {
+        "example_path": null,
+        "instruction_path": null
+      }
+    },
+    {
+      "function_id": "CF-TEST",
+      "function_name": "actions",
+      "category": "testing",
+      "passed": false,
+      "score": 0,
+      "actual_output": {
+        "has_test_dir": false,
+        "test_files_count": 0
+      },
+      "expected_output": {
+        "has_test_dir": true,
+        "test_files_count": ">= 1"
+      },
+      "error_message": null,
+      "interpretation": "❌ actions はテストがない",
+      "details": {
+        "test_dir_path": null,
+        "test_files": 0
+      }
+    },
+    {
+      "function_id": "CF-YAML",
+      "function_name": "actions",
+      "category": "yaml_syntax",
+      "passed": true,
+      "score": 100,
+      "actual_output": "Valid YAML",
+      "expected_output": "Valid YAML",
+      "error_message": null,
+      "interpretation": "✅ actions/action.yml は有効なYAML構文",
+      "details": {}
+    },
+    {
+      "function_id": "CF-STRUCT",
+      "function_name": "actions",
+      "category": "structure",
+      "passed": true,
+      "score": 100,
+      "actual_output": "Bulk Merge PRs",
+      "expected_output": "name, description present",
+      "error_message": null,
+      "interpretation": "✅ actions は必須フィールドをすべて持つ",
+      "details": {
+        "name": "Bulk Merge PRs",
+        "description": "Merge multiple pull requests that are ready (CLEAN status)"
+      }
+    },
+    {
+      "function_id": "CF-TYPE",
+      "function_name": "actions",
+      "category": "type",
+      "passed": true,
+      "score": 100,
+      "actual_output": "composite with 1 steps",
+      "expected_output": "composite",
+      "error_message": null,
+      "interpretation": "✅ actions は正しいComposite Action（1 steps）",
+      "details": {
+        "steps_count": 1,
+        "has_steps": true
+      }
+    },
+    {
+      "function_id": "CF-DOC",
+      "function_name": "actions",
+      "category": "documentation",
+      "passed": false,
+      "score": 0,
+      "actual_output": {
+        "example": false,
+        "instruction": false
+      },
+      "expected_output": {
+        "example": true,
+        "instruction": true
+      },
+      "error_message": null,
+      "interpretation": "⚠️ actions はドキュメントが不完全（example:False, instruction:False）",
+      "details": {
+        "example_path": null,
+        "instruction_path": null
+      }
+    },
+    {
+      "function_id": "CF-TEST",
+      "function_name": "actions",
+      "category": "testing",
+      "passed": false,
+      "score": 0,
+      "actual_output": {
+        "has_test_dir": false,
+        "test_files_count": 0
+      },
+      "expected_output": {
+        "has_test_dir": true,
+        "test_files_count": ">= 1"
+      },
+      "error_message": null,
+      "interpretation": "❌ actions はテストがない",
+      "details": {
+        "test_dir_path": null,
+        "test_files": 0
+      }
+    },
+    {
+      "function_id": "CF-YAML",
+      "function_name": "actions",
+      "category": "yaml_syntax",
+      "passed": true,
+      "score": 100,
+      "actual_output": "Valid YAML",
+      "expected_output": "Valid YAML",
+      "error_message": null,
+      "interpretation": "✅ actions/action.yml は有効なYAML構文",
+      "details": {}
+    },
+    {
+      "function_id": "CF-STRUCT",
+      "function_name": "actions",
+      "category": "structure",
+      "passed": true,
+      "score": 100,
+      "actual_output": "Bulk Rebase PRs",
+      "expected_output": "name, description present",
+      "error_message": null,
+      "interpretation": "✅ actions は必須フィールドをすべて持つ",
+      "details": {
+        "name": "Bulk Rebase PRs",
+        "description": "Rebase multiple pull requests against latest base branch"
+      }
+    },
+    {
+      "function_id": "CF-TYPE",
+      "function_name": "actions",
+      "category": "type",
+      "passed": true,
+      "score": 100,
+      "actual_output": "composite with 1 steps",
+      "expected_output": "composite",
+      "error_message": null,
+      "interpretation": "✅ actions は正しいComposite Action（1 steps）",
+      "details": {
+        "steps_count": 1,
+        "has_steps": true
+      }
+    },
+    {
+      "function_id": "CF-DOC",
+      "function_name": "actions",
+      "category": "documentation",
+      "passed": false,
+      "score": 0,
+      "actual_output": {
+        "example": false,
+        "instruction": false
+      },
+      "expected_output": {
+        "example": true,
+        "instruction": true
+      },
+      "error_message": null,
+      "interpretation": "⚠️ actions はドキュメントが不完全（example:False, instruction:False）",
+      "details": {
+        "example_path": null,
+        "instruction_path": null
+      }
+    },
+    {
+      "function_id": "CF-TEST",
+      "function_name": "actions",
+      "category": "testing",
+      "passed": false,
+      "score": 0,
+      "actual_output": {
+        "has_test_dir": false,
+        "test_files_count": 0
+      },
+      "expected_output": {
+        "has_test_dir": true,
+        "test_files_count": ">= 1"
+      },
+      "error_message": null,
+      "interpretation": "❌ actions はテストがない",
+      "details": {
+        "test_dir_path": null,
+        "test_files": 0
+      }
+    },
+    {
+      "function_id": "CF-YAML",
+      "function_name": "actions",
+      "category": "yaml_syntax",
+      "passed": true,
+      "score": 100,
+      "actual_output": "Valid YAML",
+      "expected_output": "Valid YAML",
+      "error_message": null,
+      "interpretation": "✅ actions/action.yml は有効なYAML構文",
+      "details": {}
+    },
+    {
+      "function_id": "CF-STRUCT",
+      "function_name": "actions",
+      "category": "structure",
+      "passed": true,
+      "score": 100,
+      "actual_output": "PR Review Enqueuer",
+      "expected_output": "name, description present",
+      "error_message": null,
+      "interpretation": "✅ actions は必須フィールドをすべて持つ",
+      "details": {
+        "name": "PR Review Enqueuer",
+        "description": "Scans open PRs and adds /review comment to trigger review workflow"
+      }
+    },
+    {
+      "function_id": "CF-TYPE",
+      "function_name": "actions",
+      "category": "type",
+      "passed": true,
+      "score": 100,
+      "actual_output": "composite with 1 steps",
+      "expected_output": "composite",
+      "error_message": null,
+      "interpretation": "✅ actions は正しいComposite Action（1 steps）",
+      "details": {
+        "steps_count": 1,
+        "has_steps": true
+      }
+    },
+    {
+      "function_id": "CF-DOC",
+      "function_name": "actions",
+      "category": "documentation",
+      "passed": false,
+      "score": 0,
+      "actual_output": {
+        "example": false,
+        "instruction": false
+      },
+      "expected_output": {
+        "example": true,
+        "instruction": true
+      },
+      "error_message": null,
+      "interpretation": "⚠️ actions はドキュメントが不完全（example:False, instruction:False）",
+      "details": {
+        "example_path": null,
+        "instruction_path": null
+      }
+    },
+    {
+      "function_id": "CF-TEST",
+      "function_name": "actions",
+      "category": "testing",
+      "passed": false,
+      "score": 0,
+      "actual_output": {
+        "has_test_dir": false,
+        "test_files_count": 0
+      },
+      "expected_output": {
+        "has_test_dir": true,
+        "test_files_count": ">= 1"
+      },
+      "error_message": null,
+      "interpretation": "❌ actions はテストがない",
+      "details": {
+        "test_dir_path": null,
+        "test_files": 0
+      }
+    },
+    {
+      "function_id": "CF-YAML",
+      "function_name": "actions",
+      "category": "yaml_syntax",
+      "passed": true,
+      "score": 100,
+      "actual_output": "Valid YAML",
+      "expected_output": "Valid YAML",
+      "error_message": null,
+      "interpretation": "✅ actions/action.yml は有効なYAML構文",
+      "details": {}
+    },
+    {
+      "function_id": "CF-STRUCT",
+      "function_name": "actions",
+      "category": "structure",
+      "passed": true,
+      "score": 100,
+      "actual_output": "Publish PR",
+      "expected_output": "name, description present",
+      "error_message": null,
+      "interpretation": "✅ actions は必須フィールドをすべて持つ",
+      "details": {
+        "name": "Publish PR",
+        "description": "Convert a draft pull request to ready for review"
+      }
+    },
+    {
+      "function_id": "CF-TYPE",
+      "function_name": "actions",
+      "category": "type",
+      "passed": true,
+      "score": 100,
+      "actual_output": "composite with 1 steps",
+      "expected_output": "composite",
+      "error_message": null,
+      "interpretation": "✅ actions は正しいComposite Action（1 steps）",
+      "details": {
+        "steps_count": 1,
+        "has_steps": true
+      }
+    },
+    {
+      "function_id": "CF-DOC",
+      "function_name": "actions",
+      "category": "documentation",
+      "passed": false,
+      "score": 0,
+      "actual_output": {
+        "example": false,
+        "instruction": false
+      },
+      "expected_output": {
+        "example": true,
+        "instruction": true
+      },
+      "error_message": null,
+      "interpretation": "⚠️ actions はドキュメントが不完全（example:False, instruction:False）",
+      "details": {
+        "example_path": null,
+        "instruction_path": null
+      }
+    },
+    {
+      "function_id": "CF-TEST",
+      "function_name": "actions",
+      "category": "testing",
+      "passed": false,
+      "score": 0,
+      "actual_output": {
+        "has_test_dir": false,
+        "test_files_count": 0
+      },
+      "expected_output": {
+        "has_test_dir": true,
+        "test_files_count": ">= 1"
+      },
+      "error_message": null,
+      "interpretation": "❌ actions はテストがない",
+      "details": {
+        "test_dir_path": null,
+        "test_files": 0
+      }
+    },
+    {
+      "function_id": "CF-YAML",
+      "function_name": "actions",
+      "category": "yaml_syntax",
+      "passed": true,
+      "score": 100,
+      "actual_output": "Valid YAML",
+      "expected_output": "Valid YAML",
+      "error_message": null,
+      "interpretation": "✅ actions/action.yml は有効なYAML構文",
+      "details": {}
+    },
+    {
+      "function_id": "CF-STRUCT",
+      "function_name": "actions",
+      "category": "structure",
+      "passed": true,
+      "score": 100,
+      "actual_output": "AI Release Notes",
+      "expected_output": "name, description present",
+      "error_message": null,
+      "interpretation": "✅ actions は必須フィールドをすべて持つ",
+      "details": {
+        "name": "AI Release Notes",
+        "description": "Generate high-quality release notes from commit history using Claude Code CLI"
+      }
+    },
+    {
+      "function_id": "CF-TYPE",
+      "function_name": "actions",
+      "category": "type",
+      "passed": true,
+      "score": 100,
+      "actual_output": "composite with 1 steps",
+      "expected_output": "composite",
+      "error_message": null,
+      "interpretation": "✅ actions は正しいComposite Action（1 steps）",
+      "details": {
+        "steps_count": 1,
+        "has_steps": true
+      }
+    },
+    {
+      "function_id": "CF-DOC",
+      "function_name": "actions",
+      "category": "documentation",
+      "passed": false,
+      "score": 0,
+      "actual_output": {
+        "example": false,
+        "instruction": false
+      },
+      "expected_output": {
+        "example": true,
+        "instruction": true
+      },
+      "error_message": null,
+      "interpretation": "⚠️ actions はドキュメントが不完全（example:False, instruction:False）",
+      "details": {
+        "example_path": null,
+        "instruction_path": null
+      }
+    },
+    {
+      "function_id": "CF-TEST",
+      "function_name": "actions",
+      "category": "testing",
+      "passed": false,
+      "score": 0,
+      "actual_output": {
+        "has_test_dir": false,
+        "test_files_count": 0
+      },
+      "expected_output": {
+        "has_test_dir": true,
+        "test_files_count": ">= 1"
+      },
+      "error_message": null,
+      "interpretation": "❌ actions はテストがない",
+      "details": {
+        "test_dir_path": null,
+        "test_files": 0
+      }
+    },
+    {
+      "function_id": "CF-YAML",
+      "function_name": "actions",
+      "category": "yaml_syntax",
+      "passed": true,
+      "score": 100,
+      "actual_output": "Valid YAML",
+      "expected_output": "Valid YAML",
+      "error_message": null,
+      "interpretation": "✅ actions/action.yml は有効なYAML構文",
+      "details": {}
+    },
+    {
+      "function_id": "CF-STRUCT",
+      "function_name": "actions",
+      "category": "structure",
+      "passed": true,
+      "score": 100,
+      "actual_output": "AI Review and Fix",
+      "expected_output": "name, description present",
+      "error_message": null,
+      "interpretation": "✅ actions は必須フィールドをすべて持つ",
+      "details": {
+        "name": "AI Review and Fix",
+        "description": "Review and automatically fix code issues using Claude Code CLI."
+      }
+    },
+    {
+      "function_id": "CF-TYPE",
+      "function_name": "actions",
+      "category": "type",
+      "passed": true,
+      "score": 100,
+      "actual_output": "composite with 4 steps",
+      "expected_output": "composite",
+      "error_message": null,
+      "interpretation": "✅ actions は正しいComposite Action（4 steps）",
+      "details": {
+        "steps_count": 4,
+        "has_steps": true
+      }
+    },
+    {
+      "function_id": "CF-DOC",
+      "function_name": "actions",
+      "category": "documentation",
+      "passed": false,
+      "score": 0,
+      "actual_output": {
+        "example": false,
+        "instruction": false
+      },
+      "expected_output": {
+        "example": true,
+        "instruction": true
+      },
+      "error_message": null,
+      "interpretation": "⚠️ actions はドキュメントが不完全（example:False, instruction:False）",
+      "details": {
+        "example_path": null,
+        "instruction_path": null
+      }
+    },
+    {
+      "function_id": "CF-TEST",
+      "function_name": "actions",
+      "category": "testing",
+      "passed": false,
+      "score": 0,
+      "actual_output": {
+        "has_test_dir": false,
+        "test_files_count": 0
+      },
+      "expected_output": {
+        "has_test_dir": true,
+        "test_files_count": ">= 1"
+      },
+      "error_message": null,
+      "interpretation": "❌ actions はテストがない",
+      "details": {
+        "test_dir_path": null,
+        "test_files": 0
+      }
+    },
+    {
+      "function_id": "CF-YAML",
+      "function_name": "actions",
+      "category": "yaml_syntax",
+      "passed": true,
+      "score": 100,
+      "actual_output": "Valid YAML",
+      "expected_output": "Valid YAML",
+      "error_message": null,
+      "interpretation": "✅ actions/action.yml は有効なYAML構文",
+      "details": {}
+    },
+    {
+      "function_id": "CF-STRUCT",
+      "function_name": "actions",
+      "category": "structure",
+      "passed": true,
+      "score": 100,
+      "actual_output": "Review and Auto-Merge PR",
+      "expected_output": "name, description present",
+      "error_message": null,
+      "interpretation": "✅ actions は必須フィールドをすべて持つ",
+      "details": {
+        "name": "Review and Auto-Merge PR",
+        "description": "Automatically rebase and merge PRs"
+      }
+    },
+    {
+      "function_id": "CF-TYPE",
+      "function_name": "actions",
+      "category": "type",
+      "passed": true,
+      "score": 100,
+      "actual_output": "composite with 1 steps",
+      "expected_output": "composite",
+      "error_message": null,
+      "interpretation": "✅ actions は正しいComposite Action（1 steps）",
+      "details": {
+        "steps_count": 1,
+        "has_steps": true
+      }
+    },
+    {
+      "function_id": "CF-DOC",
+      "function_name": "actions",
+      "category": "documentation",
+      "passed": false,
+      "score": 0,
+      "actual_output": {
+        "example": false,
+        "instruction": false
+      },
+      "expected_output": {
+        "example": true,
+        "instruction": true
+      },
+      "error_message": null,
+      "interpretation": "⚠️ actions はドキュメントが不完全（example:False, instruction:False）",
+      "details": {
+        "example_path": null,
+        "instruction_path": null
+      }
+    },
+    {
+      "function_id": "CF-TEST",
+      "function_name": "actions",
+      "category": "testing",
+      "passed": false,
+      "score": 0,
+      "actual_output": {
+        "has_test_dir": false,
+        "test_files_count": 0
+      },
+      "expected_output": {
+        "has_test_dir": true,
+        "test_files_count": ">= 1"
+      },
+      "error_message": null,
+      "interpretation": "❌ actions はテストがない",
+      "details": {
+        "test_dir_path": null,
+        "test_files": 0
+      }
+    },
+    {
+      "function_id": "CF-YAML",
+      "function_name": "actions",
+      "category": "yaml_syntax",
+      "passed": true,
+      "score": 100,
+      "actual_output": "Valid YAML",
+      "expected_output": "Valid YAML",
+      "error_message": null,
+      "interpretation": "✅ actions/action.yml は有効なYAML構文",
+      "details": {}
+    },
+    {
+      "function_id": "CF-STRUCT",
+      "function_name": "actions",
+      "category": "structure",
+      "passed": true,
+      "score": 100,
+      "actual_output": "Spec to Code",
+      "expected_output": "name, description present",
+      "error_message": null,
+      "interpretation": "✅ actions は必須フィールドをすべて持つ",
+      "details": {
+        "name": "Spec to Code",
+        "description": "Generate code from Markdown specifications using Claude Code CLI"
+      }
+    },
+    {
+      "function_id": "CF-TYPE",
+      "function_name": "actions",
+      "category": "type",
+      "passed": true,
+      "score": 100,
+      "actual_output": "composite with 3 steps",
+      "expected_output": "composite",
+      "error_message": null,
+      "interpretation": "✅ actions は正しいComposite Action（3 steps）",
+      "details": {
+        "steps_count": 3,
+        "has_steps": true
+      }
+    },
+    {
+      "function_id": "CF-DOC",
+      "function_name": "actions",
+      "category": "documentation",
+      "passed": false,
+      "score": 0,
+      "actual_output": {
+        "example": false,
+        "instruction": false
+      },
+      "expected_output": {
+        "example": true,
+        "instruction": true
+      },
+      "error_message": null,
+      "interpretation": "⚠️ actions はドキュメントが不完全（example:False, instruction:False）",
+      "details": {
+        "example_path": null,
+        "instruction_path": null
+      }
+    },
+    {
+      "function_id": "CF-TEST",
+      "function_name": "actions",
+      "category": "testing",
+      "passed": false,
+      "score": 0,
+      "actual_output": {
+        "has_test_dir": false,
+        "test_files_count": 0
+      },
+      "expected_output": {
+        "has_test_dir": true,
+        "test_files_count": ">= 1"
+      },
+      "error_message": null,
+      "interpretation": "❌ actions はテストがない",
+      "details": {
+        "test_dir_path": null,
+        "test_files": 0
+      }
+    }
+  ]
+}

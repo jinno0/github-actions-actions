@@ -1,0 +1,22 @@
+version: "1.0"
+updated_at: "2026-02-01T15:10:00Z"
+
+# === Scan Budget ===
+scan_budget:
+  max_files_per_run: 100
+  max_total_tokens: 100000
+
+# === Log Budget ===
+log_budget:
+  max_log_entries: 500
+  keep_last_n_entries: 300
+
+# === Proposal Budget ===
+proposal_budget:
+  max_prs_per_run: 5
+  max_proposal_complexity: "medium"  # low/medium/high
+
+# === Verification Budget ===
+verification_budget:
+  max_test_execution_time: 300  # seconds
+  max_actions_to_verify: 13  # 全Actions数

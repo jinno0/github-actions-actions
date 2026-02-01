@@ -1,0 +1,86 @@
+version: "1.0"
+updated_at: "2026-02-01T15:10:00Z"
+
+# === 技術的制約 ===
+technical:
+  - type: "platform"
+    constraint: "Self-hosted runner必須（GitHub-hosted runnerではClaude Code CLI利用不可）"
+    source: "README.md:60-62"
+
+  - type: "action_type"
+    constraint: "Composite Actionsのみ（Docker/JS Actions禁止）"
+    source: "SYSTEM_CONSTITUTION.md:29-31"
+
+  - type: "dependencies"
+    constraint: "Claude Code CLIがrunnerにインストールされている必要がある"
+    source: "README.md:60-62, PURPOSE.md:6"
+
+  - type: "versioning"
+    constraint: "セマンティックバージョニング必須、@main使用禁止"
+    source: "SYSTEM_CONSTITUTION.md:52-58"
+
+# === 機能的制約 ===
+functional:
+  - type: "scope"
+    constraint: "単一責務の原則：各Actionは1つの明確な目的のみ"
+    source: "SYSTEM_CONSTITUTION.md:37-42"
+
+  - type: "reusability"
+    constraint: "組織内のどのリポジトリからでも使用可能である必要"
+    source: "SYSTEM_CONSTITUTION.md:44-50"
+
+  - type: "secrets_handling"
+    constraint: "トークン・パスワード等のコードへのハードコーディング禁止"
+    source: "SYSTEM_CONSTITUTION.md:60-67"
+
+  - type: "breaking_changes"
+    constraint: "既存Actionのinputs削除や動作変更の禁止（メジャーバージョン切り替え時は除く）"
+    source: "SYSTEM_CONSTITUTION.md:106-108"
+
+# === セキュリティ制約 ===
+security:
+  - type: "secret_management"
+    constraint: "全てのSecretは呼び出し元から受け取る"
+    source: "SYSTEM_CONSTITUTION.md:64-67"
+
+  - type: "input_validation"
+    constraint: "全ての入力値のバリデーション必須"
+    source: "SYSTEM_CONSTITUTION.md:66"
+
+  - type: "third_party_scripts"
+    constraint: "第三者スクリプトの実行は慎重に検証"
+    source: "SYSTEM_CONSTITUTION.md:67"
+
+# === 運用制約 ===
+operational:
+  - type: "documentation"
+    constraint: "全Actionは自己文書化されている必要（description必須）"
+    source: "SYSTEM_CONSTITUTION.md:69-76"
+
+  - type: "error_handling"
+    constraint: "失敗時は明確なエラーメッセージを出力"
+    source: "SYSTEM_CONSTITUTION.md:91"
+
+  - type: "consistency"
+    constraint: "全Actionが統一された命名規則に従う"
+    source: "SYSTEM_CONSTITUTION.md:92"
+
+# === 品質制約 ===
+quality:
+  - type: "testing"
+    constraint: "各Actionはスタンドアロンでテスト可能"
+    source: "SYSTEM_CONSTITUTION.md:85"
+
+  - type: "dry_run"
+    constraint: "全ActionはDry Runモードで検証可能"
+    source: "README.md:71, AGENTS.mdのテストセクション"
+
+# === ドメイン制約 ===
+domain:
+  - type: "ai_limitations"
+    constraint: "AIのハルシネーションリスクを考慮し、完全自動化は採用しない"
+    source: "PURPOSE.md:66"
+
+  - type: "human_in_the_loop"
+    constraint: "最終決定権（マージ、デプロイ）は人間が持つ"
+    source: "PURPOSE.md:37"

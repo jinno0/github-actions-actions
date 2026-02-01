@@ -1,0 +1,179 @@
+version: "1.0"
+generated_at: "2026-02-01T15:10:00Z"
+run_id: "audit-run-001"
+
+# === Repository Structure ===
+structure:
+  total_actions: 13
+  actions_with_description: 13
+  actions_with_scripts: 1
+  actions_with_templates: 2
+  example_workflows: 13
+  instruction_documents: 14
+  test_files: 2
+
+# === Action Inventory ===
+actions:
+  - name: "review-and-merge"
+    status: "implemented"
+    has_test: true
+    has_scripts: true
+    has_templates: true
+    files_count: 4
+
+  - name: "spec-to-code"
+    status: "implemented"
+    has_test: true
+    has_scripts: false
+    has_templates: true
+    files_count: 3
+
+  - name: "action-fixer"
+    status: "partially_implemented"
+    has_test: false
+    has_scripts: false
+    has_templates: true
+    files_count: 2
+
+  - name: "auto-refactor"
+    status: "unknown"
+    has_test: false
+    has_scripts: false
+    has_templates: false
+    files_count: 1
+
+  - name: "auto-document"
+    status: "unknown"
+    has_test: false
+    has_scripts: false
+    has_templates: false
+    files_count: 1
+
+  - name: "release-notes-ai"
+    status: "unknown"
+    has_test: false
+    has_scripts: false
+    has_templates: false
+    files_count: 1
+
+  - name: "auto-merge"
+    status: "partially_implemented"
+    has_test: false
+    has_scripts: false
+    has_templates: false
+    files_count: 1
+
+  - name: "auto-rebase"
+    status: "unknown"
+    has_test: false
+    has_scripts: false
+    has_templates: false
+    files_count: 1
+
+  - name: "review-auto-merge"
+    status: "unknown"
+    has_test: false
+    has_scripts: false
+    has_templates: false
+    files_count: 1
+
+  - name: "publish-pr"
+    status: "unknown"
+    has_test: false
+    has_scripts: false
+    has_templates: false
+    files_count: 1
+
+  - name: "bulk-merge-prs"
+    status: "unknown"
+    has_test: false
+    has_scripts: false
+    has_templates: false
+    files_count: 1
+
+  - name: "bulk-rebase-prs"
+    status: "unknown"
+    has_test: false
+    has_scripts: false
+    has_templates: false
+    files_count: 1
+
+  - name: "pr-review-enqueuer"
+    status: "unknown"
+    has_test: false
+    has_scripts: false
+    has_templates: false
+    files_count: 1
+
+# === Test Coverage ===
+testing:
+  test_coverage: "15.4%"  # 2 out of 13 actions
+  tested_actions:
+    - "review-and-merge"
+    - "spec-to-code"
+  untested_actions: 11
+  pytest_config_issues:
+    - "duplicate_addopts"  # Line 13 and 29 in pytest.ini
+
+# === Documentation ===
+documentation:
+  description_coverage: "100%"  # All 13 actions have descriptions
+  example_coverage: "100%"  # All 13 actions have examples
+  instruction_coverage: "107%"  # 14 docs for 13 actions (includes README)
+
+# === Known Issues ===
+issues:
+  - id: "ISS-001"
+    severity: "critical"
+    category: "configuration"
+    title: "pytest.iniに重複するaddopts定義"
+    description: "Line 13 and 29 both define addopts, causing pytest to fail"
+    location: "pytest.ini:13,29"
+    impact: "pytestが全く実行できない"
+    evidence: "ERROR: /home/jinno/github-actions-actions/pytest.ini:29: duplicate name 'addopts'"
+
+  - id: "ISS-002"
+    severity: "high"
+    category: "testing"
+    title: "テストカバレッジが15.4%に留まる"
+    description: "13 Actions中2つしかテストが存在しない"
+    location: "tests/ ディレクトリ"
+    impact: "11 Actionsの動作保証がない"
+    target_coverage: "80%"
+    actual_coverage: "15.4%"
+
+  - id: "ISS-003"
+    severity: "medium"
+    category: "implementation"
+    title: "複数Actionの実装状況が不明"
+    description: "action.ymlのみでscripts/やtemplates/が存在しないActionが11つ"
+    location: "actions/*/ (11 directories)"
+    impact: "README.mdで「提供している」と主張しているが実装が不完全"
+    affected_actions:
+      - "auto-refactor"
+      - "auto-document"
+      - "release-notes-ai"
+      - "auto-rebase"
+      - "review-auto-merge"
+      - "publish-pr"
+      - "bulk-merge-prs"
+      - "bulk-rebase-prs"
+      - "pr-review-enqueuer"
+
+# === Dependencies ===
+dependencies:
+  claude_code_cli:
+    required: true
+    installed: "unknown"  # Cannot verify from worktree
+    assumption: "self-hosted runnerにインストール済みと仮定"
+
+  python_packages:
+    - name: "pytest"
+      required: true
+      installed: true
+    - name: "pytest-cov"
+      required: true
+      installed: true
+    - name: "yamllint"
+      required: false
+      installed: "unknown"
