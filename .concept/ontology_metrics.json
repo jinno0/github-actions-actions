@@ -14,9 +14,9 @@
   "decisions_lines": 22,
   "decisions_limit": 200,
   "decisions_utilization": 0.11,
-  "claims_lines": 0,
-  "last_run": "2026-02-01T05:20:49.990570Z",
-  "run_index": 50,
+  "claims_lines": 7,
+  "last_run": "2026-02-01T05:43:35Z",
+  "run_index": 51,
   "runs_since_last_gc": 0,
   "health_status": "optimal",
   "last_hygiene_run": "2026-02-01T05:20:49.990616Z",
@@ -35,10 +35,10 @@
   "auto_decision_expiration": {},
   "hygiene_summary": {
     "dedup_performed": false,
-    "gc_performed": true,
+    "gc_performed": false,
     "integrity_fixes": 0,
     "commit_leaks_fixed": 0,
-    "reason": "Janitor Agent Run 50 - Routine hygiene. decisions.md regenerated (22/200 lines), no duplicates found, all references intact. unmapped_ratio improved from 0.36 to 0.00.",
+    "reason": "Concept Sync Run 51 - Maintenance cycle. Ingested 7 claims from dry-run testing and pytest coverage enhancements. No new ambiguities or conflicts. System health optimal.",
     "warnings": []
   }
 }
