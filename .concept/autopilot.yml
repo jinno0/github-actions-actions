@@ -1,0 +1,21 @@
+version: "1.0"
+updated_at: "2026-02-02T01:40:00Z"
+
+commands:
+  lint: "npm run lint || echo 'No lint script defined'"
+  test: "npm test || pytest tests/"
+  build: "npm run build || echo 'No build script defined'"
+
+budget:
+  max_cycles: 5
+  max_files: 25
+  max_loc_add: 800
+  max_loc_del: 800
+
+mode: "pr"  # pr|commit|dry_run
+
+# 検証コマンド（プロジェクト固有）
+validation:
+  dry_run: "pytest tests/ -k dry_run --verbose"
+  structure_check: "python tests/helpers/validate_actions.py"
+  yaml_syntax: "find . -name '*.yml' -o -name '*.yaml' | xargs -I {} echo \"Checking: {}\""

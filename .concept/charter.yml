@@ -1,0 +1,93 @@
+version: "1.0"
+updated_at: "2026-02-02T01:40:00Z"
+
+product_goal:
+  north_star: "組織全体の開発効率と品質を向上させるためのAIネイティブなGitHub Actionsを提供するハブとなる（Claude Code CLI活用）"
+  success_metrics:
+    - id: "MET-001"
+      name: "Action導入数"
+      target: "組織内の複数リポジトリで採用される"
+    - id: "MET-002"
+      name: "AI提案品質"
+      target: "Acceptance Rateが向上し続ける"
+    - id: "MET-003"
+      name: "開発効率"
+      target: "人間が本質的な設計・意思決定に集中できる時間が増加"
+  non_goals:
+    - "単なるシェルスクリプトラッパー（既存Actionsで十分なもの）"
+    - "完全無人運用（AIハルシネーションリスク考慮）"
+    - "特定プロダクトへの強結合（再利用性重視）"
+
+milestones:
+  - id: "MS-001"
+    name: "Phase 3: Stabilization & Adoption"
+    intent: "作成したAI Actionsを組織内に展開し、実運用でのフィードバックを収集・改善する"
+    deliverables:
+      - "各Actionの導入ガイド完成（instructions/）"
+      - "各Actionの検証用ワークフロー完成（examples/）"
+      - "組織内プロジェクトへの導入とフィードバック収集"
+      - "ドキュメント（README）の整備"
+    acceptance:
+      - type: "test"
+        target: "tests/ テストがパスする"
+      - type: "invariant"
+        target: "INV-001: 全ActionがDry Run検証をパスする"
+    priority: "P0"
+    status: "active"
+    dependencies: []
+    risks:
+      - "組織内導入における環境設定の複雑さ"
+      - "AIのハルシネーションによる誤修正リスク"
+
+  - id: "MS-002"
+    name: "Phase 4: Quality & Performance"
+    intent: "AI Actionsの品質と性能を向上させ、より高度な自動化を実現する"
+    deliverables:
+      - "レビュー精度の向上"
+      - "カスタムルール注入機能の強化"
+      - "エラーログ解析とAI修正提案の追加"
+      - "パフォーマンス最適化"
+    acceptance:
+      - type: "test"
+        target: "パフォーマンス基準を満たす"
+      - type: "invariant"
+        target: "INV-002: AI修正のAcceptance Rateが80%以上"
+    priority: "P1"
+    status: "planned"
+    dependencies: ["MS-001"]
+    risks:
+      - "AIモデルの性能限界"
+      - "コスト増大"
+
+  - id: "MS-003"
+    name: "Phase 5: Advanced Features"
+    intent: "より高度なAI自動化機能を追加し、開発体験を革新する"
+    deliverables:
+      - "仕様書からの完全自動コード生成"
+      - "自動リファクタリングの高度化"
+      - "マルチリポジトリ対応"
+      - "学習機能の追加"
+    acceptance:
+      - type: "test"
+        target: "高度な機能テストがパスする"
+      - type: "invariant"
+        target: "INV-003: 新機能でも既存品質を維持"
+    priority: "P2"
+    status: "planned"
+    dependencies: ["MS-002"]
+    risks:
+      - "技術的複雑さの増大"
+      - "メンテナンスコスト"
+
+work_policy:
+  default_mode: "pr"
+  iteration_budget:
+    max_cycles: 5
+    max_files_changed: 25
+    max_loc_add: 800
+    max_loc_del: 800
+  quality_gates:
+    must_pass: ["lint", "test"]
+  concept_policy:
+    concept_sync_version: "0.3"
+    bloat_is_failure: true
