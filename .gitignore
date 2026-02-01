@@ -165,3 +165,6 @@ ENV/
 CODE_REVIEW_SUMMARY.md
 cleanup-analysis.md
 CLEANUP_VERIFICATION_REPORT.md
+
+# Audit artifacts and logs
+.audit/
