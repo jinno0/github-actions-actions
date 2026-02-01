@@ -1,0 +1,28 @@
+run_id: "2026-02-01T12:37:44Z"
+scope:
+  prs_to_apply: ["PR-001", "PR-002"]
+  prs_deferred: []
+success_criteria:
+  - id: "SC-001"
+    target: "Maintain 100% test pass rate"
+    verification: "pytest tests/"
+  - id: "SC-002"
+    target: "Improve documentation coverage"
+    verification: "Check all actions have README"
+  - id: "SC-003"
+    target: "Add integration tests for missing actions"
+    verification: "pytest tests/"
+rollback_trigger:
+  - "Test failures"
+  - "Coverage drop below 90%"
+improvements:
+  - pr_id: "PR-001"
+    title: "Add README.md files for all actions"
+    description: "Each action directory should have a README explaining its purpose, usage, and examples"
+    priority: "high"
+    estimated_impact: "Documentation completeness"
+  - pr_id: "PR-002"
+    title: "Create comprehensive ACTIONS.md index"
+    description: "Create central documentation listing all actions with quick reference guide"
+    priority: "medium"
+    estimated_impact: "Discoverability"

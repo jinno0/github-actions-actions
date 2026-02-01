@@ -1,0 +1,152 @@
+version: "2.0"
+updated_at: "2026-02-01T22:47:44Z"
+updated_by: "audit-run-2026-02-01"
+
+# === Mission ===
+mission:
+  target_user: "GitHub組織の開発者とDevOpsエンジニア"
+  provided_value: "AIネイティブなGitHub Actionsを提供し、開発効率と品質を向上させる"
+  desired_state: "組織全体のリポジトリでAI Actionsが採用され、人間が本質的な設計や意思決定に集中できる状態"
+
+# === Assumptions（前回実行で検証済み）===
+assumptions:
+  - id: "ASM-001"
+    field: "mission.target_user"
+    value: "GitHub組織の開発者とDevOpsエンジニア"
+    reason: "README.mdの記述とアクションの用途から推測"
+    confidence: "high"
+    validated_by: "executor-run-2026-02-01"
+    validation_result: "confirmed"
+
+  - id: "ASM-002"
+    field: "quality_attributes.test_coverage"
+    value: ">= 70%"
+    reason: "pytest.ini で --cov-fail-under=70 と設定されている"
+    confidence: "high"
+    validated_by: "executor-run-2026-02-01"
+    validation_result: "confirmed"
+
+  - id: "ASM-003"
+    field: "documentation.target_coverage"
+    value: "100% of actions should have README files"
+    reason: "前回実行で9/13アクションにREADMEがないことが判明"
+    confidence: "high"
+    validated_by: "executor-run-2026-02-01"
+    validation_result: "confirmed"
+
+# === Quality Attributes ===
+quality_attributes:
+  - id: "QA-001"
+    name: "テストカバレッジ"
+    target: ">= 70%"
+    verification:
+      type: "measurement"
+      command: "pytest --cov=. --cov-fail-under=70"
+      criteria:
+        operator: ">="
+        value: 70
+        unit: "%"
+      interpretation:
+        success_means: "コードの70%以上がテストで実行されている"
+        failure_means: "テストされていないコードパスが30%以上ある"
+        warning: "カバレッジが高くてもアサーションが弱ければ意味がない"
+
+  - id: "QA-002"
+    name: "Actionドキュメント覆盖率"
+    target: "100% (13/13 actions)"
+    verification:
+      type: "measurement"
+      command: "find actions -name 'README.md' | wc -l"
+      criteria:
+        operator: "=="
+        value: 13
+        unit: "files"
+      interpretation:
+        success_means: "全アクションにREADMEが存在し、利用方法が明確である"
+        failure_means: "アクションの使い方が不明で、導入障壁が高い"
+
+  - id: "QA-003"
+    name: "YAML構文妥当性"
+    target: "0 errors"
+    verification:
+      type: "validation"
+      command: "find actions -name '*.yml' -o -name '*.yaml' | xargs yamllint"
+      criteria:
+        operator: "=="
+        value: 0
+        unit: "errors"
+      interpretation:
+        success_means: "全てのYAMLファイルが構文的に正しい"
+        failure_means: "Workflowが実行時に失敗するリスクがある"
+
+  - id: "QA-004"
+    name: "Dry Run検証成功率"
+    target: "100%"
+    verification:
+      type: "measurement"
+      command: "pytest tests/ -k dry_run -v"
+      criteria:
+        operator: "=="
+        value: 100
+        unit: "%"
+      interpretation:
+        success_means: "全てのアクションがモック検証に合格している"
+        failure_means: "アクション定義に不備がある可能性"
+
+# === Core Functions（このリポジトリの存在意義）===
+core_functions:
+  - id: "CF-001"
+    claim: "AIがコードレビューし、条件を満たせば自動マージできる"
+    source: "README.md:12, actions/review-and-merge/action.yml"
+    testable: true
+    verification_method: "PR作成→AIレビュー→自動マージのワークフローをテスト実行"
+
+  - id: "CF-002"
+    claim: "Markdown仕様書からコードを自動生成できる"
+    source: "README.md:13, actions/spec-to-code/action.yml"
+    testable: true
+    verification_method: "サンプル仕様書→コード生成のテスト"
+
+  - id: "CF-003"
+    claim: "WorkflowエラーをAIが自動修正できる"
+    source: "README.md:14, actions/action-fixer/action.yml"
+    testable: true
+    verification_method: "エラーを含むWorkflow→修正適用のテスト"
+
+  - id: "CF-004"
+    claim: "自然言語指示でコードをリファクタリングできる"
+    source: "README.md:15, actions/auto-refactor/action.yml"
+    testable: true
+    verification_method: "リファクタ指示→コード改善のテスト"
+
+  - id: "CF-005"
+    claim: "コード変更を検知し、ドキュメントを自動更新できる"
+    source: "README.md:24, actions/auto-document/action.yml"
+    testable: true
+    verification_method: "コード変更→README更新のテスト"
+
+  - id: "CF-006"
+    claim: "コミット履歴から人間が読めるリリースノートを生成できる"
+    source: "README.md:26, actions/release-notes-ai/action.yml"
+    testable: true
+    verification_method: "コミット履歴→リリースノート生成のテスト"
+
+# === Non-Goals ===
+non_goals:
+  - "単なるシェルスクリプトのラッパー（既存のActionsで十分なもの）"
+  - "完全に無人での運用（AIのハルシネーションリスクを考慮）"
+  - "特定プロダクトに強く結合しすぎたロジック（再利用性を重視）"
+
+# === Success Criteria ===
+success_criteria:
+  - criterion: "組織内の複数のリポジトリでこれらのActionsが採用される"
+    current_state: "Phase 3: 検証・導入段階"
+    measurement: "導入リポジトリ数、Stars数"
+
+  - criterion: "AIに任せられる雑務が増え、人間が本質的な作業に集中できる時間が増加"
+    current_state: "測定不能"
+    measurement: "開発者アンケート、タスク所要時間の推移"
+
+  - criterion: "AIの提案に対する修正率（Acceptance Rate）が向上し続ける"
+    current_state: "測定不能"
+    measurement: "AI提案の採用率フィードバック"

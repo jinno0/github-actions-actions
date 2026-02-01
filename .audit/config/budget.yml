@@ -1,0 +1,33 @@
+version: "1.0"
+updated_at: "2026-02-01T22:47:44Z"
+
+# === スキャン予算 ===
+scan_budget:
+  max_files_per_run: 100
+  max_total_tokens: 100000
+  include_patterns:
+    - "actions/**/*.yml"
+    - "instructions/**/*.md"
+    - "tests/**/*.py"
+    - "*.md"
+  exclude_patterns:
+    - "node_modules/**"
+    - ".git/**"
+    - "htmlcov/**"
+    - ".pytest_cache/**"
+
+# === ログ予算 ===
+log_budget:
+  max_log_entries: 500
+  keep_last_n_entries: 300
+
+# === 提案予算 ===
+proposal_budget:
+  max_prs_per_run: 5
+  max_proposals_per_function: 3
+
+# === 検証予算 ===
+verification_budget:
+  max_verification_scripts: 10
+  max_test_data_size_mb: 1
+  timeout_per_verification_seconds: 300

@@ -1,0 +1,42 @@
+[
+  {
+    "function_id": "CF-001",
+    "scenario_name": "Review-and-Merge Action Structure",
+    "passed": false,
+    "actual_output": null,
+    "expected_output": "review.sh exists",
+    "error_message": "Script not found: actions/review-and-merge/review.sh",
+    "interpretation": "レビュースクリプトが欠落",
+    "evidence": "actions/review-and-merge/review.sh not found"
+  },
+  {
+    "function_id": "CF-002",
+    "scenario_name": "Spec-to-Code Action Structure",
+    "passed": false,
+    "actual_output": "spec-file input not found",
+    "expected_output": "spec-file input exists",
+    "error_message": "Missing spec-file input",
+    "interpretation": "仕様書ファイル入力が定義されていない",
+    "evidence": "action.yml missing spec-file input"
+  },
+  {
+    "function_id": "QA-001",
+    "scenario_name": "Test Coverage Measurement",
+    "passed": false,
+    "actual_output": "24.17%",
+    "expected_output": ">= 70%",
+    "error_message": null,
+    "interpretation": "カバレッジは24.17%で、目標70%を満たしていません",
+    "evidence": "coverage.json: 24.17%"
+  },
+  {
+    "function_id": "QA-002",
+    "scenario_name": "Documentation Coverage",
+    "passed": false,
+    "actual_output": "4/13 actions (30.8%)",
+    "expected_output": "13/13 actions (100%)",
+    "error_message": null,
+    "interpretation": "ドキュメント覆盖率は30.8%で、目標100%を満たしていません。9個のアクションにREADMEが不足しています。",
+    "evidence": "find actions -name README.md | wc -l = 4"
+  }
+]

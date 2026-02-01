@@ -1,0 +1,149 @@
+version: "1.0"
+generated_at: "2026-02-01T22:47:44Z"
+run_id: "2026-02-01T22:47:44Z"
+
+# === ギャップサマリ ===
+summary:
+  total_gaps: 3
+  critical_gaps: 1
+  high_priority_gaps: 2
+  medium_priority_gaps: 0
+  low_priority_gaps: 0
+
+# === 詳細ギャップ分析 ===
+gaps:
+  - id: "GAP-001"
+    category: "documentation"
+    severity: "critical"
+    confidence: "high"
+    
+    # === 現状（As-Is）===
+    current_state:
+      metric: "アクションREADME覆盖率"
+      value: "30.8% (4/13 actions)"
+      evidence: "C-004, C-005"
+      details:
+        documented_actions:
+          - "review-and-merge"
+          - "spec-to-code"
+          - "auto-refactor"
+          - "auto-document"
+        undocumented_actions:
+          - "action-fixer"
+          - "auto-merge"
+          - "auto-rebase"
+          - "bulk-merge-prs"
+          - "bulk-rebase-prs"
+          - "pr-review-enqueuer"
+          - "publish-pr"
+          - "release-notes-ai"
+          - "review-auto-merge"
+    
+    # === 目標（To-Be）===
+    target_state:
+      metric: "アクションREADME覆盖率"
+      value: "100% (13/13 actions)"
+      source: "QA-002, ASM-003"
+      rationale: "全アクションの利用方法が明確である必要がある"
+    
+    # === ギャップ ===
+    gap:
+      magnitude: "-69.2 percentage points"
+      missing_items: 9
+      priority: "critical"
+      impact: "アクションの導入障壁が高い、利用者が増えない"
+    
+    # === 根本原因 ===
+    root_cause:
+      primary: "ドキュメント作成が追いついていない"
+      secondary: "instructionファイルはあるが、quick referenceとしてのREADMEが不足"
+      validated_by: "C-104"
+    
+    # === 推奨アクション ===
+    recommended_actions:
+      - action: "残り9アクションのREADMEを作成"
+        effort: "medium"
+        impact: "high"
+        estimated_time: "2-3 hours"
+        reference_pr: "PR-001 (前回実行)"
+
+  - id: "GAP-002"
+    category: "testing"
+    severity: "high"
+    confidence: "medium"
+    
+    current_state:
+      metric: "テストカバレッジ"
+      value: "95.03%"
+      evidence: "C-003"
+      status: "目標超過"
+    
+    target_state:
+      metric: "テストカバレッジ"
+      value: ">= 70%"
+      source: "QA-001, pytest.ini:12"
+    
+    gap:
+      magnitude: "+25.03 percentage points (excess)"
+      status: "目標達成済み"
+      note: "課題ではない"
+    
+    # === 潜在的課題 ===
+    potential_issue:
+      description: "テストが特定のアクションに集中している可能性"
+      evidence: "C-102"
+      confidence: "medium"
+      recommendation: "全アクション均等にテストを拡充"
+
+  - id: "GAP-003"
+    category: "documentation"
+    severity: "high"
+    confidence: "high"
+    
+    current_state:
+      metric: "ACTIONS.mdのワークフロー例"
+      value: "不足"
+      evidence: "ACTIONS.mdは存在するが、ワークフロー統合例が限定的"
+      status: "改善の余地あり"
+    
+    target_state:
+      metric: "ACTIONS.mdのワークフロー例"
+      value: "全13アクションの統合例"
+      source: "前回実行フィードバック (next_cycle_suggestions #2)"
+      rationale: "利用者がアクションを組み合わせて使う方法を示す必要がある"
+    
+    gap:
+      magnitude: "ワークフロー例が不足"
+      priority: "high"
+      impact: "アクション統合の理解が浅い可能性"
+    
+    recommended_actions:
+      - action: "ACTIONS.mdにワークフロー統合例を追加"
+        effort: "low"
+        impact: "medium"
+        estimated_time: "1 hour"
+
+# === ギャップ推移 ===
+trend:
+  - run_id: "2026-02-01T12:37:44Z"
+    documentation_coverage: "30.8%"
+    test_coverage: "95.03%"
+    
+  - run_id: "2026-02-01T22:47:44Z"
+    documentation_coverage: "30.8% (no change)"
+    test_coverage: "95.03% (maintained)"
+    note: "前回実行後、新たな改善が適用されていない"
+
+# === 優先順位付け ===
+priority_order:
+  - rank: 1
+    gap_id: "GAP-001"
+    reason: "critical severity、目標100%に対し30.8%滞在"
+    
+  - rank: 2
+    gap_id: "GAP-003"
+    reason: "high severity、利用者価値に直結"
+    
+  - rank: 3
+    gap_id: "GAP-002"
+    reason: "目標達成済みだが、潜在的課題に注意"
