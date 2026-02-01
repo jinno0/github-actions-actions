@@ -18,8 +18,6 @@ mappings:
     - actions/pr-review-enqueuer/action.yml
     - actions/publish-pr/action.yml
     - actions/review-auto-merge/action.yml
-    db: []
-    api: []
   TemplateFile:
     code_symbols:
     - .helpers/config/template-helper.sh
@@ -29,20 +27,15 @@ mappings:
     - actions/auto-refactor/templates/
     - actions/auto-document/templates/
     - actions/release-notes-ai/templates/
-    db: []
-    api: []
   ExternalDispatch:
     code_symbols:
     - .github/workflows/external-dispatch.yml
-    db: []
     api:
     - repository_dispatch event
   DryRun:
     code_symbols:
     - .github/workflows/test-all-actions.yml
     - AGENTS.md#L298-L324
-    db: []
-    api: []
   AIAction:
     code_symbols:
     - actions/review-and-merge/action.yml
@@ -51,33 +44,11 @@ mappings:
     - actions/auto-refactor/action.yml
     - actions/auto-document/action.yml
     - actions/release-notes-ai/action.yml
-    db: []
-    api: []
   StandardActionStructure:
     code_symbols:
     - AGENTS.md#L112-L140
     - .helpers/config/
-    db: []
-    api: []
-  SelfHostedRunner:
-    code_symbols: []
-    db: []
-    api: []
-  ClaudeCodeCLI:
-    code_symbols: []
-    db: []
-    api: []
-  VersionPinning:
-    code_symbols: []
-    db: []
-    api: []
-  HumanInTheLoop:
-    code_symbols: []
-    db: []
-    api: []
   ScriptExtraction:
     code_symbols:
     - actions/review-and-merge/scripts/review-and-fix.sh
     - actions/review-and-merge/scripts/post-comment.sh
-    db: []
-    api: []
