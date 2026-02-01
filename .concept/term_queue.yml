@@ -1,2 +1,19 @@
-updated_at: null
-queue: []
+updated_at: "2026-02-02T07:23:00Z"
+queue:
+  - id: "TP-000001"
+    proposed_canonical: "BMADWorkflow"
+    proposed_layer: "aux"
+    term_raw_examples: ["BMAD Implementation/Test Flow", "BMAD workflow file", "BMAD workflow framework", "BMAD workflow infrastructure", "BMAD workflow execution"]
+    reason: "BMAD workflow concepts appear in execution summary but infrastructure is incomplete; these are system-external process concepts, not core to github-actions-actions product"
+    evidence:
+      - source: "workflow-execution-summary.md#L4-L5"
+        quote: "Workflow: /bmad:bmm:workflows:full-bmad-project-flow:2-implementation-test-flow"
+      - source: "workflow-execution-summary.md#L17-L22"
+        quote: "The workflow file at .claude/commands/bmad/bmm/workflows/full-bmad-project-flow/2-implementation-test-flow.md is incomplete"
+    auto_merge_candidates:
+      - term: "WorkPolicy"
+        similarity: 0.45
+    decision: "rejected"
+    expires_after_runs: 10
+    created_run: "2026-02-02T07:23:00Z"
+    rationale: "BMAD workflow concepts are process-related (how work is done), not product-domain concepts. These belong to BMAD framework documentation, not github-actions-actions ontology."

@@ -1,6 +1,6 @@
 {
-  "run_id": "2026-02-02T06:03:00Z",
-  "updated_at": "2026-02-02T06:03:00Z",
+  "run_id": "2026-02-02T07:23:00Z",
+  "updated_at": "2026-02-02T07:23:00Z",
   "ontology": {
     "total_terms": 23,
     "by_layer": {
@@ -40,8 +40,8 @@
     }
   },
   "claims": {
-    "total_lines": 32,
-    "retained_lines": 32,
+    "total_lines": 43,
+    "retained_lines": 43,
     "archived_lines": 0,
     "run_limit": 300,
     "within_limits": true
@@ -69,7 +69,7 @@
   "queue": {
     "pending": 0,
     "merged": 0,
-    "rejected": 0,
+    "rejected": 1,
     "accepted": 0,
     "limit": 50,
     "within_limits": true
