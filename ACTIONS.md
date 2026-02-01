@@ -427,7 +427,7 @@ Provide clear instructions and templates for better AI output.
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on contributing new actions or improving existing ones.
+Contributions are welcome! Please check for existing documentation in the repository for guidelines on contributing new actions or improving existing ones.
 
 ### Adding New Actions
 
@@ -440,23 +440,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on contributing new action
 
 ---
 
-## Version History
-
-See [CHANGELOG.md](CHANGELOG.md) for detailed version history.
-
-### Recent Updates
-
-- **v2.1.0** (2025-01-31): Added custom template support
-- **v2.0.0** (2025-01-15): Claude Code CLI integration
-- **v1.0.0** (2024-12-01): Initial release
-
----
-
 ## Support
 
-- **Issues:** [GitHub Issues](https://github.com/your-org/github-actions-actions/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/your-org/github-actions-actions/discussions)
-- **Documentation:** [Full Docs](https://your-docs-site.com)
+For issues, questions, or contributions, please refer to the main repository documentation.
 
 ---
 

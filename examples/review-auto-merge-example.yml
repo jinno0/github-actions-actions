@@ -16,12 +16,8 @@ permissions:
 
 # Configuration
 env:
-  # Skip draft PRs (default: true)
   SKIP_DRAFT: 'true'
-  # Skip PRs with WIP labels (default: true)
-  # Labels: WIP, Work in Progress, Do not merge
   SKIP_WIP: 'true'
-  # Comma-separated list of WIP labels to check
   WIP_LABELS: 'WIP,Work in Progress,Do not merge,dont merge,wip'
 
 jobs:
