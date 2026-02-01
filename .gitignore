@@ -68,9 +68,6 @@ debug.log
 .concept/archived/
 .concept/archive/
 
-# Concept Sync: claims.ndjson only (policy: non-commit per autopilot.yml)
-.concept/claims.ndjson
-
 
 # Auto-generated framework outputs
 _bmad-output/
