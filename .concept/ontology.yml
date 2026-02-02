@@ -1,5 +1,5 @@
 version: "0.3"
-updated_at: "2026-02-02T09:54:00Z"
+updated_at: "2026-02-02T13:30:00Z"
 
 canonical_terms:
   AIPoweredAction:
@@ -358,17 +358,21 @@ canonical_terms:
     id: "TERM-ADOPTION-GUIDE"
     layer: "aux"
     status: "stable"
-    definition: "Comprehensive documentation providing complete roadmap for teams to adopt AI Actions in their repositories including prerequisites, quick start, and troubleshooting"
-    synonyms: ["Adoption Guide", "Onboarding Guide", "導入ガイド"]
+    definition: "Comprehensive documentation and registry system providing complete roadmap for teams to adopt AI Actions in their repositories including prerequisites, quick start, troubleshooting, and adoption tracking"
+    synonyms: ["Adoption Guide", "Onboarding Guide", "導入ガイド", "Adoption Registry"]
     boundaries:
-      includes: ["Prerequisites checklist", "Setup instructions", "Troubleshooting", "Best practices"]
+      includes: ["Prerequisites checklist", "Setup instructions", "Troubleshooting", "Best practices", "Adoption tracking registry"]
       excludes: ["Technical implementation details", "API references"]
-    lifecycle: ["Published", "Used", "Updated"]
-    related_terms: ["AIPoweredAction"]
+    lifecycle: ["Published", "Used", "Updated", "Track Adoption"]
+    related_terms: ["AIPoweredAction", "SuccessMetric"]
     assumptions: []
     evidence:
       - source: "ADOPTION_GUIDE.md#L1-L7"
         quote: "このガイドは、あなたのチーム/リポジトリで AI Actions を導入するための完全なロードマップを提供します"
+      - source: "ADOPTION.md#L1-L3"
+        quote: "This document tracks the adoption of AI Hub Actions across the organization"
+      - source: "ADOPTION.md#L77-L84"
+        quote: "This registry helps track: Organizational Reach, Action Popularity, User Satisfaction, Impact Assessment"
 
   DryRunMode:
     id: "TERM-DRY-RUN"
