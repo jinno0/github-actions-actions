@@ -1,0 +1,117 @@
+version: "2.0"
+updated_at: "2026-02-02T23:57:00Z"
+updated_by: "audit-run-001"
+
+# === Technical Constraints ===
+technical:
+  - id: "TC-001"
+    name: "実行環境"
+    constraint: "Self-hosted runner上でClaude Code CLIが実行可能である必要がある"
+    rationale: "README.mdの「前提条件」で明記されている"
+    impact: "Actionの実装はClaude Code CLIのAPIまたはCLI呼び出しに依存する"
+
+  - id: "TC-002"
+    name: "Human-in-the-Loop"
+    constraint: "AIは提案・準備を行い、最終決定権（マージ、デプロイ）は人間が持つ、または人間が設定した閾値に基づく"
+    rationale: "PURPOSE.mdの「Core Competencies」で定義されている"
+    impact: "完全自動化のActionは非目標とし、常に人間の承認プロセスを含める必要がある"
+
+  - id: "TC-003"
+    name: "再利用性"
+    constraint: "特定プロダクトに強く結合しすぎたロジックを避ける"
+    rationale: "PURPOSE.mdの「非目標」で定義されている"
+    impact: "Actionは汎用的に使用可能な設計にする必要がある"
+
+  - id: "TC-004"
+    name: "Dry Run検証"
+    constraint: "全てのAI ActionsはDry Runモードで自動検証される必要がある"
+    rationale: "README.mdの「検証・テスト」で明記されている"
+    impact: "各Actionに対応する検証用ワークフローを実装する必要がある"
+
+# === Security Constraints ===
+security:
+  - id: "SC-001"
+    name: "権限管理"
+    constraint: "GitHub Actionsのpermissionsは最小限に設定する必要がある"
+    rationale: "セキュリティベストプラクティス"
+    impact: "各action.ymlのpermissionsスコープを適切に制限する"
+
+  - id: "SC-002"
+    name: "シークレット管理"
+    constraint: "APIキーや認証情報はGitHub Secretsで管理する必要がある"
+    rationale: " secretsをコードにハードコードしてはならない"
+    impact: "Actionの使用例ではsecretsの使用を明示する必要がある"
+
+  - id: "SC-003"
+    name: "コードインジェクション防止"
+    constraint: "AIが生成するコードは検証プロセスを経る必要がある"
+    rationale: "AIのハルシネーションリスクへの対策"
+    impact: "レビュー自動化Actionでも、最終的な承認は人間が行う設計にする"
+
+# === Operational Constraints ===
+operational:
+  - id: "OC-001"
+    name: "ドキュメント必須"
+    constraint: "全てのActionに導入ガイド（Instructions）と利用例（Examples）が必須"
+    rationale: "AGENTS.mdで必須構成要素として定義されている"
+    impact: "新規Action追加時は必ずこれらのドキュメントをセットで作成する"
+
+  - id: "OC-002"
+    name: "YAML構文"
+    constraint: "全てのワークフローファイルは有効なYAML構文である必要がある"
+    rationale: "ワークフロー実行の前提条件"
+    impact: "PR作成時やMainブランチへのPush時に構文チェックを行う"
+
+  - id: "OC-003"
+    name: "構造的一貫性"
+    constraint: "各Actionはaction.yml、templates/、README.mdの構造を維持する必要がある"
+    rationale: "AGENTS.mdで定義されている必須構成要素"
+    impact: "新規Action追加時は既存Actionの構造に従う"
+
+# === Quality Constraints ===
+quality:
+  - id: "QC-001"
+    name: "Acceptance Rateの追跡"
+    constraint: "AIの提案に対する修正率を測定可能である必要がある"
+    rationale: "PURPOSE.mdの「成功条件」で定義されている"
+    impact: "Actionsの出力形式やログで修正の可否を追跡できる設計にする"
+
+  - id: "QC-002"
+    name: "エラーハンドリング"
+    constraint: "AI実行失敗時には適切なエラーメッセージを出力する必要がある"
+    rationale: "デバッグと運用保守のため"
+    impact: "各Actionのエラーハンドリングを網羅的に実装する"
+
+  - id: "QC-003"
+    name: "テンプレートの切り出し"
+    constraint: "プロンプトや設定はテンプレートファイルとして切り出す必要がある"
+    rationale: "AGENTS.mdで定義されているベストプラクティス"
+    impact: "プロンプト文字列をaction.ymlに直接記述せず、templates/ディレクトリに配置する"
+
+# === Resource Constraints ===
+resource:
+  - id: "RC-001"
+    name: "Self-hosted runnerのリソース"
+    constraint: "Claude Code CLIの実行には十分なメモリとCPUが必要"
+    rationale: "AIモデルの実行リソース要件"
+    impact: "Actionのtimeoutやリソース制限を適切に設定する"
+
+  - id: "RC-002"
+    name: "実行時間"
+    constraint: "AI処理を含むActionは長時間実行される可能性がある"
+    rationale: "コードレビューや生成処理の時間コスト"
+    impact: "timeoutMinutesを適切に設定し、必要に応じてジョブを分割する"
+
+# === Compatibility Constraints ===
+compatibility:
+  - id: "CC-001"
+    name: "GitHub Actionsバージョン"
+    constraint: "最新のGitHub Actions構文に準拠する必要がある"
+    rationale: "プラットフォームの互換性"
+    impact: "非推奨の構文や機能を使用しない"
+
+  - id: "CC-002"
+    name: "Claude Code CLIバージョン"
+    constraint: "特定のバージョンのClaude Code CLIに依存しない設計にする"
+    rationale: "CLIのアップデート対応"
+    impact: "CLIのAPI変更に追従しやすくする"
