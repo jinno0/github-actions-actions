@@ -84,31 +84,23 @@ jobs:
 
 ## Documentation Types
 
-### API Documentation
+You can document any part of your codebase by specifying different source and documentation paths:
 
 ```yaml
-- name: Document API Endpoints
-  uses: ./actions/auto-document
+# API Documentation
+- uses: ./actions/auto-document
   with:
-    source-path: 'src/api/controllers/'
-    doc-path: 'docs/api/endpoints.md'
-```
+    source-path: 'src/api/'
+    doc-path: 'docs/api.md'
 
-### Component Documentation
-
-```yaml
-- name: Document React Components
-  uses: ./actions/auto-document
+# Component Documentation
+- uses: ./actions/auto-document
   with:
     source-path: 'src/components/'
     doc-path: 'docs/components.md'
-```
 
-### Usage Examples
-
-```yaml
-- name: Update Usage Examples
-  uses: ./actions/auto-document
+# Usage Examples
+- uses: ./actions/auto-document
   with:
     source-path: 'examples/'
     doc-path: 'docs/usage.md'
@@ -214,6 +206,8 @@ Always run checks after documentation updates:
 
 ### PR Documentation Update
 
+Update documentation when files change in a pull request:
+
 ```yaml
 name: Update PR Docs
 on:
@@ -253,6 +247,8 @@ jobs:
 
 ### Release Documentation
 
+Update documentation for releases:
+
 ```yaml
 name: Release Docs
 on:
@@ -276,13 +272,6 @@ jobs:
         with:
           source-path: '.'
           doc-path: 'CHANGELOG.md'
-
-      - name: Commit to Release Branch
-        run: |
-          git checkout -b docs/${{ github.event.release.tag_name }}
-          git add .
-          git commit -m "Update documentation for ${{ github.event.release.tag_name }}"
-          git push origin docs/${{ github.event.release.tag_name }}
 ```
 
 ### Multi-Language Project
@@ -373,4 +362,3 @@ jobs:
 
 - [Auto Refactor action](../auto-refactor/) - Keep docs in sync after refactoring
 - [Spec to Code action](../spec-to-code/) - Document generated code
-- [Usage guide](../../instructions/auto-document.md)
