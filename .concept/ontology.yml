@@ -389,10 +389,8 @@ canonical_terms:
     evidence:
       - source: "ADOPTION_GUIDE.md#L1-L7"
         quote: "このガイドは、あなたのチーム/リポジトリで AI Actions を導入するための完全なロードマップを提供します"
-      - source: "ADOPTION.md#L1-L3"
-        quote: "This document tracks the adoption of AI Hub Actions across the organization"
-      - source: "ADOPTION.md#L77-L84"
-        quote: "This registry helps track: Organizational Reach, Action Popularity, User Satisfaction, Impact Assessment"
+      - source: "ADOPTION_GUIDE.md#L361-L395"
+        quote: "Adoption Registry (導入登録簿)... This registry helps track: Organizational Reach, Action Popularity, User Satisfaction, Impact Assessment"
 
   DryRunMode:
     id: "TERM-DRY-RUN"

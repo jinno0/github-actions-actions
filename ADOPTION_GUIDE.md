@@ -358,5 +358,78 @@ npm install -g @anthropic-ai/claude-code
 
 ---
 
-**最終更新**: 2026-02-01
+## 📊 Adoption Registry (導入登録簿)
+
+This registry tracks the adoption of AI Hub Actions across the organization.
+
+### 統計 (Statistics)
+
+- **Total Teams**: 0
+- **Total Repositories**: 0
+- **Most Used Actions**: TBD (awaiting adoption data)
+
+### 導入チーム (Using Teams)
+
+#### Team Template
+
+- **Since**: YYYY-MM-DD
+- **Repositories**: X
+- **Actions in Use**:
+  - action-name-1
+  - action-name-2
+- **Feedback**: Describe the team's experience (positive/negative/neutral)
+
+*No teams have registered yet. Be the first to adopt AI Hub Actions!*
+
+### ロールアウトタイムライン (Rollout Timeline)
+
+| Date | Team | Repositories | Actions |
+|------|------|--------------|---------|
+| *Awaiting first adoption* | - | - | - |
+
+### チーム登録方法 (How to Register Your Team)
+
+To add your team to this registry:
+
+1. Edit this file (`ADOPTION_GUIDE.md`)
+2. Add your team information to the "導入チーム (Using Teams)" section
+3. Update the statistics and timeline
+4. Submit a PR with your changes
+
+#### プライバシーオプション (Privacy Options)
+
+Teams can choose their level of visibility:
+
+- **Public**: Team name, repository names, and feedback visible
+- **Anonymous**: Team identified as "Team X" with repository names omitted
+- **Private**: Data used for statistics only, not individually listed
+
+### フィードバック要約 (Feedback Summary)
+
+#### Positive Aspects
+
+*Awaiting user feedback*
+
+#### Areas for Improvement
+
+*Awaiting user feedback*
+
+#### Common Use Cases
+
+*Awaiting adoption data*
+
+### 成功指標 (Success Metrics)
+
+This registry helps track:
+
+1. **Organizational Reach**: How many teams are using AI Hub Actions
+2. **Action Popularity**: Which actions are most widely adopted
+3. **User Satisfaction**: Collective feedback and experiences
+4. **Impact Assessment**: Development workflow improvements
+
+---
+
+**Last Updated**: 2026-02-02
+**Update Frequency**: Monthly or as new teams adopt
+**Registry Maintainer**: TBD
 **バージョン**: 1.0
