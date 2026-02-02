@@ -1,6 +1,6 @@
 version: "2.0"
-updated_at: "2026-02-02T09:00:00Z"
-updated_by: "audit-run-001"
+updated_at: "2026-02-02T11:10:00Z"
+updated_by: "audit-run-002"
 
 # === Mission ===
 mission:
@@ -32,9 +32,10 @@ assumptions:
 
   - id: "ASM-004"
     field: "target_scale"
-    value: "組織内の複数のリポジトリ（10〜100リポジトリ規模）"
-    reason: "ADOPTION_GUIDE.md が存在し、組織導入を想定しているため"
+    value: "組織内の複数のリポジトリ（1〜1000リポジトリ規模）"
+    reason: "ADOPTION_GUIDE.md が存在し、組織導入を想定しているため。小規模(1)〜大規模(1000)まで対応"
     confidence: "medium"
+    verified: "needs_revision" # Updated based on feedback feedback_to_auditor.yml
 
   - id: "ASM-005"
     field: "claude_cli_availability"
