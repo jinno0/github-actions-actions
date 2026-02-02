@@ -171,3 +171,4 @@ CLEANUP_VERIFICATION_REPORT.md
 # Universal Janitor analysis files
 CLEANUP_ANALYSIS.md
 cleanup-analysis.md
+actions/lib/__pycache__/
