@@ -1,0 +1,10 @@
+{"log_id":"C-001","timestamp":"2026-02-02T09:00:00Z","type":"fact","category":"repository_structure","claim":"13のAI Actionsが存在する","source":"README.md:8-47","confidence":1.0,"evidence":"actions/ディレクトリ以下のサブディレクトリ数"}
+{"log_id":"C-002","timestamp":"2026-02-02T09:00:00Z","type":"fact","category":"testing","claim":"pytest.iniでカバレッジ基準値70%が設定されている","source":"pytest.ini:22","confidence":1.0,"evidence":"--cov-fail-under=70"}
+{"log_id":"C-003","timestamp":"2026-02-02T09:00:00Z","type":"fact","category":"testing","claim":"現在のテストカバレッジは23% (93/403 lines)","source":"coverage.json:totals","confidence":1.0,"evidence":"coverage.jsonのpercent_coveredフィールド"}
+{"log_id":"C-004","timestamp":"2026-02-02T09:00:00Z","type":"fact","category":"testing","claim":"60個のテストケースが存在する","source":"pytest --collect-only","confidence":1.0,"evidence":"test session starts collected 60 items"}
+{"log_id":"C-005","timestamp":"2026-02-02T09:00:00Z","type":"fact","category":"documentation","claim":"AGENTS.mdで開発者向けノウハウが提供されている","source":"AGENTS.md:1-100","confidence":1.0,"evidence":"テンプレート切り出し方やベストプラクティスの記述"}
+{"log_id":"C-006","timestamp":"2026-02-02T09:00:00Z","type":"inference","category":"adoption","claim":"現在はPhase 3（安定化と導入）の段階","source":"PURPOSE.md:22-27","reasoning":"Phase 1,2は完了済みマーク、Phase 3は一部進行中","confidence":0.9}
+{"log_id":"C-007","timestamp":"2026-02-02T09:00:00Z","type":"fact","category":"architecture","claim":"各アクションはaction.yml + templates/ + scripts/の構造","source":"AGENTS.md:86-100","confidence":0.9,"evidence":"テンプレート切り出しパターンの記述"}
+{"log_id":"C-008","timestamp":"2026-02-02T09:00:00Z","type":"fact","category":"verification","claim":"全アクションはDry Runモードで検証可能","source":"README.md:74-76","confidence":1.0,"evidence":"PR作成時やPush時の自動検証記述"}
+{"log_id":"C-009","timestamp":"2026-02-02T09:00:00Z","type":"unknown","category":"deployment","claim":"実際に組織内で導入されているリポジトリの数","needed_info":"組織内の利用実績","verification_method":"各リポジトリの.github/workflows/をスキャン"}
+{"log_id":"C-010","timestamp":"2026-02-02T09:00:00Z","type":"inference","category":"quality","claim":"テストカバレッジが目標値70%に対して現状23%で大幅に不足","source":"C-002 + C-007","reasoning":"目標70%に対し現状23%。ギャップは47%。","confidence":1.0}

@@ -1,0 +1,33 @@
+version: "1.0"
+updated_at: "2026-02-02T09:00:00Z"
+
+# === Scan Budget ===
+scan_budget:
+  max_files_per_run: 100
+  max_total_tokens: 50000
+  max_action_depth: 5
+
+# === Log Budget ===
+log_budget:
+  max_log_entries: 500
+  keep_last_n_entries: 300
+
+# === Proposal Budget ===
+proposal_budget:
+  max_prs_per_run: 5
+  max_verification_scenarios: 20
+  max_test_data_size_mb: 10
+
+# === GC Configuration ===
+gc:
+  enabled: true
+  trigger: "log_entries > max_log_entries"
+  action: "delete_old_entries"
+  keep_source_of_truth: true
+  delete_cache: true
+
+# === Execution Time Limits ===
+time_limits:
+  max_audit_duration_seconds: 600
+  max_verification_duration_seconds: 300
+  max_report_generation_seconds: 60
