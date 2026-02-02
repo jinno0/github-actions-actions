@@ -1,6 +1,6 @@
 {
-  "run_id": "2026-02-02T20:53:03Z",
-  "updated_at": "2026-02-02T20:53:03Z",
+  "run_id": "2026-02-02T21:52:58.925085+00:00",
+  "updated_at": "2026-02-02T21:52:58.925085+00:00",
   "ontology": {
     "total_terms": 36,
     "by_layer": {
@@ -47,9 +47,9 @@
     "within_limits": true
   },
   "mappings": {
-    "total_terms_mapped": 36,
-    "terms_with_code_mappings": 0,
-    "terms_with_doc_mappings": 36
+    "total_terms_mapped": 31,
+    "terms_with_code_mappings": 12,
+    "terms_with_doc_mappings": 31
   },
   "budget_status": {
     "total_terms_max": 80,
@@ -75,7 +75,7 @@
     "within_limits": true
   },
   "decisions": {
-    "active_auto_decisions": 7,
+    "active_auto_decisions": 2,
     "lines": 64,
     "limit": 200,
     "within_limits": true
@@ -89,5 +89,6 @@
     "gc_triggered": false,
     "duplicates_found": 0,
     "duplicate_ids": []
-  }
+  },
+  "unmapped_ratio": 0.14
 }
