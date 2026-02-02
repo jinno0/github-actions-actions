@@ -1,0 +1,79 @@
+#!/bin/bash
+# Mock Claude CLI for Integration Testing
+# This script simulates Claude Code CLI behavior for testing purposes
+
+set -euo pipefail
+
+# Mock environment variables
+MOCK_OUTPUT_DIR="${MOCK_OUTPUT_DIR:-/tmp/claude-mock-output}"
+MOCK_SCENARIO="${MOCK_SCENARIO:-success}"
+MOCK_VERBOSITY="${MOCK_VERBOSITY:-0}"
+
+# Create output directory
+mkdir -p "$MOCK_OUTPUT_DIR"
+
+# Log if verbose
+if [ "$MOCK_VERBOSITY" -ge 1 ]; then
+    echo "[MOCK] Claude CLI Mock v1.0.0" >&2
+    echo "[MOCK] Scenario: $MOCK_SCENARIO" >&2
+    echo "[MOCK] Arguments: $@" >&2
+fi
+
+# Simulate different scenarios
+case "$MOCK_SCENARIO" in
+    "success")
+        # Simulate successful execution
+        if [ "$MOCK_VERBOSITY" -ge 1 ]; then
+            echo "✓ Mock Claude: Executed successfully"
+        fi
+        echo "Mock output written to $MOCK_OUTPUT_DIR"
+        exit 0
+        ;;
+
+    "error")
+        # Simulate Claude error
+        echo "✗ Mock Claude: Simulated error" >&2
+        exit 1
+        ;;
+
+    "timeout")
+        # Simulate timeout (for testing error handling)
+        if [ "$MOCK_VERBOSITY" -ge 1 ]; then
+            echo "[MOCK] Simulating timeout (sleeping 300s)" >&2
+        fi
+        sleep 300
+        exit 124
+        ;;
+
+    "lgtm")
+        # Simulate LGTM review response
+        cat <<EOF
+LGTM
+Confidence: 9
+The code looks good.
+EOF
+        exit 0
+        ;;
+
+    "request_changes")
+        # Simulate request changes response
+        cat <<EOF
+REQUEST_CHANGES
+Confidence: 8
+Issues found:
+- Missing error handling
+- Add unit tests
+EOF
+        exit 0
+        ;;
+
+    *)
+        # Default: echo inputs and succeed
+        if [ "$MOCK_VERBOSITY" -ge 1 ]; then
+            echo "Mock Claude CLI v1.0.0" >&2
+            echo "Arguments: $@" >&2
+            echo "Working directory: $(pwd)" >&2
+        fi
+        exit 0
+        ;;
+esac

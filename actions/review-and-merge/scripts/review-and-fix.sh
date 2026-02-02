@@ -17,6 +17,20 @@ COMMENT_TEMPLATE="${7}"
 ACTION_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TEMPLATE_DIR="${ACTION_PATH}/templates"
 
+# Security: Check Claude CLI availability
+if ! command -v claude &> /dev/null; then
+  echo "Error: Claude CLI not found"
+  echo "Please install Claude Code CLI before using this action"
+  exit 1
+fi
+
+# Verify Claude CLI is functional
+if ! claude --version &> /dev/null; then
+  echo "Error: Claude CLI is not functional"
+  exit 1
+fi
+
+echo "✓ Claude CLI verified"
 echo "Running Claude Code CLI..."
 echo "Model: $MODEL"
 echo "Auto Fix: $AUTO_FIX"
