@@ -593,14 +593,16 @@ canonical_terms:
     related_terms: ["AIPoweredAction", "ClaudeCodeCLI", "SecurityChecklist"]
     assumptions:
       - id: "ASM-CLI-001"
-        text: "AUTO: All 7 actions using Claude have CLI availability checks (100% compliant)"
-        decision_key: "AUTO:CLIAvailabilityCheck.compliance:100_percent"
+        text: "AUTO: Actual CLI check implementation rate is 7.7% (1/13 actions) per 2026-02-03 audit. The 100% (7/7) claim was outdated/scope-different. Target is 100% (13/13) per SECURITY_CHECKLIST.md requirement."
+        decision_key: "AUTO:CLIAvailabilityCheck.rate:audit_source_truth"
         expires_after_runs: 20
     evidence:
       - source: "SECURITY_CHECKLIST.md#L9-L31"
         quote: "Every action MUST verify Claude CLI is available before attempting to use it by checking command existence and functionality"
-      - source: "SECURITY_CHECKLIST.md#L130"
-        quote: "100% of actions using Claude have CLI availability checks (7/7 compliant)"
+      - source: ".audit/analysis/gap.yml#GAP-004"
+        quote: "current: 7.7% (1/13)... target: 100% (13 actions)"
+      - source: ".audit/output/summary.md#L24-L25"
+        quote: "CLI checks実装率が7.7% (1/13) と低い"
 
   PathValidation:
     id: "TERM-PATH-VALIDATION"

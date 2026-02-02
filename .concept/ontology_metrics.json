@@ -1,6 +1,6 @@
 {
-  "run_id": "2026-02-02T17:19:48Z",
-  "updated_at": "2026-02-02T17:19:48Z",
+  "run_id": "2026-02-02T19:15:22Z",
+  "updated_at": "2026-02-02T19:15:22Z",
   "ontology": {
     "total_terms": 31,
     "by_layer": {
@@ -24,24 +24,24 @@
     }
   },
   "ambiguities": {
-    "total": 1,
+    "total": 2,
     "by_severity": {
       "high": 0,
-      "medium": 0,
+      "medium": 1,
       "low": 1
     }
   },
   "conflicts": {
-    "total": 0,
+    "total": 1,
     "by_severity": {
       "high": 0,
-      "medium": 0,
+      "medium": 1,
       "low": 0
     }
   },
   "claims": {
-    "total_lines": 120,
-    "retained_lines": 120,
+    "total_lines": 108,
+    "retained_lines": 108,
     "archived_lines": 0,
     "run_limit": 10000,
     "within_limits": true
@@ -75,7 +75,7 @@
     "within_limits": true
   },
   "decisions": {
-    "active_auto_decisions": 1,
+    "active_auto_decisions": 7,
     "lines": 55,
     "limit": 200,
     "within_limits": true

@@ -1,5 +1,14 @@
 # Active AUTO Decisions (cache) — safe to delete
 
+## AUTO:CLIAvailabilityCheck.rate:audit_source_truth
+- Status: ACTIVE
+- Chosen: Audit report (2026-02-03) is authoritative: 7.7% (1/13) actual implementation rate. The 100% (7/7) claim was based on an outdated or different scope assessment.
+- Policy: recent_authoritative_source + safety
+- Expires After Runs: 20
+- Linked: AMB-CLI-001 / CFLT-CLI-001 / ASM-CLI-001
+- Revert Triggers: primary_evidence_contradiction, security_risk
+- Evidence: .audit/analysis/gap.yml#GAP-004, .audit/output/summary.md#L24-L25
+
 ## AUTO:CLAUDE-CLI.installation:npm_global
 - Status: ACTIVE
 - Chosen: Claude Code CLI must be installed via npm globally on self-hosted runners

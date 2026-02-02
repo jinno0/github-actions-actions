@@ -1,2 +1,16 @@
-updated_at: "2026-02-02T20:00:00Z"
-conflicts: []
+updated_at: "2026-02-02T19:15:22Z"
+conflicts:
+  - id: "CFLT-CLI-001"
+    term: "CLIAvailabilityCheck"
+    about: "data_constraint"
+    severity: "medium"
+    nli: "contradiction"
+    items:
+      - claim: "100% of actions using Claude have CLI availability checks (7/7 compliant)"
+        source: "ontology.yml#CLIAvailabilityCheck evidence"
+      - claim: "7.7% (1/13 actions) have CLI checks implemented"
+        source: ".audit/analysis/gap.yml#GAP-004"
+    status: "open"
+    active_workaround:
+      decision_key: "AUTO:CLIAvailabilityCheck.rate:audit_source_truth"
+      summary: "AUTO: Audit report (2026-02-03) takes precedence over outdated security checklist claim. Actual rate is 7.7% (1/13), not 100% (7/7)"
