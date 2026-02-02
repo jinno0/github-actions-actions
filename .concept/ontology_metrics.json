@@ -1,19 +1,19 @@
 {
-  "run_id": "2026-02-02T08:30:00Z",
-  "updated_at": "2026-02-02T08:30:00Z",
+  "run_id": "2026-02-02T00:37:29.145602Z",
+  "updated_at": "2026-02-02T00:37:29.145625Z",
   "ontology": {
-    "total_terms": 23,
+    "total_terms": 24,
     "by_layer": {
-      "core": 8,
-      "domain": 10,
-      "aux": 5
+      "core": 7,
+      "domain": 11,
+      "aux": 6
     },
     "by_status": {
-      "stable": 23,
+      "stable": 24,
       "draft": 0
     },
     "draft_ratio": 0.0,
-    "draft_ratio_limit": 0.30,
+    "draft_ratio_limit": 0.3,
     "within_limits": true
   },
   "invariants": {
@@ -47,23 +47,23 @@
     "within_limits": true
   },
   "mappings": {
-    "total_terms_mapped": 18,
-    "terms_with_code_mappings": 6,
-    "terms_with_doc_mappings": 23
+    "total_terms_mapped": 20,
+    "terms_with_code_mappings": 0,
+    "terms_with_doc_mappings": 24
   },
   "budget_status": {
     "total_terms_max": 80,
-    "total_terms_current": 23,
-    "total_terms_usage": 0.287,
+    "total_terms_current": 24,
+    "total_terms_usage": 0.3,
     "core_max": 20,
-    "core_current": 8,
-    "core_usage": 0.4,
+    "core_current": 7,
+    "core_usage": 0.35,
     "domain_max": 30,
-    "domain_current": 10,
-    "domain_usage": 0.333,
+    "domain_current": 11,
+    "domain_usage": 0.367,
     "aux_max": 30,
-    "aux_current": 5,
-    "aux_usage": 0.166,
+    "aux_current": 6,
+    "aux_usage": 0.2,
     "within_budget": true
   },
   "queue": {
@@ -86,6 +86,8 @@
       "deleted": 0,
       "deprecated": 0
     },
-    "gc_triggered": false
+    "gc_triggered": false,
+    "duplicates_found": 0,
+    "duplicate_ids": []
   }
 }
