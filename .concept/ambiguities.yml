@@ -1,2 +1,31 @@
-updated_at: "2026-02-02T20:00:00Z"
-ambiguities: []
+updated_at: "2026-02-02T21:56:00Z"
+ambiguities:
+  - id: "AMB-SUCCESS-001"
+    term: "SuccessMetric"
+    topic: "Relationship between QA-001 and SuccessMetric definition"
+    severity: "low"
+    uncertainty: 0.25
+    candidates:
+      - "QA-001 (Acceptance Rate >= 80%) is a specific instance of SuccessMetric"
+      - "QA-001 is a separate quality gate independent of general SuccessMetric tracking"
+    missing_info:
+      - "Are there other quality gates besides QA-001?"
+      - "Does SuccessMetric encompass both organizational metrics AND technical quality gates?"
+    linked_conflicts: []
+    auto_decision:
+      status: "applied"
+      decision_key: "AUTO:SuccessMetric.QA-001:hierarchical"
+      chosen: "QA-001 (Acceptance Rate >= 80%) is a specific quality invariant that implements the broader SuccessMetric concept for MS-002"
+      policy: "hierarchy + clarity"
+      confidence_auto: 0.75
+      decided_at_run: "2026-02-02T21:56:00Z"
+      expires_after_runs: 20
+      revert_triggers:
+        - "primary_evidence_contradiction"
+        - "new_quality_gates_defined"
+    last_touched_run: "2026-02-02T21:56:00Z"
+    evidence:
+      - source: "metrics/README.md#L15-L20"
+        quote: "QA-001: Acceptance Rate >= 80% is the primary quality goal for MS-002"
+      - source: "charter.yml#L6-L15"
+        quote: "success_metrics: Action導入数, AI提案品質, 開発効率"

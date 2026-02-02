@@ -1,4 +1,4 @@
-updated_at: "2026-02-02T02:52:00Z"
+updated_at: "2026-02-02T21:56:00Z"
 invariants:
   - id: "INV-001"
     related_terms: ["AIPoweredAction", "ClaudeCodeCLI"]
@@ -143,3 +143,23 @@ invariants:
     checks:
       - type: "review"
         target: "Action design documentation review"
+
+  - id: "INV-010"
+    related_terms: ["SuccessMetric", "AIPoweredAction"]
+    status: "stable"
+    strength: "hard"
+    statement: "QA-001: Acceptance Rate MUST be >= 80% for AI-powered suggestions (measured as suggestions_accepted / suggestions_made * 100)"
+    rationale: "Quality assurance for MS-002 (Phase 4: Quality & Performance) - ensures AI suggestions provide value to users"
+    assumptions:
+      - id: "ASM-INV-010"
+        text: "AUTO: QA-001 is a specific implementation of SuccessMetric for technical quality measurement"
+        decision_key: "AUTO:SuccessMetric.QA-001:hierarchical"
+        expires_after_runs: 20
+    evidence:
+      - source: "metrics/README.md#L15-L20"
+        quote: "QA-001: Acceptance Rate >= 80% is the primary quality goal for MS-002"
+      - source: "actions/lib/acceptance_tracker.py#L72-L83"
+        quote: "get_acceptance_rate() calculates acceptance rate as (suggestions_accepted / suggestions_made) * 100"
+    checks:
+      - type: "test"
+        target: "tests/metrics/test_acceptance_tracker.py"

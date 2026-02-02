@@ -1,2 +1,35 @@
-updated_at: "2026-02-02T13:30:00Z"
-queue: []
+updated_at: "2026-02-02T21:56:00Z"
+queue:
+  - id: "TP-000001"
+    proposed_canonical: "AcceptanceTracker"
+    proposed_layer: "domain"
+    term_raw_examples: ["AcceptanceTracker class", "acceptance tracking library"]
+    reason: "New Python library module for tracking AI suggestion acceptance rates. Implements QA-001 quality measurement. Core component for MS-002 quality metrics."
+    evidence:
+      - source: "actions/lib/acceptance_tracker.py#L29-L36"
+        quote: "class AcceptanceTracker: Tracks acceptance rate metrics for AI-generated suggestions"
+      - source: "actions/lib/acceptance_tracker.py#L1-L18"
+        quote: "Acceptance Rate Tracking for AI Suggestions - Tracks: Suggestions made, Suggestions accepted, Suggestions rejected, Suggestions modified"
+    auto_merge_candidates: []
+    decision: "pending"
+    expires_after_runs: 10
+    created_run: "2026-02-02T21:56:00Z"
+
+  - id: "TP-000002"
+    proposed_canonical: "MetricsCollectionWorkflow"
+    proposed_layer: "aux"
+    term_raw_examples: ["metrics collection", "daily aggregation", "automated report generation"]
+    reason: "Workflow process for collecting and aggregating acceptance rate metrics. Three-step process: Tracking Integration, Daily Aggregation, Report Generation. Could potentially be merged with StructuralTesting or Testing as part of quality infrastructure."
+    evidence:
+      - source: "metrics/README.md#L30-L35"
+        quote: "Metrics are collected automatically through: 1) Tracking Integration, 2) Daily Aggregation, 3) Report Generation"
+      - source: ".github/workflows/aggregate-metrics.yml"
+        quote: "GitHub Workflow runs daily to aggregate metrics"
+    auto_merge_candidates:
+      - term: "StructuralTesting"
+        similarity: 0.62
+      - term: "SuccessMetric"
+        similarity: 0.68
+    decision: "pending"
+    expires_after_runs: 10
+    created_run: "2026-02-02T21:56:00Z"

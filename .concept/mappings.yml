@@ -1,13 +1,17 @@
-updated_at: "2026-02-02T20:00:00Z"
+updated_at: "2026-02-02T21:56:00Z"
 mappings:
   AIPoweredAction:
-    code_symbols: []
+    code_symbols:
+      - "actions/lib/"
+      - "scripts/aggregate_metrics.py"
+      - "scripts/generate_metrics_report.py"
     db: []
     api: []
     docs:
       - "PURPOSE.md"
       - "ACTIONS.md"
       - "charter.yml"
+      - "metrics/README.md"
 
   FunctionalTesting:
     code_symbols: []
@@ -147,12 +151,17 @@ mappings:
       - "PURPOSE.md"
 
   SuccessMetric:
-    code_symbols: []
+    code_symbols:
+      - "actions/lib/acceptance_tracker.py"
+      - "tests/metrics/test_acceptance_tracker.py"
+      - "scripts/aggregate_metrics.py"
+      - "scripts/generate_metrics_report.py"
     db: []
     api: []
     docs:
       - "charter.yml"
       - "PURPOSE.md"
+      - "metrics/README.md"
 
   WorkPolicy:
     code_symbols: []

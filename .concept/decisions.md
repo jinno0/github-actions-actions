@@ -44,3 +44,12 @@
 - Linked: ASM-FUNC-TEST-001, MS-001
 - Revert Triggers: primary_evidence_contradiction, implementation_complete
 - Evidence: TESTING.md#L158-L184
+
+## AUTO:SuccessMetric.QA-001:hierarchical
+- Status: ACTIVE
+- Chosen: QA-001 (Acceptance Rate >= 80%) is a specific quality invariant that implements the broader SuccessMetric concept for MS-002
+- Policy: hierarchy + clarity
+- Expires After Runs: 20
+- Linked: ASM-INV-010, AMB-SUCCESS-001, INV-010
+- Revert Triggers: primary_evidence_contradiction, new_quality_gates_defined
+- Evidence: metrics/README.md#L15-L20, charter.yml#L6-L15

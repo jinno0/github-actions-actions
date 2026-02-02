@@ -1,6 +1,6 @@
 {
-  "run_id": "2026-02-02T20:00:00Z",
-  "updated_at": "2026-02-02T20:00:00Z",
+  "run_id": "2026-02-02T21:56:00Z",
+  "updated_at": "2026-02-02T21:56:00Z",
   "ontology": {
     "total_terms": 27,
     "by_layer": {
@@ -17,18 +17,18 @@
     "within_limits": true
   },
   "invariants": {
-    "total": 9,
+    "total": 10,
     "by_strength": {
-      "hard": 6,
+      "hard": 7,
       "soft": 3
     }
   },
   "ambiguities": {
-    "total": 0,
+    "total": 1,
     "by_severity": {
       "high": 0,
       "medium": 0,
-      "low": 0
+      "low": 1
     }
   },
   "conflicts": {
@@ -40,15 +40,15 @@
     }
   },
   "claims": {
-    "total_lines": 80,
-    "retained_lines": 80,
+    "total_lines": 86,
+    "retained_lines": 86,
     "archived_lines": 0,
     "run_limit": 300,
     "within_limits": true
   },
   "mappings": {
     "total_terms_mapped": 27,
-    "terms_with_code_mappings": 7,
+    "terms_with_code_mappings": 8,
     "terms_with_doc_mappings": 27
   },
   "budget_status": {
@@ -67,7 +67,7 @@
     "within_budget": true
   },
   "queue": {
-    "pending": 0,
+    "pending": 2,
     "merged": 0,
     "rejected": 0,
     "accepted": 0,
@@ -75,8 +75,8 @@
     "within_limits": true
   },
   "decisions": {
-    "active_auto_decisions": 5,
-    "lines": 46,
+    "active_auto_decisions": 6,
+    "lines": 55,
     "limit": 200,
     "within_limits": true
   },
