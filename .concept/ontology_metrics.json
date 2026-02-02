@@ -1,6 +1,6 @@
 {
-  "run_id": "2026-02-02T21:52:58.925085+00:00",
-  "updated_at": "2026-02-02T21:52:58.925085+00:00",
+  "run_id": "2026-02-02T22:12:43Z",
+  "updated_at": "2026-02-02T22:12:43.881381+00:00",
   "ontology": {
     "total_terms": 36,
     "by_layer": {
@@ -40,16 +40,11 @@
     }
   },
   "claims": {
-    "total_lines": 113,
-    "retained_lines": 113,
+    "total_lines": 116,
+    "retained_lines": 116,
     "archived_lines": 0,
     "run_limit": 10000,
     "within_limits": true
-  },
-  "mappings": {
-    "total_terms_mapped": 31,
-    "terms_with_code_mappings": 12,
-    "terms_with_doc_mappings": 31
   },
   "budget_status": {
     "total_terms_max": 80,
@@ -76,7 +71,7 @@
   },
   "decisions": {
     "active_auto_decisions": 2,
-    "lines": 64,
+    "lines": 49,
     "limit": 200,
     "within_limits": true
   },
@@ -89,6 +84,5 @@
     "gc_triggered": false,
     "duplicates_found": 0,
     "duplicate_ids": []
-  },
-  "unmapped_ratio": 0.14
+  }
 }
