@@ -19,14 +19,14 @@ TEMPLATE_DIR="${ACTION_PATH}/templates"
 
 # Security: Check Claude CLI availability
 if ! command -v claude &> /dev/null; then
-  echo "Error: Claude CLI not found"
-  echo "Please install Claude Code CLI before using this action"
+  echo "::error::Claude CLI not found. Please install Claude Code CLI before using this action."
+  echo "  Visit https://claude.ai/ for installation instructions."
   exit 1
 fi
 
 # Verify Claude CLI is functional
 if ! claude --version &> /dev/null; then
-  echo "Error: Claude CLI is not functional"
+  echo "::error::Claude CLI is not functional"
   exit 1
 fi
 

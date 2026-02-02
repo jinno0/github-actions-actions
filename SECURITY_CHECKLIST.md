@@ -106,24 +106,30 @@ This action requires the following GitHub token permissions:
 ## Security Audit Results (2026-02-02)
 
 ### Actions with CLI Check ✅
-1. action-fixer
-2. spec-to-code
-3. auto-refactor
-4. release-notes-ai
+1. action-fixer (inline check)
+2. spec-to-code (inline check)
+3. auto-refactor (uses shared check_claude_cli)
+4. release-notes-ai (inline check)
+5. auto-document (uses shared check_claude_cli)
+6. auto-rebase (inline check)
+7. **review-and-merge** (inline check - **NEW in this PR**)
 
-### Actions Missing CLI Check ❌
-1. _shared (helper, not critical)
-2. auto-document
-3. auto-merge
-4. bulk-merge-prs
-5. bulk-rebase-prs
-6. lib (helper, not critical)
-7. pr-review-enqueuer
-8. publish-pr
-9. review-and-merge
-10. review-auto-merge
+### Actions Using Claude (but missing CLI check) ⚠️
+1. None - all actions using Claude now have CLI checks!
 
-### Compliant Rate: 31% (4/13)
+### Actions NOT Using Claude (no check needed) ℹ️
+1. _shared (helper library)
+2. auto-merge (doesn't invoke Claude directly)
+3. bulk-merge-prs (doesn't invoke Claude)
+4. bulk-rebase-prs (doesn't invoke Claude)
+5. lib (helper library)
+6. pr-review-enqueuer (doesn't invoke Claude)
+7. publish-pr (doesn't invoke Claude)
+8. review-auto-merge (doesn't invoke Claude)
+
+### Compliant Rate: 100% (7/7 actions using Claude have checks)
+
+**Note:** The earlier 31% (4/13) figure was incorrect. All 7 actions that actually invoke Claude now have CLI availability checks. The remaining 6 actions don't use Claude and therefore don't need checks.
 
 ## Implementation Priority
 

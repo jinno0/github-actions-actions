@@ -129,5 +129,6 @@ class TestSecurityChecklist:
 
         # Verify audit results section
         assert "Actions with CLI Check" in content
-        assert "Actions Missing CLI Check" in content
+        assert "Actions NOT Using Claude" in content
         assert "Compliant Rate:" in content
+        assert "100%" in content  # All actions using Claude now have checks
