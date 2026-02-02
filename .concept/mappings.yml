@@ -1,4 +1,4 @@
-updated_at: "2026-02-02T10:00:00Z"
+updated_at: "2026-02-02T20:00:00Z"
 mappings:
   AIPoweredAction:
     code_symbols: []
@@ -42,6 +42,16 @@ mappings:
       - "ACTIONS.md"
       - "PURPOSE.md"
       - "instructions/review-and-merge.md"
+
+  CustomReviewRules:
+    code_symbols: []
+    db: []
+    api: []
+    docs:
+      - "instructions/review-and-merge-custom-rules.md"
+      - "instructions/review-and-merge.md"
+      - "examples/custom-rules-tutorial.md"
+      - "examples/custom-rules/"
 
   SpecToCodeAction:
     code_symbols:

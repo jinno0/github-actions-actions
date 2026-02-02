@@ -1,5 +1,5 @@
 version: "0.3"
-updated_at: "2026-02-02T04:21:00Z"
+updated_at: "2026-02-02T20:00:00Z"
 
 canonical_terms:
   AIPoweredAction:
@@ -64,19 +64,39 @@ canonical_terms:
     id: "TERM-REVIEW-MERGE"
     layer: "domain"
     status: "stable"
-    definition: "AI-powered action that reviews pull requests using Claude Code CLI with context-aware analysis, confidence scoring, and optional auto-merge"
+    definition: "AI-powered action that reviews pull requests using Claude Code CLI with context-aware analysis, confidence scoring, custom review rules, auto-fix capability, and optional auto-merge"
     synonyms: ["review-and-merge", "AI review action", "PR review action"]
     boundaries:
-      includes: ["AI code review", "Confidence scoring", "LGTM detection", "Auto-fix capability"]
+      includes: ["AI code review", "Confidence scoring", "LGTM detection", "Auto-fix capability", "Custom rule injection"]
       excludes: ["Simple lint checks", "Non-AI review"]
     lifecycle: ["PR Opened", "Review Started", "Analysis Complete", "Comment Posted", "Optional Merge"]
-    related_terms: ["AIPoweredAction", "LGTM", "PRQualityGate"]
+    related_terms: ["AIPoweredAction", "LGTM", "PRQualityGate", "CustomReviewRules"]
     assumptions: []
     evidence:
       - source: "PURPOSE.md#L42-L44"
         quote: "review-and-merge: PRの内容をAIがレビューし、LGTMなら自動マージ"
       - source: "ACTIONS.md#L25-L34"
         quote: "Automatically review pull requests using Claude Code CLI with context-aware analysis... Intelligent code review with confidence scoring"
+      - source: "instructions/review-and-merge.md#L3-L4"
+        quote: "This action uses AI (Claude Code CLI) to review pull requests and automatically fix code issues. It can operate in two modes: Auto-Fix (applies corrections directly) or Review (posts feedback as a comment)"
+
+  CustomReviewRules:
+    id: "TERM-CUSTOM-RULES"
+    layer: "domain"
+    status: "stable"
+    definition: "Feature of review-and-merge action that allows injecting project-specific review guidelines to tailor AI behavior for coding standards, security requirements, architectural patterns, and custom review focus areas"
+    synonyms: ["custom rules", "review rules", "project-specific review guidelines", "custom review criteria"]
+    boundaries:
+      includes: ["Style rules", "Security rules", "Performance rules", "Architecture rules", "Testing rules", "Domain-specific conventions"]
+      excludes: ["Hard-coded action behavior", "One-size-fits-all review criteria"]
+    lifecycle: ["Define Rules", "Create YAML File", "Reference in Workflow", "Apply in Review"]
+    related_terms: ["ReviewAndMergeAction", "AIPoweredAction"]
+    assumptions: []
+    evidence:
+      - source: "instructions/review-and-merge-custom-rules.md#L3-L7"
+        quote: "Custom rules allow you to: Enforce project-specific coding standards, Add security requirements for your domain, Specify architectural patterns and constraints, Customize review focus areas"
+      - source: "instructions/review-and-merge.md#L37-L40"
+        quote: "Custom Review Rules: Use the custom-rules input to inject project-specific guidelines... Comprehensive documentation, Ready-to-use examples, Step-by-step tutorial"
 
   SpecToCodeAction:
     id: "TERM-SPEC-TO-CODE"

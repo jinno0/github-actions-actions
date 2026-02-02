@@ -1,7 +1,7 @@
 {
-  "run_index": 13,
-  "last_run_id": "2026-02-02T18:00:00Z",
-  "claims_retained_lines": 70,
+  "run_index": 14,
+  "last_run_id": "2026-02-02T20:00:00Z",
+  "claims_retained_lines": 80,
   "claims_archived_until_run_id": null,
-  "run_count": 13
+  "run_count": 14
 }
