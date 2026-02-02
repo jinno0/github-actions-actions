@@ -1,4 +1,4 @@
-updated_at: "2026-02-02T02:52:00Z"
+updated_at: "2026-02-02T09:54:00Z"
 mappings:
   AIPoweredAction:
     code_symbols: []
@@ -175,3 +175,41 @@ mappings:
     docs:
       - ".task-prompt.md"
       - "charter.yml"
+
+  AdoptionGuide:
+    code_symbols: []
+    db: []
+    api: []
+    docs:
+      - "ADOPTION_GUIDE.md"
+
+  DryRunMode:
+    code_symbols: []
+    db: []
+    api: []
+    docs:
+      - "ADOPTION_GUIDE.md"
+      - "examples/pilot-workflow-template.yml"
+
+  VersionManagementPolicy:
+    code_symbols: []
+    db: []
+    api: []
+    docs:
+      - "examples/pilot-workflow-template.yml"
+
+  ClaudeModelParameter:
+    code_symbols: []
+    db: []
+    api: []
+    docs:
+      - "ADOPTION_GUIDE.md"
+
+  StructuralTesting:
+    code_symbols:
+      - "tests/test_*"
+      - "conftest.py"
+    db: []
+    api: []
+    docs:
+      - "TESTING.md"

@@ -1,5 +1,5 @@
 version: "0.3"
-updated_at: "2026-02-02T07:23:00Z"
+updated_at: "2026-02-02T09:54:00Z"
 
 canonical_terms:
   AIPoweredAction:
@@ -421,3 +421,21 @@ canonical_terms:
     evidence:
       - source: "ADOPTION_GUIDE.md#L78-L86"
         quote: "claude-model: claude-sonnet-4-5-20250929"
+
+  StructuralTesting:
+    id: "TERM-STRUCTURAL-TESTING"
+    layer: "domain"
+    status: "stable"
+    definition: "Testing approach that validates GitHub Actions' structure, syntax, and configuration without executing them in GitHub Actions runtime environment"
+    synonyms: ["Structural testing", "Structural tests", "Static testing"]
+    boundaries:
+      includes: ["YAML syntax validation", "File structure checks", "Input/output validation", "Security pattern verification"]
+      excludes: ["Runtime execution", "Functional testing", "End-to-end testing", "GitHub API interaction testing"]
+    lifecycle: ["Test Design", "Test Execution", "Result Analysis"]
+    related_terms: ["AIPoweredAction"]
+    assumptions: []
+    evidence:
+      - source: "TESTING.md#L3-L5"
+        quote: "structural testing approach for GitHub Actions. Tests validate the structure, syntax, and configuration of actions without executing them"
+      - source: "TESTING.md#L25-L30"
+        quote: "Structural tests catch: YAML syntax errors, missing required files, incorrect action structure"
