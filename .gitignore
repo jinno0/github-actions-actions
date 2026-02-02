@@ -87,6 +87,7 @@ _bmad-output/
 *_FLOW_REPORT.md
 *_TEST_FLOW_REPORT.md
 *_COMPLETION_REPORT.md
+EXECUTION_BLOCKED.md
 .bmad/*execution-summary.md
 .bmad/*flow-summary.md
 .bmad/CODE_REVIEW_FINDINGS.md
