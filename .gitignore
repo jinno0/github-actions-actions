@@ -80,6 +80,9 @@ _bmad-output/
 .bmad/workflows/*flow-report.md
 .bmad/workflows/*completion-report.md
 
+# Audit and analysis reports
+.audit/
+
 # Temporary workflow/completion report files in root
 *_FLOW_REPORT.md
 *_TEST_FLOW_REPORT.md
