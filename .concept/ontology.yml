@@ -1,5 +1,5 @@
 version: "0.3"
-updated_at: "2026-02-02T14:27:15Z"
+updated_at: "2026-02-02T17:19:48Z"
 
 canonical_terms:
   AIPoweredAction:
@@ -561,3 +561,99 @@ canonical_terms:
         quote: "Adoption Registry (導入登録簿)... This registry helps track: Organizational Reach, Action Popularity, User Satisfaction, Impact Assessment"
       - source: "ADOPTION_GUIDE.md#L381-L386"
         quote: "統計: Total Teams, Total Repositories, Most Used Actions"
+
+  SecurityChecklist:
+    id: "TERM-SECURITY-CHECKLIST"
+    layer: "domain"
+    status: "stable"
+    definition: "Document (version 1.0) that ensures all GitHub Actions follow security best practices including CLI availability checks, path validation, input sanitization, and GitHub token permissions documentation"
+    synonyms: ["Security Checklist", "security checklist", "SECURITY_CHECKLIST.md"]
+    boundaries:
+      includes: ["CLI Availability Check", "Path Validation", "Input Sanitization", "GitHub Token Permissions", "Security Audit Results"]
+      excludes: ["Implementation code", "Non-security documentation"]
+    lifecycle: ["Create Document", "Audit Actions", "Document Results", "Update Checklist", "Track Compliance"]
+    related_terms: ["CLIAvailabilityCheck", "PathValidation", "InputSanitization", "GitHubToken", "AIPoweredAction"]
+    assumptions: []
+    evidence:
+      - source: "SECURITY_CHECKLIST.md#L1-L5"
+        quote: "Security Checklist is a document (version 1.0) that ensures all GitHub Actions follow security best practices"
+      - source: "SECURITY_CHECKLIST.md#L106-L132"
+        quote: "Security Audit Results (2026-02-02)... Compliant Rate: 100%"
+
+  CLIAvailabilityCheck:
+    id: "TERM-CLI-CHECK"
+    layer: "core"
+    status: "stable"
+    definition: "Security invariant requiring every action using Claude Code CLI to verify its availability before attempting to use it by checking command existence and functionality"
+    synonyms: ["CLI Availability Check", "CLI check", "Claude CLI availability check", "Claude CLI verification"]
+    boundaries:
+      includes: ["Command existence check", "Functionality verification", "Error handling", "Clear error messages"]
+      excludes: ["Actions not using Claude", "Runtime execution checks"]
+    lifecycle: ["Action Starts", "Verify CLI Exists", "Verify CLI Works", "Proceed or Fail"]
+    related_terms: ["AIPoweredAction", "ClaudeCodeCLI", "SecurityChecklist"]
+    assumptions:
+      - id: "ASM-CLI-001"
+        text: "AUTO: All 7 actions using Claude have CLI availability checks (100% compliant)"
+        decision_key: "AUTO:CLIAvailabilityCheck.compliance:100_percent"
+        expires_after_runs: 20
+    evidence:
+      - source: "SECURITY_CHECKLIST.md#L9-L31"
+        quote: "Every action MUST verify Claude CLI is available before attempting to use it by checking command existence and functionality"
+      - source: "SECURITY_CHECKLIST.md#L130"
+        quote: "100% of actions using Claude have CLI availability checks (7/7 compliant)"
+
+  PathValidation:
+    id: "TERM-PATH-VALIDATION"
+    layer: "core"
+    status: "stable"
+    definition: "Security invariant requiring validation of file path inputs to prevent path traversal attacks by checking for .. patterns, validating characters, resolving to absolute path, and ensuring path is within repository"
+    synonyms: ["Path Validation", "path validation", "path traversal check", "path security"]
+    boundaries:
+      includes: ["Path traversal detection", "Character validation", "Absolute path resolution", "Repository boundary check"]
+      excludes: ["URL validation", "Non-file-path inputs"]
+    lifecycle: ["Input Received", "Check for ..", "Validate Characters", "Resolve Path", "Verify Within Repository"]
+    related_terms: ["SecurityChecklist", "InputSanitization", "AIPoweredAction"]
+    assumptions: []
+    evidence:
+      - source: "SECURITY_CHECKLIST.md#L36-L66"
+        quote: "Path validation MUST prevent path traversal attacks by checking for .. patterns, validating characters, resolving to absolute path"
+      - source: "actions/_shared/scripts/validate-template-path.sh"
+        quote: "Path validation implementation in shared script"
+
+  InputSanitization:
+    id: "TERM-INPUT-SANITIZATION"
+    layer: "domain"
+    status: "stable"
+    definition: "Security practice requiring removal of null bytes and special characters from user input, limiting input length, and avoiding logging sensitive content"
+    synonyms: ["Input Sanitization", "input sanitization", "user input sanitization", "input cleaning"]
+    boundaries:
+      includes: ["Null byte removal", "Special character handling", "Length limits", "Safe logging practices"]
+      excludes: ["Output encoding", "Database escaping (separate concern)"]
+    lifecycle: ["Input Received", "Sanitize", "Validate", "Process"]
+    related_terms: ["SecurityChecklist", "PathValidation", "AIPoweredAction"]
+    assumptions: []
+    evidence:
+      - source: "SECURITY_CHECKLIST.md#L71-L84"
+        quote: "Input sanitization MUST remove null bytes and special characters, limit input length, and avoid logging sensitive content"
+
+  MockClaudeCLI:
+    id: "TERM-MOCK-CLAUDE"
+    layer: "aux"
+    status: "stable"
+    definition: "Testing infrastructure - mock executable script that simulates Claude CLI behavior for integration testing with different scenarios (default success, LGTM, request_changes, error)"
+    synonyms: ["Mock Claude CLI", "mock Claude", "mock claude", "testing mock"]
+    boundaries:
+      includes: ["Scenario-based testing", "Exit code simulation", "Output simulation", "Environment variable control"]
+      excludes: ["Actual Claude CLI invocation", "Production execution"]
+    lifecycle: ["Create Mock", "Define Scenarios", "Write Tests", "Execute Tests", "Verify Behavior"]
+    related_terms: ["StructuralTesting", "AIPoweredAction", "ClaudeCodeCLI"]
+    assumptions:
+      - id: "ASM-MOCK-001"
+        text: "AUTO: Mock Claude supports scenarios: default, lgtm, request_changes, error via MOCK_SCENARIO env var"
+        decision_key: "AUTO:MockClaudeCLI.scenarios:env_controlled"
+        expires_after_runs: 20
+    evidence:
+      - source: "tests/integration/test_mock_claude.py#L1-L4"
+        quote: "Integration tests for Mock Claude CLI... Tests the mock Claude CLI behavior in different scenarios"
+      - source: "tests/integration/test_mock_claude.py#L34-L47"
+        quote: "Mock Claude CLI has LGTM scenario (MOCK_SCENARIO=lgtm) that returns 'LGTM' and 'Confidence: 9'"

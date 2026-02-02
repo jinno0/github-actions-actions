@@ -1,58 +1,70 @@
-updated_at: "2026-02-02T14:27:15Z"
+updated_at: "2026-02-02T17:19:48Z"
 queue:
-  - id: "TP-ACCEPTANCE-001"
-    proposed_canonical: "AcceptanceRate"
+  - id: "TP-SECURITY-001"
+    proposed_canonical: "SecurityChecklist"
     proposed_layer: "domain"
-    term_raw_examples: ["Acceptance Rate", "acceptance rate", "Acceptance Rate Tracking"]
-    reason: "New quality metric concept for measuring AI suggestion effectiveness. Core to MS-002 (Quality & Performance milestone)"
+    term_raw_examples: ["Security Checklist", "security checklist", "SECURITY_CHECKLIST.md"]
+    reason: "Document (version 1.0) that ensures all GitHub Actions follow security best practices including CLI checks, path validation, input sanitization, and token permissions"
     evidence:
-      - source: "actions/lib/acceptance_tracker.py#L1-L18"
-        quote: "Acceptance Rate Tracking for AI Suggestions... Tracks: Suggestions made, Suggestions accepted, Suggestions rejected, Suggestions modified"
-      - source: "metrics/README.md#L6-L12"
-        quote: "Acceptance rate tracking measures the quality and effectiveness of AI suggestions by tracking: Suggestions Made, Suggestions Accepted, Suggestions Rejected, Suggestions Modified"
+      - source: "SECURITY_CHECKLIST.md#L1-L5"
+        quote: "Security Checklist is a document (version 1.0) that ensures all GitHub Actions follow security best practices"
+      - source: "SECURITY_CHECKLIST.md#L106-L132"
+        quote: "Security Audit Results (2026-02-02)... Actions with CLI Check... Compliant Rate: 100%"
     auto_merge_candidates: []
     decision: "accepted"
     expires_after_runs: 10
-    created_run: "2026-02-02T14:27:15Z"
-  - id: "TP-ACCEPTANCE-002"
-    proposed_canonical: "AcceptanceTracker"
-    proposed_layer: "domain"
-    term_raw_examples: ["AcceptanceTracker", "acceptance tracker", "tracker"]
-    reason: "Implementation class for acceptance rate tracking. Provides record_suggestion, get_acceptance_rate, export_metrics, save_to_file methods"
+    created_run: "2026-02-02T17:19:48Z"
+  - id: "TP-SECURITY-002"
+    proposed_canonical: "CLIAvailabilityCheck"
+    proposed_layer: "core"
+    term_raw_examples: ["CLI Availability Check", "CLI check", "Claude CLI availability"]
+    reason: "Security invariant requiring every action to verify Claude CLI is available before attempting to use it"
     evidence:
-      - source: "actions/lib/acceptance_tracker.py#L29-L51"
-        quote: "Tracks acceptance rate metrics for AI-generated suggestions... Attributes: action_name: Name of the GitHub Action being tracked, metrics: Dictionary tracking suggestion outcomes"
-      - source: "metrics/README.md#L99-L110"
-        quote: "The AcceptanceTracker class in actions/lib/acceptance_tracker.py provides"
+      - source: "SECURITY_CHECKLIST.md#L9-L31"
+        quote: "Every action MUST verify Claude CLI is available before attempting to use it by checking command existence and functionality"
+      - source: "actions/review-and-merge/scripts/review-and-fix.sh"
+        quote: "CLI check implementation in review-and-merge"
     auto_merge_candidates: []
     decision: "accepted"
     expires_after_runs: 10
-    created_run: "2026-02-02T14:27:15Z"
-  - id: "TP-METRIC-001"
-    proposed_canonical: "QualityMetric"
-    proposed_layer: "domain"
-    term_raw_examples: ["acceptance rate", "rejection rate", "modification rate", "quality metric"]
-    reason: "Family of metrics for measuring AI suggestion quality. Includes acceptance/rejection/modification rates"
+    created_run: "2026-02-02T17:19:48Z"
+  - id: "TP-SECURITY-003"
+    proposed_canonical: "PathValidation"
+    proposed_layer: "core"
+    term_raw_examples: ["Path Validation", "path validation", "path traversal check"]
+    reason: "Security invariant requiring validation of file path inputs to prevent path traversal attacks"
     evidence:
-      - source: "actions/lib/acceptance_tracker.py#L72-L109"
-        quote: "Calculate the acceptance/rejection/modification rate as a percentage"
-      - source: "metrics/README.md#L76-L82"
-        quote: "Acceptance Rate: Percentage of suggestions accepted (target: >= 80%)"
-    auto_merge_candidates:
-      - term: "SuccessMetric"
-        similarity: 0.72
+      - source: "SECURITY_CHECKLIST.md#L36-L66"
+        quote: "Path validation MUST prevent path traversal attacks by checking for .. patterns, validating characters, resolving to absolute path"
+      - source: "actions/_shared/scripts/validate-template-path.sh"
+        quote: "Path validation implementation in shared script"
+    auto_merge_candidates: []
     decision: "accepted"
     expires_after_runs: 10
-    created_run: "2026-02-02T14:27:15Z"
-  - id: "TP-ADOPTION-001"
-    proposed_canonical: "AdoptionRegistry"
+    created_run: "2026-02-02T17:19:48Z"
+  - id: "TP-SECURITY-004"
+    proposed_canonical: "InputSanitization"
+    proposed_layer: "domain"
+    term_raw_examples: ["Input Sanitization", "input sanitization", "user input sanitization"]
+    reason: "Security practice requiring removal of null bytes, special characters, and limiting input length"
+    evidence:
+      - source: "SECURITY_CHECKLIST.md#L71-L84"
+        quote: "Input sanitization MUST remove null bytes and special characters, limit input length, and avoid logging sensitive content"
+    auto_merge_candidates: []
+    decision: "accepted"
+    expires_after_runs: 10
+    created_run: "2026-02-02T17:19:48Z"
+  - id: "TP-TEST-001"
+    proposed_canonical: "MockClaudeCLI"
     proposed_layer: "aux"
-    term_raw_examples: ["Adoption Registry", "adoption registry", "導入登録簿"]
-    reason: "Registry system for tracking organizational adoption of AI Actions. Tracks teams, repositories, feedback, privacy options"
+    term_raw_examples: ["Mock Claude CLI", "mock Claude", "mock claude"]
+    reason: "Testing infrastructure - mock executable that simulates Claude CLI behavior for integration testing with different scenarios (success, LGTM, request_changes, error)"
     evidence:
-      - source: "ADOPTION_GUIDE.md#L361-L369"
-        quote: "Adoption Registry (導入登録簿)... This registry helps track: Organizational Reach, Action Popularity, User Satisfaction, Impact Assessment"
+      - source: "tests/integration/test_mock_claude.py#L1-L4"
+        quote: "Integration tests for Mock Claude CLI... Tests the mock Claude CLI behavior in different scenarios"
+      - source: ".github/mocks/claude"
+        quote: "Mock CLI executable script"
     auto_merge_candidates: []
     decision: "accepted"
     expires_after_runs: 10
-    created_run: "2026-02-02T14:27:15Z"
+    created_run: "2026-02-02T17:19:48Z"
