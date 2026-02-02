@@ -1,6 +1,6 @@
 version: "2.0"
-updated_at: "2026-02-02T11:10:00Z"
-updated_by: "audit-run-002"
+updated_at: "2026-02-02T13:41:00Z"
+updated_by: "audit-run-003"
 
 # === Mission ===
 mission:
@@ -35,12 +35,24 @@ assumptions:
     value: "組織内の複数のリポジトリ（1〜1000リポジトリ規模）"
     reason: "ADOPTION_GUIDE.md が存在し、組織導入を想定しているため。小規模(1)〜大規模(1000)まで対応"
     confidence: "medium"
-    verified: "needs_revision" # Updated based on feedback feedback_to_auditor.yml
+    status: "pending_pilot_verification"  # 初期パイロット導入待ち
 
   - id: "ASM-005"
     field: "claude_cli_availability"
     value: "Self-hosted runner に Claude Code CLI がインストール済み"
     reason: "全アクションが claude コマンドを直接呼び出しているため"
+    confidence: "high"
+
+  - id: "ASM-006"
+    field: "testing_maturity"
+    value: "構造的テスト完了、機能的テスト未実装"
+    reason: "168 tests passing (97.51% coverage) が全て構造検証。TESTING.md で 'No Functional Testing' が明記されている"
+    confidence: "high"
+
+  - id: "ASM-007"
+    field: "deployment_readiness"
+    value: "技術的準備完了、組織導入待ち"
+    reason: "全品質ゲート通過、ADOPTION.md 実装済みだが導入実績0チーム"
     confidence: "high"
 
 # === Core Functions（このリポジトリの本質的機能）===
@@ -74,6 +86,7 @@ quality_attributes:
   - id: "QA-001"
     name: "テストカバレッジ"
     target: ">= 70%"
+    current_value: "97.51%"
     verification:
       type: "measurement"
       command: "pytest --cov=. --cov-fail-under=70"
@@ -84,7 +97,7 @@ quality_attributes:
       interpretation:
         success_means: "コードの70%以上がテストで実行される"
         failure_means: "pytest.ini の基準値を下回る"
-        warning: "現在23%のため大幅な改善が必要"
+        achievement: "目標値を大幅に超過して達成 (97.51%)"
 
   - id: "QA-002"
     name: "アクション構造の整合性"
