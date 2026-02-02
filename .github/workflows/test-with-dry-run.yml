@@ -19,14 +19,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # Only actions that support dry-run input
         action:
-          - review-and-merge
-          - spec-to-code
-          - action-fixer
-          - auto-refactor
-          - auto-document
-          - release-notes-ai
-          - auto-rebase
+          - bulk-merge-prs
+          - bulk-rebase-prs
+          - pr-review-enqueuer
 
     steps:
       - name: Checkout
@@ -35,10 +32,9 @@ jobs:
       - name: Test ${{ matrix.action }} with dry-run
         id: dry-run
         continue-on-error: true
-        uses: ./.actions/${{ matrix.action }}
+        uses: ./actions/${{ matrix.action }}
         with:
           dry-run: true
-          test-mode: true
 
       - name: Verify exit code
         if: steps.dry-run.outcome == 'failure'
