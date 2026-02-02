@@ -1,4 +1,4 @@
-updated_at: "2026-02-02T09:54:00Z"
+updated_at: "2026-02-02T10:00:00Z"
 mappings:
   AIPoweredAction:
     code_symbols: []
@@ -8,6 +8,13 @@ mappings:
       - "PURPOSE.md"
       - "ACTIONS.md"
       - "charter.yml"
+
+  FunctionalTesting:
+    code_symbols: []
+    db: []
+    api: []
+    docs:
+      - "TESTING.md"
 
   ClaudeCodeCLI:
     code_symbols: []

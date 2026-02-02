@@ -432,10 +432,30 @@ canonical_terms:
       includes: ["YAML syntax validation", "File structure checks", "Input/output validation", "Security pattern verification"]
       excludes: ["Runtime execution", "Functional testing", "End-to-end testing", "GitHub API interaction testing"]
     lifecycle: ["Test Design", "Test Execution", "Result Analysis"]
-    related_terms: ["AIPoweredAction"]
+    related_terms: ["AIPoweredAction", "FunctionalTesting"]
     assumptions: []
     evidence:
       - source: "TESTING.md#L3-L5"
         quote: "structural testing approach for GitHub Actions. Tests validate the structure, syntax, and configuration of actions without executing them"
       - source: "TESTING.md#L25-L30"
         quote: "Structural tests catch: YAML syntax errors, missing required files, incorrect action structure"
+
+  FunctionalTesting:
+    id: "TERM-FUNCTIONAL-TESTING"
+    layer: "aux"
+    status: "stable"
+    definition: "Future testing phases for GitHub Actions including integration testing (Phase 2) and end-to-end testing (Phase 3) that validate runtime behavior and real GitHub API interactions"
+    synonyms: ["Functional testing", "Integration testing", "End-to-end testing", "Runtime testing"]
+    boundaries:
+      includes: ["Runtime execution", "GitHub API interaction testing", "Real environment validation", "Integration tests", "E2E tests"]
+      excludes: ["Structural testing", "Static validation", "YAML syntax checks"]
+    lifecycle: ["Planned", "Designed", "Implemented", "Executed"]
+    related_terms: ["StructuralTesting", "AIPoweredAction"]
+    assumptions:
+      - id: "ASM-FUNC-TEST-001"
+        text: "AUTO: Functional testing phases (Phase 2/3) are planned but not yet implemented"
+        decision_key: "AUTO:FunctionalTesting.phasing:future"
+        expires_after_runs: 20
+    evidence:
+      - source: "TESTING.md#L158-L184"
+        quote: "Phase 2: Integration Testing (Planned)... Phase 3: End-to-End Testing (Future)"

@@ -1,4 +1,4 @@
-updated_at: "2026-02-02T09:54:00Z"
+updated_at: "2026-02-02T10:00:00Z"
 queue:
   - id: "TP-TESTING-001"
     proposed_canonical: "StructuralTesting"
@@ -25,6 +25,6 @@ queue:
     auto_merge_candidates:
       - term: "StructuralTesting"
         similarity: 0.45
-    decision: "pending"
+    decision: "accepted"
     expires_after_runs: 10
     created_run: "2026-02-02T09:54:00Z"

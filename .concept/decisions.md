@@ -35,3 +35,12 @@
 - Linked: ASM-VERSION-001
 - Revert Triggers: primary_evidence_contradiction, stability_risk
 - Evidence: pilot-workflow-template.yml#L11-L14
+
+## AUTO:FunctionalTesting.phasing:future
+- Status: ACTIVE
+- Chosen: Functional testing phases (Phase 2 Integration Testing, Phase 3 End-to-End Testing) are planned but not yet implemented
+- Policy: roadmap_alignment + scope_control
+- Expires After Runs: 20
+- Linked: ASM-FUNC-TEST-001, MS-001
+- Revert Triggers: primary_evidence_contradiction, implementation_complete
+- Evidence: TESTING.md#L158-L184

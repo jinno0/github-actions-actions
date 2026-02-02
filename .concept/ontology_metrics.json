@@ -1,15 +1,15 @@
 {
-  "run_id": "2026-02-02T09:54:00Z",
-  "updated_at": "2026-02-02T09:54:00Z",
+  "run_id": "2026-02-02T10:00:00Z",
+  "updated_at": "2026-02-02T10:00:00Z",
   "ontology": {
-    "total_terms": 25,
+    "total_terms": 26,
     "by_layer": {
       "core": 7,
-      "domain": 12,
+      "domain": 13,
       "aux": 6
     },
     "by_status": {
-      "stable": 25,
+      "stable": 26,
       "draft": 0
     },
     "draft_ratio": 0.0,
@@ -40,43 +40,43 @@
     }
   },
   "claims": {
-    "total_lines": 56,
-    "retained_lines": 56,
+    "total_lines": 57,
+    "retained_lines": 57,
     "archived_lines": 0,
     "run_limit": 300,
     "within_limits": true
   },
   "mappings": {
-    "total_terms_mapped": 25,
+    "total_terms_mapped": 26,
     "terms_with_code_mappings": 7,
-    "terms_with_doc_mappings": 25
+    "terms_with_doc_mappings": 26
   },
   "budget_status": {
     "total_terms_max": 80,
-    "total_terms_current": 25,
-    "total_terms_usage": 0.3125,
+    "total_terms_current": 26,
+    "total_terms_usage": 0.325,
     "core_max": 20,
     "core_current": 7,
     "core_usage": 0.35,
     "domain_max": 30,
-    "domain_current": 12,
-    "domain_usage": 0.4,
+    "domain_current": 13,
+    "domain_usage": 0.433,
     "aux_max": 30,
     "aux_current": 6,
     "aux_usage": 0.2,
     "within_budget": true
   },
   "queue": {
-    "pending": 1,
+    "pending": 0,
     "merged": 0,
     "rejected": 0,
-    "accepted": 1,
+    "accepted": 2,
     "limit": 50,
     "within_limits": true
   },
   "decisions": {
-    "active_auto_decisions": 4,
-    "lines": 28,
+    "active_auto_decisions": 5,
+    "lines": 35,
     "limit": 200,
     "within_limits": true
   },
