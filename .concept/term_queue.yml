@@ -1,5 +1,19 @@
-updated_at: "2026-02-02T17:19:48Z"
+updated_at: "2026-02-02T23:44:31Z"
 queue:
+  - id: "TP-TELEMETRY-001"
+    proposed_canonical: "Telemetry"
+    proposed_layer: "domain"
+    term_raw_examples: ["Telemetry", "anonymous usage metrics", "telemetry data", "usage analytics"]
+    reason: "System for collecting anonymous usage metrics to understand how Actions are being used, with opt-out mechanism, SHA-256 anonymization, and minimal data collection (privacy-focused)"
+    evidence:
+      - source: "docs/telemetry.md#L1-L14"
+        quote: "This project collects anonymous usage telemetry to help us understand how Actions are being used and identify areas for improvement"
+      - source: "scripts/collect_metrics.py#L1-L20"
+        quote: "Collect and send anonymous usage metrics for GitHub Actions... Privacy Features: Repository names are hashed (SHA-256), Opt-out mechanism, Only essential metrics"
+    auto_merge_candidates: []
+    decision: "pending"
+    expires_after_runs: 10
+    created_run: "2026-02-02T23:44:31Z"
   - id: "TP-SECURITY-001"
     proposed_canonical: "SecurityChecklist"
     proposed_layer: "domain"
