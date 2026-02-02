@@ -1,4 +1,4 @@
-updated_at: "2026-02-02T21:56:00Z"
+updated_at: "2026-02-02T14:27:15Z"
 mappings:
   AIPoweredAction:
     code_symbols:
@@ -239,3 +239,41 @@ mappings:
     api: []
     docs:
       - "TESTING.md"
+
+  AcceptanceRate:
+    code_symbols:
+      - "actions/lib/acceptance_tracker.py::class AcceptanceTracker"
+      - "actions/lib/acceptance_tracker.py::get_acceptance_rate"
+    db: []
+    api: []
+    docs:
+      - "metrics/README.md"
+      - "actions/lib/acceptance_tracker.py"
+
+  AcceptanceTracker:
+    code_symbols:
+      - "actions/lib/acceptance_tracker.py::class AcceptanceTracker"
+    db: []
+    api: []
+    docs:
+      - "metrics/README.md"
+      - "actions/lib/acceptance_tracker.py"
+      - "tests/metrics/test_acceptance_tracker.py"
+
+  QualityMetric:
+    code_symbols:
+      - "actions/lib/acceptance_tracker.py::get_acceptance_rate"
+      - "actions/lib/acceptance_tracker.py::get_rejection_rate"
+      - "actions/lib/acceptance_tracker.py::get_modification_rate"
+    db: []
+    api: []
+    docs:
+      - "metrics/README.md"
+      - "actions/lib/acceptance_tracker.py"
+
+  AdoptionRegistry:
+    code_symbols: []
+    db: []
+    api: []
+    docs:
+      - "ADOPTION_GUIDE.md"

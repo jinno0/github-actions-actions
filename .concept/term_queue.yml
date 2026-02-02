@@ -1,35 +1,58 @@
-updated_at: "2026-02-02T21:56:00Z"
+updated_at: "2026-02-02T14:27:15Z"
 queue:
-  - id: "TP-000001"
+  - id: "TP-ACCEPTANCE-001"
+    proposed_canonical: "AcceptanceRate"
+    proposed_layer: "domain"
+    term_raw_examples: ["Acceptance Rate", "acceptance rate", "Acceptance Rate Tracking"]
+    reason: "New quality metric concept for measuring AI suggestion effectiveness. Core to MS-002 (Quality & Performance milestone)"
+    evidence:
+      - source: "actions/lib/acceptance_tracker.py#L1-L18"
+        quote: "Acceptance Rate Tracking for AI Suggestions... Tracks: Suggestions made, Suggestions accepted, Suggestions rejected, Suggestions modified"
+      - source: "metrics/README.md#L6-L12"
+        quote: "Acceptance rate tracking measures the quality and effectiveness of AI suggestions by tracking: Suggestions Made, Suggestions Accepted, Suggestions Rejected, Suggestions Modified"
+    auto_merge_candidates: []
+    decision: "accepted"
+    expires_after_runs: 10
+    created_run: "2026-02-02T14:27:15Z"
+  - id: "TP-ACCEPTANCE-002"
     proposed_canonical: "AcceptanceTracker"
     proposed_layer: "domain"
-    term_raw_examples: ["AcceptanceTracker class", "acceptance tracking library"]
-    reason: "New Python library module for tracking AI suggestion acceptance rates. Implements QA-001 quality measurement. Core component for MS-002 quality metrics."
+    term_raw_examples: ["AcceptanceTracker", "acceptance tracker", "tracker"]
+    reason: "Implementation class for acceptance rate tracking. Provides record_suggestion, get_acceptance_rate, export_metrics, save_to_file methods"
     evidence:
-      - source: "actions/lib/acceptance_tracker.py#L29-L36"
-        quote: "class AcceptanceTracker: Tracks acceptance rate metrics for AI-generated suggestions"
-      - source: "actions/lib/acceptance_tracker.py#L1-L18"
-        quote: "Acceptance Rate Tracking for AI Suggestions - Tracks: Suggestions made, Suggestions accepted, Suggestions rejected, Suggestions modified"
+      - source: "actions/lib/acceptance_tracker.py#L29-L51"
+        quote: "Tracks acceptance rate metrics for AI-generated suggestions... Attributes: action_name: Name of the GitHub Action being tracked, metrics: Dictionary tracking suggestion outcomes"
+      - source: "metrics/README.md#L99-L110"
+        quote: "The AcceptanceTracker class in actions/lib/acceptance_tracker.py provides"
     auto_merge_candidates: []
-    decision: "pending"
+    decision: "accepted"
     expires_after_runs: 10
-    created_run: "2026-02-02T21:56:00Z"
-
-  - id: "TP-000002"
-    proposed_canonical: "MetricsCollectionWorkflow"
-    proposed_layer: "aux"
-    term_raw_examples: ["metrics collection", "daily aggregation", "automated report generation"]
-    reason: "Workflow process for collecting and aggregating acceptance rate metrics. Three-step process: Tracking Integration, Daily Aggregation, Report Generation. Could potentially be merged with StructuralTesting or Testing as part of quality infrastructure."
+    created_run: "2026-02-02T14:27:15Z"
+  - id: "TP-METRIC-001"
+    proposed_canonical: "QualityMetric"
+    proposed_layer: "domain"
+    term_raw_examples: ["acceptance rate", "rejection rate", "modification rate", "quality metric"]
+    reason: "Family of metrics for measuring AI suggestion quality. Includes acceptance/rejection/modification rates"
     evidence:
-      - source: "metrics/README.md#L30-L35"
-        quote: "Metrics are collected automatically through: 1) Tracking Integration, 2) Daily Aggregation, 3) Report Generation"
-      - source: ".github/workflows/aggregate-metrics.yml"
-        quote: "GitHub Workflow runs daily to aggregate metrics"
+      - source: "actions/lib/acceptance_tracker.py#L72-L109"
+        quote: "Calculate the acceptance/rejection/modification rate as a percentage"
+      - source: "metrics/README.md#L76-L82"
+        quote: "Acceptance Rate: Percentage of suggestions accepted (target: >= 80%)"
     auto_merge_candidates:
-      - term: "StructuralTesting"
-        similarity: 0.62
       - term: "SuccessMetric"
-        similarity: 0.68
-    decision: "pending"
+        similarity: 0.72
+    decision: "accepted"
     expires_after_runs: 10
-    created_run: "2026-02-02T21:56:00Z"
+    created_run: "2026-02-02T14:27:15Z"
+  - id: "TP-ADOPTION-001"
+    proposed_canonical: "AdoptionRegistry"
+    proposed_layer: "aux"
+    term_raw_examples: ["Adoption Registry", "adoption registry", "導入登録簿"]
+    reason: "Registry system for tracking organizational adoption of AI Actions. Tracks teams, repositories, feedback, privacy options"
+    evidence:
+      - source: "ADOPTION_GUIDE.md#L361-L369"
+        quote: "Adoption Registry (導入登録簿)... This registry helps track: Organizational Reach, Action Popularity, User Satisfaction, Impact Assessment"
+    auto_merge_candidates: []
+    decision: "accepted"
+    expires_after_runs: 10
+    created_run: "2026-02-02T14:27:15Z"

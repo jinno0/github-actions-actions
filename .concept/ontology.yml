@@ -1,5 +1,5 @@
 version: "0.3"
-updated_at: "2026-02-02T20:00:00Z"
+updated_at: "2026-02-02T14:27:15Z"
 
 canonical_terms:
   AIPoweredAction:
@@ -481,3 +481,83 @@ canonical_terms:
     evidence:
       - source: "TESTING.md#L158-L184"
         quote: "Phase 2: Integration Testing (Planned)... Phase 3: End-to-End Testing (Future)"
+
+  AcceptanceRate:
+    id: "TERM-ACCEPTANCE-RATE"
+    layer: "domain"
+    status: "stable"
+    definition: "Quality metric measuring the effectiveness of AI-generated suggestions, calculated as (suggestions_accepted / suggestions_made) * 100, with target >= 80% (QA-001)"
+    synonyms: ["Acceptance Rate", "acceptance rate", "Acceptance Rate Tracking"]
+    boundaries:
+      includes: ["Percentage calculation", "Quality measurement", "AI suggestion effectiveness", "Target threshold (80%)"]
+      excludes: ["Rejection rate", "Modification rate", "Non-AI metrics"]
+    lifecycle: ["Suggestion Made", "Suggestion Accepted", "Rate Calculated", "Rate Tracked"]
+    related_terms: ["SuccessMetric", "QualityMetric", "AIPoweredAction"]
+    assumptions:
+      - id: "ASM-ACCEPTANCE-001"
+        text: "AUTO: Acceptance Rate >= 80% is the target (QA-001) for MS-002 quality milestone"
+        decision_key: "AUTO:AcceptanceRate.target:qa_001"
+        expires_after_runs: 20
+    evidence:
+      - source: "actions/lib/acceptance_tracker.py#L72-L83"
+        quote: "Calculate the acceptance rate as a percentage. Returns: Acceptance rate percentage (0.0 to 100.0), Returns 0.0 if no suggestions have been made"
+      - source: "metrics/README.md#L16-L20"
+        quote: "QA-001: Acceptance Rate >= 80% is the primary quality goal for MS-002"
+
+  AcceptanceTracker:
+    id: "TERM-ACCEPTANCE-TRACKER"
+    layer: "domain"
+    status: "stable"
+    definition: "Python class that tracks acceptance rate metrics for AI-generated suggestions with methods for recording outcomes, calculating rates, exporting metrics, and persisting to JSON files"
+    synonyms: ["AcceptanceTracker", "acceptance tracker", "tracker"]
+    boundaries:
+      includes: ["Python implementation", "Suggestion outcome tracking", "Rate calculation", "JSON persistence", "Metrics aggregation"]
+      excludes: ["Manual tracking", "Non-AI suggestions", "Non-Python implementations"]
+    lifecycle: ["Initialize", "Record Suggestions", "Calculate Rates", "Export Metrics", "Persist to File"]
+    related_terms: ["AcceptanceRate", "AIPoweredAction", "QualityMetric"]
+    assumptions: []
+    evidence:
+      - source: "actions/lib/acceptance_tracker.py#L29-L51"
+        quote: "Tracks acceptance rate metrics for AI-generated suggestions. Attributes: action_name: Name of the GitHub Action being tracked, metrics: Dictionary tracking suggestion outcomes"
+      - source: "metrics/README.md#L99-L110"
+        quote: "The AcceptanceTracker class in actions/lib/acceptance_tracker.py provides: tracker = AcceptanceTracker('action-name'), tracker.record_suggestion('made')"
+
+  QualityMetric:
+    id: "TERM-QUALITY-METRIC"
+    layer: "domain"
+    status: "stable"
+    definition: "Family of metrics for measuring AI suggestion quality including acceptance rate, rejection rate, and modification rate, used to evaluate AI action effectiveness"
+    synonyms: ["quality metric", "Quality metrics", "AI quality metrics"]
+    boundaries:
+      includes: ["Acceptance rate", "Rejection rate", "Modification rate", "Percentage-based calculations", "AI suggestion measurement"]
+      excludes: ["Performance metrics", "Business metrics", "Non-quality metrics"]
+    lifecycle: ["Define Metric", "Track Metric", "Analyze Trend", "Improve Quality"]
+    related_terms: ["AcceptanceRate", "SuccessMetric", "AIPoweredAction"]
+    assumptions:
+      - id: "ASM-QUALITY-001"
+        text: "AUTO: QualityMetric family includes acceptance/rejection/modification rates as primary measurements"
+        decision_key: "AUTO:QualityMetric.family:rates"
+        expires_after_runs: 20
+    evidence:
+      - source: "actions/lib/acceptance_tracker.py#L72-L109"
+        quote: "Calculate the acceptance/rejection/modification rate as a percentage (0.0 to 100.0)"
+      - source: "metrics/README.md#L76-L82"
+        quote: "Acceptance Rate: Percentage of suggestions accepted (target: >= 80%), Rejection Rate: Percentage of suggestions rejected, Modification Rate: Percentage of suggestions modified"
+
+  AdoptionRegistry:
+    id: "TERM-ADOPTION-REGISTRY"
+    layer: "aux"
+    status: "stable"
+    definition: "Registry system in ADOPTION_GUIDE.md for tracking organizational adoption of AI Actions including team count, repository count, most used actions, team registrations with privacy options, feedback summary, and success metrics"
+    synonyms: ["Adoption Registry", "adoption registry", "導入登録簿", "Adoption tracking"]
+    boundaries:
+      includes: ["Team registration", "Repository tracking", "Privacy options (Public/Anonymous/Private)", "Feedback collection", "Statistics aggregation"]
+      excludes: ["Git repository", "Code registry", "Non-adoption metrics"]
+    lifecycle: ["Team Adopts", "Register Team", "Update Statistics", "Track Feedback", "Generate Insights"]
+    related_terms: ["AdoptionGuide", "SuccessMetric", "AIPoweredAction"]
+    assumptions: []
+    evidence:
+      - source: "ADOPTION_GUIDE.md#L361-L369"
+        quote: "Adoption Registry (導入登録簿)... This registry helps track: Organizational Reach, Action Popularity, User Satisfaction, Impact Assessment"
+      - source: "ADOPTION_GUIDE.md#L381-L386"
+        quote: "統計: Total Teams, Total Repositories, Most Used Actions"
