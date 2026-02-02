@@ -58,6 +58,26 @@ Self-hosted runner上で動作する **Claude Code CLI** を活用し、文脈�
 ### 3. 組織での導入を計画している方へ
 チーム全体で導入を進める場合は、[**ADOPTION_GUIDE.md**](./ADOPTION_GUIDE.md) を参照してください。パイロット導入から本番展開までの完全なロードマップを提供しています。
 
+## 🎨 カスタマイズ
+
+AI Actionsはプロジェクトに合わせてカスタマイズ可能です：
+
+### カスタムレビュールール (review-and-merge)
+**review-and-merge** アクションでは、プロジェクト固有のコーディング規約やセキュリティ要件をAIレビューに反映できます：
+
+- 📖 **[カスタムルール導入ガイド](./instructions/review-and-merge-custom-rules.md)** - 詳しい設定方法と例
+- 🔧 **[ルールテンプレート](./examples/custom-rules/)** - TypeScript/Python/React等のテンプレート
+- 📚 **[チュートリアル](./examples/custom-rules-tutorial.md)** - ステップバイステップで学べるガイド
+
+**対応言語・フレームワーク:**
+- TypeScript (厳格モード)
+- Python (PEP 8準拠)
+- React (ベストプラクティス)
+- セキュリティ (共通脆弱性の防止)
+
+### テンプレートと設定のカスタマイズ
+各Actionは、カスタムプロンプトやテンプレートを注入可能です。詳しくは各Actionのセットアップガイドを参照してください。
+
 ## 🏗 前提条件
 
 これらの Action を利用するには、**Self-hosted Runner** 上で **Claude Code CLI** が実行可能である必要があります。

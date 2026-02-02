@@ -1,0 +1,132 @@
+# Python Style and Best Practices Rules
+# Enforce PEP 8 compliance and Python idioms
+
+custom-rules: |
+  Code Style (PEP 8):
+  - Follow PEP 8 style guide (use pylint, flake8, black)
+  - Use 4 spaces for indentation (no tabs)
+  - Limit line length to 79 characters (or 88 with Black)
+  - Use snake_case for function and variable names
+  - Use PascalCase for class names
+  - Use UPPER_CASE for constants
+  - Use descriptive names (avoid abbreviations)
+
+  Type Hints:
+  - Use type hints for all function parameters and returns
+  - Use typing module for complex types (List, Dict, Optional)
+  - Use TypeAlias for complex type definitions
+  - Use typing_extensions for new features (backport)
+  - Run mypy for static type checking
+
+  Docstrings:
+  - Write docstrings for all functions, classes, and modules
+  - Use Google style or NumPy style docstrings
+  - Include parameters, returns, and raises sections
+  - Keep docstrings concise but informative
+
+  Error Handling:
+  - Use specific exceptions (ValueError, TypeError)
+  - Avoid bare except clauses
+  - Use finally for cleanup code
+  - Use context managers (with statements) for resource management
+  - Implement proper exception chaining (raise ... from e)
+
+  Pythonic Code:
+  - Use list comprehensions instead of map/filter
+  - Use f-strings for string formatting (Python 3.6+)
+  - Use enumerate instead of manual index tracking
+  - Use zip to iterate over multiple sequences
+  - Use dict.get() to avoid KeyError
+  - Use sets for membership testing (O(1) vs O(n))
+  - Use generators for large sequences (yield)
+
+  Import Conventions:
+  - Group imports: stdlib, third-party, local
+  - Use absolute imports, not relative
+  - Import one module per line (no multiple imports)
+  - Avoid wildcard imports (from module import *)
+  - Use __all__ to control module exports
+
+  Performance:
+  - Use built-in functions and libraries (optimized C)
+  - Use appropriate data structures (set vs list)
+  - Avoid premature optimization
+  - Profile before optimizing (cProfile, line_profiler)
+  - Use caching for expensive operations (functools.lru_cache)
+
+  Testing:
+  - Write unit tests with pytest
+  - Use descriptive test names (test_... convention)
+  - Follow Arrange-Act-Assert pattern
+  - Use fixtures for test data
+  - Mock external dependencies (unittest.mock)
+  - Aim for 80%+ code coverage
+
+  Examples to Follow:
+  ```python
+  # Good: Type hints, docstring, f-string
+  def calculate_discount(price: float, discount_percent: float) -> float:
+      """Calculate discounted price.
+
+      Args:
+          price: Original price
+          discount_percent: Discount percentage (0-100)
+
+      Returns:
+          Discounted price
+      """
+      return price * (1 - discount_percent / 100)
+
+
+  # Good: List comprehension, context manager
+  def read_config(path: Path) -> Dict[str, str]:
+      """Read configuration file."""
+      with path.open() as f:
+          return dict(
+              line.strip().split('=', 1)
+              for line in f
+              if line.strip() and not line.startswith('#')
+          )
+
+
+  # Good: Enumerate, set for membership testing
+  def find_duplicates(items: List[str]) -> List[str]:
+      """Find duplicate items in list."""
+      seen: Set[str] = set()
+      duplicates: Set[str] = set()
+
+      for i, item in enumerate(items):
+          if item in seen:
+              duplicates.add(item)
+          seen.add(item)
+
+      return list(duplicates)
+
+
+  # Good: Error handling, exception chaining
+  def fetch_data(url: str) -> Dict:
+      """Fetch data from URL.
+
+      Raises:
+          ConnectionError: If network request fails
+      """
+      try:
+          response = requests.get(url, timeout=10)
+          response.raise_for_status()
+          return response.json()
+      except requests.RequestException as e:
+          raise ConnectionError(f"Failed to fetch {url}") from e
+
+
+  # Bad: No type hints, no docstring
+  def calc_disc(p, d):
+      return p * (1 - d / 100)  # What do parameters mean?
+
+
+  # Bad: Bare except, no error context
+  def fetch_data_bad(url):
+      try:
+          return requests.get(url).json()
+      except:  # DON'T use bare except
+          return None  # Error swallowed, no context
+  ```

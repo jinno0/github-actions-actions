@@ -1,0 +1,67 @@
+# TypeScript Strict Mode Rules
+# Enforce TypeScript best practices and strict mode
+
+custom-rules: |
+  TypeScript Configuration:
+  - Enable strict mode in tsconfig.json (strict: true)
+  - Enable strictNullChecks
+  - Enable noImplicitAny
+  - Enable noImplicitThis
+  - Enable alwaysStrict
+
+  Type Safety:
+  - Use explicit return types for all functions
+  - Avoid 'any' type - use 'unknown' instead
+  - Prefer interface over type for object shapes
+  - Use enum for fixed sets of values
+  - Leverage type inference when types are obvious
+  - Use type guards for runtime type checking
+
+  Modern TypeScript:
+  - Use async/await instead of Promise chains
+  - Use optional chaining (?.) for null checks
+  - Use nullish coalescing (??) for defaults
+  - Use template literals for string formatting
+  - Use arrow functions for callbacks
+
+  Error Handling:
+  - Handle promise rejections with try/catch
+  - Don't ignore caught errors
+  - Use Error types or custom error classes
+  - Log errors with context
+
+  Code Organization:
+  - Use barrel files (index.ts) for exports
+  - Separate types from implementation
+  - Use namespaces or modules for organization
+  - Import dependencies explicitly (no wildcards)
+
+  Examples to Follow:
+  ```typescript
+  // Good: Explicit types
+  function calculateArea(width: number, height: number): number {
+    return width * height;
+  }
+
+  // Good: Type guards
+  function isString(value: unknown): value is string {
+    return typeof value === 'string';
+  }
+
+  // Good: Async/await with error handling
+  async function fetchData(url: string): Promise<Data> {
+    try {
+      const response = await fetch(url);
+      return await response.json();
+    } catch (error) {
+      console.error('Failed to fetch data:', error);
+      throw error;
+    }
+  }
+
+  // Bad: Implicit any, no error handling
+  async function fetchData(url) {  // no type annotations
+    const response = await fetch(url);  // no error handling
+    return await response.json();
+  }
+  ```

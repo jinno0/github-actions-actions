@@ -35,8 +35,39 @@ This action is triggered on `pull_request` events (opened, synchronized, or reop
 ### Customization
 
 - **Custom Review Rules**: Use the `custom-rules` input to inject project-specific guidelines.
+  - 📖 **[Custom Rules Guide](./review-and-merge-custom-rules.md)** - Comprehensive documentation
+  - 🔧 **[Rule Templates](../examples/custom-rules/)** - Ready-to-use examples
+  - 📚 **[Tutorial](../examples/custom-rules-tutorial.md)** - Step-by-step guide
 - **Custom Templates**: Use `review-prompt-template` or `comment-template` to override default prompts.
 - **LGTM Threshold**: Adjust `lgtm-threshold` (1-10) to control auto-merge sensitivity.
+
+### Custom Rules Quick Start
+
+Create `.github/review-rules.yml` in your repository:
+
+```yaml
+custom-rules: |
+  - Enable TypeScript strict mode
+  - No console.log in production code
+  - All async functions must have error handling
+  - Validate API responses with schemas
+```
+
+Then reference in your workflow:
+
+```yaml
+- name: Read custom rules
+  id: rules
+  run: echo "rules=$(cat .github/review-rules.yml)" >> $GITHUB_OUTPUT
+
+- name: Review and Merge
+  uses: owner/repo/actions/review-and-merge@v1
+  with:
+    github-token: ${{ secrets.GITHUB_TOKEN }}
+    custom-rules: ${{ steps.rules.outputs.rules }}
+```
+
+**See [Custom Rules Guide](./review-and-merge-custom-rules.md) for details.**
 
 ### Integration with Auto-Merge
 

@@ -1,0 +1,125 @@
+# React Best Practices Rules
+# Enforce React patterns and performance optimizations
+
+custom-rules: |
+  Component Architecture:
+  - Use functional components with hooks (no class components)
+  - Keep components small and focused (< 200 lines)
+  - Extract reusable logic into custom hooks
+  - Use composition over inheritance
+  - Implement proper error boundaries
+
+  State Management:
+  - Use useState for local component state
+  - Use useContext for global state (small apps)
+  - Consider Redux/Zustand for complex state (large apps)
+  - Avoid prop drilling (use context or state management)
+  - Keep state close to where it's used
+
+  Performance Optimization:
+  - Implement proper dependency arrays in useEffect
+  - Use useCallback for memoized functions
+  - Use useMemo for expensive computations
+  - Use React.memo for pure components
+  - Lazy load routes and heavy components
+  - Implement virtual scrolling for long lists
+  - Avoid unnecessary re-renders
+
+  useEffect Best Practices:
+  - Always include all dependencies in dependency array
+  - Return cleanup function for subscriptions
+  - Separate effects by concern (multiple useEffect calls)
+  - Don't perform async operations directly in useEffect
+  - Handle errors in async effects
+
+  Code Organization:
+  - Co-locate components with their styles and tests
+  - Use barrel files (index.ts) for exports
+  - Separate concerns (components, hooks, utils, types)
+  - Use absolute imports (configure path aliases)
+  - Implement proper TypeScript types
+
+  Styling:
+  - Use CSS-in-JS (styled-components, emotion) or CSS modules
+  - Avoid inline styles (except dynamic values)
+  - Implement responsive design (mobile-first)
+  - Use Tailwind CSS or similar utility frameworks
+  - Ensure accessibility (ARIA labels, keyboard navigation)
+
+  Testing:
+  - Write tests for components (React Testing Library)
+  - Test user behavior, not implementation details
+  - Test error states and loading states
+  - Mock external dependencies (API calls, hooks)
+  - Aim for 80%+ code coverage
+
+  Examples to Follow:
+  ```typescript
+  // Good: Functional component with proper dependencies
+  function UserProfile({ userId }: { userId: string }) {
+    const [user, setUser] = useState<User | null>(null);
+
+    useEffect(() => {
+      let cancelled = false;
+      fetchUser(userId).then(data => {
+        if (!cancelled) setUser(data);
+      });
+      return () => { cancelled = true; };
+    }, [userId]);  // Proper dependency array
+
+    return user ? <div>{user.name}</div> : <Loading />;
+  }
+
+  // Good: Memoized callback and computed value
+  function ExpensiveComponent({ items, onSelect }: Props) {
+    const processedItems = useMemo(
+      () => items.map(processItem),
+      [items]
+    );
+
+    const handleSelect = useCallback(
+      (item: Item) => onSelect(item),
+      [onSelect]
+    );
+
+    return <List items={processedItems} onSelect={handleSelect} />;
+  }
+
+  // Good: Custom hook for reusable logic
+  function useUserProfile(userId: string) {
+    const [user, setUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+      fetchUser(userId).then(data => {
+        setUser(data);
+        setLoading(false);
+      });
+    }, [userId]);
+
+    return { user, loading };
+  }
+
+  // Bad: Missing dependencies (will cause bugs)
+  function BadComponent({ userId }: { userId: string }) {
+    const [user, setUser] = useState<User | null>(null);
+
+    useEffect(() => {
+      fetchUser(userId).then(setUser);
+    }, []);  // Missing userId dependency!
+
+    return <div>{user?.name}</div>;
+  }
+
+  // Bad: Direct state mutation
+  function BadList({ items }: { items: Item[] }) {
+    const [list, setList] = useState(items);
+
+    const addItem = (item: Item) => {
+      list.push(item);  // DON'T mutate state directly!
+      setList(list);
+    };
+
+    return <button onClick={addItem}>Add</button>;
+  }
+  ```

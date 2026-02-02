@@ -1,0 +1,79 @@
+# Security Best Practices Rules
+# Enforce security guidelines to prevent common vulnerabilities
+
+custom-rules: |
+  Credential Management:
+  - No hardcoded credentials, API keys, or secrets in code
+  - Use environment variables for all sensitive data
+  - Never commit secrets to version control
+  - Use secret scanning tools (e.g., git-secrets, truffleHog)
+  - Rotate credentials regularly
+
+  Input Validation:
+  - Validate and sanitize all user inputs
+  - Use whitelist validation, not blacklist
+  - Validate types, lengths, and formats
+  - Sanitize HTML to prevent XSS attacks
+  - Use prepared statements for database queries
+
+  Authentication & Authorization:
+  - Implement proper authentication (JWT, OAuth, sessions)
+  - Check authorization on every protected endpoint
+  - Use HTTPS only (redirect HTTP to HTTPS)
+  - Implement CSRF protection for state-changing operations
+  - Set secure cookie flags (HttpOnly, Secure, SameSite)
+  - Implement rate limiting on authentication endpoints
+
+  Data Protection:
+  - Encrypt sensitive data at rest
+  - Use strong encryption algorithms (AES-256)
+  - Hash passwords with bcrypt/argon2 (never store plain text)
+  - Never log sensitive data (passwords, tokens, PII)
+  - Implement proper key management
+
+  API Security:
+  - Validate API request data with schemas
+  - Implement proper error handling (don't expose internals)
+  - Use API versioning
+  - Implement rate limiting
+  - Use CORS properly (restrict origins)
+  - Set security headers (helmet middleware)
+
+  Dependencies:
+  - Keep dependencies up to date
+  - Use npm audit or similar tools
+  - Review third-party code for security issues
+  - Use lock files (package-lock.json, yarn.lock)
+
+  Logging & Monitoring:
+  - Log security events (login attempts, failures)
+  - Implement intrusion detection
+  - Monitor for suspicious activity
+  - Set up alerts for security incidents
+  - Regular security audits
+
+  Examples to Follow:
+  ```typescript
+  // Good: Environment variables for secrets
+  const apiKey = process.env.API_KEY;
+  if (!apiKey) {
+    throw new Error('API_KEY not configured');
+  }
+
+  // Good: Input validation with schema
+  const schema = z.object({
+    email: z.string().email(),
+    password: z.string().min(8),
+  });
+  const validatedData = schema.parse(userInput);
+
+  // Good: Parameterized query (SQL injection prevention)
+  const query = 'SELECT * FROM users WHERE id = $1';
+  await db.query(query, [userId]);
+
+  // Bad: Hardcoded credentials
+  const apiKey = 'sk_live_1234567890abcdef';  // NEVER DO THIS
+
+  // Bad: Direct string concatenation (SQL injection risk)
+  const query = `SELECT * FROM users WHERE id = '${userId}'`;  // NEVER DO THIS
+  ```
