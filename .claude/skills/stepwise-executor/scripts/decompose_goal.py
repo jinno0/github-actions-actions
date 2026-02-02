@@ -10,7 +10,6 @@ import argparse
 import json
 import os
 import sys
-from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -36,7 +35,7 @@ def load_env_file():
                             key, value = line.split("=", 1)
                             os.environ.setdefault(key.strip(), value.strip())
                 return  # 読み込み成功
-            except Exception as e:
+            except Exception:
                 # 読み込み失敗は無視（別の場所の.envファイルを試す）
                 # デバッグ時は以下のコメントを外して詳細を表示可能
                 # import warnings
@@ -184,7 +183,7 @@ def decompose_with_claude(prompt: str) -> dict[str, Any]:
 
     client = anthropic.Anthropic(api_key=api_key)
 
-    print(f"\n🎯 目標を分解中...")
+    print("\n🎯 目標を分解中...")
 
     try:
         # モデルは環境変数から取得（デフォルト: claude-sonnet-4-20250514）

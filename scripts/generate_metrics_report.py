@@ -11,7 +11,6 @@ Usage:
 
 import argparse
 import json
-from datetime import datetime
 from pathlib import Path
 
 
@@ -108,8 +107,8 @@ def generate_markdown_report(metrics_data: dict) -> str:
 
                 lines.append(f"{status} **Acceptance Rate:** {acceptance_rate:.1f}%")
                 lines.append("")
-                lines.append(f"| Metric | Count | Percentage |")
-                lines.append(f"|--------|-------|------------|")
+                lines.append("| Metric | Count | Percentage |")
+                lines.append("|--------|-------|------------|")
                 lines.append(f"| Accepted | {action_metrics.get('suggestions_accepted', 0)} | {acceptance_rate:.1f}% |")
                 lines.append(f"| Rejected | {action_metrics.get('suggestions_rejected', 0)} | {action_metrics.get('rejection_rate', 0):.1f}% |")
                 lines.append(f"| Modified | {action_metrics.get('suggestions_modified', 0)} | {action_metrics.get('modification_rate', 0):.1f}% |")
@@ -147,7 +146,7 @@ def generate_markdown_report(metrics_data: dict) -> str:
 
         if sorted_by_rate:
             best_action, best_metrics = sorted_by_rate[0]
-            lines.append(f"### 🏆 Best Performing Action")
+            lines.append("### 🏆 Best Performing Action")
             lines.append("")
             lines.append(f"**{best_action}:** {best_metrics.get('acceptance_rate', 0):.1f}% acceptance rate")
             lines.append("")

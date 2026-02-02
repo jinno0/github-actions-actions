@@ -7,11 +7,10 @@ checking for completeness, structure, and quality issues.
 """
 
 import sys
-import os
 import argparse
 import json
 from pathlib import Path
-from typing import Dict, List, Any, Set, Tuple, Optional
+from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
 import re
 
@@ -609,7 +608,7 @@ Examples:
         return 1
 
     if not args.input_file.suffix.lower() == '.md':
-        print(f"❌ Error: Input file must be a markdown file (.md)")
+        print("❌ Error: Input file must be a markdown file (.md)")
         return 1
 
     # Parse severity filter
@@ -639,7 +638,7 @@ Examples:
                 args.export_json = auto_log_path
             else:
                 # User specified both --auto-log and --export-json
-                print(f"⚠️  Warning: Both --auto-log and --export-json specified. Using --export-json path.")
+                print("⚠️  Warning: Both --auto-log and --export-json specified. Using --export-json path.")
 
         # Export to JSON if requested
         if args.export_json:
@@ -696,7 +695,7 @@ Examples:
                 else:
                     print("\n✅ No issues found!")
 
-            print(f"\n📈 Metrics:")
+            print("\n📈 Metrics:")
             metrics = result.metrics
             print(f"   • Lines: {metrics['basic']['line_count']}")
             print(f"   • Words: {metrics['basic']['word_count']}")
@@ -704,7 +703,7 @@ Examples:
             print(f"   • Code blocks: {metrics['basic']['code_block_count']}")
             print(f"   • Links: {metrics['basic']['link_count']}")
 
-            print(f"\n💡 Top Recommendations:")
+            print("\n💡 Top Recommendations:")
             for i, rec in enumerate(result.recommendations[:3], 1):
                 print(f"   {i}. {rec}")
 

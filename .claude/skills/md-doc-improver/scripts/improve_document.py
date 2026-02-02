@@ -7,11 +7,10 @@ It provides purpose-oriented enhancement with multi-perspective reviews and self
 """
 
 import sys
-import os
 import argparse
 import json
 from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
+from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, asdict
 from datetime import datetime
 import re
@@ -610,7 +609,7 @@ class DocumentImprover:
             if iteration < max_iterations:
                 # In a real implementation, we would analyze the improved document
                 # For now, we'll simulate improvement
-                print(f"   Simulating improvements...")
+                print("   Simulating improvements...")
                 print(f"   Applied {len(improvements)} improvements")
 
             results['iterations'].append(iteration_result)
@@ -773,7 +772,7 @@ Examples:
         return 1
 
     if not args.input_file.suffix.lower() == '.md':
-        print(f"❌ Error: Input file must be a markdown file (.md)")
+        print("❌ Error: Input file must be a markdown file (.md)")
         return 1
 
     if args.max_iterations < 1:
@@ -803,7 +802,7 @@ Examples:
             print(f"📄 Results exported to: {args.export_json}")
 
         # Print summary
-        print(f"\n📊 Improvement Summary:")
+        print("\n📊 Improvement Summary:")
         assessment = results['final_assessment']
         if assessment:
             print(f"   Iterations completed: {assessment['iterations_completed']}")

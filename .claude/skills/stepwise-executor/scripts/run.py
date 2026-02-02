@@ -6,9 +6,7 @@ Stepwise Executor Runner - 統合実行コマンド
 """
 
 import argparse
-import json
 import os
-import shutil
 import subprocess
 import sys
 from datetime import datetime
@@ -118,7 +116,7 @@ def run_execute(goal_file: str, progress_file: str, skill_root: Path, interactiv
     if resume:
         cmd.append("--resume")
 
-    print(f"\n🚀 ステップ実行中...")
+    print("\n🚀 ステップ実行中...")
     print(f"コマンド: {' '.join(cmd)}")
 
     try:
@@ -144,7 +142,7 @@ def run_track(progress_file: str, skill_root: Path, export_report: str = None):
     if export_report:
         cmd.extend(["-e", export_report])
 
-    print(f"\n📊 進捗を表示中...")
+    print("\n📊 進捗を表示中...")
     print(f"コマンド: {' '.join(cmd)}")
 
     try:

@@ -1,6 +1,5 @@
 """Pytest configuration and fixtures for AI Hub Actions testing."""
 
-import os
 import tempfile
 import shutil
 from pathlib import Path

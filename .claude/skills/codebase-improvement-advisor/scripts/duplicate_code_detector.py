@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import List
 
 # Import from main analyzer
-from codebase_analyzer import CodeIssue, FunctionInfo, ClassInfo, JSCPD_AVAILABLE
+from codebase_analyzer import CodeIssue, FunctionInfo, ClassInfo
 
 
 class DuplicateCodeDetector:

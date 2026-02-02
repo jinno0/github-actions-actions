@@ -3,7 +3,6 @@
 
 import os
 import subprocess
-import sys
 from dataclasses import dataclass
 
 import yaml
@@ -136,7 +135,7 @@ class IssueCreator:
             body += f"## ⚠️ 制約事項\n\n{config.constraints}\n\n"
 
         body += "## 📊 成功条件\n\n"
-        body += f"- [ ] TypeScript エラー: 0件\n"
+        body += "- [ ] TypeScript エラー: 0件\n"
         body += "- [ ] セキュリティスキャン: 脆弱性0件\n\n"
 
         body += "## 🤖 Agent実行設定\n\n"

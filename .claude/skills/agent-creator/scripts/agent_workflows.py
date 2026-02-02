@@ -4,7 +4,6 @@ This module loads workflow definitions from markdown template files,
 making it easier to maintain and version control workflow content.
 """
 
-import os
 from pathlib import Path
 
 
