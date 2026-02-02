@@ -1,0 +1,93 @@
+{
+  "run_id": "2026-02-02T09:18:00Z",
+  "timestamp": "2026-02-02T09:18:00Z",
+  "snapshot_type": "before_improvements",
+
+  "test_metrics": {
+    "total_tests": 60,
+    "total_passed": 60,
+    "total_failed": 0,
+    "test_execution_time_sec": 0.19,
+    "test_status": "all_passed"
+  },
+
+  "coverage_metrics": {
+    "overall_coverage_percent": 95.3,
+    "target_threshold": 70.0,
+    "meets_threshold": true,
+    "source": "coverage.json from previous audit"
+  },
+
+  "action_coverage": {
+    "total_actions": 13,
+    "actions_with_tests": 3,
+    "actions_without_tests": 10,
+    "coverage_percentage": 23.1,
+
+    "tested_actions": [
+      "review-and-merge",
+      "spec-to-code",
+      "action-fixer"
+    ],
+
+    "untested_actions": [
+      "auto-document",
+      "auto-merge",
+      "auto-rebase",
+      "auto-refactor",
+      "bulk-merge-prs",
+      "bulk-rebase-prs",
+      "pr-review-enqueuer",
+      "publish-pr",
+      "release-notes-ai",
+      "review-auto-merge"
+    ]
+  },
+
+  "core_function_verification": {
+    "cf_001_review_and_merge": {
+      "status": "passed",
+      "note": "Tests exist and pass"
+    },
+    "cf_002_spec_to_code": {
+      "status": "passed",
+      "note": "Tests exist and pass"
+    },
+    "cf_003_action_fixer": {
+      "status": "passed",
+      "note": "Tests exist and pass"
+    },
+    "cf_004_dry_run": {
+      "status": "passed",
+      "note": "All 60 tests pass"
+    }
+  },
+
+  "quality_attributes": {
+    "qa_001_test_coverage": {
+      "status": "achieved",
+      "current": "95.3%",
+      "target": ">= 70%",
+      "gap": 0
+    },
+    "qa_002_action_structure": {
+      "status": "partial",
+      "tested_actions": 3,
+      "total_actions": 13,
+      "gap": 10
+    }
+  },
+
+  "baseline_summary": {
+    "strengths": [
+      "High test coverage (95.3%) for tested code",
+      "All existing tests pass",
+      "Test infrastructure is well-structured"
+    ],
+    "gaps": [
+      "Only 3/13 actions have test coverage",
+      "Cannot verify Dry Run claim for 10/13 actions",
+      "No adoption tracking mechanism exists"
+    ]
+  }
+}

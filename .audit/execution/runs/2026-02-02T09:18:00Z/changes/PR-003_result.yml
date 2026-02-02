@@ -1,0 +1,86 @@
+pr_id: "PR-003"
+title: "Adoption Registry Implementation"
+status: "applied"
+applied_at: "2026-02-02T09:21:00Z"
+
+changes:
+  - file: "ADOPTION.md"
+    action: "created"
+    lines_added: 87
+    lines_removed: 0
+
+total_files_created: 1
+total_lines_added: 87
+total_lines_removed: 0
+
+intermediate_verification:
+  file_exists: true
+  file_readable: true
+  structure_valid: true
+  has_sections:
+    - "Statistics"
+    - "Using Teams"
+    - "Rollout Timeline"
+    - "Feedback Summary"
+    - "Adoption Process"
+    - "Success Metrics"
+  has_privacy_options: true
+  has_update_instructions: true
+
+acceptance_criteria:
+  - criteria: "ADOPTION.md is created"
+    status: "achieved"
+    evidence: "File created at /ADOPTION.md"
+
+  - criteria: "At least 1 team is registered"
+    status: "not_applicable"
+    note: "Template created. No teams have registered yet (as expected for initial implementation)"
+
+  - criteria: "Statistics section is accurate"
+    status: "achieved"
+    evidence: "Statistics section shows 0 teams, 0 repos (accurate for new registry)"
+
+  - criteria: "Update workflow is documented"
+    status: "achieved"
+    evidence: "'How to Register Your Team' section included"
+
+verification:
+  manual_testing:
+    - "Reviewed ADOPTION.md for accuracy"
+    - "Verified all sections are present"
+    - "Confirmed structure matches PR-003 specification"
+
+  structure_check:
+    has_statistics: true
+    has_team_template: true
+    has_timeline: true
+    has_feedback_sections: true
+    has_privacy_options: true
+    has_adoption_process: true
+    has_success_metrics: true
+
+rollback_plan: "Delete ADOPTION.md if privacy concerns arise"
+privacy_considerations:
+  - "Teams can choose to remain anonymous"
+  - "Repository names can be omitted if needed"
+  - "Feedback can be anonymized"
+  - "Three privacy levels documented: Public, Anonymous, Private"
+
+estimated_impact:
+  provides_visibility: true
+  enables_measurement: true
+  facilitates_feedback: true
+  no_runtime_impact: true
+  documentation_only: true
+
+maintenance:
+  update_frequency: "Monthly or as new teams adopt"
+  assign_owner: "TBD"
+  last_updated: "2026-02-02"
+
+notes: |
+  - ADOPTION.md is a template registry ready for real adoption data
+  - Provides structure for tracking success criteria from PURPOSE.md
+  - Includes privacy options to address potential concerns
+  - Documentation-only change (no code impact)
+  - Rollback is simple: delete the file

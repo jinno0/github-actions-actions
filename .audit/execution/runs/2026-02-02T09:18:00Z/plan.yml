@@ -1,0 +1,118 @@
+run_id: "2026-02-02T09:18:00Z"
+execution_start: "2026-02-02T09:18:00Z"
+executor: "15_repo_improvement_executor"
+audit_run_id: "audit-run-001"
+
+# === Execution Scope ===
+scope:
+  prs_to_apply:
+    - id: "PR-001"
+      title: "Test Infrastructure for Remaining 10 Actions"
+      priority: "Critical"
+      estimated_effort: "High (20 hours)"
+      rationale: "Currently only 3/13 actions have tests. PR-001 will add tests for remaining 10 actions, improving coverage from 60 to 260 tests."
+
+    - id: "PR-003"
+      title: "Adoption Registry Implementation"
+      priority: "High"
+      estimated_effort: "Medium (4 hours)"
+      rationale: "Creates ADOPTION.md to track repository adoption across the organization, enabling measurement of success criteria."
+
+  prs_deferred: []
+  budget_remaining:
+    max_prs_per_run: 5
+    used: 2
+    remaining: 3
+
+# === Success Criteria (from intent.yml) ===
+success_criteria:
+  - id: "SC-001"
+    source: "intent.yml#quality_attributes[0]"
+    target: "テストカバレッジ >= 70%"
+    current: "95.3%"
+    verification: "pytest --cov=. --cov-fail-under=70"
+    status: "already_achieved"
+
+  - id: "SC-002"
+    source: "intent.yml#core_functions[3]"
+    target: "全アクションがDry Runモードで検証可能"
+    current: "3/13 actions tested"
+    verification: "pytest tests/"
+    status: "approaching"
+
+  - id: "SC-003"
+    source: "PR-003"
+    target: "導入実績追跡の仕組みが存在"
+    current: "No tracking mechanism"
+    verification: "ls ADOPTION.md"
+    status: "not_started"
+
+# === Rollback Triggers ===
+rollback_triggers:
+  - "既存テストが失敗するようになった"
+  - "ビルドエラーが発生"
+  - "アクション構造が破壊される"
+
+# === Execution Strategy ===
+execution_strategy:
+  phase_1_before_snapshot:
+    - "Run pytest and capture baseline metrics"
+    - "Count current test files and tests"
+    - "Verify current coverage"
+
+  phase_2_apply_pr001:
+    - "Create test directories for 10 actions"
+    - "Implement test files following existing pattern"
+    - "Run intermediate verification after each action"
+    - "On failure: rollback that specific action's tests"
+
+  phase_3_apply_pr003:
+    - "Create ADOPTION.md"
+    - "Verify structure and accuracy"
+
+  phase_4_after_snapshot:
+    - "Run pytest and capture new metrics"
+    - "Compare before/after"
+    - "Run verify_core_functions.py"
+
+  phase_5_verification:
+    - "Measure improvement"
+    - "Generate feedback to auditor"
+
+# === Risk Assessment ===
+risk_assessment:
+  pr001:
+    risk_level: "Low"
+    concerns:
+      - "Test creation is additive (no production impact)"
+      - "Only affects tests/ directory"
+      - "Rollback is simple (delete test directories)"
+    mitigation: "Create tests incrementally with intermediate verification"
+
+  pr003:
+    risk_level: "Minimal"
+    concerns:
+      - "Documentation only (no code changes)"
+      - "No runtime impact"
+    mitigation: "None needed"
+
+# === Expected Outcomes ===
+expected_outcomes:
+  test_count:
+    before: 60
+    after: 260
+    increase: 200
+
+  actions_tested:
+    before: 3
+    after: 13
+    increase: 10
+
+  adoption_tracking:
+    before: false
+    after: true
+
+  quality_attributes:
+    test_coverage:
+      before: "95.3%"
+      after: ">=95.3% (maintained)"
