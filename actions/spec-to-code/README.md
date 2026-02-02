@@ -219,4 +219,3 @@ Error: Code generation failed
 
 - [Full workflow examples](../../examples/)
 - [Usage guide](../../instructions/spec-to-code.md)
-- [Spec best practices](../../docs/spec-format.md)

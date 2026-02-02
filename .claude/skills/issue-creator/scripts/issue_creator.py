@@ -135,7 +135,8 @@ class IssueCreator:
             body += f"## ⚠️ 制約事項\n\n{config.constraints}\n\n"
 
         body += "## 📊 成功条件\n\n"
-        body += "- [ ] TypeScript エラー: 0件\n"
+        body += "- [ ] Python エラー・警告: 0件\n"
+        body += "- [ ] テストカバレッジ: 80%以上\n"
         body += "- [ ] セキュリティスキャン: 脆弱性0件\n\n"
 
         body += "## 🤖 Agent実行設定\n\n"
@@ -327,9 +328,7 @@ class IssueCreator:
 
                 if config.auto_execute:
                     print("\n🤖 Agent実行が開始されます (約3-5分)")
-                    print(
-                        f"進捗確認: npm run agents:parallel:exec -- --issue {result['issue_number']} --dry-run"
-                    )
+                    print(f"進捗確認: GitHub Issueのコメント欄を確認してください")
 
             return result
 
