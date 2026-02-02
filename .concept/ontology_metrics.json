@@ -1,6 +1,6 @@
 {
-  "run_id": "2026-02-02T13:30:00Z",
-  "updated_at": "2026-02-02T13:30:00Z",
+  "run_id": "2026-02-02T04:21:00Z",
+  "updated_at": "2026-02-02T04:21:00Z",
   "ontology": {
     "total_terms": 26,
     "by_layer": {
@@ -40,8 +40,8 @@
     }
   },
   "claims": {
-    "total_lines": 67,
-    "retained_lines": 67,
+    "total_lines": 68,
+    "retained_lines": 68,
     "archived_lines": 0,
     "run_limit": 300,
     "within_limits": true
