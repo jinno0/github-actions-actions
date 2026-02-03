@@ -23,7 +23,7 @@ import os
 import sys
 import json
 import hashlib
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 
@@ -83,7 +83,7 @@ def collect_metrics(
 
     metrics = {
         "action_name": action_name,
-        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "timestamp": datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z'),
         "status": status,
         "duration_ms": duration_ms,
         "repository_anonymous_id": repo_id,
