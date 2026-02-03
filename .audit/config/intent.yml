@@ -1,6 +1,6 @@
 version: "2.0"
-updated_at: "2026-02-03T17:50:00Z"
-updated_by: "audit-run-cycle2"
+updated_at: "2026-02-03T21:30:00Z"
+updated_by: "audit-run-cycle4"
 
 # === Mission（不明時は仮定で埋める）===
 mission:
@@ -25,17 +25,26 @@ assumptions:
     reason: "一般的なOSS品質基準"
     confidence: "high"
     status: "confirmed"
-    verified_at: "2026-02-03T08:34:34Z"
-    verification_evidence: "95.0%構造的テストカバレッジ達成"
+    verified_at: "2026-02-03T11:28:13Z"
+    verification_evidence: "94.49%構造的テストカバレッジ維持 (目標80%)"
 
   - id: "ASM-003"
     field: "quality_attributes.testing.integration"
     value: "統合テストカバレッジ >= 50%"
     reason: "前回実行のフィードバックで追加された品質属性"
+    confidence: "high"
+    status: "confirmed"
+    verified_at: "2026-02-03T11:28:13Z"
+    verification_evidence: "100%統合テストカバレッジ達成 (13/13 Actions)"
+
+  - id: "ASM-004"
+    field: "quality_attributes.testing.runtime"
+    value: "ランタイムテスト（actツール）の導入は次フェーズ"
+    reason: "Phase 2bで提案された次のステップ"
     confidence: "medium"
-    status: "partially_achieved"
-    verified_at: "2026-02-03T08:34:34Z"
-    verification_evidence: "53.8%統合テストカバレッジ達成（7/13 Actions）"
+    status: "proposed"
+    proposed_action: "actツール導入による実際のAction実行テスト"
+    evidence: "feedback_to_auditor.ymlのnext_cycle_suggestionsに記載"
 
 # === Quality Attributes（検証方法とセット）===
 quality_attributes:
@@ -56,17 +65,17 @@ quality_attributes:
 
   - id: "QA-002"
     name: "統合テストカバレッジ"
-    target: ">= 50%"
+    target: "100%"
     verification:
       type: "measurement"
       command: "ls tests/integration/test_*_integration.py | wc -l"
       criteria:
-        operator: ">="
-        value: 7
+        operator: "=="
+        value: 13
         unit: "Actions"
       interpretation:
-        success_means: "13 Actionsのうち50%以上（7 Actions）が統合テストで検証されている"
-        failure_means: "統合テストで検証されていないActionsが50%以上ある"
+        success_means: "すべてのActions (13) が統合テストで検証されている"
+        failure_means: "統合テストで検証されていないActionsが存在する"
         warning: "統合テストはYAML構造検証レベルであり、実際の実行テストではない"
 
   - id: "QA-003"
@@ -104,31 +113,50 @@ core_functions:
     source: "README.md:8"
     testable: true
     verification_method: "actions/*/action.ymlファイルの存在確認"
+    status: "verified"
+    last_verified_at: "2026-02-03T11:28:13Z"
 
   - id: "CF-002"
     claim: "各Actionに導入手順（Instructions）を提供"
     source: "README.md:50-56"
     testable: true
     verification_method: "instructions/*.mdファイルの存在確認"
+    status: "verified"
+    last_verified_at: "2026-02-03T11:28:13Z"
 
   - id: "CF-003"
     claim: "各Actionに利用例（Examples）を提供"
     source: "README.md:52-53"
     testable: true
     verification_method: "examples/*.ymlファイルの存在確認"
+    status: "verified"
+    last_verified_at: "2026-02-03T11:28:13Z"
 
   - id: "CF-004"
-    claim: "構造的テストで97.51%のカバレッジを達成"
-    source: "TESTING.md:112-113"
+    claim: "構造的テストで94.49%のカバレッジを達成"
+    source: "TESTING.md:113"
     testable: true
     verification_method: "pytest --covを実行"
+    status: "verified"
+    last_verified_at: "2026-02-03T11:28:13Z"
 
   - id: "CF-005"
+    claim: "統合テストで100%のアクションカバレッジを達成"
+    source: "TESTING.md:118"
+    testable: true
+    verification_method: "統合テストファイル数のカウント"
+    status: "verified"
+    last_verified_at: "2026-02-03T11:28:13Z"
+
+  - id: "CF-006"
     claim: "AIレビューの品質メトリクス（受入率）を追跡"
     source: "README.md:123-124"
     testable: true
     verification_method: "scripts/calculate_acceptance_rate.pyの存在確認"
+    status: "verified"
+    last_verified_at: "2026-02-03T11:28:13Z"
 
 non_goals:
   - "GitHub Actionsランナーのホスティング"
   - "サードパーティサービスの統合（明示的に文書化されたものを除く）"
+  - "ランタイムテスト（現在は構造的テストとYAML検証のみ）"
