@@ -1,12 +1,12 @@
 {
-  "run_id": "2026-02-03T21:11:00.000000+00:00",
-  "updated_at": "2026-02-03T21:11:00+0000",
+  "run_id": "2026-02-03T13:42:58.000000+00:00",
+  "updated_at": "2026-02-03T13:42:58+0000",
   "ontology": {
     "total_terms": 38,
     "by_layer": {
       "core": 9,
-      "domain": 19,
-      "aux": 10
+      "domain": 20,
+      "aux": 9
     },
     "by_status": {
       "stable": 38,
@@ -40,14 +40,14 @@
     }
   },
   "claims": {
-    "total_lines": 160,
-    "retained_lines": 160,
+    "total_lines": 170,
+    "retained_lines": 170,
     "archived_lines": 0,
     "run_limit": 10000,
     "within_limits": true
   },
   "queue": {
-    "pending": 0,
+    "pending": 3,
     "merged": 0,
     "rejected": 0,
     "accepted": 0,
@@ -55,8 +55,8 @@
     "within_limits": true
   },
   "decisions": {
-    "active_auto_decisions": 2,
-    "lines": 73,
+    "active_auto_decisions": 7,
+    "lines": 75,
     "limit": 200,
     "within_limits": true
   },
@@ -70,18 +70,18 @@
     "gc_triggered": false,
     "duplicates_found": 0,
     "duplicate_ids": [],
-    "last_hygiene_run": "2026-02-03T21:11:00.000000+00:00"
+    "last_hygiene_run": "2026-02-03T13:42:58.000000+00:00"
   },
   "hygiene": {
-    "decisions_md_lines": 73,
+    "decisions_md_lines": 75,
     "decisions_md_limit": 200,
     "decisions_md_within_limit": true,
-    "claims_ndjson_lines": 160,
+    "claims_ndjson_lines": 170,
     "claims_ndjson_limit": 3000,
     "claims_ndjson_within_limit": true,
     "tombstones_count": 0,
     "tombstones_limit": 200,
-    "unmapped_ratio": 0.184,
+    "unmapped_ratio": 0.176,
     "unmapped_ratio_limit": 0.2,
     "all_within_limits": true
   },
@@ -93,11 +93,11 @@
     "core_current": 9,
     "core_usage": 0.45,
     "domain_max": 30,
-    "domain_current": 19,
-    "domain_usage": 0.6333333333333333,
+    "domain_current": 20,
+    "domain_usage": 0.667,
     "aux_max": 30,
-    "aux_current": 10,
-    "aux_usage": 0.3333333333333333,
+    "aux_current": 9,
+    "aux_usage": 0.3,
     "within_budget": true
   }
 }

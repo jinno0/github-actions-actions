@@ -1,5 +1,5 @@
 version: '0.3'
-updated_at: '2026-02-03T04:34:31Z'
+updated_at: '2026-02-03T13:42:58Z'
 canonical_terms:
   AIPoweredAction:
     id: TERM-AI-ACTION
@@ -877,23 +877,24 @@ canonical_terms:
         incorrect action structure'
   FunctionalTesting:
     id: TERM-FUNCTIONAL-TESTING
-    layer: aux
+    layer: domain
     status: stable
-    definition: Future testing phases for GitHub Actions including integration testing
-      (Phase 2) and end-to-end testing (Phase 3) that validate runtime behavior and
-      real GitHub API interactions
+    definition: Testing phases for GitHub Actions including integration testing (Phase
+      2 - COMPLETED) with 100% action coverage, end-to-end testing (Phase 3 - FUTURE),
+      and runtime testing with act tool (Phase 2b - PROPOSED)
     synonyms:
     - Functional testing
     - Integration testing
     - End-to-end testing
     - Runtime testing
+    - 統合テスト
     boundaries:
       includes:
       - Runtime execution
       - GitHub API interaction testing
       - Real environment validation
-      - Integration tests
-      - E2E tests
+      - Integration tests (12 files, 100% coverage)
+      - E2E tests (future)
       excludes:
       - Structural testing
       - Static validation
@@ -907,14 +908,20 @@ canonical_terms:
     - StructuralTesting
     - AIPoweredAction
     assumptions:
-    - id: ASM-FUNC-TEST-001
-      text: 'AUTO: Functional testing phases (Phase 2/3) are planned but not yet implemented'
-      decision_key: AUTO:FunctionalTesting.phasing:future
+    - id: ASM-FUNC-TEST-002
+      text: 'AUTO: Phase 2 (Integration Testing) is COMPLETED with 100% coverage
+        (13/13 actions). Phase 2b (Runtime Testing with act) is PROPOSED but not yet
+        implemented.'
+      decision_key: AUTO:FunctionalTesting.phasing:phase2_complete
       expires_after_runs: 20
     evidence:
-    - source: TESTING.md#L158-L184
-      quote: 'Phase 2: Integration Testing (Planned)... Phase 3: End-to-End Testing
-        (Future)'
+    - source: .audit/config/intent.yml#L143-L149
+      quote: '統合テストで100%のアクションカバレッジを達成しており、13/13 Actionsが統合テストで検証されている'
+    - source: .audit/analysis/as_is.yml#L18-L19
+      quote: 'integration_coverage_percentage: 100 # 13/13 actions'
+    - source: .audit/analysis/as_is.yml#L56-L59
+      quote: 'phase_2_integration_testing: "COMPLETED ✅"... phase_2b_runtime_testing:
+        "PENDING"'
   AcceptanceRate:
     id: TERM-ACCEPTANCE-RATE
     layer: domain

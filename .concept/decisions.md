@@ -45,14 +45,14 @@
 - Revert Triggers: primary_evidence_contradiction, stability_risk
 - Evidence: pilot-workflow-template.yml#L11-L14
 
-## AUTO:FunctionalTesting.phasing:future
+## AUTO:FunctionalTesting.phasing:phase2_complete
 - Status: ACTIVE
-- Chosen: Functional testing phases (Phase 2 Integration Testing, Phase 3 End-to-End Testing) are planned but not yet implemented
-- Policy: roadmap_alignment + scope_control
+- Chosen: Phase 2 (Integration Testing) is COMPLETED with 100% coverage (13/13 actions). Phase 2b (Runtime Testing with act) is PROPOSED but not yet implemented.
+- Policy: authoritative_audit_evidence + roadmap_update
 - Expires After Runs: 20
-- Linked: ASM-FUNC-TEST-001, MS-001
-- Revert Triggers: primary_evidence_contradiction, implementation_complete
-- Evidence: TESTING.md#L158-L184
+- Linked: ASM-FUNC-TEST-002
+- Revert Triggers: primary_evidence_contradiction, security_risk
+- Evidence: .audit/config/intent.yml#L143-L149, .audit/analysis/as_is.yml#L56-L59
 
 ## AUTO:SuccessMetric.QA-001:hierarchical
 - Status: ACTIVE
