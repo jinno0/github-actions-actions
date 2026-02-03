@@ -1,16 +1,17 @@
-updated_at: "2026-02-02T19:15:22Z"
+updated_at: '2026-02-03T15:28:58Z'
 conflicts:
-  - id: "CFLT-CLI-001"
-    term: "CLIAvailabilityCheck"
-    about: "data_constraint"
-    severity: "medium"
-    nli: "contradiction"
-    items:
-      - claim: "100% of actions using Claude have CLI availability checks (7/7 compliant)"
-        source: "ontology.yml#CLIAvailabilityCheck evidence"
-      - claim: "7.7% (1/13 actions) have CLI checks implemented"
-        source: ".audit/analysis/gap.yml#GAP-004"
-    status: "open"
-    active_workaround:
-      decision_key: "AUTO:CLIAvailabilityCheck.rate:audit_source_truth"
-      summary: "AUTO: Audit report (2026-02-03) takes precedence over outdated security checklist claim. Actual rate is 7.7% (1/13), not 100% (7/7)"
+- id: CFLT-CLI-001
+  term: CLIAvailabilityCheck
+  about: data_constraint
+  severity: medium
+  nli: contradiction
+  items:
+  - claim: 100% of actions using Claude have CLI availability checks (7/7 compliant)
+    source: ontology.yml#CLIAvailabilityCheck evidence
+  - claim: 7.7% (1/13 actions) have CLI checks implemented
+    source: .audit/analysis/gap.yml#GAP-004
+  status: resolved
+  active_workaround:
+    decision_key: AUTO:CLIAvailabilityCheck.rate:post_audit_cleanup
+    summary: 'AUTO: Audit reports removed - historical contradiction no longer relevant.
+      Rate unknown post-cleanup, but target remains 100% per security requirements.'

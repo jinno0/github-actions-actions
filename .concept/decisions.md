@@ -1,13 +1,22 @@
 # Active AUTO Decisions (cache) — safe to delete
 
-## AUTO:CLIAvailabilityCheck.rate:audit_source_truth
+## AUTO:CLIAvailabilityCheck.rate:post_audit_cleanup
 - Status: ACTIVE
-- Chosen: Audit report (2026-02-03) is authoritative: 7.7% (1/13) actual implementation rate. The 100% (7/7) claim was based on an outdated or different scope assessment.
+- Chosen: Audit reports removed (commit cc1e88e). Current CLI check implementation rate is unknown. SECURITY_CHECKLIST.md requires 100% (13/13 actions). Target remains 100% compliance per security requirements.
 - Policy: recent_authoritative_source + safety
 - Expires After Runs: 20
-- Linked: AMB-CLI-001 / CFLT-CLI-001 / ASM-CLI-001
+- Linked: AMB-CLI-001 / ASM-CLI-001
 - Revert Triggers: primary_evidence_contradiction, security_risk
-- Evidence: .audit/analysis/gap.yml#GAP-004, .audit/output/summary.md#L24-L25
+- Evidence: SECURITY_CHECKLIST.md#L9-L31, commit cc1e88e
+
+## AUTO:FunctionalTesting.phasing:post_audit_cleanup
+- Status: ACTIVE
+- Chosen: Audit reports removed (commit cc1e88e). Phase 2 (Integration Testing) was previously confirmed as COMPLETED with 100% coverage (13/13 actions) per commit a5a4475. Phase 2b (Runtime Testing with act) remains PROPOSED.
+- Policy: authoritative_git_evidence + roadmap_update
+- Expires After Runs: 20
+- Linked: ASM-FUNC-TEST-002
+- Revert Triggers: primary_evidence_contradiction, security_risk
+- Evidence: commit a5a4475
 
 ## AUTO:CLAUDE-CLI.installation:npm_global
 - Status: ACTIVE
@@ -45,15 +54,6 @@
 - Revert Triggers: primary_evidence_contradiction, stability_risk
 - Evidence: pilot-workflow-template.yml#L11-L14
 
-## AUTO:FunctionalTesting.phasing:phase2_complete
-- Status: ACTIVE
-- Chosen: Phase 2 (Integration Testing) is COMPLETED with 100% coverage (13/13 actions). Phase 2b (Runtime Testing with act) is PROPOSED but not yet implemented.
-- Policy: authoritative_audit_evidence + roadmap_update
-- Expires After Runs: 20
-- Linked: ASM-FUNC-TEST-002
-- Revert Triggers: primary_evidence_contradiction, security_risk
-- Evidence: .audit/config/intent.yml#L143-L149, .audit/analysis/as_is.yml#L56-L59
-
 ## AUTO:SuccessMetric.QA-001:hierarchical
 - Status: ACTIVE
 - Chosen: QA-001 (Acceptance Rate >= 80%) is a specific quality invariant that implements the broader SuccessMetric concept for MS-002
@@ -71,3 +71,5 @@
 - Linked: ASM-TELE-001
 - Revert Triggers: primary_evidence_contradiction, privacy_risk, legal_noncompliance
 - Evidence: docs/telemetry.md#L129-L139
+
+_last_updated: 2026-02-03T15:29:24Z_

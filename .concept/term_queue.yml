@@ -1,57 +1,60 @@
-updated_at: "2026-02-03T13:42:58Z"
+updated_at: '2026-02-03T15:29:04Z'
 queue:
-  - id: "TP-001"
-    proposed_canonical: "ExampleWorkflow"
-    proposed_layer: "aux"
-    term_raw_examples:
-      - "利用例"
-      - "examples"
-      - "workflow examples"
-    reason: "各Actionにexamples/*.ymlとして提供される利用例。AdoptionGuideやAIPoweredActionの一部として扱える可能性あり"
-    evidence:
-      - source: ".audit/config/intent.yml#L127-L133"
-        quote: "各Actionに利用例（Examples）を提供しており、examples/*.ymlファイルが存在する"
-      - source: "as_is.yml#L11"
-        quote: "example_workflows: 18"
-    auto_merge_candidates:
-      - term: "AdoptionGuide"
-        similarity: 0.72
-        rationale: "AdoptionGuide includes examples as part of onboarding materials"
-    decision: "pending"
-    expires_after_runs: 10
-    created_run: "2026-02-03T13:42:58Z"
-
-  - id: "TP-002"
-    proposed_canonical: "TechnicalDebt"
-    proposed_layer: "domain"
-    term_raw_examples:
-      - "Technical Debt"
-      - "技術的負債"
-    reason: "audit cycle 4で識別されたMEDIUM severityの技術的負債（TD-001, TD-002）。品質管理の観点から追跡が必要"
-    evidence:
-      - source: ".audit/analysis/as_is.yml#L94-L108"
-        quote: "TD-001: No runtime testing (act tool not yet implemented)... TD-002: Field-Level integration test coverage not tracked"
-    auto_merge_candidates: []
-    decision: "pending"
-    expires_after_runs: 10
-    created_run: "2026-02-03T13:42:58Z"
-
-  - id: "TP-003"
-    proposed_canonical: "FieldLevelCoverage"
-    proposed_layer: "aux"
-    term_raw_examples:
-      - "Field-Level Coverage"
-      - "フィールドレベルカバレッジ"
-    reason: "audit cycle 4で識別されたLOw priorityのギャップ。統合テストのYAMLフィールド検証の深さを測る指標"
-    evidence:
-      - source: ".audit/analysis/as_is.yml#L102-L108"
-        quote: "Field-Level integration test coverage not tracked (LOW severity, MEDIUM priority)"
-      - source: ".audit/analysis/gap.yml"
-        quote: "PR-007: Field-Level Coverage Tracking (Priority 2)"
-    auto_merge_candidates:
-      - term: "FunctionalTesting"
-        similarity: 0.68
-        rationale: "Subset of integration testing metrics"
-    decision: "pending"
-    expires_after_runs: 10
-    created_run: "2026-02-03T13:42:58Z"
+- id: TP-001
+  proposed_canonical: ExampleWorkflow
+  proposed_layer: aux
+  term_raw_examples:
+  - 利用例
+  - examples
+  - workflow examples
+  reason: 各Actionにexamples/*.ymlとして提供される利用例。AdoptionGuideやAIPoweredActionの一部として扱える可能性あり
+  evidence:
+  - source: .audit/config/intent.yml#L127-L133
+    quote: 各Actionに利用例（Examples）を提供しており、examples/*.ymlファイルが存在する
+  - source: as_is.yml#L11
+    quote: 'example_workflows: 18'
+  auto_merge_candidates:
+  - term: AdoptionGuide
+    similarity: 0.72
+    rationale: AdoptionGuide includes examples as part of onboarding materials
+  decision: rejected
+  expires_after_runs: 10
+  created_run: '2026-02-03T13:42:58Z'
+  rejection_reason: Evidence source removed in commit cc1e88e
+- id: TP-002
+  proposed_canonical: TechnicalDebt
+  proposed_layer: domain
+  term_raw_examples:
+  - Technical Debt
+  - 技術的負債
+  reason: audit cycle 4で識別されたMEDIUM severityの技術的負債（TD-001, TD-002）。品質管理の観点から追跡が必要
+  evidence:
+  - source: .audit/analysis/as_is.yml#L94-L108
+    quote: 'TD-001: No runtime testing (act tool not yet implemented)... TD-002: Field-Level
+      integration test coverage not tracked'
+  auto_merge_candidates: []
+  decision: rejected
+  expires_after_runs: 10
+  created_run: '2026-02-03T13:42:58Z'
+  rejection_reason: Evidence source removed in commit cc1e88e
+- id: TP-003
+  proposed_canonical: FieldLevelCoverage
+  proposed_layer: aux
+  term_raw_examples:
+  - Field-Level Coverage
+  - フィールドレベルカバレッジ
+  reason: audit cycle 4で識別されたLOw priorityのギャップ。統合テストのYAMLフィールド検証の深さを測る指標
+  evidence:
+  - source: .audit/analysis/as_is.yml#L102-L108
+    quote: Field-Level integration test coverage not tracked (LOW severity, MEDIUM
+      priority)
+  - source: .audit/analysis/gap.yml
+    quote: 'PR-007: Field-Level Coverage Tracking (Priority 2)'
+  auto_merge_candidates:
+  - term: FunctionalTesting
+    similarity: 0.68
+    rationale: Subset of integration testing metrics
+  decision: rejected
+  expires_after_runs: 10
+  created_run: '2026-02-03T13:42:58Z'
+  rejection_reason: Evidence source removed in commit cc1e88e
