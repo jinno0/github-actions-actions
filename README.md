@@ -118,6 +118,26 @@ env:
 
 詳細なプライバシーポリシーについては、[docs/telemetry.md](./docs/telemetry.md) を参照してください。
 
+## 📈 AIレビュー品質メトリクス
+
+**review-and-merge** Action では、AIレビューの品質を測定するための**受入率（Acceptance Rate）**を追跡しています。これにより、AIレビューの有効性を定量的に評価できます。
+
+### 品質メトリクスの概要
+
+- **受入率（Acceptance Rate）**: 人間に受け入れられたAIレビューの割合（目標: >= 70%）
+- **レビューアウトカム**: approved（承認）/modified（修正あり）/rejected（拒否）/needs_work（修正要求）
+- **提案数**: 1回のレビューあたりの平均提案数
+- **一般的な拒否理由**: AIレビューが拒否される主な理由
+
+### メトリクスの確認方法
+
+```bash
+# 品質メトリクスレポートを生成
+python scripts/calculate_acceptance_rate.py --output report --time-period 7d
+```
+
+詳細な品質メトリクスのドキュメントについては、[docs/quality_metrics.md](./docs/quality_metrics.md) を参照してください。
+
 ## 🎯 プロジェクトの目的
 
 詳細なロードマップや現在のステータスについては、[PURPOSE.md](./PURPOSE.md) を参照してください。
