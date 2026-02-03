@@ -1,0 +1,143 @@
+# Gap Analysis - ギャップ分析
+
+version: "1.0"
+generated_at: "2026-02-03T23:20:15Z"
+
+# === Mission Alignment Gaps ===
+mission_gaps: []
+
+# === Quality Attribute Gaps ===
+quality_attribute_gaps:
+  - qa_id: "QA-001"
+    name: "Action構造の完全性"
+    target: "100%のActionが3点セットを持つ"
+    current: "100% (13/13)"
+    gap: "なし"
+    severity: "none"
+    status: "✅ ACHIEVED"
+
+  - qa_id: "QA-002"
+    name: "YAML構文の妥当性"
+    target: "0 エラー"
+    current: "0 エラー"
+    gap: "なし"
+    severity: "none"
+    status: "✅ ACHIEVED"
+
+  - qa_id: "QA-003"
+    name: "テレメトリー実装の Coverage"
+    target: "全Actionが匿名テレメトリーを収集またはオプトアウト可能"
+    current: "実装が見つからない"
+    gap: "README.mdの記述と実装コードの不一致"
+    severity: "medium"
+    status: "⚠️ DISCREPANCY"
+    details:
+      assumption: "ASM-001により、テレメトリー機能は計画段階またはオプション機能と推測"
+      evidence: "README.md:98-119には詳細な説明があるが、actions/内に実装コードがない"
+      verification_needed: "テレメトリー機能が実際に実装されているか、またはREADMEが古い記載かを確認"
+
+  - qa_id: "QA-004"
+    name: "AIレビュー受入率の追跡可能性"
+    target: "メトリクス計算スクリプトが実行可能"
+    current: "実行可能（--helpが動作）"
+    gap: "なし"
+    severity: "none"
+    status: "✅ ACHIEVED"
+
+# === Core Function Gaps ===
+core_function_gaps:
+  - cf_id: "CF-001"
+    claim: "13種類のAI Actionsを提供しており、それぞれがexamplesとinstructionsを持つ"
+    current: "13種類のActionが存在し、全てがexamplesとinstructionsを持つ"
+    gap: "なし"
+    severity: "none"
+    status: "✅ VERIFIED"
+
+  - cf_id: "CF-002"
+    claim: "全てのActionがComposite Actionとして実装されており、self-hosted runner上のClaude Code CLIを使用する"
+    current: "全ActionがComposite Actionとして実装されている"
+    gap: "なし"
+    severity: "none"
+    status: "✅ VERIFIED"
+    note: "Claude Code CLIの使用はaction.yml内で確認可能"
+
+  - cf_id: "CF-003"
+    claim: "各ActionはDry Runモードで自動検証される"
+    current: ".github/workflows/test-all-actions.ymlが存在し、Dry Run検証を実装"
+    gap: "なし"
+    severity: "none"
+    status: "✅ VERIFIED"
+
+  - cf_id: "CF-004"
+    claim: "AIレビューの品質メトリクス（受入率）を追跡できる"
+    current: "scripts/calculate_acceptance_rate.pyが存在し実行可能"
+    gap: "なし"
+    severity: "none"
+    status: "✅ VERIFIED"
+    note: "実際のメトリクスデータ（metrics/acceptance_rate_30d.json）の確認が必要"
+
+# === Phase Progress Gaps ===
+phase_gaps:
+  - phase: "Phase 3: Stabilization & Adoption"
+    target: "組織内プロジェクトへの導入とフィードバック収集"
+    current: "ADOPTION_GUIDE.mdは存在するが、実際の導入実績が不明"
+    gap: "進捗の可視化不足"
+    severity: "medium"
+    status: "⚠️ NEEDS_VISIBILITY"
+    based_on_assumption: "ASM-002: Phase 3（安定化・導入期）にある"
+    details:
+      evidence: "PURPOSE.md:25で「組織内プロジェクトへの導入とフィードバック収集」が⬜（未完了）"
+      missing_info: "どのリポジトリで導入されているか、実際の利用数、ユーザーフィードバック"
+      recommendation: "導入状況を追跡する仕組みの導入、または進捗レポートの作成"
+
+# === Documentation Gaps ===
+documentation_gaps:
+  - gap_id: "DOC-001"
+    description: "README.mdのテレメトリー記述と実装の不一致"
+    severity: "medium"
+    current_state: "README.md:98-119でテレメトリー機能の詳細な説明がある"
+    actual_state: "actions/内にテレメトリー実装コードが見つからない"
+    possible_causes:
+      - "テレメトリー機能が未実装（READMEが先行して記載されている）"
+      - "テレメトリー機能が別の場所（hub/）で実装されている"
+      - "テレメトリー機能が削除されたが、READMEの更新が漏れている"
+    action_required: "実装状況の確認とREADMEまたは実装の修正"
+
+# === Testing Gaps ===
+testing_gaps: []
+
+# === Security Gaps ===
+security_gaps: []
+
+# === Summary ===
+summary:
+  total_gaps: 4
+  by_severity:
+    high: 0
+    medium: 3
+    low: 1
+  by_status:
+    achieved: 4
+    discrepancy: 1
+    needs_visibility: 1
+  overall_assessment: "リポジトリは健全な状態にあるが、テレメトリー実装の不一致と導入状況の可視化が課題"
+
+# === Critical Path to Resolution ===
+critical_path:
+  - priority: 1
+    gap: "QA-003: テレメトリー実装の不一致"
+    action: "テレメトリー機能の実装状況を調査"
+    estimated_effort: "小"
+    dependency: "なし"
+
+  - priority: 2
+    gap: "Phase 3: 導入状況の可視化不足"
+    action: "導入リポジトリのリストアップと進捗レポートの作成"
+    estimated_effort: "中"
+    dependency: "なし"
+
+  - priority: 3
+    gap: "CF-004: 受入率メトリクスの実データ確認"
+    action: "metrics/acceptance_rate_30d.jsonの存在確認と内容の分析"
+    estimated_effort: "小"
+    dependency: "なし"

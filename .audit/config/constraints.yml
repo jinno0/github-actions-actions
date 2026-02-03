@@ -1,0 +1,72 @@
+# Constraints - 制約条件
+
+version: "1.0"
+updated_at: "2026-02-03T23:20:15Z"
+
+# === 技術的制約 ===
+technical:
+  - type: "platform"
+    constraint: "Self-hosted GitHub Actions Runner"
+    rationale: "Claude Code CLIはself-hosted環境でのみ実行可能"
+    source: "README.md:82-86"
+
+  - type: "runtime"
+    constraint: "Claude Code CLIがインストールされている必要がある"
+    rationale: "AIによる高度な自動化に必要"
+    source: "AGENTS.md:5-11"
+
+  - type: "action_type"
+    constraint: "Composite Actionsのみ"
+    rationale: "SYSTEM_CONSTITUTION.mdで定義"
+    source: "SYSTEM_CONSTITUTION.md:29-31"
+
+# === セキュリティ制約 ===
+security:
+  - type: "secrets_management"
+    constraint: "トークンやパスワードはコードに含めず、呼び出し元から受け取る"
+    rationale: " SYSTEM_CONSTITUTION.md: セキュリティ最優先"
+    source: "SYSTEM_CONSTITUTION.md:60-68"
+
+  - type: "input_validation"
+    constraint: "全ての入力値をバリデーションする"
+    rationale: "第三者スクリプト実行の安全性確保"
+    source: "SYSTEM_CONSTITUTION.md:66"
+
+  - type: "privacy"
+    constraint: "テレメトリーはオプトアウト可能で、匿名化されている必要がある"
+    rationale: "プライバシー保護"
+    source: "README.md:102-106"
+
+# === 運用制約 ===
+operational:
+  - type: "versioning"
+    constraint: "セマンティックバージョニング。@mainは使用しない"
+    rationale: "安定性確保"
+    source: "SYSTEM_CONSTITUTION.md:52-58"
+
+  - type: "breaking_changes"
+    constraint: "破壊的変更はメジャーバージョンアップで対応し、移行ガイドを提供"
+    rationale: "既存利用者への影響最小化"
+    source: "SYSTEM_CONSTITUTION.md:111-118"
+
+  - type: "documentation"
+    constraint: "全Actionがaction.yml, examples, instructionsの3点セットを持つ"
+    rationale: "ドキュメント駆動開発"
+    source: "AGENTS.md:239-276"
+
+# === 品質制約 ===
+quality:
+  - type: "testing"
+    constraint: "全ActionがDry Runモードで自動検証される"
+    rationale: "CIによる品質保証"
+    source: "AGENTS.md:278-376"
+
+  - type: "structure"
+    constraint: "単一責務の原則。各Actionは1つの明確な目的のみを持つ"
+    rationale: "再利用性と保守性"
+    source: "SYSTEM_CONSTITUTION.md:37-42"
+
+  - type: "reusability"
+    constraint: "組織内のどのリポジトリからでも使用可能である必要がある"
+    rationale: "横断的利用"
+    source: "SYSTEM_CONSTITUTION.md:44-50"

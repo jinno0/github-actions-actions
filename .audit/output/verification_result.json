@@ -1,0 +1,130 @@
+[
+  {
+    "function_id": "CF-001",
+    "scenario_name": "13種類のAI Actionsの存在と構造",
+    "passed": true,
+    "actual_output": {
+      "action_count": 13,
+      "actions_with_examples": 13,
+      "actions_with_instructions": 13,
+      "missing_examples": [],
+      "missing_instructions": []
+    },
+    "expected_output": {
+      "action_count": 13,
+      "actions_with_examples": 13,
+      "actions_with_instructions": 13
+    },
+    "error_message": null,
+    "interpretation": "✅ 13個のActionが存在し、全てがexamplesとinstructionsを持っている",
+    "evidence": [
+      "Found 13 action.yml files in actions/"
+    ]
+  },
+  {
+    "function_id": "CF-002",
+    "scenario_name": "全ActionがComposite Actionとして実装",
+    "passed": true,
+    "actual_output": {
+      "composite_count": 13,
+      "non_composite": []
+    },
+    "expected_output": {
+      "composite_count": 13,
+      "non_composite": []
+    },
+    "error_message": null,
+    "interpretation": "✅ 全13個のActionがComposite Actionとして実装されている",
+    "evidence": [
+      "action-fixer",
+      "pr-review-enqueuer",
+      "review-and-merge",
+      "spec-to-code",
+      "bulk-rebase-prs",
+      "auto-document",
+      "release-notes-ai",
+      "auto-rebase",
+      "review-auto-merge",
+      "auto-merge",
+      "bulk-merge-prs",
+      "auto-refactor",
+      "publish-pr"
+    ]
+  },
+  {
+    "function_id": "CF-003",
+    "scenario_name": "Dry Run検証ワークフローの実装",
+    "passed": true,
+    "actual_output": {
+      "workflow_exists": true,
+      "has_pr_trigger": false,
+      "has_push_trigger": false,
+      "has_test_job": true,
+      "uses_dry_run_env": true
+    },
+    "expected_output": {
+      "workflow_exists": true,
+      "has_test_job": true
+    },
+    "error_message": null,
+    "interpretation": "✅ Dry Run検証ワークフローが存在し、自動テストを実装している",
+    "evidence": [
+      ".github/workflows/test-all-actions.yml"
+    ]
+  },
+  {
+    "function_id": "CF-004",
+    "scenario_name": "受入率計算スクリプトの実行可能性",
+    "passed": true,
+    "actual_output": {
+      "script_exists": true,
+      "executable": true,
+      "has_help_output": true,
+      "has_metrics_data": true,
+      "metrics_files": [
+        "acceptance_rate_30d.json"
+      ]
+    },
+    "expected_output": {
+      "script_exists": true,
+      "executable": true
+    },
+    "error_message": null,
+    "interpretation": "✅ 受入率計算スクリプトが実行可能（メトリクスデータ: 1ファイル）",
+    "evidence": [
+      "/home/jinno/github-actions-actions/scripts/calculate_acceptance_rate.py"
+    ]
+  },
+  {
+    "function_id": "QA-002",
+    "scenario_name": "YAML構文の妥当性",
+    "passed": true,
+    "actual_output": {
+      "total_files": 13,
+      "valid_files": 13,
+      "invalid_files": []
+    },
+    "expected_output": {
+      "total_files": 13,
+      "valid_files": 13,
+      "invalid_files": []
+    },
+    "error_message": null,
+    "interpretation": "✅ 全13個のaction.ymlが有効なYAML",
+    "evidence": [
+      "action-fixer",
+      "pr-review-enqueuer",
+      "review-and-merge",
+      "spec-to-code",
+      "bulk-rebase-prs",
+      "auto-document",
+      "release-notes-ai",
+      "auto-rebase",
+      "review-auto-merge",
+      "auto-merge",
+      "bulk-merge-prs",
+      "auto-refactor",
+      "publish-pr"
+    ]
+  }
+]

@@ -1,0 +1,25 @@
+# Budget - 予算設定
+
+version: "1.0"
+updated_at: "2026-02-03T23:20:15Z"
+
+# === Scan Budget ===
+scan_budget:
+  max_files_per_run: 500
+  max_total_tokens: 100000
+  file_size_limit_mb: 1
+
+# === Log Budget ===
+log_budget:
+  max_log_entries: 500
+  keep_last_n_entries: 300
+
+# === Proposal Budget ===
+proposal_budget:
+  max_prs_per_run: 10
+  max_action_proposals: 20
+
+# === Verification Budget ===
+verification_budget:
+  max_test_actions: 13
+  timeout_per_test_seconds: 30
