@@ -1,6 +1,6 @@
 {
-  "run_id": "2026-02-03T20:38:31.955986+00:00",
-  "updated_at": "2026-02-03T20:38:31.955986+00:00",
+  "run_id": "2026-02-03T22:07:04.605116+00:00",
+  "updated_at": "2026-02-03T22:07:04.605138+00:00",
   "ontology": {
     "total_terms": 38,
     "by_layer": {
@@ -24,11 +24,11 @@
     }
   },
   "ambiguities": {
-    "total": 2,
+    "total": 0,
     "by_severity": {
       "high": 0,
       "medium": 0,
-      "low": 2
+      "low": 0
     }
   },
   "conflicts": {
@@ -55,7 +55,7 @@
     "within_limits": true
   },
   "decisions": {
-    "active_auto_decisions": 1,
+    "active_auto_decisions": 0,
     "lines": 75,
     "limit": 200,
     "within_limits": true
@@ -70,7 +70,7 @@
     "gc_triggered": false,
     "duplicates_found": 0,
     "duplicate_ids": [],
-    "last_hygiene_run": "2026-02-03T20:38:31.955986+00:00"
+    "last_hygiene_run": "2026-02-03T22:07:04.605155+00:00"
   },
   "hygiene": {
     "decisions_md_lines": 75,
@@ -81,23 +81,8 @@
     "claims_ndjson_within_limit": true,
     "tombstones_count": 0,
     "tombstones_limit": 200,
-    "unmapped_ratio": 0.184,
+    "unmapped_ratio": 0.0,
     "unmapped_ratio_limit": 0.2,
     "all_within_limits": true
-  },
-  "budget_status": {
-    "total_terms_max": 80,
-    "total_terms_current": 38,
-    "total_terms_usage": 0.475,
-    "core_max": 20,
-    "core_current": 9,
-    "core_usage": 0.45,
-    "domain_max": 30,
-    "domain_current": 20,
-    "domain_usage": 0.667,
-    "aux_max": 30,
-    "aux_current": 9,
-    "aux_usage": 0.3,
-    "within_budget": true
   }
 }
