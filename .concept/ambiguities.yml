@@ -1,4 +1,4 @@
-updated_at: '2026-02-03T15:28:50Z'
+updated_at: '2026-02-03T18:15:45Z'
 ambiguities:
 - id: AMB-CLI-001
   term: CLIAvailabilityCheck
@@ -62,4 +62,5 @@ ambiguities:
   - source: metrics/README.md#L15-L20
     quote: 'QA-001: Acceptance Rate >= 80% is the primary quality goal for MS-002'
   - source: charter.yml#L6-L15
-    quote: 'success_metrics: Action導入数, AI提案品質, 開発効率'
+    quote: "success_metrics: Action\u5C0E\u5165\u6570, AI\u63D0\u6848\u54C1\u8CEA\
+      , \u958B\u767A\u52B9\u7387"
