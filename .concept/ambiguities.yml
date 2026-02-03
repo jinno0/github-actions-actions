@@ -13,8 +13,8 @@ ambiguities:
   auto_decision:
     status: superseded
     decision_key: AUTO:CLIAvailabilityCheck.rate:verified
-    chosen: VERIFIED: All 7 actions that invoke Claude have CLI checks (100% compliant).
-      Remaining 6 actions don't use Claude and don't need checks. Ambiguity resolved.
+    chosen: 'VERIFIED: All 7 actions that invoke Claude have CLI checks (100% compliant).
+      Remaining 6 actions don''t use Claude and don''t need checks. Ambiguity resolved.'
     policy: verification + audit
     confidence_auto: 1.0
     decided_at_run: '2026-02-04T04:35:48Z'
