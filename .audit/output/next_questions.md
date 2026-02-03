@@ -1,174 +1,191 @@
-# Confirmation List and Assumptions Report
+# 確認事項と仮定の報告
 
-**Audit Run**: audit-run-002
-**Date**: 2026-02-04T03:00:00Z
+**Audit ID**: run-002  
+**Generated**: 2026-02-04T04:00:00Z
 
-This document lists the assumptions applied during this audit and questions for the next cycle.
-
----
-
-## Applied Assumptions
-
-Since this audit operates in non-blocking mode, the following assumptions were made to complete the analysis. Please review and correct any inaccuracies.
-
-### ASM-001: Target User
-**Assumed**: GitHub Self-hosted Runner users (medium-large organizations)
-**Confidence**: High
-**Reason**: README.md emphasizes self-hosted runners and Claude CLI
-**Impact**: Affects documentation tone and feature priorities
-
-### ASM-002: Target Languages/Frameworks
-**Assumed**: TypeScript, Python, React projects
-**Confidence**: Medium
-**Reason**: Custom review rule examples limited to these in examples/custom-rules/
-**Impact**: Affects which languages get priority for custom rules
-
-### ASM-003: Test Coverage Target
-**Assumed**: >= 70% is appropriate target
-**Confidence**: High
-**Reason**: Explicitly configured in pytest.ini:22
-**Actual Status**: 93.93% (exceeds target)
-**Impact**: None - target validated as appropriate
-
-### ASM-004: AI Acceptance Rate Target
-**Assumed**: >= 70% acceptance rate is achievable
-**Confidence**: High
-**Reason**: Stated in README.md:127 as goal
-**Impact**: Defines success metric for AI review quality
-
-### ASM-005: Claude CLI Availability
-**Assumed**: Claude Code CLI installed on self-hosted runners
-**Confidence**: High
-**Reason**: Required by design; AGENTS.md documents requirement
-**Impact**: All actions depend on this being true
-
-### ASM-006: Runner OS
-**Assumed**: Linux-based (Ubuntu or similar)
-**Confidence**: Medium
-**Reason**: Standard for GitHub Actions self-hosted runners
-**Impact**: Affects script compatibility and testing approach
+対話ができないため、以下の仮定に基づいて監査を完了させました。
+認識が異なる場合は `.audit/config/intent.yml` を修正してください。
 
 ---
 
-## Measurement Error Correction
+## 適用した仮定
 
-### ISS-NEW-001: Coverage Measurement Error (RESOLVED)
+### 今回の監査で新たに追加した仮定
 
-**Previous Audit Finding**:
-- Reported coverage: 23.06%
-- Classification: Critical Issue
-- Proposed action: PR-004 to improve coverage
+なし。今回の監査では新しい仮定を追加せず、既存の仮定の検証を行いました。
 
-**Actual State**:
-- Actual coverage: 93.93%
-- Classification: Excellent (exceeds target by 23.93%)
-- Required action: None - measurement error corrected
+### 前回までの仮定の状態更新
 
-**Root Cause**:
-Previous audit did not execute `pytest --cov` directly. Likely relied on stale or incorrect data.
-
-**Corrected Methodology**:
-This audit now always runs `pytest --cov` to get actual measurements, not relying on cached reports or secondary sources.
-
-**Lessons Learned**:
-1. Always run actual measurement commands during audit
-2. Don't rely on previously reported metrics without verification
-3. Cross-check critical findings with direct execution
+| ID | 項目 | 仮定した値 | 前回ステータス | 今回ステータス | 変更理由 |
+|----|------|------------|---------------|---------------|----------|
+| ASM-003 | テストカバレッジ | >= 70% | unverified | ✅ **confirmed** | 実測値93.93% > 70% |
+| ASM-004 | AIレビュー受入率 | >= 70% | unverified | ⚠️ **needs_data** | 本番データが0件で測定不能 |
 
 ---
 
-## Questions for Next Cycle
+## 前回監査からの改善点
 
-### Validation Questions
+### 解決された問題
 
-Please review these assumptions and correct if inaccurate:
+1. **ISS-NEW-001: カバレッジ監査不一致** ✅
+   - 前回: 23.06%と報告
+   - 実際: 93.93%であることを確認
+   - 対応: 監査手法を修正
 
-- [ ] **ASM-001**: Are we correct that the primary users are organizations using self-hosted runners?
-- [ ] **ASM-002**: Should we prioritize TypeScript/Python/React, or are other languages equally important?
-- [ ] **ASM-006**: Is Linux the primary OS for self-hosted runners, or do you need Windows/macOS support?
-
-### Operational Questions
-
-These questions emerged during the audit but were not answerable from the code:
-
-1. **Production Data Availability** (ISS-003)
-   - Question: Are production metrics (acceptance rate, usage counts) currently being collected?
-   - Impact: Determines if infrastructure is ready or needs setup
-   - Follow-up: Check if `scripts/calculate_acceptance_rate.py` is being used in production workflows
-
-2. **Organizational Adoption Status** (ISS-004)
-   - Question: How many repositories are currently using these actions?
-   - Impact: Determines success of organizational rollout
-   - Follow-up: Would adoption tracking provide valuable insights?
-
-3. **Template Standardization Priority** (ISS-002)
-   - Question: Is template standardization (6 Actions) a priority for the team?
-   - Impact: Affects Phase 2 planning
-   - Current state: 7/13 Actions have templates/, 6 do not
-
-4. **Dashboard UI vs Weekly Reports** (ISS-005)
-   - Question: Is a real-time dashboard UI needed, or are weekly reports sufficient?
-   - Impact: Determines if we invest in dashboard development
-   - Current state: Weekly automated reports implemented (PR-001)
-
-5. **Runtime Testing Timeline** (ISS-006)
-   - Question: When should we invest in runtime testing (act, GitHub API mocking)?
-   - Impact: Determines Phase 3 timeline
-   - Current state: Structural testing (297 tests) catches most bugs
+2. **ISS-NEW-002: 検証スクリプト未実装** ✅
+   - 前回: verify_core_functions.pyが空
+   - 現在: 10,532バイトで実装完了
+   - 検証結果: 13/13 actionsが構造検証に合格
 
 ---
 
-## Updated Recommendations Based on Corrections
+## 今回の監査で判明した事実
 
-### Previous Recommendations (Now Invalid)
+### テストカバレッジ
 
-❌ ~~PR-004: Improve test coverage from 23.06% to 70%~~
-**Status**: NOT NEEDED
-**Reason**: Actual coverage is 93.93%, far exceeding target
-**Action**: Remove from roadmap
+- **実測値**: 93.93% (295 tests passed)
+- **目標値**: 70%
+- **判定**: 目標を23.93ポイント超過
+- **結論**: ASM-003の仮定は正しかった（confirmed）
 
-### New Recommendations
+### AIレビュー受入率
 
-✅ **Phase 1.1: Document Structural Testing as Verification Method**
-- **Issue**: ISS-007
-- **Rationale**: Clarify that structural testing IS the core function verification
-- **Effort**: 1 day (documentation)
-- **Action**: Add section to TESTING.md explaining methodology
+- **実測値**: N/A (本番レビュー実績が0件)
+- **目標値**: 70%
+- **判定**: 測定不能
+- **結論**: ASM-004の仮定はまだ検証できない（needs_data）
 
-✅ **Phase 1.2: Enable Production Metrics Collection**
-- **Issue**: ISS-003
-- **Rationale**: Infrastructure ready, need to start collecting data
-- **Effort**: Low (verify scripts are enabled)
-- **Action**: Confirm metrics workflows active
+### テンプレート完備率
 
----
-
-## Assumption Updates
-
-If any of the assumptions above are incorrect, please update `.audit/config/intent.yml`:
-
-```yaml
-assumptions:
-  - id: "ASM-001"
-    field: "mission.target_user"
-    value: "CORRECTED_VALUE"
-    reason: "ACTUAL_REASON"
-    confidence: "low|medium|high"
-```
-
-This will ensure the next audit uses accurate assumptions.
+- **実測値**: 38.5% (5/13 actions only)
+- **目標値**: 100%
+- **判定**: 目標を61.5ポイント下回る
+- **課題**: QA-005未達成
+- **提案**: PR-005で改善予定
 
 ---
 
-## Feedback for Next Audit
+## 質問（次回の精度向上のため）
 
-Please provide feedback on:
+### 高優先度の確認事項
 
-1. **Assumption Accuracy**: Were the assumptions above correct?
-2. **Priority Ranking**: Do you agree with Medium/Low classifications?
-3. **Proposed Actions**: Should we proceed with Phase 1 recommendations?
-4. **Missing Context**: Is there critical context we missed?
+#### Q1: 本番環境での導入状況
+
+- [ ] **質問**: 現在、このAI Actionsを本番環境で使用しているリポジトリはありますか？
+- [ ] **現在の認識**: 0件（本番データが全くない状態）
+- [ ] **影響**: ASM-004（AI受入率>=70%）を検証できない
+- [ ] **推奨アクション**: パイロット導入を検討してください（PR-006参照）
+
+#### Q2: テンプレート未対応のActionについて
+
+- [ ] **質問**: 以下の8つのActionで`templates/`ディレクトリがないのは意図的ですか？
+  - `_shared`, `auto-merge`, `bulk-merge-prs`, `bulk-rebase-prs`
+  - `lib`, `pr-review-enqueuer`, `publish-pr`, `review-auto-merge`
+- [ ] **現在の認識**: 技術的債務として扱い、PR-005で改善を提案
+- [ ] **影響**: QA-005（テンプレート完備率100%）未達成
+- [ ] **推奨アクション**: PR-005を確認し、同意する場合はマージしてください
+
+#### Q3: テレメトリー収集の開始時期
+
+- [ ] **質問**: テレメトリー収集（`metrics/telemetry/telemetry.log`）をいつから開始する予定ですか？
+- [ ] **現在の認識**: スクリプトは準備完了だが、運用開始の時期未定
+- [ ] **影響**: C-030（実際の使用統計）が不明のまま
+- [ ] **推奨アクション**: PR-007でテレメトリー収集を開始してください
+
+### 中優先度の確認事項
+
+#### Q4: カスタムレビュールールの使用状況
+
+- [ ] **質問**: `review-and-merge`アクションでカスタムルールを使用しているチームはありますか？
+- [ ] **現在の認識**: ドキュメントとテンプレートは完備しているが、使用実績不明
+- [ ] **推奨**: 使用事例があればドキュメント化を推奨
+
+#### Q5: 組織の導入目標数
+
+- [ ] **質問**: PURPOSE.md:70で成功条件として記載されている「組織内の複数リポジトリ」の具体的な数は？
+- [ ] **現在の認識**: 「複数」を5〜10リポジトリと仮定
+- [ ] **推奨**: 具体的な目標数を設定し、進捗を追跡すること
 
 ---
 
-**End of Confirmation List**
+## 仮定に基づく提案
+
+以下の提案は、上記の仮定に基づいて作成されています。認識が異なる場合は修正してください。
+
+### PR-005: Template Standardization (MEDIUM Priority)
+
+**仮定**:
+- テンプレート完備率100%（QA-005）は達成すべき目標である
+- 8つのActionでテンプレートが不足しているのは技術的債務である
+- 保守性向上のため、テンプレート分離が望ましい
+
+**提案内容**: 
+- 8つのActionに`templates/`ディレクトリを作成
+- イラインスクリプトを`templates/main.sh`に抽出
+- 推定工数: 2-3時間
+- リスク: LOW（295テストが回帰を防止）
+
+**反対意見がある場合**:
+- テンプレートが不要なActionがある場合は、その理由を記載してください
+- QA-005の目標値自体を見直す場合は、`intent.yml`を更新してください
+
+### PR-006: Pilot Adoption Program (HIGH Priority)
+
+**仮定**:
+- 本番データの収集が必要である（ASM-004検証のため）
+- 2-3リポジトリでのパイロット導入は実現可能である
+- 30日間のパイロットで十分なデータが収集できる
+
+**提案内容**:
+- 2-3つのパイロットリポジトリを選定
+- `review-and-merge`アクションを導入
+- 30日間の運用で受入率データを収集
+- 推定工数: 1-2週間（準備〜運用）
+
+**反対意見がある場合**:
+- パイロット導入が現実的でない場合は、代替のデータ収集方法を提案してください
+- ASM-004の仮定自体を見直す場合は、その根拠を示してください
+
+### PR-007: Telemetry Activation (LOW Priority)
+
+**仮定**:
+- 使用統計の収集は価値がある
+- パフォーマンスへの影響は無視できる程度である
+- 週次レポートの自動生成は有用である
+
+**提案内容**:
+- `metrics/telemetry/telemetry.log`を作成
+- 主要Actionにテレメトリー記録を追加
+- CIで週次レポート自動生成を設定
+- 推定工数: 1-2時間
+
+**反対意見がある場合**:
+- テレメトリー収集が不要な場合は、その理由を示してください
+- プライバシー上の懸念がある場合は、制約事項として記録してください
+
+---
+
+## 次回監査での改善予定
+
+今回の監査で判明した以下の点を、次回監査（1ヶ月後）で改善予定です：
+
+1. **GAP-001の解決**: パイロット導入により、AI受入率を測定可能にする
+2. **GAP-002の解決**: PR-005を適用し、QA-005を達成する
+3. **GAP-003の解決**: PR-007を適用し、テレメトリー収集を開始する
+
+---
+
+## まとめ
+
+- ✅ **技術的品質は優秀**: 93.93%カバレッジ、構造検証100%合格
+- ⚠️ **運用的な成熟度が不足**: 本番データがなく、品質目標を検証できない
+- 📋 **3つの改善提案**: PR-005（テンプレート）, PR-006（パイロット）, PR-007（テレメトリー）
+- 🎯 **最優先アクション**: パイロット導入（PR-006）でASM-004を検証すること
+
+認識が異なる点があれば、`.audit/config/intent.yml`を更新し、次回監査で反映させてください。
+
+---
+
+**Generated by**: Repo Genesis Auditor v2.0  
+**Mode**: Non-Blocking (全ての仮定を明示)  
+**Next Audit**: 2026-03-04 (after pilot program completion)
