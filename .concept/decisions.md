@@ -62,3 +62,12 @@
 - Linked: ASM-INV-010, AMB-SUCCESS-001, INV-010
 - Revert Triggers: primary_evidence_contradiction, new_quality_gates_defined
 - Evidence: metrics/README.md#L15-L20, charter.yml#L6-L15
+
+## AUTO:Telemetry.privacy:compliance
+- Status: ACTIVE
+- Chosen: Telemetry system respects DISABLE_TELEMETRY setting and follows GDPR/CCPA compliance requirements with SHA-256 anonymization and opt-out mechanism
+- Policy: privacy + compliance + safety
+- Expires After Runs: 20
+- Linked: ASM-TELE-001
+- Revert Triggers: primary_evidence_contradiction, privacy_risk, legal_noncompliance
+- Evidence: docs/telemetry.md#L129-L139

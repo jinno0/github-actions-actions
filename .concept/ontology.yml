@@ -1294,3 +1294,96 @@ canonical_terms:
     - source: tests/integration/test_mock_claude.py#L34-L47
       quote: 'Mock Claude CLI has LGTM scenario (MOCK_SCENARIO=lgtm) that returns
         ''LGTM'' and ''Confidence: 9'''
+  Telemetry:
+    id: TERM-TELEMETRY
+    layer: domain
+    status: stable
+    definition: System for collecting anonymous usage metrics to understand how Actions
+      are being used with privacy-first design (SHA-256 anonymization, opt-out mechanism,
+      minimal data collection)
+    synonyms:
+    - telemetry
+    - anonymous usage metrics
+    - usage analytics
+    - telemetry data
+    boundaries:
+      includes:
+      - Anonymous metrics collection
+      - SHA-256 hash anonymization
+      - Opt-out mechanism (DISABLE_TELEMETRY)
+      - Minimal data collection
+      - Privacy-focused design
+      excludes:
+      - Personal data collection
+      - Repository names (hashed)
+      - User identities
+      - Code content
+      - Sensitive information
+    lifecycle:
+    - Action Executed
+    - Collect Metrics
+    - Hash Identifiers
+    - Send to Telemetry System
+    - Aggregate and Analyze
+    related_terms:
+    - AIPoweredAction
+    - QualityMetric
+    - SuccessMetric
+    assumptions:
+    - id: ASM-TELE-001
+      text: 'AUTO: Telemetry respects DISABLE_TELEMETRY setting and follows GDPR/CCPA
+        compliance requirements'
+      decision_key: AUTO:Telemetry.privacy:compliance
+      expires_after_runs: 20
+    evidence:
+    - source: docs/telemetry.md#L1-L14
+      quote: This project collects anonymous usage telemetry to help us understand how
+        Actions are being used and identify areas for improvement
+    - source: scripts/collect_metrics.py#L1-L20
+      quote: 'Collect and send anonymous usage metrics for GitHub Actions... Privacy
+        Features: Repository names are hashed (SHA-256), Opt-out mechanism, Only
+        essential metrics'
+    - source: docs/telemetry.md#L129-L139
+      quote: 'Under GDPR: lawful basis is legitimate interest, data controller is
+        repository maintainers, users can opt-out, data minimization applies... Under
+        CCPA: opt-out available via DISABLE_TELEMETRY'
+  ReviewOutcome:
+    id: TERM-REVIEW-OUTCOME
+    layer: aux
+    status: stable
+    definition: Categorization of AI review results used in quality metrics: Approved
+      (AI approved, human accepted without modification), Modified (human made changes
+      before accepting), Rejected (human rejected AI suggestions), Needs Work (AI
+      requested changes)
+    synonyms:
+    - review outcome
+    - review outcome category
+    - AI review result
+    - review categorization
+    boundaries:
+      includes:
+      - Categorical classification
+      - Human-AI interaction measurement
+      - Quality tracking
+      - excludes:
+      - Numeric scores only
+      - Binary approve/reject
+      - Non-AI reviews
+    lifecycle:
+    - Review Complete
+    - Categorize Outcome
+    - Record in Metrics
+    - Calculate Acceptance Rate
+    - Analyze Trends
+    related_terms:
+    - AcceptanceRate
+    - QualityMetric
+    - ReviewAndMergeAction
+    assumptions: []
+    evidence:
+    - source: docs/quality_metrics.md#L30-L35
+      quote: 'Review outcomes are categorized as: Approved (AI approved, human accepted),
+        Modified (human changed before accepting), Rejected (human rejected AI suggestions),
+        Needs Work (AI requested changes)'
+    - source: scripts/calculate_acceptance_rate.py#L38-L41
+      quote: Count outcomes from metrics: approved, modified, rejected, needs_work

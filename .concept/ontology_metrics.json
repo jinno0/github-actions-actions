@@ -1,15 +1,15 @@
 {
-  "run_id": "2026-02-03T04:34:31Z",
-  "updated_at": "2026-02-03T04:36:11.974283+00:00",
+  "run_id": "2026-02-03T06:28:40Z",
+  "updated_at": "2026-02-03T06:28:40+00:00",
   "ontology": {
-    "total_terms": 36,
+    "total_terms": 38,
     "by_layer": {
       "core": 9,
-      "domain": 18,
-      "aux": 9
+      "domain": 19,
+      "aux": 10
     },
     "by_status": {
-      "stable": 36,
+      "stable": 38,
       "draft": 0
     },
     "draft_ratio": 0.0,
@@ -48,29 +48,29 @@
   },
   "budget_status": {
     "total_terms_max": 80,
-    "total_terms_current": 36,
-    "total_terms_usage": 0.45,
+    "total_terms_current": 38,
+    "total_terms_usage": 0.475,
     "core_max": 20,
     "core_current": 9,
     "core_usage": 0.45,
     "domain_max": 30,
-    "domain_current": 18,
-    "domain_usage": 0.6,
+    "domain_current": 19,
+    "domain_usage": 0.6333333333333333,
     "aux_max": 30,
-    "aux_current": 9,
-    "aux_usage": 0.3,
+    "aux_current": 10,
+    "aux_usage": 0.3333333333333333,
     "within_budget": true
   },
   "queue": {
-    "pending": 2,
+    "pending": 0,
     "merged": 0,
     "rejected": 0,
-    "accepted": 5,
+    "accepted": 0,
     "limit": 50,
     "within_limits": true
   },
   "decisions": {
-    "active_auto_decisions": 7,
+    "active_auto_decisions": 8,
     "lines": 64,
     "limit": 200,
     "within_limits": true
@@ -79,18 +79,19 @@
     "actions_taken": {
       "merged": 0,
       "deleted": 0,
-      "deprecated": 0
+      "deprecated": 0,
+      "added": 2
     },
-    "gc_triggered": true,
+    "gc_triggered": false,
     "duplicates_found": 0,
     "duplicate_ids": [],
-    "last_hygiene_run": "2026-02-03T04:34:31Z"
+    "last_hygiene_run": "2026-02-03T06:28:40Z"
   },
   "hygiene": {
     "decisions_md_lines": 64,
     "decisions_md_limit": 200,
     "decisions_md_within_limit": true,
-    "claims_ndjson_lines": 132,
+    "claims_ndjson_lines": 150,
     "claims_ndjson_limit": 3000,
     "claims_ndjson_within_limit": true,
     "tombstones_count": 0,
