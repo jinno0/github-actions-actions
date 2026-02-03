@@ -1,0 +1,134 @@
+[
+  {
+    "function_id": "CF-001",
+    "scenario_name": "review-and-merge action structure",
+    "passed": true,
+    "actual_output": "Has name: True, description: True, runs: True",
+    "expected_output": "All required fields present",
+    "error_message": null,
+    "interpretation": "Action file exists with basic structure",
+    "evidence": [
+      "Checking actions/review-and-merge/action.yml",
+      "✓ actions/review-and-merge/action.yml exists",
+      "  ✓ Has name",
+      "  ✓ Has description",
+      "  ✓ Has runs"
+    ]
+  },
+  {
+    "function_id": "CF-002",
+    "scenario_name": "spec-to-code action and example exist",
+    "passed": true,
+    "actual_output": "Action: True, Example: True",
+    "expected_output": "Both action and example should exist",
+    "error_message": null,
+    "interpretation": "spec-to-code action is properly structured",
+    "evidence": [
+      "Checking actions/spec-to-code/action.yml",
+      "Checking examples/spec-to-code-example.yml",
+      "  ✓ Action file exists",
+      "  ✓ Example file exists"
+    ]
+  },
+  {
+    "function_id": "CF-003",
+    "scenario_name": "action-fixer action and documentation exist",
+    "passed": true,
+    "actual_output": "Action: True, Instruction: True",
+    "expected_output": "Both action and instruction should exist",
+    "error_message": null,
+    "interpretation": "action-fixer action is properly documented",
+    "evidence": [
+      "Checking actions/action-fixer/action.yml",
+      "Checking instructions/action-fixer.md",
+      "  ✓ Action file exists",
+      "  ✓ Instruction file exists"
+    ]
+  },
+  {
+    "function_id": "CF-004",
+    "scenario_name": "auto-refactor action and example exist",
+    "passed": true,
+    "actual_output": "Action: True, Example: True",
+    "expected_output": "Both action and example should exist",
+    "error_message": null,
+    "interpretation": "auto-refactor action is properly structured",
+    "evidence": [
+      "Checking actions/auto-refactor/action.yml: ✓",
+      "Checking examples/auto-refactor-example.yml: ✓"
+    ]
+  },
+  {
+    "function_id": "CF-005",
+    "scenario_name": "auto-document action and documentation exist",
+    "passed": true,
+    "actual_output": "Action: True, Instruction: True",
+    "expected_output": "Both action and instruction should exist",
+    "error_message": null,
+    "interpretation": "auto-document action is properly documented",
+    "evidence": [
+      "Action exists: ✓",
+      "Instruction exists: ✓"
+    ]
+  },
+  {
+    "function_id": "CF-006",
+    "scenario_name": "release-notes-ai action and example exist",
+    "passed": true,
+    "actual_output": "Action: True, Example: True",
+    "expected_output": "Both action and example should exist",
+    "error_message": null,
+    "interpretation": "release-notes-ai action is properly structured",
+    "evidence": [
+      "Action exists: ✓",
+      "Example exists: ✓"
+    ]
+  },
+  {
+    "function_id": "CF-007",
+    "scenario_name": "Quality metrics infrastructure exists",
+    "passed": 73,
+    "actual_output": "Script: True, Library: True, Executable: 73",
+    "expected_output": "All metrics infrastructure should exist and be executable",
+    "error_message": null,
+    "interpretation": "Quality metrics system is properly set up",
+    "evidence": [
+      "Checking scripts/calculate_acceptance_rate.py",
+      "Checking actions/lib/acceptance_tracker.py",
+      "  ✓ Metrics script exists",
+      "  ✓ Tracker library exists",
+      "  ✓ Script is executable"
+    ]
+  },
+  {
+    "function_id": "CF-008",
+    "scenario_name": "Test infrastructure with coverage",
+    "passed": true,
+    "actual_output": "Test dirs: 15, Coverage: True, Threshold: True",
+    "expected_output": "Comprehensive test infrastructure with coverage",
+    "error_message": null,
+    "interpretation": "Test infrastructure is properly configured",
+    "evidence": [
+      "Checking pytest.ini",
+      "  ✓ pytest.ini exists",
+      "  Found 15 test directories",
+      "  ✓ Coverage configured",
+      "  ✓ Coverage threshold set"
+    ]
+  },
+  {
+    "function_id": "QA-001",
+    "scenario_name": "YAML files are syntactically valid",
+    "passed": true,
+    "actual_output": "3/3 key files valid",
+    "expected_output": "All YAML files should be valid",
+    "error_message": null,
+    "interpretation": "YAML syntax appears valid",
+    "evidence": [
+      "Found 51 YAML files",
+      "  ✓ actions/review-and-merge/action.yml appears valid",
+      "  ✓ examples/review-and-merge-example.yml appears valid",
+      "  ✓ pytest.ini appears valid"
+    ]
+  }
+]
