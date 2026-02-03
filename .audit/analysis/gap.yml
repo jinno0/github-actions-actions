@@ -1,0 +1,127 @@
+# Gap Analysis - Intent vs Current State
+version: "2.0"
+generated_at: "2026-02-04T02:20:00Z"
+generated_by: "audit-run-001"
+
+gaps:
+  - id: "ISS-001"
+    severity: "critical"
+    category: "quality_attributes"
+    title: "テストカバレッジが目標70%を46.94%下回っている"
+    current_state: "カバレッジ23.06%（pytest coverage report）"
+    desired_state: "カバレッジ>= 70%（pytest.ini:22, intent.yml QA-001）"
+    gap_size: -46.94%
+    impact: |
+      - pytestが必ず失敗する（--cov-fail-under=70）
+      - コードの76.94%がテストされていない
+      - 回帰リスクが高い
+    evidence: ["C-003", "C-007", "C-014"]
+    assumptions:
+      - id: "ASM-003"
+        description: "目標70%は適切である"
+        confidence: "high"
+        reason: "pytest.iniで明示的に設定されている"
+
+  - id: "ISS-002"
+    severity: "high"
+    category: "structure"
+    title: "6つのAction（46%）がテンプレート標準に準拠していない"
+    current_state: "7/13 Actionsのみがtemplates/を持つ"
+    desired_state: "13/13 Actionsがtemplates/を持つ（AGENTS.md:241-246）"
+    gap_size: -6 actions
+    impact: |
+      - テンプレートのメンテナンス性が低い
+      - ユーザーがカスタムプロンプトを注入しにくい
+      - action.ymlにハードコードされたプロンプトが存在する可能性
+    evidence: ["C-006", "C-010", "C-015"]
+    assumptions:
+      - id: "ASM-005"
+        description: "全Actionでテンプレート使用が推奨されている"
+        confidence: "high"
+        reason: "AGENTS.mdで明示的に推奨されている"
+
+  - id: "ISS-003"
+    severity: "medium"
+    category: "operational"
+    title: "AIレビュー受入率の実測値が不明"
+    current_state: "受入率データが存在しない（C-018）"
+    desired_state: "受入率>= 70%（README.md:127, intent.yml QA-002）"
+    gap_size: "不明（データ不足）"
+    impact: |
+      - 品質目標の達成状況を評価できない
+      - AIレビューの有効性を証明できない
+      - 改善の方向性を決められない
+    evidence: ["C-018"]
+    assumptions:
+      - id: "ASM-004"
+        description: "目標70%は適切である"
+        confidence: "high"
+        reason: "README.mdで明示的に記載されている"
+
+  - id: "ISS-004"
+    severity: "medium"
+    category: "operational"
+    title: "組織内導入状況の追跡・報告が不足"
+    current_state: "導入リポジトリ数が不明（C-019）"
+    desired_state: "複数リポジトリで採用されている（PURPOSE.md:70）"
+    gap_size: "不明（データ不足）"
+    impact: |
+      - 成功条件を評価できない
+      - 採用拡大の戦略を立てられない
+      - ユーザーフィードバックを収集しにくい
+    evidence: ["C-019"]
+
+  - id: "ISS-005"
+    severity: "medium"
+    category: "operational"
+    title: "Action使用状況の可視化が不足"
+    current_state: "実行回数・成功率が不明（C-020）"
+    desired_state: "各Actionの実行回数と成功率を追跡（README.md:98-119でテレメトリー収集あり）"
+    gap_size: "収集はあるが報告がない"
+    impact: |
+      - 人気のあるActionと使われていないActionが分からない
+      - エラー率の高いActionを特定できない
+      - 改善の優先順位を決められない
+    evidence: ["C-020"]
+
+  - id: "ISS-006"
+    severity: "low"
+    category: "testing"
+    title: "機能検証（Runtime Testing）が未実装"
+    current_state: "構造検証のみ（TESTING.md:44-50）"
+    desired_state: "Runtime環境での完全な機能テスト"
+    gap_size: "Phase 3: E2E Testing（Future）"
+    impact: |
+      - 実行時のバグを検出できない
+      - GitHub APIとの相互作用をテストできない
+      - エラーハンドリングを検証できない
+    evidence: ["C-011", "C-016"]
+    assumptions:
+      - id: "ASM-006"
+        description: "Runtime環境はGitHub Actions Runtimeまたはactシミュレーター"
+        confidence: "medium"
+        reason: "TESTING.mdで言及されている"
+
+summary:
+  total_gaps: 6
+  critical: 1
+  high: 1
+  medium: 3
+  low: 1
+  overall_assessment: |
+    リポジトリは構造的に良く整備されているが、テストカバレッジと運用メトリクスの
+    可視化に大きな課題がある。Critical/High優先度のギャップ（ISS-001, ISS-002）は
+    技術的債務であり、中期的に解決が必要。Medium優先度のギャップ（ISS-003〜ISS-005）
+    は運用上の課題であり、短期的に改善可能。
+
+priority_matrix:
+  quick_wins:
+    - "ISS-005: テレメトリーデータの可視化ダッシュボード作成"
+    - "ISS-003: 受入率スクリプトの定期実行とレポート自動化"
+  
+  strategic_investments:
+    - "ISS-001: テストカバレッジ70%達成（最大の課題）"
+    - "ISS-002: テンプレート標準の完全準拠"
+  
+  phased_approach:
+    - "ISS-006: 機能検証はPhase 3として段階的に実装"

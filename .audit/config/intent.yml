@@ -1,0 +1,229 @@
+version: "2.0"
+updated_at: "2026-02-04T02:20:00Z"
+updated_by: "audit-run-001"
+
+# === Mission ===
+mission:
+  target_user: "組織の開発チームとDevOpsエンジニア（GitHub Self-hosted Runnerを使用）"
+  provided_value: "AIネイティブなGitHub Actionsを通じた開発効率と品質の向上（コードレビュー、自動修正、ドキュメント生成）"
+  desired_state: "13のAI Actionsが組織内の複数リポジトリで採用され、AIが雑務を自動化することで人間が本質的な設計に集中できる状態"
+
+# === Assumptions ===
+assumptions:
+  - id: "ASM-001"
+    field: "mission.target_user"
+    value: "GitHub Self-hosted Runnerを使用する中規模〜大規模組織"
+    reason: "README.mdで'Self-hosted runner上で動作するClaude Code CLI'を前提としているため"
+    confidence: "high"
+
+  - id: "ASM-002"
+    field: "mission.target_user"
+    value: "TypeScript/Python/Reactプロジェクトを中心とした開発チーム"
+    reason: "README.mdのカスタムレビュールールでこれらの言語/フレームワークを例示しているため"
+    confidence: "medium"
+
+  - id: "ASM-003"
+    field: "quality_attributes.test_coverage"
+    value: ">= 70%"
+    reason: "pytest.iniで--cov-fail-under=70と設定されているため"
+    confidence: "high"
+
+  - id: "ASM-004"
+    field: "quality_attributes.ai_acceptance_rate"
+    value: ">= 70%"
+    reason: "README.mdで「AIレビューの受入率（Acceptance Rate）目標: >= 70%」と記載されているため"
+    confidence: "high"
+
+  - id: "ASM-005"
+    field: "infrastructure.claude_cli"
+    value: "Self-hosted RunnerにClaude Code CLIがインストールされている"
+    reason: "AGENTS.mdで'self-hosted runner上で動作するClaude Code CLI'を前提としているため"
+    confidence: "high"
+
+  - id: "ASM-006"
+    field: "infrastructure.runner_os"
+    value: "Linux系OS（Ubuntu等）"
+    reason: "GitHub Actionsの標準的Self-hosted Runner環境を想定"
+    confidence: "medium"
+
+# === Core Functions ===
+core_functions:
+  - id: "CF-001"
+    claim: "PRのAIレビューと自動マージができる"
+    source: "README.md:14, PURPOSE.md:43"
+    testable: true
+    verification_method: "構造検証とDry Runモック実行"
+
+  - id: "CF-002"
+    claim: "Markdown仕様書からコードを自動生成できる"
+    source: "README.md:15"
+    testable: true
+    verification_method: "構造検証とテンプレート置換検証"
+
+  - id: "CF-003"
+    claim: "WorkflowエラーをAIが自動検知・修正できる"
+    source: "README.md:16, PURPOSE.md:49"
+    testable: true
+    verification_method: "構造検証とテンプレート検証"
+
+  - id: "CF-004"
+    claim: "自然言語指示に基づきコードをリファクタリングできる"
+    source: "README.md:17"
+    testable: true
+    verification_method: "構造検証とテンプレート置換検証"
+
+  - id: "CF-005"
+    claim: "コード変更を検知しREADME等のドキュメントを自動更新できる"
+    source: "README.md:23"
+    testable: true
+    verification_method: "構造検証とテンプレート検証"
+
+  - id: "CF-006"
+    claim: "コミット履歴からリリースノートを自動生成できる"
+    source: "README.md:24"
+    testable: true
+    verification_method: "構造検証とテンプレート置換検証"
+
+  - id: "CF-007"
+    claim: "PRが条件を満たす場合に自動マージできる"
+    source: "README.md:30"
+    testable: true
+    verification_method: "構造検証とYAMLパース検証"
+
+  - id: "CF-008"
+    claim: "PRの競合をAIが自動解決しながらリベースできる"
+    source: "README.md:31"
+    testable: true
+    verification_method: "構造検証"
+
+  - id: "CF-009"
+    claim: "AIレビュー後、CIパス時に自動マージできる"
+    source: "README.md:32"
+    testable: true
+    verification_method: "構造検証"
+
+  - id: "CF-010"
+    claim: "ドラフトPRを自動的にレビュー準備完了に変更できる"
+    source: "README.md:33"
+    testable: true
+    verification_method: "構造検証"
+
+  - id: "CF-011"
+    claim: "複数のPRを一括マージできる"
+    source: "README.md:39"
+    testable: true
+    verification_method: "構造検証"
+
+  - id: "CF-012"
+    claim: "複数のPRを一括リベースできる"
+    source: "README.md:40"
+    testable: true
+    verification_method: "構造検証"
+
+  - id: "CF-013"
+    claim: "PRをスキャンし、AIレビューキューに自動登録できる"
+    source: "README.md:46"
+    testable: true
+    verification_method: "構造検証"
+
+  - id: "CF-014"
+    claim: "プロジェクト固有のコーディング規約をAIレビューに反映できる"
+    source: "README.md:66-70"
+    testable: true
+    verification_method: "カスタムルールテンプレート存在確認"
+
+  - id: "CF-015"
+    claim: "AIレビューの品質を定量的に測定できる（受入率追跡）"
+    source: "README.md:122-139"
+    testable: true
+    verification_method: "メトリクス収集スクリプト実行"
+
+  - id: "CF-016"
+    claim: "全ActionがDry Runモードで検証できる"
+    source: "README.md:93, AGENTS.md:279-376"
+    testable: true
+    verification_method: "pytestによる構造検証実行"
+
+# === Quality Attributes ===
+quality_attributes:
+  - id: "QA-001"
+    name: "テストカバレッジ"
+    target: ">= 70%"
+    verification:
+      type: "measurement"
+      command: "pytest --cov=. --cov-fail-under=70"
+      criteria:
+        operator: ">="
+        value: 70
+        unit: "%"
+      interpretation:
+        success_means: "コードの70%以上がテストで実行されている"
+        failure_means: "テストされていないコードパスが30%以上ある"
+        warning: "カバレッジが高くてもアサーションが弱ければ意味がない"
+
+  - id: "QA-002"
+    name: "AIレビュー受入率"
+    target: ">= 70%"
+    verification:
+      type: "measurement"
+      command: "python scripts/calculate_acceptance_rate.py --output report --time-period 7d"
+      criteria:
+        operator: ">="
+        value: 70
+        unit: "%"
+      interpretation:
+        success_means: "AIレビューの70%以上が人間に受け入れられている"
+        failure_means: "AIレビューの30%以上が拒否または修正されている"
+        warning: "受入率が高くてもレビューの質が低い可能性がある"
+
+  - id: "QA-003"
+    name: "Action構造検証"
+    target: "100% (13/13 Actions)"
+    verification:
+      type: "structural_check"
+      command: "pytest tests/ -v"
+      criteria:
+        operator: "=="
+        value: 13
+        unit: "actions"
+      interpretation:
+        success_means: "全Actionが構造検証をパスしている"
+        failure_means: "未検証のActionまたは構造エラーがある"
+        warning: "構造検証は実行時の振る舞いを保証しない"
+
+  - id: "QA-004"
+    name: "YAML構文有効性"
+    target: "100% (action.yml全て)"
+    verification:
+      type: "syntax_check"
+      command: "find actions -name 'action.yml' -exec python3 -c \"import yaml; yaml.safe_load(open('{}'))\" \\;"
+      criteria:
+        operator: "=="
+        value: 13
+        unit: "files"
+      interpretation:
+        success_means: "全ActionのYAML構文が正しい"
+        failure_means: "構文エラーのあるActionがある"
+        warning: "YAMLが有効でも論理エラーの可能性はある"
+
+  - id: "QA-005"
+    name: "テンプレートファイル完備率"
+    target: "100% (Action毎にtemplates/ディレクトリ存在)"
+    verification:
+      type: "structural_check"
+      command: "for action in actions/*/; do [ -d \"$action/templates\" ] || echo \"Missing: $action\"; done"
+      criteria:
+        operator: "=="
+        value: 100
+        unit: "%"
+      interpretation:
+        success_means: "全Actionがテンプレートファイルを持っている"
+        failure_means: "テンプレートを持たないActionがある"
+        warning: "テンプレートがなくてもActionは動作するが保守性が下がる"
+
+# === Non-Goals ===
+non_goals:
+  - "単なるシェルスクリプトのラッパー（既存のActionsで十分なもの）"
+  - "完全に無人での運用（AIのハルシネーションリスクを考慮）"
+  - "特定プロダクトに強く結合しすぎたロジック（再利用性を重視）"
+  - "Runtime環境での完全な機能テスト（構造検証に留める）"
