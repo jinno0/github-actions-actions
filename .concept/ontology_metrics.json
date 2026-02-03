@@ -1,6 +1,6 @@
 {
-  "run_id": "2026-02-03T04:18:33Z",
-  "updated_at": "2026-02-03T04:18:33+00:00",
+  "run_id": "2026-02-03T04:34:31Z",
+  "updated_at": "2026-02-03T04:36:11.974283+00:00",
   "ontology": {
     "total_terms": 36,
     "by_layer": {
@@ -40,8 +40,8 @@
     }
   },
   "claims": {
-    "total_lines": 116,
-    "retained_lines": 116,
+    "total_lines": 150,
+    "retained_lines": 150,
     "archived_lines": 0,
     "run_limit": 10000,
     "within_limits": true
@@ -62,7 +62,7 @@
     "within_budget": true
   },
   "queue": {
-    "pending": 0,
+    "pending": 2,
     "merged": 0,
     "rejected": 0,
     "accepted": 5,
@@ -84,7 +84,7 @@
     "gc_triggered": true,
     "duplicates_found": 0,
     "duplicate_ids": [],
-    "last_hygiene_run": "2026-02-03T04:18:33Z"
+    "last_hygiene_run": "2026-02-03T04:34:31Z"
   },
   "hygiene": {
     "decisions_md_lines": 64,
@@ -96,7 +96,7 @@
     "tombstones_count": 0,
     "tombstones_limit": 200,
     "unmapped_ratio": 0.0,
-    "unmapped_ratio_limit": 0.20,
+    "unmapped_ratio_limit": 0.2,
     "all_within_limits": true
   }
 }

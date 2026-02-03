@@ -1,4 +1,4 @@
-updated_at: "2026-02-02T23:44:31Z"
+updated_at: "2026-02-03T04:34:31Z"
 queue:
   - id: "TP-TELEMETRY-001"
     proposed_canonical: "Telemetry"
@@ -82,3 +82,20 @@ queue:
     decision: "accepted"
     expires_after_runs: 10
     created_run: "2026-02-02T17:19:48Z"
+  - id: "TP-QUALITY-002"
+    proposed_canonical: "ReviewOutcome"
+    proposed_layer: "aux"
+    term_raw_examples: ["Review outcome", "review outcome category", "AI review result"]
+    reason: "Categorization of AI review results: Approved (AI approved, human accepted), Modified (human changed before accepting), Rejected (human rejected), Needs Work (AI requested changes)"
+    evidence:
+      - source: "docs/quality_metrics.md#L30-L35"
+        quote: "Review outcomes are categorized as: Approved, Modified, Rejected, Needs Work"
+      - source: "scripts/calculate_acceptance_rate.py#L38-L41"
+        quote: "Count outcomes from metrics: approved, modified, rejected, needs_work"
+    auto_merge_candidates:
+      - term: "AcceptanceRate"
+        similarity: 0.72
+        note: "Related but distinct - AcceptanceRate measures ReviewOutcomes"
+    decision: "pending"
+    expires_after_runs: 10
+    created_run: "2026-02-03T04:34:31Z"
