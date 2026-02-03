@@ -3,7 +3,7 @@
 import json
 import pytest
 from pathlib import Path
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 # Import the module to test
 import sys
@@ -93,7 +93,7 @@ class TestFilterMetricsByTime:
 
     def test_filter_last_7_days(self):
         """Test filtering to last 7 days."""
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         metrics = [
             {
                 "outcome": "approved",
@@ -121,7 +121,7 @@ class TestFilterMetricsByTime:
             {"outcome": "rejected"},  # No timestamp
             {
                 "outcome": "approved",
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.now(timezone.utc).isoformat()
             },
         ]
 
@@ -170,13 +170,13 @@ class TestGenerateQualityReport:
         metrics = [
             {
                 "outcome": "approved",
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
                 "suggestions_count": 3,
                 "accepted_count": 3
             },
             {
                 "outcome": "modified",
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
                 "suggestions_count": 5,
                 "accepted_count": 2,
                 "rejection_reasons": ["Too aggressive"]
@@ -196,12 +196,12 @@ class TestGenerateQualityReport:
         metrics = [
             {
                 "outcome": "rejected",
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
                 "rejection_reasons": ["Too aggressive", "Missing context"]
             },
             {
                 "outcome": "rejected",
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
                 "rejection_reasons": ["Too aggressive"]
             },
         ]

@@ -7,9 +7,9 @@ providing insights into AI review quality and effectiveness.
 """
 
 import json
+import os
 import sys
-from datetime import datetime, timedelta
-from pathlib import Path
+from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List
 from collections import defaultdict
 
@@ -131,7 +131,7 @@ def filter_metrics_by_time(
         return []
 
     # Parse time period (e.g., "7d", "24h", "1w")
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
 
     if time_period.endswith('d'):
         days = int(time_period[:-1])
@@ -156,16 +156,8 @@ def filter_metrics_by_time(
         else:
             try:
                 timestamp = datetime.fromisoformat(timestamp_str.replace('Z', '+00:00'))
-                # Make both timestamps timezone-aware or naive for comparison
-                if timestamp.tzinfo is not None and cutoff.tzinfo is None:
-                    cutoff_local = cutoff.replace(tzinfo=timestamp.tzinfo)
-                elif timestamp.tzinfo is None and cutoff.tzinfo is not None:
-                    timestamp = timestamp.replace(tzinfo=cutoff.tzinfo)
-                    cutoff_local = cutoff
-                else:
-                    cutoff_local = cutoff
-
-                if timestamp >= cutoff_local:
+                # Both timestamps are timezone-aware - direct comparison
+                if timestamp >= cutoff:
                     filtered.append(metric)
             except (ValueError, AttributeError):
                 # Skip metrics with invalid timestamps
@@ -184,8 +176,8 @@ def generate_quality_report(metrics: List[Dict[str, Any]], time_period: str = "7
     report.append("")
     report.append("## Summary")
     report.append("")
-    report.append(f"| Metric | Value | Target | Status |")
-    report.append(f"|--------|-------|--------|--------|")
+    report.append("| Metric | Value | Target | Status |")
+    report.append("|--------|-------|--------|--------|")
 
     acceptance_rate = stats["acceptance_rate"]
     target = 70
@@ -258,6 +250,11 @@ def main():
     )
 
     args = parser.parse_args()
+
+    # Respect privacy settings - check if telemetry is disabled
+    if os.getenv("DISABLE_TELEMETRY", "").lower() == "true":
+        print("Quality metrics analysis is disabled via DISABLE_TELEMETRY environment variable.", file=sys.stderr)
+        return 0
 
     # Load metrics
     metrics = load_metrics_from_file(args.metrics_file)
