@@ -1,0 +1,80 @@
+run_id: "2026-02-04T02:35:00Z"
+created_at: "2026-02-04T02:35:00Z"
+
+scope:
+  prs_to_apply:
+    - id: "PR-004"
+      priority: "critical"
+      title: "テストカバレッジ70%達成"
+      estimated_impact: "high"
+      risk: "medium"
+    - id: "PR-001"
+      priority: "medium"
+      title: "テレメトリーダッシュボード作成"
+      estimated_impact: "medium"
+      risk: "low"
+  prs_deferred: []
+
+success_criteria:
+  - id: "SC-001"
+    from: "intent.yml#quality_attributes[0]"
+    target: "テストカバレッジ >= 70%"
+    verification: "pytest --cov=. --cov-fail-under=70"
+    current_value: 23.06%
+    gap: 46.94%
+
+  - id: "SC-002"
+    from: "intent.yml#core_functions"
+    target: "Core Functions検証: 100% (16/16 functions)"
+    verification: ".audit/verification/verify_core_functions.py"
+    current_status: "検証スクリプト未実装"
+
+rollback_trigger:
+  - "pytest失敗（既存テスト）"
+  - "カバレッジが低下"
+  - "ビルドエラー"
+  - "構造検証失敗"
+
+execution_strategy:
+  phase_1:
+    - description: "beforeスナップショット取得"
+      commands:
+        - "pytest --cov=. --cov-report=json > .audit/execution/runs/$RUN_ID/before/metrics.json 2>&1"
+        - "pytest tests/ -v > .audit/execution/runs/$RUN_ID/before/test_results.txt 2>&1"
+
+  phase_2:
+    - pr: "PR-001"
+      description: "テレメトリダッシュボード実装"
+      files:
+        - create: "scripts/generate_telemetry_report.py"
+        - create: ".github/workflows/generate-telemetry-report.yml"
+        - modify: "docs/telemetry.md"
+      verification:
+        - "python scripts/generate_telemetry_report.py --dry-run"
+        - "yamllint .github/workflows/generate-telemetry-report.yml"
+
+  phase_3:
+    - pr: "PR-004"
+      description: "テストカバレッジ改善（Phase 1のみ実行）"
+      scope: "scripts/のテスト追加（目標+15% coverage）"
+      files:
+        - create: "tests/test_scripts/test_calculate_acceptance_rate.py"
+        - create: "tests/test_scripts/test_collect_metrics.py"
+        - create: "tests/test_scripts/test_aggregate_metrics.py"
+        - create: "tests/test_scripts/test_generate_metrics_report.py"
+        - create: "tests/test_scripts/test_generate_adoption_report.py"
+        - create: "tests/test_scripts/test_generate_telemetry_report.py"
+      verification:
+        - "pytest tests/test_scripts/ -v"
+        - "pytest --cov=. --cov-report=term-missing | grep -E '(TOTAL|scripts/)'"
+
+  phase_4:
+    - description: "afterスナップショット取得"
+      commands:
+        - "pytest --cov=. --cov-report=json > .audit/execution/runs/$RUN_ID/after/metrics.json 2>&1"
+        - "pytest tests/ -v > .audit/execution/runs/$RUN_ID/after/test_results.txt 2>&1"
+
+budget:
+  max_prs_per_run: 2
+  max_file_changes_per_pr: 10
+  max_execution_minutes: 30

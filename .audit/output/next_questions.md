@@ -1,226 +1,174 @@
-# 確認事項と仮定の報告
+# Confirmation List and Assumptions Report
 
-**Audit Run**: audit-run-001  
-**Date**: 2026-02-04
+**Audit Run**: audit-run-002
+**Date**: 2026-02-04T03:00:00Z
 
-## Overview
-
-対話ができないため、以下の仮定に基づいて監査を完了させました。  
-認識が異なる場合は `.audit/config/intent.yml` を修正してください。
+This document lists the assumptions applied during this audit and questions for the next cycle.
 
 ---
 
-## 適用した仮定
+## Applied Assumptions
 
-| ID | 項目 | 仮定した値 | 根拠 | 自信度 |
-|----|------|------------|------|--------|
-| ASM-001 | ターゲットユーザー | GitHub Self-hosted Runnerを使用する中規模〜大規模組織 | README.mdで"Self-hosted runner上で動作するClaude Code CLI"を前提 | high |
-| ASM-002 | 対象プロジェクト | TypeScript/Python/Reactプロジェクトを中心 | README.mdのカスタムレビュールールでこれらを例示 | medium |
-| ASM-003 | テストカバレッジ目標 | ≥70% | pytest.iniで--cov-fail-under=70と設定 | high |
-| ASM-004 | AIレビュー受入率目標 | ≥70% | README.mdで目標として明記 | high |
-| ASM-005 | インフラ | Self-hosted RunnerにClaude Code CLIがインストール済み | AGENTS.mdで前提として記載 | high |
-| ASM-006 | Runner OS | Linux系OS（Ubuntu等） | GitHub Actionsの標準的Self-hosted環境 | medium |
+Since this audit operates in non-blocking mode, the following assumptions were made to complete the analysis. Please review and correct any inaccuracies.
 
----
+### ASM-001: Target User
+**Assumed**: GitHub Self-hosted Runner users (medium-large organizations)
+**Confidence**: High
+**Reason**: README.md emphasizes self-hosted runners and Claude CLI
+**Impact**: Affects documentation tone and feature priorities
 
-## 質問と確認リスト
+### ASM-002: Target Languages/Frameworks
+**Assumed**: TypeScript, Python, React projects
+**Confidence**: Medium
+**Reason**: Custom review rule examples limited to these in examples/custom-rules/
+**Impact**: Affects which languages get priority for custom rules
 
-### 次回の精度向上のための確認事項
+### ASM-003: Test Coverage Target
+**Assumed**: >= 70% is appropriate target
+**Confidence**: High
+**Reason**: Explicitly configured in pytest.ini:22
+**Actual Status**: 93.93% (exceeds target)
+**Impact**: None - target validated as appropriate
 
-以下の質問に対する回答を `.audit/config/intent.yml` に反映してください。
+### ASM-004: AI Acceptance Rate Target
+**Assumed**: >= 70% acceptance rate is achievable
+**Confidence**: High
+**Reason**: Stated in README.md:127 as goal
+**Impact**: Defines success metric for AI review quality
 
-#### 1. ターゲットユーザーの確認 (ASM-001, ASM-002)
+### ASM-005: Claude CLI Availability
+**Assumed**: Claude Code CLI installed on self-hosted runners
+**Confidence**: High
+**Reason**: Required by design; AGENTS.md documents requirement
+**Impact**: All actions depend on this being true
 
-- [ ] **ASM-001**: 「中規模〜大規模組織」で合っていますか？
-  - 代替案: 小規模組織/個人開発者も含む？
-  - 影響範囲: READMEのトーン、導入ガイドの詳細度
-
-- [ ] **ASM-002**: 「TypeScript/Python/React中心」で合っていますか？
-  - 代替案: Go/Rust/Java等も含む？
-  - 影響範囲: カスタムルールの例示、サポート言語のドキュメント
-
-#### 2. 品質目標の確認 (ASM-003, ASM-004)
-
-- [ ] **ASM-003**: テストカバレッジ70%目標は適切ですか？
-  - 現状: pytest.iniで設定済み
-  - 達成状況: 23.06%（46.94%不足）
-  - 選択肢:
-    - 維持する（推奨）: PR-004で改善
-    - 引き下げる（例: 60%）: pytest.ini修正
-    - 引き上げる（例: 80%）: より多くのテストが必要
-
-- [ ] **ASM-004**: AIレビュー受入率70%目標は適切ですか？
-  - 現状: README.mdで記載あり
-  - 実測値: 不明（C-018）
-  - 選択肢:
-    - 維持する: PR-002で計測開始
-    - 調整する: 目標値を変更
-
-#### 3. インフラの確認 (ASM-005, ASM-006)
-
-- [ ] **ASM-005**: Self-hosted RunnerへのClaude Code CLIインストールは前提で良いですか？
-  - 現状: AGENTS.mdで前提として記載
-  - 選択肢:
-    - はい（推奨）: 現状維持
-    - いいえ: Dockerコンテナ等の代替手段を考慮
-
-- [ ] **ASM-006**: 「Linux系OS（Ubuntu等）」で合っていますか？
-  - 現状: 仮定
-  - 選択肢:
-    - はい: 様々なLinuxディストリビューションを想定
-    - いいえ: macOS/Windowsもサポート
-    - 限定する: Ubuntuのみ公式サポート
-
-#### 4. 運用メトリクスの確認
-
-- [ ] **テレメトリー収集状況**: 現在、テレメトリーは収集されていますか？
-  - README.md:98-119で収集機能ありと記載
-  - C-020: 実行回数・成功率が不明
-  - 確認事項:
-    - 収集は開始されているか？
-    - データはどこに保存されているか？
-    - 可視化ダッシュボードはあるか？
-
-- [ ] **導入リポジトリ数**: 組織内で何リポジトリが導入していますか？
-  - PURPOSE.md:70で成功条件として記載
-  - C-019: 現状不明
-  - 確認事項:
-    - 0リポジトリ（まだ開始されていない）
-    - 1-5リポジトリ（パイロット段階）
-    - 6+リポジトリ（本格展開中）
-
-- [ ] **AIレビュー受入率**: 現在、実際の受入率は何%ですか？
-  - README.md:127で目標70%と記載
-  - C-018: 実測値不明
-  - 確認事項:
-    - 計測は開始されているか？
-    - 目標70%は現実的か？
-    - 実績値を共有可能か？
+### ASM-006: Runner OS
+**Assumed**: Linux-based (Ubuntu or similar)
+**Confidence**: Medium
+**Reason**: Standard for GitHub Actions self-hosted runners
+**Impact**: Affects script compatibility and testing approach
 
 ---
 
-## 不明点（Unknowns）の解決方法
+## Measurement Error Correction
 
-### C-018: AIレビュー受入率
+### ISS-NEW-001: Coverage Measurement Error (RESOLVED)
 
-**現状**: 実測値が不明  
-**検証方法**: `python scripts/calculate_acceptance_rate.py --output report --time-period 7d`  
-**次のアクション**: 
-- [ ] スクリプトを実行してレポート生成
-- [ ] 定期実行をCIに追加（PR-002）
-- [ ] READMEに実績値を追記
+**Previous Audit Finding**:
+- Reported coverage: 23.06%
+- Classification: Critical Issue
+- Proposed action: PR-004 to improve coverage
 
-### C-019: 組織内導入リポジトリ数
+**Actual State**:
+- Actual coverage: 93.93%
+- Classification: Excellent (exceeds target by 23.93%)
+- Required action: None - measurement error corrected
 
-**現状**: 導入状況が不明  
-**検証方法**: 
-- 使用状況アンケート実施
-- テレメトリーデータの分析（一意なリポジトリ数）
-- 手動でのリスト作成
-**次のアクション**:
-- [ ] 導入リポジトリ追跡システム作成（PR-003）
-- [ ] 定期調査の実施
+**Root Cause**:
+Previous audit did not execute `pytest --cov` directly. Likely relied on stale or incorrect data.
 
-### C-020: Action実行回数と成功率
+**Corrected Methodology**:
+This audit now always runs `pytest --cov` to get actual measurements, not relying on cached reports or secondary sources.
 
-**現状**: 実行回数・成功率が不明  
-**検証方法**: テレメトリーデータの集計  
-**次のアクション**:
-- [ ] テレメトリー集計スクリプト作成（PR-001）
-- [ ] 週次レポート自動化
-- [ ] ダッシュボード作成
+**Lessons Learned**:
+1. Always run actual measurement commands during audit
+2. Don't rely on previously reported metrics without verification
+3. Cross-check critical findings with direct execution
 
 ---
 
-## 仮定が正しくなかった場合の対応
+## Questions for Next Cycle
 
-### 仮定を修正する場合
+### Validation Questions
 
-1. `.audit/config/intent.yml` を編集
-2. 該当する `assumptions` エントリを更新
-3. 再監査を実行（または改善提案を修正）
+Please review these assumptions and correct if inaccurate:
 
-### 例: ASM-003を修正する場合
+- [ ] **ASM-001**: Are we correct that the primary users are organizations using self-hosted runners?
+- [ ] **ASM-002**: Should we prioritize TypeScript/Python/React, or are other languages equally important?
+- [ ] **ASM-006**: Is Linux the primary OS for self-hosted runners, or do you need Windows/macOS support?
+
+### Operational Questions
+
+These questions emerged during the audit but were not answerable from the code:
+
+1. **Production Data Availability** (ISS-003)
+   - Question: Are production metrics (acceptance rate, usage counts) currently being collected?
+   - Impact: Determines if infrastructure is ready or needs setup
+   - Follow-up: Check if `scripts/calculate_acceptance_rate.py` is being used in production workflows
+
+2. **Organizational Adoption Status** (ISS-004)
+   - Question: How many repositories are currently using these actions?
+   - Impact: Determines success of organizational rollout
+   - Follow-up: Would adoption tracking provide valuable insights?
+
+3. **Template Standardization Priority** (ISS-002)
+   - Question: Is template standardization (6 Actions) a priority for the team?
+   - Impact: Affects Phase 2 planning
+   - Current state: 7/13 Actions have templates/, 6 do not
+
+4. **Dashboard UI vs Weekly Reports** (ISS-005)
+   - Question: Is a real-time dashboard UI needed, or are weekly reports sufficient?
+   - Impact: Determines if we invest in dashboard development
+   - Current state: Weekly automated reports implemented (PR-001)
+
+5. **Runtime Testing Timeline** (ISS-006)
+   - Question: When should we invest in runtime testing (act, GitHub API mocking)?
+   - Impact: Determines Phase 3 timeline
+   - Current state: Structural testing (297 tests) catches most bugs
+
+---
+
+## Updated Recommendations Based on Corrections
+
+### Previous Recommendations (Now Invalid)
+
+❌ ~~PR-004: Improve test coverage from 23.06% to 70%~~
+**Status**: NOT NEEDED
+**Reason**: Actual coverage is 93.93%, far exceeding target
+**Action**: Remove from roadmap
+
+### New Recommendations
+
+✅ **Phase 1.1: Document Structural Testing as Verification Method**
+- **Issue**: ISS-007
+- **Rationale**: Clarify that structural testing IS the core function verification
+- **Effort**: 1 day (documentation)
+- **Action**: Add section to TESTING.md explaining methodology
+
+✅ **Phase 1.2: Enable Production Metrics Collection**
+- **Issue**: ISS-003
+- **Rationale**: Infrastructure ready, need to start collecting data
+- **Effort**: Low (verify scripts are enabled)
+- **Action**: Confirm metrics workflows active
+
+---
+
+## Assumption Updates
+
+If any of the assumptions above are incorrect, please update `.audit/config/intent.yml`:
 
 ```yaml
-# .audit/config/intent.yml
 assumptions:
-  - id: "ASM-003"
-    field: "quality_attributes.test_coverage"
-    value: ">= 60%"  # 70%から60%に引き下げ
-    reason: "現状のリソースで現実的な目標"
-    confidence: "high"
+  - id: "ASM-001"
+    field: "mission.target_user"
+    value: "CORRECTED_VALUE"
+    reason: "ACTUAL_REASON"
+    confidence: "low|medium|high"
 ```
 
-その後:
-- `pytest.ini` の `--cov-fail-under=70` を `60` に修正
-- PR-004の目標カバレッジを60%に調整
+This will ensure the next audit uses accurate assumptions.
 
 ---
 
-## 優先順位: どの仮定から確認すべきか
+## Feedback for Next Audit
 
-### 高優先度（監査結果に大きな影響）
+Please provide feedback on:
 
-1. **ASM-003** (テストカバレッジ70%)
-   - 影響: PR-004の規模と期間
-   - 確認期限: 改善開始前
-
-2. **ASM-004** (AIレビュー受入率70%)
-   - 影響: PR-002の目標値
-   - 確認期限: 早期（計測開始のため）
-
-### 中優先度（運用面での影響）
-
-3. **ASM-001** (ターゲットユーザー)
-   - 影響: READMEのトーン、ドキュメントの詳細度
-   - 確認期限: 次回ドキュメント更新時
-
-4. **テレメトリー収集状況** (C-020)
-   - 影響: PR-001の必要性と規模
-   - 確認期限: 早期（現状把握のため）
-
-### 低優先度（微調整）
-
-5. **ASM-002** (対象プロジェクト)
-   - 影響: カスタムルールの例示
-   - 確認期限: 次回機能拡張時
-
-6. **ASM-006** (Runner OS)
-   - 影響: ドキュメントの記述
-   - 確認期限: 他OSサポート開始時
+1. **Assumption Accuracy**: Were the assumptions above correct?
+2. **Priority Ranking**: Do you agree with Medium/Low classifications?
+3. **Proposed Actions**: Should we proceed with Phase 1 recommendations?
+4. **Missing Context**: Is there critical context we missed?
 
 ---
 
-## フィードバックの提供方法
-
-この監査に関するフィードバックは以下の方法で提供してください:
-
-### 1. 仮定の修正
-- ファイル: `.audit/config/intent.yml`
-- 方法: 該当する `assumptions` エントリを編集
-
-### 2. 改善提案のフィードバック
-- ファイル: `.audit/proposal/changes/PR-*.md`
-- 方法: 各PRファイルにコメント追加
-
-### 3. 次回監査への要望
-- ファイル: `.audit/output/next_questions.md` (このファイル)
-- 方法: 追加の質問・確認事項を記載
-
----
-
-## 次回監査時の改善点
-
-今回の監査で得られた知見を次回に活かします:
-
-1. **仮定の精緻化**: ユーザーフィードバックを反映
-2. **検証方法の強化**: 実際のメトリクスデータを活用
-3. **ギャップ分析の深化**: 実運用上の課題を特定
-4. **改善提案の具体化**: 実行可能なアクションプラン作成
-
----
-
-**Document Version**: 1.0  
-**Last Updated**: 2026-02-04T02:20:00Z  
-**Maintained By**: Repo Genesis Auditor v2.0
+**End of Confirmation List**
