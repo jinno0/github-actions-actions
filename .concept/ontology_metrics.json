@@ -70,7 +70,7 @@
     "gc_triggered": false,
     "duplicates_found": 0,
     "duplicate_ids": [],
-    "last_hygiene_run": "2026-02-03T22:07:04.605155+00:00"
+    "last_hygiene_run": "2026-02-03T23:41:33.247924Z"
   },
   "hygiene": {
     "decisions_md_lines": 75,
@@ -83,6 +83,7 @@
     "tombstones_limit": 200,
     "unmapped_ratio": 0.0,
     "unmapped_ratio_limit": 0.2,
-    "all_within_limits": true
+    "all_within_limits": true,
+    "last_hygiene_check": "2026-02-03T23:41:33.247903Z"
   }
 }
