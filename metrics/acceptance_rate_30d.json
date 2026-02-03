@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-02-03T17:40:08.571420",
+  "time_range": "30 days ago",
+  "overall": {
+    "suggestions_made": 0,
+    "suggestions_accepted": 0,
+    "suggestions_rejected": 0,
+    "suggestions_modified": 0,
+    "actions_tracked": 0,
+    "acceptance_rate": 0.0
+  },
+  "by_action": {},
+  "note": "No metrics data available yet. Metrics will be collected as actions are used."
+}

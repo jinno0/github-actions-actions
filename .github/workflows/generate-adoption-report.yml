@@ -1,0 +1,44 @@
+name: Generate Adoption Report
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # Every Sunday at midnight UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    name: Generate and Publish Adoption Report
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Generate Adoption Report
+        run: |
+          python scripts/generate_adoption_report.py \
+            --output metrics/ADOPTION_REPORT.md
+
+      - name: Upload adoption report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: adoption-report-${{ github.run_number }}
+          path: metrics/ADOPTION_REPORT.md
+          retention-days: 90
+
+      - name: Commit adoption report
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add metrics/ADOPTION_REPORT.md
+          git diff --staged --quiet || git commit -m "chore: Update adoption metrics report [skip ci]"
+          git push
