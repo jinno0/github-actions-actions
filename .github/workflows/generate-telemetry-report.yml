@@ -9,19 +9,40 @@ permissions:
   contents: write
 
 jobs:
-  report:
+  generate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
       - name: Generate report
         run: |
           python scripts/generate_telemetry_report.py
 
-      - name: Commit report
+      - name: Validate report
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if [ ! -s docs/telemetry_report.md ]; then
+            echo "Error: Report file is empty or doesn't exist"
+            exit 1
+          fi
+
+          # Check report has minimum expected content
+          if ! grep -q "Total Runs:" docs/telemetry_report.md; then
+            echo "Error: Report missing expected content"
+            exit 1
+          fi
+
+          echo "Report validation passed"
+
+      - name: Commit report
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
           git add docs/telemetry_report.md
-          git diff --staged --quiet || git commit -m "chore: update telemetry report"
+          git diff --staged --quiet || git commit -m "chore: Update telemetry report [skip ci]"
           git push
