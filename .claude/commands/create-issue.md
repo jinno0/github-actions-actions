@@ -134,99 +134,7 @@ Agent自動実行を有効にしますか? (y/n):
 
 ## 実行例
 
-### Example 1: 新機能Issue作成
-
-```bash
-/create-issue
-```
-
-```
-🤖 Agent Issue Creator
-
-Issue タイトルを入力してください:
-> ユーザープロフィール編集機能
-
-Issue タイプを選択してください:
-1. 🆕 feature
-...
-> 1
-
-要件を入力してください (完了したら空行):
-> プロフィール編集画面UI
-> プロフィール更新API
-> バリデーション実装
-> ユニットテスト作成
->
-
-技術スタックを入力してください (任意):
-> React, TypeScript, REST API
-
-制約事項があれば入力してください (任意):
-> パスワード変更は別機能として実装
-
-Agent自動実行を有効にしますか? (y/n):
-> y
-
-優先度を選択してください:
-1. 🔴 High
-2. 🟡 Medium
-3. 🟢 Low
-> 2
-
-担当者を指定しますか? (GitHubユーザー名、空でスキップ):
->
-
-✅ Issue作成完了
-Issue番号: #123
-URL: https://github.com/owner/repo/issues/123
-
-🤖 Agent実行が開始されます (約3-5分)
-進捗確認: npm run agents:parallel:exec -- --issue 123 --dry-run
-```
-
-### Example 2: バグ修正Issue作成
-
-```bash
-/create-issue
-```
-
-```
-Issue タイトルを入力してください:
-> ログイン時にトークンが更新されない
-
-Issue タイプを選択してください:
-> 2 (bug)
-
-要件を入力してください:
-> トークンリフレッシュロジック修正
-> エラーハンドリング追加
-> E2Eテスト追加
->
-
-Agent自動実行を有効にしますか? (y/n):
-> y
-
-優先度を選択してください:
-> 1 (High)
-
-✅ Issue作成完了
-Issue番号: #124
-URL: https://github.com/owner/repo/issues/124
-
-🚨 優先度: High のため、即座にAgent実行されます
-```
-
-## GitHub CLI統合
-
-内部的に `gh` コマンドを使用してIssueを作成します:
-
-```bash
-gh issue create \
-  --title "ユーザープロフィール編集機能" \
-  --body "$(cat issue-body.md)" \
-  --label "🤖agent-execute,🆕feature,🟡priority-medium" \
-  --repo owner/repo
-```
+コマンドを実行すると対話的に情報を入力し、最後にIssueが作成されます。詳細な対話フローは上記「対話フロー」セクションを参照してください。
 
 ## ラベル自動付与
 
@@ -255,21 +163,6 @@ Agent自動実行:
 | 設定 | ラベル |
 |------|--------|
 | 有効 | 🤖agent-execute |
-
-## Issue Templateとの違い
-
-### GitHub Issue Template (手動作成)
-
-- GitHubのWebUI上で手動で作成
-- テンプレートに沿って手動入力
-- ラベルは手動で付与
-
-### /create-issue コマンド (Claude Code)
-
-- コマンドラインから対話的に作成
-- 自動でテンプレート生成
-- ラベル自動付与
-- Agent実行設定をその場で決定
 
 ## 設定
 

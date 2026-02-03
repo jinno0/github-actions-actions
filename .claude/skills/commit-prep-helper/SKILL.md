@@ -87,7 +87,7 @@ python .claude/skills/commit-prep-helper/scripts/code_review.py
 - 複雑度 (関数の長さ、ネスト深さ)
 
 ### Step 5: コミットメッセージ生成とコミット実行
-`references/conventional_commits.md`のルールに従い、コミットメッセージを生成：
+[Conventional Commits](https://www.conventionalcommits.org/)のルールに従い、コミットメッセージを生成：
 
 ```bash
 python .claude/skills/commit-prep-helper/scripts/create_commit.py
@@ -245,9 +245,10 @@ Jest: 2 tests failed, 15 passed
 ### references/
 スキルの動作に関する詳細ドキュメントで、Claudeが参照する情報源です。
 
-- `conventional_commits.md` - コミットメッセージのルールとテンプレート
 - `quality_thresholds.md` - 品質チェックのしきい値と設定基準
 - `tool_mapping.md` - プロジェクトタイプ別ツール設定のマッピング
+
+**Note**: コミットメッセージのルールについては [Conventional Commits](https://www.conventionalcommits.org/) の公式ドキュメントを参照してください。
 
 ### assets/
 スキル実行時に使用される設定ファイルとテンプレートです。

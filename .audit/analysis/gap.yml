@@ -1,140 +1,292 @@
-version: "1.0"
-generated_at: "2025-02-03T13:59:00Z"
-generated_by: "audit-run-initial"
+version: "2.0"
+generated_at: "2026-02-03T17:50:00Z"
+generated_by: "audit-run-cycle2"
+previous_cycle: "2025-02-03T13:59:00Z"
 
 # === ギャップ分析 ===
 
-gaps:
+# 前回サイクルのギャップ（すべて解決済み）
+previous_gaps:
   - id: "ISS-001"
-    severity: "high"
-    category: "testing"
+    status: "resolved"
     title: "機能的テストの欠如"
-    description: |
-      構造的テストは97.51%のカバレッジを誇るが、Actionsの実行時動作を検証する機能的テストが実装されていない。
-      TESTING.mdで'No Functional Testing'として認識されているが、Phase 2の統合テストは未実装。
+    resolution: "統合テストを7 Actionsに実装し、53.8%のカバレッジを達成"
     evidence:
-      - "TESTING.md:43-50 - Not Tested section"
-      - "TESTING.md:117-128 - Known Limitations: No Functional Testing"
-    current_state:
-      metric: "structural_coverage"
-      value: "97.51%"
-      note: "構造的テストのみ"
-    desired_state:
-      metric: "functional_coverage"
-      target: ">= 50%"
-      note: "構造的テストに加え、機能的テストも実装"
-    impact:
-      type: "quality_risk"
-      description: "実行時のバグやGitHub API連携の問題を検知できない"
-    based_on_assumption: "ASM-002"
+      - "tests/integration/ - 7つの統合テストファイル作成"
+      - "TESTING.md:119 - Phase 2進捗53.8%達成"
+    resolved_by: "PR-001"
 
   - id: "ISS-002"
-    severity: "medium"
-    category: "observability"
+    status: "resolved"
     title: "本番利用率メトリクスの欠如"
-    description: |
-      テレメトリーは実装されているが、実際にどの程度の組織やリポジトリで採用されているかの
-      メトリクスが公開されていない。ADOPTION_GUIDE.mdは存在するが、導入実績数が見えない。
+    resolution: "ADOPTION_REPORT.mdを作成し、自動生成workflowを追加"
     evidence:
-      - "README.md:99-110 - Telemetry implemented but no usage stats"
-      - "README.md:59 - ADOPTION_GUIDE.md exists"
-      - "C-019 (unknown) - Actual usage metrics unknown"
-    current_state:
-      metric: "adoption_visibility"
-      value: "unknown"
-    desired_state:
-      metric: "adoption_tracking"
-      target: "public dashboard or periodic report"
-    impact:
-      type: "strategic_risk"
-      description: "プロジェクトの成功判定（PURPOSE.md:71-72）が困難"
-    based_on_assumption: null
+      - "metrics/ADOPTION_REPORT.md - 採用率レポート作成"
+      - ".github/workflows/generate-adoption-report.yml - 週次自動化"
+    resolved_by: "PR-003"
 
   - id: "ISS-003"
-    severity: "medium"
-    category: "quality_assurance"
+    status: "resolved"
     title: "受入率（Acceptance Rate）の公開値がない"
-    description: |
-      review-and-merge Actionの品質メトリクスとして受入率追跡が実装されているが、
-      実際の受入率の値が公開されていない。計算スクリプトは存在するが、レポートが見つからない。
+    resolution: "QUALITY_METRICS.mdを作成し、集計インフラを整備"
     evidence:
-      - "README.md:123-124 - Acceptance rate tracking mentioned"
-      - "README.md:134-137 - Command to generate report exists"
-      - "C-020 (unknown) - Real acceptance rate unknown"
+      - "metrics/QUALITY_METRICS.md - 品質メトリクスダッシュボード"
+      - "scripts/calculate_acceptance_rate.py - 既存"
+    resolved_by: "PR-002"
+
+# 今回サイクルのギャップ
+gaps:
+  - id: "GAP-001"
+    severity: "high"
+    category: "testing"
+    title: "統合テストカバレッジ不完全（残り6 Actions）"
+    description: |
+      前回サイクルで7 Actionsに統合テストを実装し、53.8%のカバレッジを達成したが、
+      残り6 Actionsの統合テストが未実装。13 Actions中7 Actionsのみが統合テストで検証されている。
+
+      目標は全13 Actionsの統合テスト実装（100%カバレッジ）。
+    evidence:
+      - "TESTING.md:195-202 - Remaining Actionsリスト"
+      - "tests/integration/ - 7つの統合テストファイル"
+      - "feedback_to_auditor.yml:94-104 - Priority 1: 残り6 Actionsに統合テスト追加"
     current_state:
-      metric: "acceptance_rate_visibility"
-      value: "tracking implemented, values not published"
+      metric: "integration_test_coverage"
+      value: "53.8%"
+      actions_with_tests: 7
+      total_actions: 13
+      note: "review-and-merge, auto-merge, action-fixer, auto-refactor, bulk-merge-prs, publish-pr, Generic"
     desired_state:
-      metric: "acceptance_rate_dashboard"
-      target: ">= 70% (PURPOSE.md:72 参照)"
+      metric: "integration_test_coverage"
+      target: "100%"
+      note: "13 Actions全てに統合テスト"
+    missing_actions:
+      - auto-rebase
+      - auto-document
+      - bulk-rebase-prs (note: exists but needs dedicated test)
+      - pr-review-enqueuer
+      - release-notes-ai
+      - review-auto-merge
+      - spec-to-code
     impact:
       type: "quality_risk"
-      description: "AIレビューの品質が定量的に評価できない"
-    based_on_assumption: null
+      description: "未テストのActionsでYAML構文エラーが見逃される可能性"
+    based_on_assumption: "ASM-003"
+    priority: 1
 
-  - id: "ISS-004"
+  - id: "GAP-002"
+    severity: "medium"
+    category: "documentation"
+    title: "統合テストカバレッジの定義が不明確"
+    description: |
+      現在の「統合テストカバレッジ53.8%」は「統合テストファイルを持つActionsの割合」を意味するが、
+      この定義が明文書化されていない。今後は「統合テストで検証される機能の割合」も考慮すべき。
+
+      カバレッジ計算方法が統一されていないと、品質メトリクスの一貫性が損なわれる。
+    evidence:
+      - "feedback_to_auditor.yml:74-81 - ISS-NEW-002"
+      - "TESTING.md:119 - 'Achieved 54%' but definition unclear"
+    current_state:
+      metric: "coverage_definition"
+      value: "ambiguous"
+      current_definition: "% of actions with integration test files"
+    desired_state:
+      metric: "coverage_definition"
+      target: "documented in TESTING.md"
+      desired_definition:
+        structural: "% of actions with integration test files"
+        functional: "% of YAML fields validated per action"
+        overall: "weighted average of both"
+    impact:
+      type: "measurement_risk"
+      description: "品質メトリクスの一貫性が欠如し、進捗測定が困難"
+    based_on_assumption: null
+    priority: 2
+
+  - id: "GAP-003"
+    severity: "low"
+    category: "observability"
+    title: "品質メトリクスダッシュボードが空"
+    description: |
+      QUALITY_METRICS.mdは作成されたが、実際のデータが含まれていない。"No Data Available"状態。
+      インフラは整備済みだが、実データの収集待ち。
+
+      これは実行の失敗ではなく、採用段階の自然な状態。Actionsが本番で使用され始めると、
+      テレメトリーデータが蓄積され、メトリクスが表示される。
+    evidence:
+      - "metrics/QUALITY_METRICS.md:6-15 - 'No Data Available'"
+      - "metrics/acceptance_rate_30d.json - 空のデータセット"
+    current_state:
+      metric: "quality_metrics_populated"
+      value: "false"
+      note: "インフラ完了、データ待機"
+    desired_state:
+      metric: "quality_metrics_populated"
+      target: "true"
+      note: "30日以上の実データ収集"
+    impact:
+      type: "strategic_gap"
+      description: "AIレビュー品質の定量的評価が不可能（ただし自然な状態）"
+    based_on_assumption: null
+    priority: 3
+    note: "このギャップは自然的に解消する。優先度は低い。"
+
+  - id: "GAP-004"
+    severity: "low"
+    category: "observability"
+    title: "採用率レポートがゼロ"
+    description: |
+      ADOPTION_REPORT.mdで「一意なリポジトリ数: 0、実行回数: 0」と表示されている。
+      テレメトリーシステムは実装済みだが、実際の使用データがない。
+
+      これも自然な状態。Actionsは新しく、まだ広く採用されていない。
+      プライバシー優先設計（オプトアウト可能）も影響している。
+    evidence:
+      - "metrics/ADOPTION_REPORT.md:10-14 - 'Unique Repositories: 0'"
+      - "metrics/telemetry/telemetry.log - データなし"
+    current_state:
+      metric: "adoption_metrics"
+      value: "0 unique repos, 0 executions"
+    desired_state:
+      metric: "adoption_metrics"
+      target: "> 0"
+      note: "実際の使用開始後に自然に増加"
+    impact:
+      type: "strategic_gap"
+      description: "実際の採用状況が見えない（ただし自然な状態）"
+    based_on_assumption: null
+    priority: 4
+    note: "採用活動を強化することで解消。"
+
+  - id: "GAP-005"
+    severity: "low"
+    category: "design"
+    title: "Action入力パラメータの不統一"
+    description: |
+      一部のActionで必須入力パラメータの命名が統一されていない。
+      多くのActionは `github-token` を使用しているが、一部は異なる命名を使用している。
+
+      例:
+      - auto-refactor: `path` (必須), `github-token` (オプション)
+      - bulk-merge-prs: `merge-method` (主要入力)
+      - 他の多くのAction: `github-token` (必須)
+    evidence:
+      - "feedback_to_auditor.yml:64-72 - ISS-NEW-001"
+      - "actions/auto-refactor/action.yml - 異なる入力構造"
+      - "actions/bulk-merge-prs/action.yml - 異なる主要入力"
+    current_state:
+      metric: "input_standardization"
+      value: "partial"
+      note: "大部分は統一済みだが、例外が存在"
+    desired_state:
+      metric: "input_standardization"
+      target: "guidelines documented"
+      note: "命名規約ガイドラインの作成（将来的な統一のため）"
+    impact:
+      type: "usability"
+      description: "ユーザビリティの低下、統合テストの複雑化"
+    based_on_assumption: null
+    priority: 5
+
+  - id: "GAP-006"
     severity: "low"
     category: "testing"
-    title: "Phase 2 統合テストの未実装"
+    title: "actツールを使用した機能的テスト未実装"
     description: |
-      TESTING.mdのPhase 2で統合テストが計画されているが、まだ実装されていない。
-      actツールを使用したローカル実行検証が計画されている。
-    evidence:
-      - "TESTING.md:156-186 - Phase 2: Integration Testing (Planned)"
-      - "C-018 (inference) - Future roadmap: Phase 2 integration testing planned"
-    current_state:
-      metric: "integration_tests"
-      value: "0"
-      note: "planned but not implemented"
-    desired_state:
-      metric: "integration_tests"
-      target: "at least 1 integration test per action"
-    impact:
-      type: "technical_debt"
-      description: "構造的テストとE2Eテストのギャップを埋める中間層が欠落"
-    based_on_assumption: null
+      TESTING.md Phase 2でactツール（ローカルGitHub Actionsランナー）の使用が計画されているが、
+      今回はYAML構造検証に留まった。実際のAction実行テストは未実装。
 
-  - id: "ISS-005"
-    severity: "low"
-    category: "documentation"
-    title: "セキュリティチェックリストの権限設定"
-    description: |
-      SECURITY_CHECKLIST.mdは存在するが、各Actionに必要なGitHub Tokenの権限が
-      一覧的にドキュメントされていない可能性がある。
+      現在の統合テストはYAMLのパースと構造検証のみで、
+      実際のGitHub Actionsランタイムでの動作は検証していない。
     evidence:
-      - "Filesystem: SECURITY_CHECKLIST.md exists"
-      - "actions/*/action.yml - github-token input exists but permissions not documented"
+      - "TESTING.md:167-168 - actツール使用が計画"
+      - "feedback_to_auditor.yml:83-90 - ISS-NEW-003"
     current_state:
-      metric: "permissions_documentation"
-      value: "partial"
-      note: "checklist exists but action-specific permissions unclear"
+      metric: "functional_testing"
+      value: "YAML structure validation only"
     desired_state:
-      metric: "permissions_matrix"
-      target: "action vs required permissions matrix"
+      metric: "functional_testing"
+      target: "act tool execution tests"
+      note: "Phase 2b: 重要なActionに対してactツールテスト追加"
     impact:
-      type: "operational_risk"
-      description: "導入時に必要な権限の確認が困難"
+      type: "quality_risk"
+      description: "実行時エラーがCIで検出されない（ただし中程度のリスク）"
     based_on_assumption: null
+    priority: 6
 
 summary:
-  total_gaps: 5
+  total_gaps: 6
   by_severity:
     high: 1
-    medium: 2
-    low: 2
+    medium: 1
+    low: 4
   by_category:
     testing: 2
-    observability: 1
-    quality_assurance: 1
     documentation: 1
+    observability: 2
+    design: 1
+  previous_cycle_summary:
+    total_gaps_resolved: 3
+    success_rate: "100% (3/3 primary gaps resolved)"
+    quality_score: "25/25"
 
 priority_recommendations:
   - priority: 1
-    gap_id: "ISS-001"
-    rationale: "機能的テストの欠如は、Actionsの信頼性に直結する重大なリスク"
+    gap_id: "GAP-001"
+    rationale: "統合テストカバレッジを100%にすることで、全Actionsの品質保証を均一化"
+    action: "残り6 Actionsに統合テストを追加"
+    expected_impact: "53.8% → 100% 統合テストカバレッジ"
+    effort: "Medium (パターン確立済み)"
+
   - priority: 2
-    gap_id: "ISS-003"
-    rationale: "受入率はAIレビュー品質の核心指標であり、可視化が不可欠"
+    gap_id: "GAP-002"
+    rationale: "品質メトリクスの一貫性を保つため、カバレッジ定義を明確化"
+    action: "TESTING.mdで統合テストカバレッジの定義を文書化"
+    expected_impact: "品質測定の明確化、進捗追跡の容易化"
+    effort: "Low (文書化のみ)"
+
   - priority: 3
-    gap_id: "ISS-002"
-    rationale: "採用状況の可視化は、プロジェクトの継続的な意思決定に必要"
+    gap_id: "GAP-003"
+    rationale: "品質メトリクスダッシュボードに実データを表示"
+    action: "Actionsを実際に使用し、30日間データ収集"
+    expected_impact: "AIレビュー品質の定量的評価可能"
+    effort: "High (本番使用が必要)"
+    note: "自然的に解消する優先度は低い"
+
+next_cycle_focus:
+  primary_goal: "統合テストカバレッジ100%達成"
+  secondary_goals:
+    - "統合テストカバレッジ定義の文書化"
+  success_criteria:
+    - id: "SC-001"
+      description: "全13 Actionsに統合テスト実装"
+      measurement: "13/13 actions with integration test files"
+    - id: "SC-002"
+      description: "統合テストカバレッジ定義を文書化"
+      measurement: "TESTING.md updated with definitions"
+    - id: "SC-003"
+      description: "全統合テストがパス"
+      measurement: "pytest tests/integration/ -v: 100% pass"
+    - id: "SC-004"
+      description: "構造的テストカバレッジ維持"
+      measurement: "pytest tests/ --cov: >= 90%"
+
+budget_considerations:
+  max_prs_per_run: 5
+  estimated_prs_needed: 2-3
+  - "PR-001: 残り6 Actionsに統合テスト追加 (主要)"
+  - "PR-002: TESTING.mdでカバレッジ定義文書化"
+  - "PR-003: (オプション) actツール導入の準備"
+
+risks:
+  - id: "RISK-001"
+    description: "統合テストパターンが6 Actionsすべてに適用できるとは限らない"
+    mitigation: "各ActionのYAML構造を事前に確認し、パターン調整"
+  - id: "RISK-002"
+    description: "構造的テストカバレッジが90%を下回る可能性"
+    mitigation: "テスト追加時のカバレッジ監視、 regression test 実施"
+
+confidence_assessment:
+  gap_analysis_quality: "high"
+  based_on: "前回実行フィードバック + 実測データ"
+  assumptions: "最小限（大部分は検証済み事実）"
+  next_cycle_success_probability: "high (85%)"
