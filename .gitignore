@@ -41,6 +41,7 @@ coverage/
 .nyc_output/
 lcov.info
 *.lcov
+coverage_*.json
 
 # Build outputs
 dist/
@@ -98,6 +99,13 @@ EXECUTION_BLOCKED.md
 # Historical reports and documentation
 .docs/history/*_REPORT.md
 .docs/history/*_report.md
+
+# Generated reports and telemetry
+docs/telemetry_report.md
+docs/*_execution_report.md
+docs/*_execution-summary.md
+docs/*_report.md
+*_telemetry_report.md
 
 # Test execution reports and temporary validation files
 TEST_EXECUTION_REPORT.md
