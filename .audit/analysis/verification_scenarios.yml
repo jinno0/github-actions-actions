@@ -1,0 +1,112 @@
+version: "1.0"
+generated_at: "2025-02-03T13:59:00Z"
+
+scenarios:
+  - function_id: "CF-001"
+    name: "13の再利用可能なGitHub Actionsを提供"
+    description: "リポジトリが提供すると主張する13のActionsが実際に存在し、適切に構造化されている"
+
+    input:
+      type: "filesystem_scan"
+      path: "actions/"
+      pattern: "*/action.yml"
+
+    expected_output:
+      type: "count"
+      value: 13
+      validation_rules:
+        - "各Actionディレクトリにaction.ymlが存在する"
+        - "action.ymlはYAMLとしてパース可能"
+        - "name, description, inputs, runsフィールドが含まれる"
+
+    edge_cases:
+      - name: "action.ymlが欠落しているAction"
+        expectation: "カウントに含まれない、警告を発報"
+      - name: "action.ymlが破損している（無効なYAML）"
+        expectation: "YAMLパースエラー、検証失敗"
+
+  - function_id: "CF-002"
+    name: "各Actionに導入手順を提供"
+    description: "各Actionに対応するinstructions/*.mdが存在し、必要なセクションが含まれる"
+
+    input:
+      type: "filesystem_scan"
+      path: "instructions/"
+      pattern: "*.md"
+
+    expected_output:
+      type: "count_and_content"
+      value: 14  # 13 actions + possibly 1 overview
+      validation_rules:
+        - "各Actionに対応するマニュアルが存在"
+        - "導入手順（Setup/Installation）セクションが含まれる"
+        - "必要な権限（Permissions）が記載されている"
+
+    edge_cases:
+      - name: "Actionに対応するinstructionsが存在しない"
+        expectation: "ドキュメントギャップとして記録"
+
+  - function_id: "CF-003"
+    name: "各Actionに利用例を提供"
+    description: "各Actionに対応するexamples/*.ymlが存在し、ワークフローとしてコピー可能"
+
+    input:
+      type: "filesystem_scan"
+      path: "examples/"
+      pattern: "*.yml"
+
+    expected_output:
+      type: "count_and_content"
+      value: 13
+      validation_rules:
+        - "各Actionに対応するexample workflowが存在"
+        - "YAMLとしてパース可能"
+        - "on, jobs, stepsフィールドを含む"
+
+    edge_cases:
+      - name: "Actionに対応するexampleが存在しない"
+        expectation: "導入障壁として記録"
+
+  - function_id: "CF-004"
+    name: "構造的テストで97.51%のカバレッジを達成"
+    description: "pytestを実行し、テストが通過すること、カバレッジが目標値以上であることを確認"
+
+    input:
+      type: "command_execution"
+      command: "pytest tests/ --cov=. --cov-report=json"
+      timeout: 120
+
+    expected_output:
+      type: "test_results"
+      validation_rules:
+        - "すべてのテストがパスする（exit code 0）"
+        - "カバレッジ >= 80% (ASM-002の仮定に基づく)"
+        - "テスト数 >= 160 (TESTING.md:112の168件に近い値)"
+
+    edge_cases:
+      - name: "テストが失敗する"
+        expectation: "検証失敗、失敗したテストを報告"
+      - name: "カバレッジが80%未満"
+        expectation: "ASM-002の仮定に基づき、ギャップとして記録"
+
+  - function_id: "CF-005"
+    name: "AIレビューの品質メトリクス（受入率）を追跡"
+    description: "受入率計算スクリプトが存在し、実行可能であることを確認"
+
+    input:
+      type: "filesystem_and_command"
+      path: "scripts/calculate_acceptance_rate.py"
+      command: "python scripts/calculate_acceptance_rate.py --help"
+
+    expected_output:
+      type: "script_exists_and_executable"
+      validation_rules:
+        - "スクリプトファイルが存在する"
+        - "Pythonとして実行可能（--helpが動作）"
+        - "必要な依存関係が満たされている"
+
+    edge_cases:
+      - name: "スクリプトが存在しない"
+        expectation: "README.mdの主張と不一致、検証失敗"
+      - name: "スクリプトが実行できない"
+        expectation: "依存関係未解決、改善提案に追加"

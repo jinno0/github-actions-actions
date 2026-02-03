@@ -1,0 +1,103 @@
+version: "2.0"
+updated_at: "2025-02-03T13:59:00Z"
+updated_by: "audit-run-initial"
+
+# === Mission（不明時は仮定で埋める）===
+mission:
+  target_user: "GitHub Actionsユーザー"
+  provided_value: "再利用可能なGitHub Actionsコンポジットアクションを提供"
+  desired_state: "品質が高く、文書化された、テストされたアクションが利用可能"
+
+# === Assumptions（重要：仮定した前提を必ず記録）===
+assumptions:
+  - id: "ASM-001"
+    field: "mission.target_user"
+    value: "GitHub ActionsでCI/CDパイプラインを構築するDevOpsエンジニア"
+    reason: "リポジトリ名がactionsで終わるため"
+    confidence: "medium"
+  - id: "ASM-002"
+    field: "quality_attributes.testing"
+    value: "テストカバレッジ >= 80%"
+    reason: "一般的なOSS品質基準"
+    confidence: "low"
+
+# === Quality Attributes（検証方法とセット）===
+quality_attributes:
+  - id: "QA-001"
+    name: "テストカバレッジ"
+    target: ">= 80%"
+    verification:
+      type: "measurement"
+      command: "npm test -- --coverage"
+      criteria:
+        operator: ">="
+        value: 80
+        unit: "%"
+      interpretation:
+        success_means: "コードの80%以上がテストで実行された"
+        failure_means: "テストされていないコードパスが20%以上ある"
+        warning: "カバレッジが高くてもアサーションが弱ければ意味がない"
+
+  - id: "QA-002"
+    name: "アクションの文書化"
+    target: "100%"
+    verification:
+      type: "measurement"
+      command: "find . -name 'action.yml' -exec head -20 {} \;"
+      criteria:
+        operator: "=="
+        value: 100
+        unit: "%"
+      interpretation:
+        success_means: "すべてのアクションがaction.ymlで適切に文書化されている"
+        failure_means: "文書化されていないアクションが存在する"
+
+  - id: "QA-003"
+    name: "TypeScript型安全性"
+    target: "strict mode"
+    verification:
+      type: "measurement"
+      command: "npm run type-check"
+      criteria:
+        operator: "=="
+        value: 0
+        unit: "errors"
+      interpretation:
+        success_means: "TypeScriptコンパイルエラーがない"
+        failure_means: "型エラーが存在する"
+
+# === Core Functions（存在意義の主張）===
+core_functions:
+  - id: "CF-001"
+    claim: "13の再利用可能なGitHub Actionsを提供"
+    source: "README.md:8"
+    testable: true
+    verification_method: "actions/*/action.ymlファイルの存在確認"
+
+  - id: "CF-002"
+    claim: "各Actionに導入手順（Instructions）を提供"
+    source: "README.md:50-56"
+    testable: true
+    verification_method: "instructions/*.mdファイルの存在確認"
+
+  - id: "CF-003"
+    claim: "各Actionに利用例（Examples）を提供"
+    source: "README.md:52-53"
+    testable: true
+    verification_method: "examples/*.ymlファイルの存在確認"
+
+  - id: "CF-004"
+    claim: "構造的テストで97.51%のカバレッジを達成"
+    source: "TESTING.md:112-113"
+    testable: true
+    verification_method: "pytest --covを実行"
+
+  - id: "CF-005"
+    claim: "AIレビューの品質メトリクス（受入率）を追跡"
+    source: "README.md:123-124"
+    testable: true
+    verification_method: "scripts/calculate_acceptance_rate.pyの存在確認"
+
+non_goals:
+  - "GitHub Actionsランナーのホスティング"
+  - "サードパーティサービスの統合（明示的に文書化されたものを除く）"

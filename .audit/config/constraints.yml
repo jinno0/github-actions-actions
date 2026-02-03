@@ -1,0 +1,32 @@
+version: "1.0"
+updated_at: "2025-02-03T13:59:00Z"
+
+# === 技術的制約 ===
+technical:
+  languages:
+    - "TypeScript"
+  node_version: "20.x"
+  platforms:
+    - "linux"
+    - "macos"
+    - "windows"
+
+# === 運用制約 ===
+operational:
+  max_action_runtime: "5 minutes"
+  supported_github_events:
+    - "push"
+    - "pull_request"
+
+# === セキュリティ制約 ===
+security:
+  allow_external_network_calls: false
+  require_token_input: true
+ 禁止事項:
+    - "機密情報のログ出力"
+    - "未検証の入力の実行"
+
+# === リソース制約 ===
+resources:
+  max_memory_usage: "512MB"
+  max_disk_usage: "1GB"

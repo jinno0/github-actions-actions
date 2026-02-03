@@ -1,0 +1,140 @@
+version: "1.0"
+generated_at: "2025-02-03T13:59:00Z"
+generated_by: "audit-run-initial"
+
+# === ギャップ分析 ===
+
+gaps:
+  - id: "ISS-001"
+    severity: "high"
+    category: "testing"
+    title: "機能的テストの欠如"
+    description: |
+      構造的テストは97.51%のカバレッジを誇るが、Actionsの実行時動作を検証する機能的テストが実装されていない。
+      TESTING.mdで'No Functional Testing'として認識されているが、Phase 2の統合テストは未実装。
+    evidence:
+      - "TESTING.md:43-50 - Not Tested section"
+      - "TESTING.md:117-128 - Known Limitations: No Functional Testing"
+    current_state:
+      metric: "structural_coverage"
+      value: "97.51%"
+      note: "構造的テストのみ"
+    desired_state:
+      metric: "functional_coverage"
+      target: ">= 50%"
+      note: "構造的テストに加え、機能的テストも実装"
+    impact:
+      type: "quality_risk"
+      description: "実行時のバグやGitHub API連携の問題を検知できない"
+    based_on_assumption: "ASM-002"
+
+  - id: "ISS-002"
+    severity: "medium"
+    category: "observability"
+    title: "本番利用率メトリクスの欠如"
+    description: |
+      テレメトリーは実装されているが、実際にどの程度の組織やリポジトリで採用されているかの
+      メトリクスが公開されていない。ADOPTION_GUIDE.mdは存在するが、導入実績数が見えない。
+    evidence:
+      - "README.md:99-110 - Telemetry implemented but no usage stats"
+      - "README.md:59 - ADOPTION_GUIDE.md exists"
+      - "C-019 (unknown) - Actual usage metrics unknown"
+    current_state:
+      metric: "adoption_visibility"
+      value: "unknown"
+    desired_state:
+      metric: "adoption_tracking"
+      target: "public dashboard or periodic report"
+    impact:
+      type: "strategic_risk"
+      description: "プロジェクトの成功判定（PURPOSE.md:71-72）が困難"
+    based_on_assumption: null
+
+  - id: "ISS-003"
+    severity: "medium"
+    category: "quality_assurance"
+    title: "受入率（Acceptance Rate）の公開値がない"
+    description: |
+      review-and-merge Actionの品質メトリクスとして受入率追跡が実装されているが、
+      実際の受入率の値が公開されていない。計算スクリプトは存在するが、レポートが見つからない。
+    evidence:
+      - "README.md:123-124 - Acceptance rate tracking mentioned"
+      - "README.md:134-137 - Command to generate report exists"
+      - "C-020 (unknown) - Real acceptance rate unknown"
+    current_state:
+      metric: "acceptance_rate_visibility"
+      value: "tracking implemented, values not published"
+    desired_state:
+      metric: "acceptance_rate_dashboard"
+      target: ">= 70% (PURPOSE.md:72 参照)"
+    impact:
+      type: "quality_risk"
+      description: "AIレビューの品質が定量的に評価できない"
+    based_on_assumption: null
+
+  - id: "ISS-004"
+    severity: "low"
+    category: "testing"
+    title: "Phase 2 統合テストの未実装"
+    description: |
+      TESTING.mdのPhase 2で統合テストが計画されているが、まだ実装されていない。
+      actツールを使用したローカル実行検証が計画されている。
+    evidence:
+      - "TESTING.md:156-186 - Phase 2: Integration Testing (Planned)"
+      - "C-018 (inference) - Future roadmap: Phase 2 integration testing planned"
+    current_state:
+      metric: "integration_tests"
+      value: "0"
+      note: "planned but not implemented"
+    desired_state:
+      metric: "integration_tests"
+      target: "at least 1 integration test per action"
+    impact:
+      type: "technical_debt"
+      description: "構造的テストとE2Eテストのギャップを埋める中間層が欠落"
+    based_on_assumption: null
+
+  - id: "ISS-005"
+    severity: "low"
+    category: "documentation"
+    title: "セキュリティチェックリストの権限設定"
+    description: |
+      SECURITY_CHECKLIST.mdは存在するが、各Actionに必要なGitHub Tokenの権限が
+      一覧的にドキュメントされていない可能性がある。
+    evidence:
+      - "Filesystem: SECURITY_CHECKLIST.md exists"
+      - "actions/*/action.yml - github-token input exists but permissions not documented"
+    current_state:
+      metric: "permissions_documentation"
+      value: "partial"
+      note: "checklist exists but action-specific permissions unclear"
+    desired_state:
+      metric: "permissions_matrix"
+      target: "action vs required permissions matrix"
+    impact:
+      type: "operational_risk"
+      description: "導入時に必要な権限の確認が困難"
+    based_on_assumption: null
+
+summary:
+  total_gaps: 5
+  by_severity:
+    high: 1
+    medium: 2
+    low: 2
+  by_category:
+    testing: 2
+    observability: 1
+    quality_assurance: 1
+    documentation: 1
+
+priority_recommendations:
+  - priority: 1
+    gap_id: "ISS-001"
+    rationale: "機能的テストの欠如は、Actionsの信頼性に直結する重大なリスク"
+  - priority: 2
+    gap_id: "ISS-003"
+    rationale: "受入率はAIレビュー品質の核心指標であり、可視化が不可欠"
+  - priority: 3
+    gap_id: "ISS-002"
+    rationale: "採用状況の可視化は、プロジェクトの継続的な意思決定に必要"
