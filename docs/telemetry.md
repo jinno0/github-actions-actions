@@ -154,7 +154,53 @@ We may update this policy as we improve the telemetry system. Significant change
 - Tagged with the updated date
 - Reviewed for privacy implications
 
+## Telemetry Reports
+
+Weekly telemetry reports are automatically generated and published to provide visibility into Action usage patterns.
+
+### View Reports
+
+- **Latest Report**: [telemetry_report.md](./telemetry_report.md)
+- **Historical Data**: Git history of `docs/telemetry_report.md`
+
+### Automated Report Generation
+
+Reports are generated weekly via GitHub Actions:
+
+- **Schedule**: Every Sunday at midnight UTC
+- **Workflow**: `.github/workflows/generate-telemetry-report.yml`
+- **Script**: `scripts/generate_telemetry_report.py`
+
+### Manual Report Generation
+
+To generate a report on demand:
+
+```bash
+python scripts/generate_telemetry_report.py
+```
+
+The report will be saved to `docs/telemetry_report.md`.
+
+### Report Contents
+
+Each telemetry report includes:
+
+- **Summary**: Total runs and overall success rate
+- **Per-Action Breakdown**: Usage statistics for each Action
+  - Number of runs
+  - Success rate
+  - Failure count (if applicable)
+
+### Customization
+
+To customize report generation:
+
+1. **Change Schedule**: Edit `.github/workflows/generate-telemetry-report.yml`
+2. **Modify Report Format**: Edit `scripts/generate_telemetry_report.py`
+3. **Add Additional Metrics**: Extend the script with new analyses
+
 ---
 
 **Version History**:
 - **v1.0** (2026-02-03): Initial telemetry policy
+- **v1.1** (2026-02-04): Added automated telemetry reports section
