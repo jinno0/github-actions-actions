@@ -1,3 +1,6 @@
+# This workflow demonstrates immediate merge mode.
+# The action will merge the PR immediately when triggered (without waiting for branch protection rules).
+# For GitHub's built-in auto-merge feature (waits for branch protection rules), see review-and-merge-example.yml
 name: Auto Merge PR
 
 on:
@@ -15,6 +18,8 @@ jobs:
   auto-merge-pr:
     runs-on: self-hosted
     steps:
+      # Immediate merge mode: Merges PR right away when this step executes
+      # auto-merge: 'false' = Don't enable GitHub's auto-merge feature, just merge immediately
       - name: Auto Merge
         uses: ./actions/auto-merge
         with:
