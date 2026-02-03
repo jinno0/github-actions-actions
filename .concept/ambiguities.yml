@@ -1,63 +1,6 @@
-updated_at: '2026-02-03T18:15:45Z'
-ambiguities:
-- id: AMB-CLI-001
-  term: CLIAvailabilityCheck
-  topic: Actual CLI checks implementation rate across actions
-  severity: low
-  uncertainty: 0.0
-  candidates:
-  - CLI check implementation rate is 100% (7/7 actions using Claude)
-  - Actions not using Claude (6/13) don't need checks
-  missing_info: []
-  linked_conflicts: []
-  auto_decision:
-    status: superseded
-    decision_key: AUTO:CLIAvailabilityCheck.rate:verified
-    chosen: 'VERIFIED: All 7 actions that invoke Claude have CLI checks (100% compliant).
-      Remaining 6 actions don''t use Claude and don''t need checks. Ambiguity resolved.'
-    policy: verification + audit
-    confidence_auto: 1.0
-    decided_at_run: '2026-02-04T04:35:48Z'
-    expires_after_runs: 50
-    revert_triggers:
-    - primary_evidence_contradiction
-    - security_risk
-  last_touched_run: '2026-02-04T04:35:48Z'
-  evidence:
-  - source: SECURITY_CHECKLIST.md#L33-L34
-    quote: 'Status: 7/7 actions using Claude are compliant (100%)'
-  - source: manual_verification
-    quote: 'Verified 7 actions use Claude and all have CLI checks: action-fixer, auto-document,
-      auto-rebase, auto-refactor, release-notes-ai, review-and-merge, spec-to-code'
-- id: AMB-SUCCESS-001
-  term: SuccessMetric
-  topic: Relationship between QA-001 and SuccessMetric definition
-  severity: low
-  uncertainty: 0.25
-  candidates:
-  - QA-001 (Acceptance Rate >= 80%) is a specific instance of SuccessMetric
-  - QA-001 is a separate quality gate independent of general SuccessMetric tracking
-  missing_info:
-  - Are there other quality gates besides QA-001?
-  - Does SuccessMetric encompass both organizational metrics AND technical quality
-    gates?
-  linked_conflicts: []
-  auto_decision:
-    status: applied
-    decision_key: AUTO:SuccessMetric.QA-001:hierarchical
-    chosen: QA-001 (Acceptance Rate >= 80%) is a specific quality invariant that implements
-      the broader SuccessMetric concept for MS-002
-    policy: hierarchy + clarity
-    confidence_auto: 0.75
-    decided_at_run: '2026-02-02T21:56:00Z'
-    expires_after_runs: 20
-    revert_triggers:
-    - primary_evidence_contradiction
-    - new_quality_gates_defined
-  last_touched_run: '2026-02-02T21:56:00Z'
-  evidence:
-  - source: metrics/README.md#L15-L20
-    quote: 'QA-001: Acceptance Rate >= 80% is the primary quality goal for MS-002'
-  - source: charter.yml#L6-L15
-    quote: "success_metrics: Action\u5C0E\u5165\u6570, AI\u63D0\u6848\u54C1\u8CEA\
-      , \u958B\u767A\u52B9\u7387"
+updated_at: '2026-02-04T06:36:00Z'
+ambiguities: []
+
+# Resolved ambiguities archive
+# AMB-CLI-001 (superseded): Verified 7/7 actions using Claude have CLI checks (100% compliant)
+# AMB-SUCCESS-001 (applied): QA-001 is a specific quality invariant implementing broader SuccessMetric

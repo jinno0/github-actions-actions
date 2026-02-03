@@ -167,26 +167,6 @@ For each iteration (1 to N):
   - Proper syntax highlighting
   - Clear explanations
 
-- **Common Patterns**:
-  ```markdown
-  ## Basic Usage
-  ```python
-  # Simple, complete example
-  result = api_call()
-  print(result)
-  ```
-
-  ## Advanced Usage
-  ```python
-  # More complex scenario with error handling
-  try:
-      result = api_call_with_options(timeout=30)
-      process_result(result)
-  except APIError as e:
-      handle_error(e)
-  ```
-  ```
-
 #### 2. Error Handling Documentation
 - **Required Elements**:
   - Common errors and causes
@@ -242,78 +222,7 @@ For each iteration (1 to N):
 
 ## Implementation Details
 
-### Data Structures
-
-#### DocumentAnalysis
-```python
-@dataclass
-class DocumentAnalysis:
-    purpose: str                    # Document's primary purpose
-    target_audience: str            # Intended users
-    completeness_score: float       # 0.0 to 1.0
-    missing_sections: List[str]     # Identified gaps
-    structure_issues: List[str]     # Structural problems
-    content_gaps: List[str]         # Content areas needing attention
-    improvement_areas: List[str]    # Prioritized improvement areas
-```
-
-#### ReviewResult
-```python
-@dataclass
-class ReviewResult:
-    reviewer_type: str              # 'technical', 'ux', 'educational'
-    score: float                    # 0.0 to 1.0
-    feedback: List[str]             # Specific issues found
-    suggestions: List[str]          # Actionable improvement suggestions
-    priority_issues: List[str]      # High-priority problems to address
-```
-
-### Algorithm Flow
-
-#### Main Improvement Loop
-```python
-def improve_document(file_path: Path) -> ImprovementResults:
-    document = load_document(file_path)
-    analyzer = TechnicalDocumentAnalyzer()
-    reviewer = MultiPerspectiveReviewer()
-    planner = ImprovementPlanGenerator()
-
-    for iteration in range(max_iterations):
-        # Phase 1: Analysis
-        analysis = analyzer.analyze_document(document)
-        reviews = reviewer.review_document(document, analysis)
-
-        # Check convergence
-        avg_score = sum(r.score for r in reviews) / len(reviews)
-        if avg_score >= target_threshold:
-            break
-
-        # Phase 2: Planning
-        plan = planner.generate_plan(analysis, reviews, iteration)
-
-        # Phase 3: Implementation
-        document = apply_improvements(document, plan)
-
-    return generate_results(document, analysis, reviews)
-```
-
-#### Quality Score Calculation
-```python
-def calculate_overall_score(reviews: List[ReviewResult]) -> float:
-    # Weighted scoring
-    weights = {
-        'technical': 0.4,
-        'ux': 0.3,
-        'educational': 0.3
-    }
-
-    weighted_sum = sum(
-        review.score * weights[review.reviewer_type]
-        for review in reviews
-    )
-
-    return min(1.0, weighted_sum)
-```
+The framework uses a three-phase approach: Analysis, Planning, and Iterative Improvement. Quality scores are calculated using weighted reviews from multiple perspectives (technical: 0.4, ux: 0.3, educational: 0.3).
 
 ## Usage Guidelines
 
@@ -334,23 +243,7 @@ def calculate_overall_score(reviews: List[ReviewResult]) -> float:
 
 ### Integration Patterns
 
-#### CI/CD Integration
-```bash
-# Validate documentation in CI pipeline
-python md-doc-improver/scripts/document_validator.py docs/*.md \
-    --severity error,warning \
-    --format json \
-    --export-json validation_report.json
-```
-
-#### Automated Improvement
-```bash
-# Run improvement process
-python md-doc-improver/scripts/improve_document.py README.md \
-    --max-iterations 3 \
-    --threshold 0.85 \
-    --output-dir ./improvements
-```
+The framework can be integrated into CI/CD pipelines for automated documentation validation and improvement.
 
 ### Customization Options
 
@@ -403,32 +296,4 @@ draft_threshold = 0.70         # Work in progress
 
 ## Extending the Framework
 
-### Adding New Perspectives
-```python
-class SecurityReviewer:
-    """Security-focused document reviewer"""
-
-    def review(self, document: str, analysis: DocumentAnalysis) -> ReviewResult:
-        # Implement security-specific review logic
-        pass
-
-# Integrate into main system
-reviewer = MultiPerspectiveReviewer()
-reviewer.add_reviewer(SecurityReviewer(), weight=0.1)
-```
-
-### Custom Validation Rules
-```python
-class CustomValidator(TechnicalDocumentValidator):
-    def _validate_custom_rules(self, content: str) -> List[ValidationIssue]:
-        # Implement domain-specific validation rules
-        pass
-```
-
-### Integration with External Tools
-- **Grammar Checkers**: Integrate with grammar checking APIs
-- **Link Validation**: Check external link validity
-- **Code Validation**: Verify code examples compile/run
-- **Style Guides**: Enforce organization-specific style guidelines
-
-This framework provides a comprehensive, extensible foundation for improving technical documentation quality through systematic, evidence-based iteration.
+The framework supports custom validation rules and can be integrated with external tools such as grammar checkers, link validators, and code validation systems.
