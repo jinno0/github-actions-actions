@@ -1351,7 +1351,8 @@ canonical_terms:
     id: TERM-REVIEW-OUTCOME
     layer: aux
     status: stable
-    definition: Categorization of AI review results used in quality metrics: Approved
+    definition: >-
+      Categorization of AI review results used in quality metrics: Approved
       (AI approved, human accepted without modification), Modified (human made changes
       before accepting), Rejected (human rejected AI suggestions), Needs Work (AI
       requested changes)
@@ -1365,7 +1366,7 @@ canonical_terms:
       - Categorical classification
       - Human-AI interaction measurement
       - Quality tracking
-      - excludes:
+      excludes:
       - Numeric scores only
       - Binary approve/reject
       - Non-AI reviews
@@ -1386,4 +1387,4 @@ canonical_terms:
         Modified (human changed before accepting), Rejected (human rejected AI suggestions),
         Needs Work (AI requested changes)'
     - source: scripts/calculate_acceptance_rate.py#L38-L41
-      quote: Count outcomes from metrics: approved, modified, rejected, needs_work
+      quote: 'Count outcomes from metrics: approved, modified, rejected, needs_work'

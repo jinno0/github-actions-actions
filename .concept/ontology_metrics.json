@@ -1,6 +1,6 @@
 {
-  "run_id": "2026-02-03T06:28:40Z",
-  "updated_at": "2026-02-03T06:28:40+00:00",
+  "run_id": "2026-02-03T09:26:13.106693+00:00",
+  "updated_at": "2026-02-03T09:26:13+0000",
   "ontology": {
     "total_terms": 38,
     "by_layer": {
@@ -46,6 +46,45 @@
     "run_limit": 10000,
     "within_limits": true
   },
+  "queue": {
+    "pending": 0,
+    "merged": 0,
+    "rejected": 0,
+    "accepted": 0,
+    "limit": 50,
+    "within_limits": true
+  },
+  "decisions": {
+    "active_auto_decisions": 2,
+    "lines": 73,
+    "limit": 200,
+    "within_limits": true
+  },
+  "bloat_control": {
+    "actions_taken": {
+      "merged": 0,
+      "deleted": 0,
+      "deprecated": 0,
+      "added": 0
+    },
+    "gc_triggered": false,
+    "duplicates_found": 0,
+    "duplicate_ids": [],
+    "last_hygiene_run": "2026-02-03T09:26:13.106727+00:00"
+  },
+  "hygiene": {
+    "decisions_md_lines": 73,
+    "decisions_md_limit": 200,
+    "decisions_md_within_limit": true,
+    "claims_ndjson_lines": 150,
+    "claims_ndjson_limit": 3000,
+    "claims_ndjson_within_limit": true,
+    "tombstones_count": 0,
+    "tombstones_limit": 200,
+    "unmapped_ratio": 0.184,
+    "unmapped_ratio_limit": 0.2,
+    "all_within_limits": true
+  },
   "budget_status": {
     "total_terms_max": 80,
     "total_terms_current": 38,
@@ -60,44 +99,5 @@
     "aux_current": 10,
     "aux_usage": 0.3333333333333333,
     "within_budget": true
-  },
-  "queue": {
-    "pending": 0,
-    "merged": 0,
-    "rejected": 0,
-    "accepted": 0,
-    "limit": 50,
-    "within_limits": true
-  },
-  "decisions": {
-    "active_auto_decisions": 8,
-    "lines": 64,
-    "limit": 200,
-    "within_limits": true
-  },
-  "bloat_control": {
-    "actions_taken": {
-      "merged": 0,
-      "deleted": 0,
-      "deprecated": 0,
-      "added": 2
-    },
-    "gc_triggered": false,
-    "duplicates_found": 0,
-    "duplicate_ids": [],
-    "last_hygiene_run": "2026-02-03T06:28:40Z"
-  },
-  "hygiene": {
-    "decisions_md_lines": 64,
-    "decisions_md_limit": 200,
-    "decisions_md_within_limit": true,
-    "claims_ndjson_lines": 150,
-    "claims_ndjson_limit": 3000,
-    "claims_ndjson_within_limit": true,
-    "tombstones_count": 0,
-    "tombstones_limit": 200,
-    "unmapped_ratio": 0.0,
-    "unmapped_ratio_limit": 0.2,
-    "all_within_limits": true
   }
 }
