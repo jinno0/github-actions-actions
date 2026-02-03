@@ -1,0 +1,157 @@
+{
+  "lint": {
+    "javascript_typescript": {
+      "eslint": {
+        "max_errors": 0,
+        "warnings_allowed": true,
+        "error_level_must_be_zero": true,
+        "target_files": "staged_only"
+      },
+      "prettier": {
+        "max_format_errors": 0,
+        "target": "all_files",
+        "check_items": [
+          "indentation",
+          "quote_consistency",
+          "semicolons",
+          "line_endings"
+        ]
+      }
+    },
+    "python": {
+      "black": {
+        "max_format_errors": 0,
+        "max_line_length": 88,
+        "target_files": "staged_only"
+      },
+      "flake8": {
+        "optional": true,
+        "max_errors": 0,
+        "max_warnings": 5,
+        "max_cyclomatic_complexity": 10
+      }
+    }
+  },
+  "test": {
+    "jest_vitest": {
+      "min_success_rate": 100,
+      "min_coverage": 70,
+      "recommended_coverage": 80,
+      "target": "entire_project",
+      "timeout_minutes": 5
+    },
+    "pytest": {
+      "min_success_rate": 100,
+      "min_coverage": 70,
+      "recommended_coverage": 80,
+      "coverage_measurement": "--cov",
+      "timeout_minutes": 5
+    },
+    "coverage_types": [
+      "statement",
+      "branch",
+      "function",
+      "line"
+    ]
+  },
+  "code_review": {
+    "security": {
+      "high_severity": {
+        "action": "block",
+        "patterns": [
+          "hardcoded_passwords_api_keys",
+          "eval_exec_usage",
+          "sql_injection",
+          "xss_vulnerability",
+          "shell_injection"
+        ]
+      },
+      "medium_severity": {
+        "action": "warn",
+        "patterns": [
+          "debug_code_residual",
+          "todo_fixme_comments",
+          "excessively_long_functions"
+        ]
+      }
+    },
+    "quality": {
+      "complexity": {
+        "max_function_length": 50,
+        "max_cyclomatic_complexity": 10,
+        "max_nesting_depth": 4
+      },
+      "naming": {
+        "function": "camelCase_or_snake_case",
+        "variable": "camelCase_or_snake_case",
+        "constant": "UPPER_CASE",
+        "class": "PascalCase_or_CamelCase"
+      },
+      "style": {
+        "max_line_length": 120,
+        "one_function_one_responsibility": true,
+        "minimize_duplicate_code": true
+      }
+    }
+  },
+  "commit": {
+    "message": {
+      "format": "conventional_commits",
+      "types": ["feat", "fix", "docs", "test", "chore"],
+      "scope_required": "preferred",
+      "max_description_length": 50
+    },
+    "granularity": {
+      "unit": "functionally_related_changes",
+      "ideal_file_count": 5,
+      "scope": "one_feature_per_commit"
+    }
+  },
+  "error_handling": {
+    "lint": {
+      "error_level": "block_commit",
+      "warning_level": "warn_only",
+      "suggest_auto_fix": true
+    },
+    "test": {
+      "failed_tests": "block_commit",
+      "insufficient_coverage": "warn",
+      "timeout": "treat_as_error"
+    },
+    "security": {
+      "high_severity": "block_commit",
+      "medium_severity": "warn",
+      "low_severity": "info_only"
+    }
+  },
+  "scoring": {
+    "lint": {
+      "max_points": 30,
+      "criteria": {
+        "zero_errors": 30,
+        "one_warning": 25,
+        "two_to_three_warnings": 20,
+        "four_or_more_warnings": 10
+      }
+    },
+    "test": {
+      "max_points": 40,
+      "criteria": {
+        "all_success_coverage_80_plus": 40,
+        "all_success_coverage_70_80": 35,
+        "all_success_coverage_below_70": 25,
+        "any_failure": 0
+      }
+    },
+    "code_review": {
+      "max_points": 30,
+      "criteria": {
+        "no_security_minimal_quality_issues": 30,
+        "minor_quality_issues": 25,
+        "moderate_quality_issues": 15,
+        "major_issues": 0
+      }
+    },
+    "passing_threshold": 80
+  }
+}
