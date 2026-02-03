@@ -3,35 +3,32 @@ ambiguities:
 - id: AMB-CLI-001
   term: CLIAvailabilityCheck
   topic: Actual CLI checks implementation rate across actions
-  severity: medium
-  uncertainty: 0.5
+  severity: low
+  uncertainty: 0.0
   candidates:
-  - CLI check implementation rate is unknown after audit removal (commit cc1e88e)
-  - Target remains 100% (13/13 actions) per SECURITY_CHECKLIST.md requirement
-  missing_info:
-  - What is the current CLI check implementation rate across all 13 actions?
-  - Which actions still need CLI availability checks added?
-  linked_conflicts:
-  - CFLT-CLI-001
+  - CLI check implementation rate is 100% (7/7 actions using Claude)
+  - Actions not using Claude (6/13) don't need checks
+  missing_info: []
+  linked_conflicts: []
   auto_decision:
-    status: applied
-    decision_key: AUTO:CLIAvailabilityCheck.rate:post_audit_cleanup
-    chosen: Audit reports removed - rate unknown but target remains 100% per security
-      requirements. Re-measurement needed.
-    policy: recent_authoritative_source + safety
-    confidence_auto: 0.65
-    decided_at_run: '2026-02-03T15:28:50Z'
-    expires_after_runs: 20
+    status: superseded
+    decision_key: AUTO:CLIAvailabilityCheck.rate:verified
+    chosen: VERIFIED: All 7 actions that invoke Claude have CLI checks (100% compliant).
+      Remaining 6 actions don't use Claude and don't need checks. Ambiguity resolved.
+    policy: verification + audit
+    confidence_auto: 1.0
+    decided_at_run: '2026-02-04T04:35:48Z'
+    expires_after_runs: 50
     revert_triggers:
     - primary_evidence_contradiction
     - security_risk
-  last_touched_run: '2026-02-03T15:28:50Z'
+  last_touched_run: '2026-02-04T04:35:48Z'
   evidence:
-  - source: commit cc1e88e
-    quote: Removed .audit/ directory including gap analysis (GAP-004) and summary
-      reports
-  - source: SECURITY_CHECKLIST.md#L9-L31
-    quote: Every action MUST verify Claude CLI is available
+  - source: SECURITY_CHECKLIST.md#L33-L34
+    quote: 'Status: 7/7 actions using Claude are compliant (100%)'
+  - source: manual_verification
+    quote: 'Verified 7 actions use Claude and all have CLI checks: action-fixer, auto-document,
+      auto-rebase, auto-refactor, release-notes-ai, review-and-merge, spec-to-code'
 - id: AMB-SUCCESS-001
   term: SuccessMetric
   topic: Relationship between QA-001 and SuccessMetric definition

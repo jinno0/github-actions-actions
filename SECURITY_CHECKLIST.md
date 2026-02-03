@@ -30,8 +30,8 @@ Every action MUST verify Claude CLI is available before attempting to use it.
     echo "✓ Claude CLI verified"
 ```
 
-**Status:** 4/13 actions compliant
-**Required for:** All 13 actions
+**Status:** 7/7 actions using Claude are compliant (100%)
+**Required for:** All 7 actions that invoke Claude CLI
 
 ### 2. Path Validation ✅ REQUIRED
 
@@ -100,8 +100,9 @@ This action requires the following GitHub token permissions:
 - `contents:write` - To push changes (if auto-fix enabled)
 ```
 
-**Status:** 0/13 actions documented
+**Status:** 7/13 actions documented (54%)
 **Required for:** All 13 actions
+**Actions with documentation:** auto-merge, auto-rebase, bulk-merge-prs, bulk-rebase-prs, pr-review-enqueuer, review-and-auto-merge-workflow, review-auto-merge
 
 ## Security Audit Results (2026-02-02)
 
@@ -133,10 +134,10 @@ This action requires the following GitHub token permissions:
 
 ## Implementation Priority
 
-### Phase 1: Critical (Week 1)
-- [ ] Add CLI checks to remaining 9 production actions
+### Phase 1: Critical (Week 1) ✅ COMPLETED
+- [x] Add CLI checks to all 7 actions using Claude (100% complete)
 - [ ] Add path validation to spec-to-code action
-- [ ] Document token permissions for all actions
+- [ ] Document token permissions for remaining 6 actions (currently 7/13)
 
 ### Phase 2: High (Week 2)
 - [ ] Add input sanitization to all actions accepting user input
