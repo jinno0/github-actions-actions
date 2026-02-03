@@ -158,19 +158,6 @@ custom-rules: |
   - Implement proper defer for cleanup
 ```
 
-### React
-
-```yaml
-custom-rules: |
-  - Use functional components with hooks
-  - Implement proper dependency arrays in useEffect/useCallback/useMemo
-  - Avoid prop drilling (use context or state management)
-  - Memoize expensive computations with useMemo
-  - Use React.memo for pure components
-  - Implement proper cleanup in useEffect return
-  - Avoid direct state mutations
-```
-
 ## Advanced Usage
 
 ### Multi-line Rules with Examples
@@ -265,7 +252,6 @@ Discuss rules with your team to ensure alignment.
 See `examples/custom-rules/` for ready-to-use rule templates:
 - `typescript-strict.yml` - TypeScript strict mode
 - `security-best-practices.yml` - Security guidelines
-- `react-patterns.yml` - React-specific rules
 - `python-style.yml` - Python PEP 8 compliance
 
 ## Troubleshooting
