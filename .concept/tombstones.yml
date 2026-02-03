@@ -1,0 +1,7 @@
+version: "0.3"
+updated_at: "2026-02-03T00:00:00Z"
+
+# Tombstones for deleted concepts
+# Records of removed ontology terms, ambiguities, or conflicts
+# Format: id, deleted_at, replacement (if any), reason
+tombstones: []
