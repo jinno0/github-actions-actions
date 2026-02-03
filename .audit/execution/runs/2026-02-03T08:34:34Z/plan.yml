@@ -1,0 +1,39 @@
+run_id: "2026-02-03T08:34:34Z"
+timestamp: "2026-02-03T08:34:34Z"
+
+scope:
+  prs_to_apply:
+    - "PR-001"  # functional testing
+    - "PR-002"  # quality metrics dashboard
+    - "PR-003"  # telemetry adoption tracking
+  prs_deferred: []
+
+success_criteria:
+  - id: "SC-001"
+    from: "intent.yml#quality_attributes[0]"
+    target: "テストカバレッジ >= 80%"
+    verification: "pytest --cov"
+    baseline: 95.32%
+
+  - id: "SC-002"
+    from: "intent.yml#core_functions[4]"
+    target: "AIレビューの品質メトリクス（受入率）を追跡"
+    verification: "scripts/calculate_acceptance_rate.py exists"
+    baseline: "Script exists"
+
+  - id: "SC-003"
+    from: "PR-001"
+    target: "統合テストカバレッジ >= 50% (7/13 actions)"
+    verification: "pytest tests/integration/ -v"
+    baseline: "2 integration tests"
+
+rollback_trigger:
+  - "検証失敗"
+  - "既存テスト失敗"
+  - "ビルドエラー"
+  - "カバレッジが10%以上低下"
+
+execution_budget:
+  max_prs_per_run: 5
+  max_file_changes_per_pr: 20
+  max_execution_minutes: 60
