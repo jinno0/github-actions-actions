@@ -169,6 +169,7 @@ metrics/telemetry/
 
 # Temporary analysis and review files
 CODE_REVIEW_SUMMARY.md
+CODE_REVIEW_REPORT.md
 cleanup-analysis.md
 CLEANUP_VERIFICATION_REPORT.md
 
