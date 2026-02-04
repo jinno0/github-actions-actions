@@ -1,0 +1,146 @@
+version: "2.0"
+updated_at: "2026-02-04T09:21:00Z"
+updated_by: "audit-run-001"
+
+# === スキャン予算 ===
+scan_budget:
+  max_files_per_run: 200
+  reason: "リポジトリの規模に基づき設定（actions/, tests/, scripts/ など）"
+
+  max_total_tokens: 100000
+  reason: "監査処理のトークン制限"
+
+  file_filters:
+    include:
+      - "actions/**/*"
+      - "tests/**/*"
+      - "scripts/**/*"
+      - "examples/**/*"
+      - "instructions/**/*"
+      - "*.md"
+      - ".github/workflows/**/*"
+    exclude:
+      - "node_modules/**"
+      - ".git/**"
+      - "**/__pycache__/**"
+      - "**/htmlcov/**"
+      "*.pyc"
+
+# === ログ予算 ===
+log_budget:
+  max_log_entries: 1000
+  keep_last_n_entries: 500
+  reason: "ログサイズの抑制と古い情報のパージ"
+
+  rotation_policy:
+    mode: "keep_latest"
+    archive: false
+    reason: "監査は最新状態に基づいて実行するため、アーカイブは不要"
+
+# === 提案予算 ===
+proposal_budget:
+  max_prs_per_run: 10
+  reason: "一度に多数の変更を提案してもレビューが追いつかないため"
+
+  max_items_per_section: 5
+  sections:
+    - "critical（重大な問題）"
+    - "important（重要な改善）"
+    - "nice_to_have（品質向上）"
+
+  priority_weights:
+    critical: 10
+    important: 5
+    nice_to_have: 1
+
+# === 実行予算 ===
+execution_budget:
+  max_verification_time: "30 minutes"
+  reason: "検証スクリプトの実行時間制限"
+
+  max_test_execution_time: "15 minutes"
+  reason: "pytestの実行時間制限"
+
+  timeout_per_action:
+    dry_run: "5 minutes"
+    unit_test: "3 minutes"
+    integration_test: "10 minutes"
+
+# === GC（ガベージコレクション）設定 ===
+gc:
+  triggers:
+    - "log_entries > max_log_entries"
+    - "cache_size > 100MB"
+
+  targets:
+    delete:
+      - ".audit/analysis/**"
+      - ".audit/proposal/**"
+      - ".audit/output/**"
+      - ".audit/verification/test_data/**"
+
+    preserve:
+      - ".audit/config/**"
+      - ".audit/log/**"
+      - ".audit/execution/**"
+
+  schedule:
+    mode: "on_threshold_exceeded"
+    reason: "予算超過時に自動的にキャッシュをクリア"
+
+# === メトリクス収集予算 ===
+metrics_budget:
+  max_telemetry_records: 10000
+  retention_days: 90
+
+  aggregation_window:
+    acceptance_rate: "7d"
+    execution_time: "24h"
+    error_rate: "24h"
+
+# === テスト予算 ===
+test_budget:
+  max_parallel_tests: 10
+  reason: "CI/CD環境のリソース制限を考慮"
+
+  max_test_retries: 3
+  retry_delay_seconds: 5
+
+  coverage:
+    minimum: 70
+    target: 80
+    stretch_goal: 90
+
+# === ドキュ生成予算 ===
+documentation_budget:
+  max_readme_size_kb: 100
+  reason: "長すぎるREADMEは読みづらいため"
+
+  max_instruction_length: "2000 words"
+  reason: "導入ガイドは簡潔であるべき"
+
+  max_examples_per_action: 5
+  reason: "例が多すぎると逆に混乱する"
+
+# === コスト最適化設定 ===
+cost_optimization:
+  cache_analysis_results: true
+  cache_duration_hours: 24
+
+  incremental_analysis: true
+  reason: "前回実行からの差分のみを分析"
+
+  parallel_processing:
+    enabled: true
+    max_workers: 4
+
+# === レポート生成予算 ===
+report_budget:
+  max_summary_length: "5000 words"
+  max_question_list: 20
+  max_assumptions: 30
+
+  output_formats:
+    - "markdown"
+    - "json"
+    - "yaml"

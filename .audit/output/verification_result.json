@@ -1,0 +1,91 @@
+[
+  {
+    "function_id": "CF-001",
+    "scenario_name": "AIレビュー機能のテスト検証",
+    "passed": false,
+    "actual_output": {
+      "exit_code": 1,
+      "tests_run": 22
+    },
+    "expected_output": {
+      "exit_code": 0,
+      "minimum_tests": 1
+    },
+    "error_message": null,
+    "interpretation": "テストが失敗または実行されなかった。Exit code: 1"
+  },
+  {
+    "function_id": "CF-002",
+    "scenario_name": "Spec-to-Code機能のテスト検証",
+    "passed": false,
+    "actual_output": {
+      "exit_code": 1,
+      "tests_run": 23
+    },
+    "expected_output": {
+      "exit_code": 0,
+      "minimum_tests": 1
+    },
+    "error_message": null,
+    "interpretation": "テストが失敗。Exit code: 1"
+  },
+  {
+    "function_id": "CF-003",
+    "scenario_name": "Action Fixer機能のテスト検証",
+    "passed": false,
+    "actual_output": {
+      "exit_code": 1,
+      "tests_run": 15
+    },
+    "expected_output": {
+      "exit_code": 0,
+      "minimum_tests": 1
+    },
+    "error_message": null,
+    "interpretation": "テストが失敗。Exit code: 1"
+  },
+  {
+    "function_id": "CF-006",
+    "scenario_name": "テストカバレッジの検証",
+    "passed": true,
+    "actual_output": {
+      "exit_code": 0,
+      "coverage_percent": 93.93338620142744
+    },
+    "expected_output": {
+      "exit_code": 0,
+      "coverage_percent": 70
+    },
+    "error_message": null,
+    "interpretation": "テストカバレッジ93.93%は目標の70%を達成している。"
+  },
+  {
+    "function_id": "QA-COMMON-002",
+    "scenario_name": "ドキュメント網羅性の確認",
+    "passed": false,
+    "actual_output": {
+      "total_actions": 14,
+      "missing_readme": [
+        "action-fixer",
+        "pr-review-enqueuer",
+        "bulk-rebase-prs",
+        "release-notes-ai",
+        "auto-rebase",
+        "review-auto-merge",
+        "auto-merge",
+        "bulk-merge-prs",
+        "publish-pr"
+      ],
+      "missing_instructions": [
+        "lib"
+      ]
+    },
+    "expected_output": {
+      "total_actions": 14,
+      "missing_readme": [],
+      "missing_instructions": []
+    },
+    "error_message": null,
+    "interpretation": "READMEが不足: ['action-fixer', 'pr-review-enqueuer', 'bulk-rebase-prs', 'release-notes-ai', 'auto-rebase', 'review-auto-merge', 'auto-merge', 'bulk-merge-prs', 'publish-pr'], Setup Guideが不足: ['lib']"
+  }
+]

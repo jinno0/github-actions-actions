@@ -1,0 +1,229 @@
+version: "2.0"
+generated_at: "2026-02-04T09:21:00Z"
+generated_by: "audit-run-001"
+
+# === ギャップ分析 ===
+gap_analysis:
+
+  # === Mission & Core Functions ===
+  mission_alignment:
+    gap_id: "GAP-001"
+    category: "Mission"
+    description: "AIレビュー受入率の測定ができない"
+
+    current_state:
+      metric: "AIレビュー受入率"
+      value: "UNKNOWN (C-008)"
+      source: "claims.ndjson"
+
+    desired_state:
+      metric: "AIレビュー受入率"
+      value: ">= 70%"
+      source: "intent.yml QA-001"
+
+    gap_severity: "HIGH"
+    gap_description: "calculate_acceptance_rate.pyスクリプトは存在するが、実際の運用データがないため、目標達成状況を測定できない"
+
+    root_cause:
+      - "組織での実運用が開始されていない"
+      - "フィードバック収集機能が利用されていない"
+
+    impact:
+      - "品質目標の達成状況を証明できない"
+      - "AIレビューの有効性を示せない"
+
+    proposed_solutions:
+      - "パイロット導入を実施し、データを収集する"
+      - "モックデータを使った検証を実施する"
+
+  # === Quality Attributes ===
+  quality_attributes:
+
+    - gap_id: "GAP-002"
+      category: "Documentation"
+      description: "ドキュメント網羅性が未確認"
+
+      current_state:
+        metric: "ドキュメント網羅性"
+        value: "90% (推定)"
+        source: "as_is.yml"
+
+      desired_state:
+        metric: "ドキュメント網羅性"
+        value: "100%"
+        source: "constraints.yml"
+
+      gap_severity: "MEDIUM"
+      gap_description: "全てのActionにREADME.mdとSetup Guideが存在するか未確認"
+
+      root_cause:
+        - "各Actionのディレクトリを個別に確認していない"
+
+      impact:
+        - "未ドキュメントのActionがある可能性"
+        - "利用者の混乱を招く可能性"
+
+      proposed_solutions:
+        - "全ActionのREADME.md存在確認スクリプトを作成"
+        - "不足している場合は作成"
+
+    - gap_id: "GAP-003"
+      category: "Performance"
+      description: "パフォーマンスベンチマークがない"
+
+      current_state:
+        metric: "実行時間"
+        value: "UNKNOWN"
+        source: "as_is.yml"
+
+      desired_state:
+        metric: "実行時間"
+        value: "< 30 minutes (constraints.yml)"
+        source: "constraints.yml"
+
+      gap_severity: "LOW"
+      gap_description: "実際の実行時間や成功率のデータがない"
+
+      root_cause:
+        - "実運用データがない"
+        - "ベンチマークテストが不足"
+
+      impact:
+        - "パフォーマンス目標の達成状況を証明できない"
+
+      proposed_solutions:
+        - "実行時間計測スクリプトの追加"
+        - "ベンチマークテストの実施"
+
+  # === Core Functions ===
+  core_functions:
+
+    - gap_id: "GAP-004"
+      function_id: "CF-001"
+      function_name: "AIによるコードレビューと自動マージ"
+      testable: true
+      verification_status: "NOT_VERIFIED"
+
+      description: "AIレビューの実際の品質を検証できない"
+
+      current_state:
+        tests_pass: true
+        coverage: 94%
+        production_data: false
+
+      desired_state:
+        acceptance_rate: ">= 70%"
+        real_world_validation: true
+
+      gap_severity: "HIGH"
+      gap_description: "テストはパスしているが、実際のPRレビューでの受入率が不明"
+
+      proposed_solutions:
+        - "パイロット導入を実施"
+        - "モックデータでシミュレーション"
+
+    - gap_id: "GAP-005"
+      function_id: "CF-002"
+      function_name: "Markdown仕様書からコードを自動生成"
+      testable: true
+      verification_status: "VERIFIED"
+
+      description: "生成コードの品質は検証済み"
+
+      current_state:
+        tests_pass: true
+        coverage: 99%
+        integration_tests: true
+
+      desired_state:
+        success_rate: ">= 90%"
+        compilation: true
+
+      gap_severity: "NONE"
+      gap_description: "テストカバレッジ99%で十分に検証されている"
+
+      proposed_solutions: []
+
+  # === Assumptions ===
+  assumptions_validation:
+
+    - assumption_id: "ASM-001"
+      assumption: "ターゲットユーザーは中規模〜大規模のGitHub組織（10人以上）"
+      validation_status: "NOT_VERIFIED"
+      confidence: "medium"
+
+      description: "Self-hosted runnerの導入コストから推測した仮定"
+
+      verification_needed:
+        - "実際の導入組織の規模を調査"
+        - "GitHubの利用統計を収集"
+
+      if_rejected:
+        - "ターゲットを小規模組織に調整"
+        - "コスト削減案を提示"
+
+    - assumption_id: "ASM-002"
+      assumption: "AIレビュー受入率目標70%は適切"
+      validation_status: "NOT_VERIFIED"
+      confidence: "medium"
+
+      description: "業界標準（60-80%）を参考に設定"
+
+      verification_needed:
+        - "実際の受入率データを収集"
+        - "競合他社のベンチマークを調査"
+
+      if_rejected:
+        - "目標値を調整（80%など）"
+        - "レビュー精度の改善"
+
+    - assumption_id: "ASM-003"
+      assumption: "全てのCore Functionが検証可能"
+      validation_status: "CONFIRMED"
+      confidence: "high"
+
+      description: "Dry Run検証機能により確認済み"
+
+      verification_needed: []
+
+      if_rejected: []
+
+  # === Security ===
+  security_gaps: []
+
+  # === Compliance ===
+  compliance_gaps: []
+
+# === 優先順位付け ===
+priority_ordering:
+  critical:
+    - "GAP-001: AIレビュー受入率の測定"
+
+  high:
+    - "GAP-004: AIレビューの実際の品質検証"
+
+  medium:
+    - "GAP-002: ドキュメント網羅性の確認"
+
+  low:
+    - "GAP-003: パフォーマンスベンチマーク"
+
+# === 依存関係 ===
+dependencies:
+  - "GAP-001の解決には、パイロット導入（GAP-004）が必要"
+  - "GAP-004の解決には、実運用データの収集が必要"
+  - "GAP-002は独立して解決可能"
+  - "GAP-003は、GAP-001の解決後に実施可能"
+
+# === 成功指標 ===
+success_metrics:
+  gap_closure_target:
+    timeframe: "Phase 3完了まで"
+    critical_gaps: "100%解消"
+    high_gaps: "80%解消"
+    medium_gaps: "50%解消"
+
+  measurement_frequency:
+    - "AIレビュー受入率: 週次"
+    - "ドキュメント網羅性: 月次"
+    - "パフォーマンス: 月次"
