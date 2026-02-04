@@ -61,9 +61,8 @@ def test_readmes_have_required_sections():
                 if not (has_inputs and has_example):
                     issues.append(f"{action_dir.name}: Missing required sections")
 
-    # Allow some flexibility - just warn if issues exist
-    if issues:
-        pytest.warns(UserWarning, match="Some READMEs may be missing sections")
+    # Report any issues found
+    assert len(issues) == 0, f"Some READMEs may be missing required sections: {issues}"
 
 
 def test_readme_quality():

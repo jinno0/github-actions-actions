@@ -32,8 +32,8 @@ jobs:
       - name: Calculate Acceptance Rate
         run: |
           python scripts/calculate_acceptance_rate.py \
-            --output .audit/output/acceptance_rate_report.md \
-            --time-period 7d
+            --time-period 7d \
+            --output report > .audit/output/acceptance_rate_report.md
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true

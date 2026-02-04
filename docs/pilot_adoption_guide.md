@@ -123,7 +123,7 @@ python scripts/calculate_acceptance_rate.py --output report.md --time-period 7d
 2. **トレンドの分析**
    \`\`\`bash
    # テレメトリーレポートを生成
-   python scripts/generate_telemetry_report.py --input .audit/metrics/ --output trends.md
+   python scripts/generate_adoption_report.py --output trends.md
    \`\`\`
 
 ## トラブルシューティング

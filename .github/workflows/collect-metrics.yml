@@ -29,9 +29,12 @@ jobs:
       - name: Create output directory
         run: mkdir -p .audit/metrics
 
-      - name: Collect Metrics
+      - name: Aggregate Existing Metrics
         run: |
-          python scripts/collect_metrics.py --output .audit/metrics/
+          # Aggregate metrics from various sources
+          python scripts/aggregate_metrics.py \
+            --since '7 days ago' \
+            --output .audit/metrics/aggregated.json
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true
