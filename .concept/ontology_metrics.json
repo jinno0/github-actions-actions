@@ -1,6 +1,6 @@
 {
-  "run_id": "2026-02-04T08:50:00Z",
-  "updated_at": "2026-02-04T08:50:00Z",
+  "run_id": "2026-02-04T10:30:00Z",
+  "updated_at": "2026-02-04T10:30:00Z",
   "ontology": {
     "total_terms": 38,
     "by_layer": {
@@ -55,7 +55,7 @@
     "within_limits": true
   },
   "decisions": {
-    "active_auto_decisions": 6,
+    "active_auto_decisions": 8,
     "lines": 75,
     "limit": 200,
     "within_limits": true
@@ -70,7 +70,7 @@
     "gc_triggered": false,
     "duplicates_found": 0,
     "duplicate_ids": [],
-    "last_hygiene_run": "2026-02-04T01:29:09.720628Z"
+    "last_hygiene_run": "2026-02-04T10:30:00.000000Z"
   },
   "hygiene": {
     "decisions_md_lines": 75,
@@ -84,6 +84,6 @@
     "unmapped_ratio": 0.026,
     "unmapped_ratio_limit": 0.2,
     "all_within_limits": true,
-    "last_hygiene_check": "2026-02-04T01:29:09.720628Z"
+    "last_hygiene_check": "2026-02-04T10:30:00.000000Z"
   }
 }
