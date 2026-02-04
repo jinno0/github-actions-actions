@@ -1,0 +1,57 @@
+name: Generate Quality Report
+
+on:
+  schedule:
+    # 毎週月曜日9時に実行
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt 2>/dev/null || true
+
+      - name: Create output directory
+        run: mkdir -p .audit/output
+
+      - name: Calculate Acceptance Rate
+        run: |
+          python scripts/calculate_acceptance_rate.py \
+            --output .audit/output/acceptance_rate_report.md \
+            --time-period 7d
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
+      - name: Upload Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: acceptance-rate-report-${{ github.run_number }}
+          path: .audit/output/acceptance_rate_report.md
+          retention-days: 90
+        if: success() || failure()
+
+      # レポートをブランチにコミット（オプション）
+      - name: Commit Report
+        if: github.ref == 'refs/heads/main' && success()
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add .audit/output/acceptance_rate_report.md
+          git diff --staged --quiet || git commit -m "chore: update acceptance rate report" || exit 0
+          git push || exit 0
