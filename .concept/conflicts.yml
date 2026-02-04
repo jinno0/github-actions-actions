@@ -1,13 +1,13 @@
-updated_at: '2026-02-03T18:15:45Z'
+updated_at: '2026-02-04T13:41:00Z'
 conflicts:
 - id: CFLT-CLI-001
-  term: CLIAvailabilityCheck
+  term: TERM-CLI-CHECK
   about: data_constraint
   severity: medium
   nli: contradiction
   items:
   - claim: 100% of actions using Claude have CLI availability checks (7/7 compliant)
-    source: ontology.yml#CLIAvailabilityCheck evidence
+    source: ontology.yml#TERM-CLI-CHECK evidence
   - claim: 7.7% (1/13 actions) have CLI checks implemented
     source: .audit/analysis/gap.yml#GAP-004
   status: resolved
