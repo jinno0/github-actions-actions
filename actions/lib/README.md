@@ -1,6 +1,16 @@
 # Actions Library
 
+## Overview
+
 Shared libraries and utilities for GitHub Actions.
+
+## Inputs
+
+This library requires no specific inputs. It provides Python modules that can be imported and used in GitHub Actions or other Python code.
+
+## Example Usage
+
+See the Integration Guide section below for detailed examples.
 
 ## Acceptance Tracking
 
