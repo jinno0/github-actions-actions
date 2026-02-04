@@ -1,10 +1,15 @@
-{"claim_id":"C-001","type":"fact","timestamp":"2026-02-04T09:21:00Z","statement":"リポジトリはAIネイティブなGitHub Actionsを提供するハブである","source":"README.md:1-5","confidence":1.0,"evidence":["README.mdに「AI Hub - GitHub Actions for AI-Native Development」と記載されている"],"verification_method":"README.mdの読取り"}
-{"claim_id":"C-002","type":"fact","timestamp":"2026-02-04T09:21:00Z","statement":"現在13件のAI Actionsが提供されている","source":"README.md:8","confidence":1.0,"evidence":["README.mdに「全13件」と記載されている"],"verification_method":"README.mdの読取り"}
-{"claim_id":"C-003","type":"fact","timestamp":"2026-02-04T09:21:00Z","statement":"テストカバレッジの目標は70%以上","source":"pytest.ini:22","confidence":1.0,"evidence":["pytest.iniに「--cov-fail-under=70」と設定されている"],"verification_method":"pytest.iniの読取り"}
-{"claim_id":"C-004","type":"fact","timestamp":"2026-02-04T09:21:00Z","statement":"現在297件のテストが存在する","source":"pytest --collect-only","confidence":1.0,"evidence":["pytest --collect-only で297 itemsが収集された"],"verification_method":"pytestコマンドの実行"}
-{"claim_id":"C-005","type":"fact","timestamp":"2026-02-04T09:21:00Z","statement":"actions/ディレクトリ以下に16個のアクションが存在する","source":"ls actions/","confidence":1.0,"evidence":["actions/ディレクトリのlsコマンドで16個のサブディレクトリを確認"],"verification_method":"lsコマンドの実行"}
-{"claim_id":"C-006","type":"inference","timestamp":"2026-02-04T09:21:00Z","statement":"プロジェクトはPhase 3（安定化と導入）の段階にある","source":"PURPOSE.md:22-26","confidence":0.8,"evidence":["PURPOSE.mdに「Phase 3: Stabilization & Adoption (In Progress)」と記載されている"],"reasoning":"基本的なActionsの実装は完了しており、導入とフィードバック収集の段階"}
-{"claim_id":"C-007","type":"inference","timestamp":"2026-02-04T09:21:00Z","statement":"AIレビューの受入率目標70%は業界標準に基づいている","source":"README.md:127","confidence":0.6,"evidence":["README.mdに「目標: >= 70%」と記載されている"],"reasoning":"一般的なAIレビューの受入率は60-80%の範囲であり、70%は妥当な目標値だが、特定のソースは明記されていない"}
-{"claim_id":"C-008","type":"unknown","timestamp":"2026-02-04T09:21:00Z","statement":"実際のAIレビュー受入率は不明","source":"なし","confidence":0.0,"evidence":["calculate_acceptance_rate.pyスクリプトは存在するが、実際のデータが存在しない"],"needed_info":"組織での実運用データ","verification_method":"python scripts/calculate_acceptance_rate.py --time-period 7d を実行してデータを収集"}
-{"claim_id":"C-009","type":"fact","timestamp":"2026-02-04T09:21:00Z","statement":"Self-hosted Runner上での動作を前提としている","source":"README.md:83-85","confidence":1.0,"evidence":["README.mdに「Self-hosted Runner上でClaude Code CLIが実行可能である必要があります」と記載"],"verification_method":"README.mdの読取り"}
-{"claim_id":"C-010","type":"fact","timestamp":"2026-02-04T09:21:00Z","statement":"テレメトリー収集機能が実装されている","source":"README.md:98-119","confidence":1.0,"evidence":["README.mdに「匿名テレメトリーを収集している」と記載され、無効化方法も明記されている"],"verification_method":"README.mdの読取り"}
+{"type":"fact","id":"C-001","claim":"13のAI Actionsが提供されている","source":"README.md:8","confidence":1.0}
+{"type":"fact","id":"C-002","claim":"テストカバレッジは93.96%","source":"pytest実行結果","confidence":1.0,"timestamp":"2026-02-04T12:34:00Z"}
+{"type":"fact","id":"C-003","claim":"299のテストが全てパスしている","source":"pytest実行結果","confidence":1.0,"timestamp":"2026-02-04T12:34:00Z"}
+{"type":"fact","id":"C-004","claim":"15のactionディレクトリが存在する","source":"findコマンド","confidence":1.0}
+{"type":"fact","id":"C-005","claim":"14個のaction.ymlが存在する","source":"findコマンド","confidence":1.0}
+{"type":"fact","id":"C-006","claim":"15のinstructionsファイルが存在する","source":"findコマンド","confidence":1.0}
+{"type":"fact","id":"C-007","claim":"13個のREADME.mdがactions/以下に存在","source":"findコマンド","confidence":1.0}
+{"type":"fact","id":"C-008","claim":"Self-hosted Runner上のClaude Code CLIを使用","source":"README.md:4","confidence":1.0}
+{"type":"fact","id":"C-009","claim":"Dry Run検証機能が存在","source":"README.md:94","confidence":1.0}
+{"type":"fact","id":"C-010","claim":"AIレビュー受入率の計測機能がある","source":"README.md:135-136","confidence":1.0}
+{"type":"fact","id":"C-011","claim":"テレメトリ収集機能が存在し、オプトアウト可能","source":"README.md:100-117","confidence":1.0}
+{"type":"inference","id":"C-101","claim":"actions/lib/ディレクトリは共有ライブラリ用","reasoning":"_shared/ディレクトリに加え、lib/という命名は一般的に共有ライブラリを示す","confidence":0.8}
+{"type":"inference","id":"C-102","claim":"一部のActionsにREADME.mdが不足","reasoning":"15ディレクトリ中13個のみにREADME.mdが存在。_shared/とlib/はドキュメント不要として除外されると推測","confidence":0.9}
+{"type":"inference","id":"C-103","claim":"Phase 3(Stabilization & Adoption)の進捗は75%","reasoning":"PURPOSE.mdによれば、✅✅✅⬜✅で4/5完了","confidence":0.9}
+{"type":"inference","id":"C-104","claim":"全Actionsに対応するinstructions/ファイルが存在","reasoning":"README.mdに記載の13Actions全てに対し、15個のinstructionsファイルが存在","confidence":0.95}

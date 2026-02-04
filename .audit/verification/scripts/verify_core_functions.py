@@ -30,7 +30,7 @@ def verify_cf001_ai_review() -> VerificationResult:
     # 1. テストで検証（review-and-merge Action）
     try:
         result = subprocess.run(
-            ["python", "-m", "pytest", "tests/test_review_and_merge/", "-v", "--tb=short"],
+            ["python", "-m", "pytest", "tests/test_review_and_merge/", "-v", "--tb=short", "--no-cov"],
             capture_output=True,
             text=True,
             timeout=60,
@@ -91,7 +91,7 @@ def verify_cf002_spec_to_code() -> VerificationResult:
     # 1. テストで検証（spec-to-code Action）
     try:
         result = subprocess.run(
-            ["python", "-m", "pytest", "tests/test_spec_to_code/", "-v", "--tb=short"],
+            ["python", "-m", "pytest", "tests/test_spec_to_code/", "-v", "--tb=short", "--no-cov"],
             capture_output=True,
             text=True,
             timeout=60,
@@ -151,7 +151,7 @@ def verify_cf003_action_fixer() -> VerificationResult:
 
     try:
         result = subprocess.run(
-            ["python", "-m", "pytest", "tests/test_action_fixer/", "-v", "--tb=short"],
+            ["python", "-m", "pytest", "tests/test_action_fixer/", "-v", "--tb=short", "--no-cov"],
             capture_output=True,
             text=True,
             timeout=60,
@@ -259,7 +259,8 @@ def verify_all_actions_have_documentation() -> VerificationResult:
     actions_dir = Path("/home/jinno/github-actions-actions/actions")
     instructions_dir = Path("/home/jinno/github-actions-actions/instructions")
 
-    actions = [d for d in actions_dir.iterdir() if d.is_dir() and not d.name.startswith("_")]
+    # Exclude lib and _shared as they are not actions
+    actions = [d for d in actions_dir.iterdir() if d.is_dir() and not d.name.startswith("_") and d.name != "lib"]
 
     missing_readme = []
     missing_instructions = []
