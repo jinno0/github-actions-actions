@@ -1,16 +1,16 @@
 {
-  "run_id": "2026-02-06T14:14:11Z",
-  "updated_at": "2026-02-06T14:14:11Z",
+  "run_id": "2026-02-06T23:33:37Z",
+  "updated_at": "2026-02-06T23:33:37Z",
   "ontology": {
-    "total_terms": 38,
+    "total_terms": 34,
     "by_layer": {
       "core": 9,
       "domain": 20,
-      "aux": 9
+      "aux": 5
     },
     "by_status": {
       "draft": 0,
-      "stable": 38
+      "stable": 34
     },
     "draft_ratio": 0.0,
     "draft_ratio_limit": 0.3,
@@ -63,14 +63,20 @@
   "bloat_control": {
     "actions_taken": {
       "merged": 0,
-      "deleted": 0,
+      "deleted": 4,
       "deprecated": 0,
       "added": 0
     },
-    "gc_triggered": false,
+    "gc_triggered": true,
     "duplicates_found": 0,
     "duplicate_ids": [],
-    "last_hygiene_run": "2026-02-06T14:14:11.000000Z"
+    "last_hygiene_run": "2026-02-06T23:33:37.000000Z",
+    "deleted_terms": [
+      "PRQualityGate",
+      "SpecDrivenDevelopment",
+      "NonGoal",
+      "AdoptionRegistry"
+    ]
   },
   "hygiene": {
     "decisions_md_lines": 75,
@@ -79,16 +85,12 @@
     "claims_ndjson_lines": 189,
     "claims_ndjson_limit": 3000,
     "claims_ndjson_within_limit": true,
-    "tombstones_count": 0,
+    "tombstones_count": 4,
     "tombstones_limit": 200,
-    "unmapped_ratio": 0.026,
+    "unmapped_ratio": 0.0,
     "unmapped_ratio_limit": 0.2,
     "all_within_limits": true,
-    "last_hygiene_check": "2026-02-06T14:14:11.000000Z",
-    "integrity_fixes": {
-      "references_updated": [
-        "conflicts.yml: Updated CLIAvailabilityCheck → TERM-CLI-CHECK"
-      ]
-    }
+    "last_hygiene_check": "2026-02-06T23:33:37.000000Z",
+    "integrity_fixes": []
   }
 }

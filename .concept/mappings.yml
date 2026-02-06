@@ -1,4 +1,4 @@
-updated_at: "2026-02-02T14:27:15Z"
+updated_at: "2026-02-06T23:33:37Z"
 mappings:
   AIPoweredAction:
     code_symbols:
@@ -120,19 +120,7 @@ mappings:
       - "ACTIONS.md"
       - "instructions/review-and-merge.md"
 
-  PRQualityGate:
-    code_symbols: []
-    db: []
-    api: []
-    docs:
-      - "ACTIONS.md"
 
-  SpecDrivenDevelopment:
-    code_symbols: []
-    db: []
-    api: []
-    docs:
-      - "ACTIONS.md"
 
   ProjectPhase:
     code_symbols: []
@@ -186,13 +174,6 @@ mappings:
       - "charter.yml"
       - "PURPOSE.md"
 
-  NonGoal:
-    code_symbols: []
-    db: []
-    api: []
-    docs:
-      - "charter.yml"
-      - "PURPOSE.md"
 
   ConceptSync:
     code_symbols: []
@@ -271,9 +252,3 @@ mappings:
       - "metrics/README.md"
       - "actions/lib/acceptance_tracker.py"
 
-  AdoptionRegistry:
-    code_symbols: []
-    db: []
-    api: []
-    docs:
-      - "ADOPTION_GUIDE.md"

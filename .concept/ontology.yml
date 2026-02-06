@@ -1,5 +1,5 @@
 version: '0.3'
-updated_at: '2026-02-03T15:28:40Z'
+updated_at: '2026-02-06T23:33:37Z'
 canonical_terms:
   AIPoweredAction:
     id: TERM-AI-ACTION
@@ -396,71 +396,6 @@ canonical_terms:
     - source: ACTIONS.md#L235-L242
       quote: LGTM (Looks Good To Me) is a threshold-based approval mechanism for PR
         review
-  PRQualityGate:
-    id: TERM-PR-QUALITY-GATE
-    layer: aux
-    status: stable
-    definition: Workflow pattern ensuring code quality before merging by combining
-      AI review, refactoring, and documentation updates
-    synonyms:
-    - Quality Gate
-    - PR Quality Check
-    - Code quality workflow
-    boundaries:
-      includes:
-      - AI review
-      - Auto-refactoring
-      - Documentation update
-      - Pre-merge validation
-      excludes:
-      - Post-merge checks
-      - Manual quality gates
-    lifecycle:
-    - PR Opened
-    - Quality Check
-    - Optional Fixes
-    - Merge Decision
-    related_terms:
-    - ReviewAndMergeAction
-    - AutoRefactorAction
-    - AutoDocumentAction
-    assumptions: []
-    evidence:
-    - source: ACTIONS.md#L261-L281
-      quote: Ensure code quality before merging... AI Review, Refactor if Needed,
-        Update Docs
-  SpecDrivenDevelopment:
-    id: TERM-SPEC-DRIVEN-DEV
-    layer: aux
-    status: stable
-    definition: Workflow pattern where code and tests are automatically generated
-      from Markdown specifications
-    synonyms:
-    - Spec-Driven Development
-    - Documentation-driven development
-    - Spec-first workflow
-    boundaries:
-      includes:
-      - Spec file trigger
-      - Code generation
-      - Test generation
-      - Doc update
-      excludes:
-      - Code-first approach
-      - Manual implementation from specs
-    lifecycle:
-    - Spec Changed
-    - Generate Code
-    - Generate Tests
-    - Update Docs
-    related_terms:
-    - SpecToCodeAction
-    - AutoDocumentAction
-    assumptions: []
-    evidence:
-    - source: ACTIONS.md#L291-L307
-      quote: Generate code from specifications... code and tests are generated from
-        Markdown specifications
   ProjectPhase:
     id: TERM-PHASE
     layer: aux
@@ -649,32 +584,6 @@ canonical_terms:
     - source: charter.yml#L4-L5
       quote: 'north_star: 組織全体の開発効率と品質を向上させるためのAIネイティブなGitHub Actionsを提供するハブとなる（Claude
         Code CLI活用）'
-  NonGoal:
-    id: TERM-NON-GOAL
-    layer: aux
-    status: stable
-    definition: Explicitly excluded project goals including simple shell script wrappers,
-      fully unmanned operation, and tight coupling to specific products
-    synonyms:
-    - Exclusions
-    - Out of Scope
-    - Anti-goals
-    boundaries:
-      includes:
-      - Explicit exclusions
-      - Scope boundaries
-      excludes:
-      - In-scope features
-    lifecycle:
-    - Defined
-    - Enforced
-    related_terms:
-    - ProductGoal
-    assumptions: []
-    evidence:
-    - source: charter.yml#L16-L19
-      quote: 'non_goals: 単なるシェルスクリプトラッパー（既存Actionsで十分なもの）, 完全無人運用（AIハルシネーションリスク考慮）,
-        特定プロダクトへの強結合（再利用性重視）'
   ConceptSync:
     id: TERM-CONCEPT-SYNC
     layer: core
@@ -1055,46 +964,6 @@ canonical_terms:
     - source: docs/quality_metrics.md#L6-L8
       quote: Quality metrics are collected for the AI review functionality in the
         review-and-merge action to measure effectiveness and reliability
-  AdoptionRegistry:
-    id: TERM-ADOPTION-REGISTRY
-    layer: aux
-    status: stable
-    definition: Registry system in ADOPTION_GUIDE.md for tracking organizational adoption
-      of AI Actions including team count, repository count, most used actions, team
-      registrations with privacy options, feedback summary, and success metrics
-    synonyms:
-    - Adoption Registry
-    - adoption registry
-    - 導入登録簿
-    - Adoption tracking
-    boundaries:
-      includes:
-      - Team registration
-      - Repository tracking
-      - Privacy options (Public/Anonymous/Private)
-      - Feedback collection
-      - Statistics aggregation
-      excludes:
-      - Git repository
-      - Code registry
-      - Non-adoption metrics
-    lifecycle:
-    - Team Adopts
-    - Register Team
-    - Update Statistics
-    - Track Feedback
-    - Generate Insights
-    related_terms:
-    - AdoptionGuide
-    - SuccessMetric
-    - AIPoweredAction
-    assumptions: []
-    evidence:
-    - source: ADOPTION_GUIDE.md#L361-L369
-      quote: 'Adoption Registry (導入登録簿)... This registry helps track: Organizational
-        Reach, Action Popularity, User Satisfaction, Impact Assessment'
-    - source: ADOPTION_GUIDE.md#L381-L386
-      quote: '統計: Total Teams, Total Repositories, Most Used Actions'
   SecurityChecklist:
     id: TERM-SECURITY-CHECKLIST
     layer: domain
