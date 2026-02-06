@@ -1,58 +1,42 @@
 version: "2.0"
-generated_at: "2026-02-07T00:00:00Z"
-generated_by: "audit-run-001"
+generated_at: "2026-02-06T16:48:19Z"
+generated_by: "audit-run-002"
+updated_based_on: "feedback from execution-run-2026-02-07T00:30:00Z"
 
 # === ギャップ分析（Gap Analysis）===
 
 summary:
-  total_gaps: 8
-  critical: 2
-  high: 3
+  total_gaps: 5
+  critical: 0
+  high: 2
   medium: 2
   low: 1
+  resolved: 3
 
-## gaps:
+# === Resolved Gaps（前回サイクルで解決済み）===
+resolved_gaps:
   - id: "GAP-001"
-    priority: "critical"
-    category: "Quality Assurance"
-    title: "テストカバレッジが計測されていない"
-    intent_source: "QA-001 (intent.yml)"
-    current_state: "テストファイルは32個存在するが、実際のカバレッジ率は不明"
-    target_state: "テストカバレッジ >= 70% (ASM-002による仮定)"
-    gap_description: |
-      pytest --cov 実行時のカバレッジレポートが生成されていない。
-      どの程度のコードがテストされているか可視化されていない。
-    impact:
-      - "テスト不足によるバグリスクの可視化ができない"
-      - "品質改善の進捗が測定できない"
-    proposed_actions:
-      - "pytest.iniにカバレッジ設定を追加"
-      - "CIでカバレッジレポートを自動生成"
-      - "カバレッジ結果をPRコメントに投稿"
-    effort_estimate: "Low (1-2 hours)"
-    based_on_assumption: "ASM-002"
+    resolved_at: "2026-02-07T00:30:00Z"
+    resolution_method: "PR-001: Test Coverage Measurement"
+    outcome: "✅ テストカバレッジ測定基盤が整備された"
+    actual_baseline: "78.63% (ASM-002 confirmed)"
+    evidence: "pytest --cov integration with CI completed"
 
   - id: "GAP-002"
-    priority: "critical"
-    category: "Quality Metrics"
-    title: "AIレビュー受入率の実測値が不明"
-    intent_source: "QA-004, CF-007 (intent.yml)"
-    current_state: "計算スクリプトは存在するが、履歴データがない"
-    target_state: "受入率 >= 70% (ASM-005)"
-    gap_description: |
-      scripts/calculate_acceptance_rate.py は実装されているが、
-      過去のレビューデータが存在せず、現在の品質レベルが不明。
-    impact:
-      - "AIレビューの実用性が評価できない"
-      - "改善効果の測定ができない"
-      - "目標70%に対する現状が不明"
-    proposed_actions:
-      - "メトリクス収集ワークフローを有効化"
-      - "初期ベースライン値を計測"
-      - "定期実行スケジュールを設定"
-    effort_estimate: "Medium (2-4 hours)"
-    based_on_assumption: "ASM-005"
+    resolved_at: "2026-02-07T00:30:00Z"
+    resolution_method: "PR-002: Acceptance Rate Baseline"
+    outcome: "✅ 週次自動計算ワークフローが実装された"
+    status: "tracking_ready (awaiting data collection)"
+    evidence: ".github/workflows/calculate-acceptance-rate.yml created"
 
+  - id: "GAP-004"
+    resolved_at: "2026-02-07T00:30:00Z"
+    resolution_method: "PR-003: Adoption Tracking"
+    outcome: "✅ 導入追跡システムが実装された"
+    status: "adoption_tracking_enabled with 2 adopters"
+    evidence: "ADOPTION.md created with scan script"
+
+## gaps:
   - id: "GAP-003"
     priority: "high"
     category: "Documentation"
@@ -61,37 +45,26 @@ summary:
     current_state: "examples: 14, instructions: 15, actions: 13"
     target_state: "全ActionにExampleとInstructionが1:1で存在"
     gap_description: |
-      ファイル数に微妙な不一致があり、一部Actionのドキュメントが
+      ファイル数に不一致があり、一部Actionのドキュメントが
       重複しているか、不足している可能性がある。
+
+      具体的な不一致:
+      - examples/: 14ファイル（actions/:13に対して+1）
+      - instructions/: 15ファイル（actions/:13に対して+2）
+
+      前回監査でも特定されたが、未解決のまま。
     impact:
-      - "ユーザーが混乱する可能性がある"
+      - "CF-002（全ActionのExampleとInstruction対応）の主張との矛盾"
+      - "ユーザーがどのファイルを参照すべきか混乱する可能性"
       - "ドキュメントの完全性が担保されていない"
     proposed_actions:
-      - "各ActionのExample-Instruction対応表を作成"
-      - "不足しているドキュメントを特定"
-      - "命名規則の統一"
-    effort_estimate: "Low (1 hour)"
+      - "余剰ファイルの特定と用途の分析"
+      - "対応表の作成（Action → Example → Instruction）"
+      - "不要なファイルの削除または再編成"
+      - "命名規則の統一（kebab-caseの整合性確認）"
+    effort_estimate: "Low (1-2 hours)"
     based_on_assumption: "なし（事実に基づくギャップ）"
-
-  - id: "GAP-004"
-    priority: "high"
-    category: "Observability"
-    title: "組織導入状況が不明"
-    intent_source: "mission.desired_state (intent.yml)"
-    current_state: "外部リポジトリでの使用状況を追跡していない"
-    target_state: "組織内の複数リポジトリで採用されている"
-    gap_description: |
-      PURPOSE.md の成功条件に「組織内の複数のリポジトリで採用」とあるが、
-      導入数やフィードバックを収集する仕組みがない。
-    impact:
-      - "プロジェクトの成功定義を満たしているか判断できない"
-      - "ユーザーフィードバックが収集できない"
-    proposed_actions:
-      - "導入リポジトリを登録する仕組みを作成"
-      - "GitHub APIで利用状況をスキャン（可能な場合）"
-      - "アンケートやフィードバックフォームを用意"
-    effort_estimate: "Medium (3-5 hours)"
-    based_on_assumption: "なし（意図に基づくギャップ）"
+    first_identified: "audit-run-001"
 
   - id: "GAP-005"
     priority: "high"
@@ -103,13 +76,18 @@ summary:
     gap_description: |
       各Actionの実行時間を追跡しておらず、
       パフォーマンス劣化やボトルネックを検知できない。
+
+      README.mdに「5分以内」という言及があるが、
+      実測値やベンチマークデータが存在しない。
     impact:
       - "ユーザー体験の悪化を検知できない"
       - "パフォーマンス改善の優先順位が決められない"
+      - "5分以内という目標が達成されているか不明"
     proposed_actions:
       - "各Actionの実行時間をログに記録"
       - "テレメトリーに実行時間を含める"
       - "パフォーマンスレポートを生成"
+      - "GitHub Actionsの実行時間を可視化"
     effort_estimate: "Medium (2-3 hours)"
     based_on_assumption: "なし（制約に基づくギャップ）"
 
@@ -121,15 +99,22 @@ summary:
     current_state: "Happy Pathのテストは存在するが、エッジケースの網羅性は不明"
     target_state: "主要なエッジケースがカバレッジに含まれている"
     gap_description: |
-      32個のテストファイルが存在するが、
+      32個のテストファイルが存在し、カバレッジ78.63%を達成しているが、
       どの程度のエッジケースをカバーしているか定量化されていない。
+
+      特に:
+      - Claude Code CLIがインストールされていない環境
+      - ネットワークエラー時の挙動
+      - 空入力や異常フォーマットの扱い
     impact:
       - "予期せぬ入力による障害リスク"
       - "エラーメッセージの品質が不明"
+      - "実運用環境での失敗パターンが不明"
     proposed_actions:
       - "各Actionのエッジケースをリストアップ"
       - "エッジケースカバレッジをテスト計画に追加"
       - "カオスエンジニアリング的なテストを検討"
+      - "エラーハンドリングの統一ガイドライン作成"
     effort_estimate: "High (5-8 hours)"
     based_on_assumption: "なし（品質保証のベストプラクティス）"
 
@@ -143,13 +128,18 @@ summary:
     gap_description: |
       AGENTS.md は「新しいActionを追加する場合」の参照を指定しているが、
       テンプレートやチェックリストが不足している。
+
+      新規Action追加のハードルを下げるには、
+      より具体的なガイドが必要。
     impact:
       - "新しいActionの追加ハードルが高い"
       - "実装の一貫性が保てない"
+      - "コミュニティ貢献の障壁"
     proposed_actions:
       - "Action追加用テンプレートを作成"
       - "ステップバイステップガイドを充実"
       - "PRテンプレートを作成"
+      - "クイックスタートガイドの追加"
     effort_estimate: "Medium (3-4 hours)"
     based_on_assumption: "なし（開発者体験の改善）"
 
@@ -158,59 +148,85 @@ summary:
     category: "Automation"
     title: "メトリクスレポートの自動化が不完全"
     intent_source: "QA-004, QA-005 (intent.yml)"
-    current_state: "レポート生成用Workflowは存在するが、定期実行の設定が不明"
-    target_state: "メトリクスレポートが定期的に自動生成される"
+    current_state: "レポート生成用Workflowは存在するが、通知設定が不十分"
+    target_state: "メトリクスレポートが定期的に自動生成・通知される"
     gap_description: |
-      .github/workflows/ にレポート生成用Workflowがあるが、
-      GitHub Actionsのscheduleトリガーが設定されているか確認が必要。
+      .github/workflows/ に複数のレポート生成Workflowがあるが、
+      自動通知の設定が不十分。
+
+      calculate-acceptance-rate.yml は週次実行設定済みだが、
+      通知先（Issue/PR/Slack）の設定が不明。
     impact:
-      - "手動実行の負担が残る"
+      - "レポートが生成されても、誰も気づかない可能性"
       - "定期的なモニタリングが行われない可能性"
+      - "品質変動の検知遅れ"
     proposed_actions:
-      - "scheduleトリガーを設定（cron: '0 0 * * 0' など）"
-      - "レポートをIssueやPRで自動通知"
+      - "レポート自動通知の設定確認"
+      - "Issueテンプレートによる週次レポート作成"
+      - "Slack/Email通知の統合（可能な場合）"
       - "ダッシュボードを作成"
     effort_estimate: "Low (1 hour)"
     based_on_assumption: "なし（運用自動化の改善）"
 
-## assumption_validation_plan:
-  - id: "ASM-002"
-    assumption: "テストカバレッジ >= 70%"
-    validation_method: "pytest --cov=actions --cov=scripts --cov-report=term-missing"
-    priority: "High"
-    estimated_effort: "30 minutes"
+## assumption_validation_results:
+  validated:
+    - id: "ASM-002"
+      assumption: "テストカバレッジ >= 70%"
+      status: "confirmed ✅"
+      actual_value: "78.63%"
+      validation_method: "pytest --cov=actions --cov=scripts --cov-report=term"
+      validated_at: "2026-02-06T16:48:19Z"
+      evidence: |
+        pytest実行結果:
+        - 299 passed, 2 skipped
+        - Coverage: 78.63%
+        - Required threshold: 70%
+        - Result: PASSED
 
-  - id: "ASM-005"
-    assumption: "AIレビュー受入率 >= 70%"
-    validation_method: "メトリクスデータの収集後に calculate_acceptance_rate.py を実行"
-    priority: "High"
-    estimated_effort: "1 hour (data collection required)"
+  in_progress:
+    - id: "ASM-005"
+      assumption: "AIレビュー受入率 >= 70%"
+      status: "tracking_ready ⏳"
+      current_step: "メトリクスデータ収集中"
+      next_step: "週次レポートの最初の実行を確認"
+      evidence: "calculate-acceptance-rate.yml 週次実行設定済み"
 
-  - id: "ASM-003"
-    assumption: "ドキュメントカバレッジ 100%"
-    validation_method: "actions/、examples/、instructions/ のファイル対応表を作成"
-    priority: "Medium"
-    estimated_effort: "1 hour"
+  pending:
+    - id: "ASM-003"
+      assumption: "ドキュメントカバレッジ 100%"
+      status: "partially_verified ⚠️"
+      notes: "全ActionにREADMEとInstructionは存在するが、ファイル数の不一致（GAP-003）がある"
+      action_required: "GAP-003の解決後に完全検証"
 
 ## risk_assessment:
-  technical_risks:
-    - risk: "テストカバレッジが実際には70%を大きく下回っている可能性"
-      probability: "Medium"
-      impact: "High"
-      mitigation: "早急にカバレッジを計測し、不足分を補強"
-
-    - risk: "AIレビュー受入率が低く、実用的でない可能性"
-      probability: "Medium"
-      impact: "High"
-      mitigation: "ベースラインを計測し、閾値70%が妥当か検証"
+  technical_risks: []  # 前回の主要リスクは解決済み
 
   operational_risks:
-    - risk: "導入リポジトリがゼロの可能性（開発チームの自己利用のみ）"
+    - risk: "導入リポジトリが少ないまま停滞する可能性"
       probability: "Medium"
       impact: "Medium"
-      mitigation: "導入リポジトリを追跡し、成功事例を蓄積"
+      mitigation: "組織内プロモーションと成功事例の蓄積"
 
-    - risk: "メトリクス収集が有効化されていない可能性"
+    - risk: "週次レポートが実行されていない可能性"
       probability: "Low"
       impact: "Medium"
-      mitigation: "有効化手順を明確にし、初期セットアップを自動化"
+      mitigation: "最初の週次実行を確認し、失敗時のアラートを設定"
+
+## new_issues_discovered_from_execution:
+  - id: "ISS-NEW-001"
+    description: "pytest.ini の --cov-fail-under=70 は CIで緩和すべき"
+    source: "PR-001実行中の気づき"
+    priority: "medium"
+    recommendation: "ベースライン取得前に閾値を適用すると開発摩擦が増える"
+
+  - id: "ISS-NEW-002"
+    description: "coverage.json のパースエラーハンドリングが不完全"
+    source: "PR-001のworkflow実装"
+    priority: "low"
+    recommendation: "より良いエラーメッセージとフォールバック"
+
+  - id: "ISS-NEW-003"
+    description: "ADOPTION.md のテーブルパーサーが脆弱"
+    source: "PR-003のスクリプト実装"
+    priority: "low"
+    recommendation: "当面は手動メンテで運用"
