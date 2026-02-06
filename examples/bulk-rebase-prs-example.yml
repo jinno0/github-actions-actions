@@ -21,7 +21,7 @@ jobs:
   bulk-rebase:
     runs-on: self-hosted
     steps:
-      - uses: jinno0/github-actions-actions/actions/bulk-rebase-prs@v1
+      - uses: ./actions/bulk-rebase-prs
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           limit: ${{ inputs.limit }}

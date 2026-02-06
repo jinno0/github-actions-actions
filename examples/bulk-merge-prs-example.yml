@@ -22,7 +22,7 @@ jobs:
   bulk-merge:
     runs-on: self-hosted
     steps:
-      - uses: jinno0/github-actions-actions/actions/bulk-merge-prs@v1
+      - uses: ./actions/bulk-merge-prs
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           limit: ${{ inputs.limit }}
