@@ -1,0 +1,31 @@
+version: "2.0"
+
+# === Scan Budget ===
+scan_budget:
+  max_files_per_run: 500  # 全Action + テスト + ドキュメントを網羅
+  max_total_tokens: 100000  # 大きめのリポジトリのため
+  max_depth: 5
+
+# === Log Budget ===
+log_budget:
+  max_log_entries: 1000
+  keep_last_n_entries: 500
+  audit_log_rotation: "overwrite"  # 最新のみ保持
+
+# === Proposal Budget ===
+proposal_budget:
+  max_prs_per_run: 10  # 改善提案の上限
+  max_proposals_per_category: 5
+
+# === Verification Budget ===
+verification_budget:
+  max_test_execution_time: 600  # seconds
+  max_verification_scenarios: 20
+  skip_slow_tests: false
+
+# === GC Thresholds ===
+gc:
+  trigger_on_log_entries_exceeded: true
+  trigger_on_cache_size_mb: 100
+  keep_source_of_truth: true  # config/ は消さない
+  archive_logs: false  # ログはアーカイブしない

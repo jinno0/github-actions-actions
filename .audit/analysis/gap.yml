@@ -1,0 +1,143 @@
+version: "2.0"
+generated_at: "2026-02-07T03:00:00Z"
+
+# === Gap Analysis ===
+
+## Critical Gaps (存在意義に関わる重大なギャップ)
+
+### GAP-001: review-and-merge Actionの例ファイル欠落
+severity: "medium"
+function_id: "CF-001"
+current_state:
+  - "actions/review-and-merge/ は存在する"
+  - "README.md, instructions/review-and-merge.md は存在する"
+  - "examples/review-and-merge.yml が存在しない"
+expected_state:
+  - "README.md:50-53で「全てのActionには利用例（Examples）がある」と記載"
+  - "examples/ ディレクトリにコピーして使える.ymlファイルが存在すべき"
+impact:
+  - "利用者がreview-and-mergeを導入する際の手間が増える"
+  - "READMEの「すぐに試せる」という主張と矛盾"
+root_cause: "examples/ ディレクトリの作成漏れ"
+
+### GAP-002: spec-to-code Actionのscripts/ディレクトリ欠落
+severity: "high"
+function_id: "CF-002"
+current_state:
+  - "actions/spec-to-code/action.yml は存在する"
+  - "actions/spec-to-code/scripts/ ディレクトリが存在しない"
+expected_state:
+  - "README.md:54で「コード生成」を主張"
+  - "action.yml内でscripts/を参照しているはず"
+impact:
+  - "spec-to-code Actionが実行時にスクリプトを見つけられず失敗する"
+  - "「Markdown仕様書からコードを生成できる」という存在意義が機能しない"
+root_cause: "scripts/ ディレクトリの作成漏れ、またはaction.ymlのパス設定ミス"
+
+### GAP-003: action-fixer Actionのscripts/ディレクトリ欠落
+severity: "high"
+function_id: "CF-004"
+current_state:
+  - "actions/action-fixer/action.yml は存在する"
+  - "actions/action-fixer/scripts/ ディレクトリが存在しない"
+expected_state:
+  - "README.md:16, ACTIONS.md:144で「エラー自動修正」を主張"
+  - "YAML検証・修正スクリプトが存在すべき"
+impact:
+  - "action-fixer Actionが実行時にスクリプトを見つけられず失敗する"
+  - "「ワークフローのエラーを検知・修正」という機能が動作しない"
+root_cause: "scripts/ ディレクトリの作成漏れ、またはaction.ymlのパス設定ミス"
+
+## Medium Gaps (品質・UXに関わるギャップ)
+
+### GAP-004: 複数ActionのREADME.md欠落
+severity: "low"
+affected_actions:
+  - "auto-merge"
+  - "auto-rebase"
+  - "review-auto-merge"
+  - "publish-pr"
+  - "pr-review-enqueuer"
+  - "bulk-merge-prs"
+  - "bulk-rebase-prs"
+current_state:
+  - "7/15 Action (46.7%) が README.md を欠落"
+  - "instructions/*.md は全て存在する"
+expected_state:
+  - "README.md:89で「AGENTS.md を確認してください」とあるように、各ActionにREADMEが必要"
+  - "actions/ ディレクトリ構造としてREADMEが標準"
+impact:
+  - "actions/ ディレクトリ直下でREADMEを探す利用者が混乱する"
+  - "各Actionの詳細説明（パラメータ、使用例）が actions/xxx/README.md にない"
+root_cause: "README作成の優先順位が低かった、またはinstructions/で代替している"
+
+### GAP-005: AIレビュー受入率の可視化不足
+severity: "medium"
+function_id: "QA-005"
+current_state:
+  - "目標値: >= 70%"
+  - "現状値: 不明"
+  - "README.md:147-148で「計測中（ベースライン策定中）」と記載"
+expected_state:
+  - "受入率を計算するスクリプト (scripts/calculate_acceptance_rate.py) は存在"
+  - "定期実行され、metrics/ ディレクトリにレポートが保存されるべき"
+impact:
+  - "品質目標の達成状況が不明"
+  - "改善の方向性がデータドリブンで決められない"
+root_cause: "定期実行ワークフローの未設定、またはデータ収集期間が短い"
+
+## Minor Gaps (改善推奨)
+
+### GAP-006: テレメトリーデータのプライバシーポリシー
+severity: "low"
+current_state:
+  - "README.md:122-139でテレメトリー機能の説明あり"
+  - "オプトアウト方法、匿名化方法の記載あり"
+expected_state:
+  - "docs/telemetry.md で詳細なプライバシーポリシーを提供"
+  - "収集データの保持期間、削除方法の記載"
+impact:
+  - "プライバシーに厳格な組織で導入が進みにくい可能性"
+root_cause: "ドキュメントの優先度"
+
+### GAP-007: カスタムレビュールールの具体例不足
+severity: "low"
+current_state:
+  - "README.md:65-70でカスタムルール機能の紹介あり"
+  - "examples/custom-rules/ テンプレートの言及あり"
+expected_state:
+  - "examples/custom-rules/ に各言語・フレームワークの具体例がある"
+impact:
+  - "導入ハードルが下がる"
+root_cause: "README.mdに記載があるが、実際のファイルが未作成"
+
+## Assumptions Requiring Validation
+assumptions_to_validate:
+  - id: "ASM-006"
+    field: "usage.adoption_status"
+    value: "パイロット導入段階（2つのプロジェクトで採用済み）"
+    validation_needed: "ADOPTION.md で実際の採用リポジトリを確認"
+    confidence: "medium"
+
+  - id: "ASM-004"
+    field: "quality.target_acceptance_rate"
+    value: "AIレビュー受入率 >= 70%"
+    validation_needed: "metrics/ ディレクトリで過去の受入率レポートを確認"
+    confidence: "high"
+
+## Summary
+total_gaps: 7
+critical_gaps: 3
+medium_gaps: 2
+minor_gaps: 2
+
+overall_assessment: |
+  リポジトリは全体的に良く構築されており、テストカバレッジ93.9%は目標を大きく上回っている。
+  しかし、3つのAction (review-and-merge, spec-to-code, action-fixer) で重要なファイル（exampleやscripts）が
+  欠落しており、これはリポジトリの「全Actionが利用可能である」という主張と矛盾している。
+
+  特に spec-to-code と action-fixer の scripts/ ディレクトリ欠落は、Actionの実行自体に
+  影響を与えるCriticalな問題であり、早急な修正が必要。
+
+  一方で、README.md欠落はinstructions/で補完されているため、運用上の問題は少ないが、
+  ドキュメントの一貫性の観点から改善が望ましい。

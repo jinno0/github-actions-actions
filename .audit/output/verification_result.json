@@ -1,0 +1,72 @@
+[
+  {
+    "function_id": "CF-001",
+    "scenario_name": "review-and-merge Action構造検証",
+    "passed": false,
+    "actual_output": "Found issues: ['examples/review-and-merge.yml not found']",
+    "expected_output": "action.yml, README.md, instructions/*.md, examples/*.yml が存在する",
+    "interpretation": "欠落ファイル: examples/review-and-merge.yml not found",
+    "evidence_files": [
+      "/home/jinno/github-actions-actions/actions/review-and-merge/action.yml",
+      "/home/jinno/github-actions-actions/actions/review-and-merge/README.md",
+      "/home/jinno/github-actions-actions/instructions/review-and-merge.md",
+      "/home/jinno/github-actions-actions/examples/review-and-merge.yml"
+    ]
+  },
+  {
+    "function_id": "CF-002",
+    "scenario_name": "spec-to-code Action構造検証",
+    "passed": false,
+    "actual_output": "Found issues: ['scripts/ directory not found']",
+    "expected_output": "actions/spec-to-code/ に必要なファイルが存在する",
+    "interpretation": "欠落: scripts/ directory not found",
+    "evidence_files": [
+      "/home/jinno/github-actions-actions/actions/spec-to-code/action.yml",
+      "/home/jinno/github-actions-actions/actions/spec-to-code/scripts"
+    ]
+  },
+  {
+    "function_id": "CF-003",
+    "scenario_name": "auto-document Action構造検証",
+    "passed": true,
+    "actual_output": "Structure verified",
+    "expected_output": "actions/auto-document/ と導入ドキュメントが存在する",
+    "interpretation": "auto-document Actionは実装されている",
+    "evidence_files": [
+      "/home/jinno/github-actions-actions/actions/auto-document/action.yml",
+      "/home/jinno/github-actions-actions/instructions/auto-document.md"
+    ]
+  },
+  {
+    "function_id": "CF-004",
+    "scenario_name": "action-fixer Action構造検証",
+    "passed": false,
+    "actual_output": "Found issues: ['scripts/ directory not found']",
+    "expected_output": "actions/action-fixer/ に検証スクリプトが存在する",
+    "interpretation": "欠落: scripts/ directory not found",
+    "evidence_files": [
+      "/home/jinno/github-actions-actions/actions/action-fixer/action.yml",
+      "/home/jinno/github-actions-actions/actions/action-fixer/scripts"
+    ]
+  },
+  {
+    "function_id": "CF-005",
+    "scenario_name": "テストカバレッジ >= 70% 達成確認",
+    "passed": true,
+    "actual_output": "93.9%",
+    "expected_output": ">= 70%",
+    "interpretation": "テストカバレッジ 93.9% は目標を達成している",
+    "evidence_files": [
+      "/home/jinno/github-actions-actions/coverage.json"
+    ]
+  },
+  {
+    "function_id": "CF-006",
+    "scenario_name": "テストケース数 >= 301 確認",
+    "passed": true,
+    "actual_output": "301 tests",
+    "expected_output": ">= 301 tests",
+    "interpretation": "テストケース数 301 は目標の301件以上を満たしている",
+    "evidence_files": []
+  }
+]
