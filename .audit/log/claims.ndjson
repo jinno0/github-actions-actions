@@ -1,0 +1,16 @@
+{"claim_id":"C-001","type":"fact","source":"actions/ directory listing","content":"13種類のAI Actionsが存在する（action.ymlファイル数）","confidence":1.0,"evidence":["action-fixer","auto-document","auto-merge","auto-rebase","auto-refactor","bulk-merge-prs","bulk-rebase-prs","pr-review-enqueuer","publish-pr","release-notes-ai","review-and-merge","review-auto-merge","spec-to-code"]}
+{"claim_id":"C-002","type":"fact","source":"examples/ directory listing","content":"14個のExample Workflowファイルが存在する","confidence":1.0,"evidence":["find examples -name '*.yml' | wc -l returned 14"]}
+{"claim_id":"C-003","type":"fact","source":"instructions/ directory listing","content":"15個のInstruction Guideファイルが存在する","confidence":1.0,"evidence":["find instructions -name '*.md' | wc -l returned 15"]}
+{"claim_id":"C-004","type":"fact","source":"README.md:94","content":"Dry Runモードによる自動検証機能が存在する","confidence":1.0,"evidence":["README.md states '全ての AI Actions は **Dry Run モード** で自動検証されます'"]}
+{"claim_id":"C-005","type":"fact","source":"scripts/collect_metrics.py","content":"テレメトリ収集スクリプトが存在する","confidence":1.0,"evidence":["File exists in scripts/ directory"]}
+{"claim_id":"C-006","type":"fact","source":"scripts/calculate_acceptance_rate.py","content":"AIレビュー受入率計算スクリプトが存在する","confidence":1.0,"evidence":["File exists in scripts/ directory"]}
+{"claim_id":"C-007","type":"fact","source":"README.md:103-117","content":"プライバシー機能（オプトアウト、匿名化）が文書化されている","confidence":1.0,"evidence":["README.md explicitly mentions opt-out via DISABLE_TELEMETRY and SHA-256 hashing"]}
+{"claim_id":"C-008","type":"fact","source":"tests/ directory listing","content":"32個のテストファイルが存在する","confidence":1.0,"evidence":["find tests -name 'test_*.py' | wc -l returned 32"]}
+{"claim_id":"C-009","type":"fact","source":"actions/lib/acceptance_tracker.py","content":"受入率追跡ライブラリが実装されている","confidence":1.0,"evidence":["File exists in actions/lib/"]}
+{"claim_id":"C-010","type":"inference","source":"README.md:66-70, examples/custom-rules/","content":"カスタムレビュールール機能が実装されている","confidence":0.9,"reasoning":"README.mdがカスタムルール機能を説明し、examples/custom-rules/に実装例が存在する"}
+{"claim_id":"C-011","type":"inference","source":"actions/review-and-merge/action.yml","content":"review-and-merge ActionがClaude Code CLIを利用している","confidence":0.95,"reasoning":"README.mdがClaude Code CLIを前提としており、主要なActionである"}
+{"claim_id":"C-012","type":"unknown","source":"README.md:25","content":"組織内プロジェクトへの導入数","confidence":0.0,"needed_info":"外部リポジトリでの使用状況","verification_method":"GitHub APIで利用リポジトリを検索するか、アンケートを実施"}
+{"claim_id":"C-013","type":"unknown","source":"scripts/calculate_acceptance_rate.py","content":"現在のAIレビュー受入率（実測値）","confidence":0.0,"needed_info":"メトリクスデータファイル","verification_method":"スクリプトを実行して現状の受入率を取得する"}
+{"claim_id":"C-014","type":"inference","source":"actions/review-and-merge/templates/review_prompt.txt","content":"AIレビューにカスタムプロンプトテンプレートが使用されている","confidence":0.85,"reasoning":"README.mdがテンプレート機能を説明しており、templates/ディレクトリが存在する"}
+{"claim_id":"C-015","type":"fact","source":".github/workflows/test-with-dry-run.yml","content":"Dry Run検証用のワークフローが存在する","confidence":1.0,"evidence":["File exists in .github/workflows/"]}
+{"claim_id":"C-016","type":"inference","source":"README.md:26 (Phase 3 status)","content":"現在Phase 3（安定化・導入）の進行中","confidence":0.8,"reasoning":"PURPOSE.mdがPhase 3を'In Progress'とマークしている"}

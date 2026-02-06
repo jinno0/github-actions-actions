@@ -1,0 +1,23 @@
+version: "2.0"
+updated_at: "2026-02-07T00:00:00Z"
+updated_by: "audit-run-001"
+
+# === スキャン予算 ===
+scan_budget:
+  max_files_per_run: 200
+  max_total_tokens: 100000
+
+# === ログ予算 ===
+log_budget:
+  max_log_entries: 1000
+  keep_last_n_entries: 500
+
+# === 提案予算 ===
+proposal_budget:
+  max_prs_per_run: 10
+  max_issues_per_run: 20
+
+# === 検証予算 ===
+verification_budget:
+  max_test_cases: 50
+  max_execution_time_seconds: 300

@@ -1,0 +1,162 @@
+[
+  {
+    "function_id": "CF-001",
+    "scenario_name": "13種類のAI Actionsを提供している",
+    "passed": true,
+    "actual_output": {
+      "count": 13,
+      "actions": [
+        "action-fixer",
+        "auto-document",
+        "auto-merge",
+        "auto-rebase",
+        "auto-refactor",
+        "bulk-merge-prs",
+        "bulk-rebase-prs",
+        "pr-review-enqueuer",
+        "publish-pr",
+        "release-notes-ai",
+        "review-and-merge",
+        "review-auto-merge",
+        "spec-to-code"
+      ]
+    },
+    "expected_output": {
+      "count": 13,
+      "actions": [
+        "action-fixer",
+        "auto-document",
+        "auto-merge",
+        "auto-rebase",
+        "auto-refactor",
+        "bulk-merge-prs",
+        "bulk-rebase-prs",
+        "pr-review-enqueuer",
+        "publish-pr",
+        "release-notes-ai",
+        "review-and-merge",
+        "review-auto-merge",
+        "spec-to-code"
+      ]
+    },
+    "error_message": null,
+    "interpretation": "✅ 13個のActionが存在し、期待通り",
+    "file_references": [
+      "actions/action-fixer/action.yml",
+      "actions/pr-review-enqueuer/action.yml",
+      "actions/review-and-merge/action.yml",
+      "actions/spec-to-code/action.yml",
+      "actions/bulk-rebase-prs/action.yml",
+      "actions/auto-document/action.yml",
+      "actions/release-notes-ai/action.yml",
+      "actions/auto-rebase/action.yml",
+      "actions/review-auto-merge/action.yml",
+      "actions/auto-merge/action.yml",
+      "actions/bulk-merge-prs/action.yml",
+      "actions/auto-refactor/action.yml",
+      "actions/publish-pr/action.yml"
+    ]
+  },
+  {
+    "function_id": "CF-002",
+    "scenario_name": "全ActionのExampleとInstructionの対応",
+    "passed": true,
+    "actual_output": {
+      "total_actions": 13,
+      "missing_examples": [],
+      "missing_instructions": []
+    },
+    "expected_output": {
+      "total_actions": 13,
+      "missing_examples": [],
+      "missing_instructions": []
+    },
+    "error_message": null,
+    "interpretation": "✅ 全ActionにExampleとInstructionが存在",
+    "file_references": []
+  },
+  {
+    "function_id": "CF-005",
+    "scenario_name": "Dry Run検証ワークフローの存在",
+    "passed": true,
+    "actual_output": {
+      "exists": true,
+      "jobs": [
+        "dry-run-test",
+        "summary"
+      ]
+    },
+    "expected_output": {
+      "exists": true,
+      "jobs": [
+        "*"
+      ]
+    },
+    "error_message": null,
+    "interpretation": "✅ Dry Run検証ワークフローが存在（2個のジョブ）",
+    "file_references": [
+      ".github/workflows/test-with-dry-run.yml"
+    ]
+  },
+  {
+    "function_id": "CF-006",
+    "scenario_name": "テレメトリーのプライバシー機能",
+    "passed": true,
+    "actual_output": {
+      "opt_out": true,
+      "hashing": true,
+      "anonymization": true
+    },
+    "expected_output": {
+      "opt_out": true,
+      "hashing": true,
+      "anonymization": true
+    },
+    "error_message": null,
+    "interpretation": "✅ プライバシー機能（オプトアウト、匿名化、ハッシュ化）が実装されている",
+    "file_references": [
+      "scripts/collect_metrics.py"
+    ]
+  },
+  {
+    "function_id": "CF-007",
+    "scenario_name": "受入率計算スクリプトの実装",
+    "passed": true,
+    "actual_output": {
+      "script_exists": true,
+      "lib_exists": true,
+      "has_calculation": true,
+      "has_output": true
+    },
+    "expected_output": {
+      "script_exists": true,
+      "lib_exists": true,
+      "has_calculation": true,
+      "has_output": true
+    },
+    "error_message": null,
+    "interpretation": "✅ 受入率計算スクリプトとライブラリが実装されている",
+    "file_references": [
+      "scripts/calculate_acceptance_rate.py",
+      "actions/lib/acceptance_tracker.py"
+    ]
+  },
+  {
+    "function_id": "QA-002",
+    "scenario_name": "全Actionのドキュメントカバレッジ",
+    "passed": true,
+    "actual_output": {
+      "total_actions": 13,
+      "missing_readmes": [],
+      "missing_instructions": []
+    },
+    "expected_output": {
+      "total_actions": 13,
+      "missing_readmes": [],
+      "missing_instructions": []
+    },
+    "error_message": null,
+    "interpretation": "✅ 全13個のActionにREADMEとInstructionが存在",
+    "file_references": []
+  }
+]

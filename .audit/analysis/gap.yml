@@ -1,0 +1,216 @@
+version: "2.0"
+generated_at: "2026-02-07T00:00:00Z"
+generated_by: "audit-run-001"
+
+# === ギャップ分析（Gap Analysis）===
+
+summary:
+  total_gaps: 8
+  critical: 2
+  high: 3
+  medium: 2
+  low: 1
+
+## gaps:
+  - id: "GAP-001"
+    priority: "critical"
+    category: "Quality Assurance"
+    title: "テストカバレッジが計測されていない"
+    intent_source: "QA-001 (intent.yml)"
+    current_state: "テストファイルは32個存在するが、実際のカバレッジ率は不明"
+    target_state: "テストカバレッジ >= 70% (ASM-002による仮定)"
+    gap_description: |
+      pytest --cov 実行時のカバレッジレポートが生成されていない。
+      どの程度のコードがテストされているか可視化されていない。
+    impact:
+      - "テスト不足によるバグリスクの可視化ができない"
+      - "品質改善の進捗が測定できない"
+    proposed_actions:
+      - "pytest.iniにカバレッジ設定を追加"
+      - "CIでカバレッジレポートを自動生成"
+      - "カバレッジ結果をPRコメントに投稿"
+    effort_estimate: "Low (1-2 hours)"
+    based_on_assumption: "ASM-002"
+
+  - id: "GAP-002"
+    priority: "critical"
+    category: "Quality Metrics"
+    title: "AIレビュー受入率の実測値が不明"
+    intent_source: "QA-004, CF-007 (intent.yml)"
+    current_state: "計算スクリプトは存在するが、履歴データがない"
+    target_state: "受入率 >= 70% (ASM-005)"
+    gap_description: |
+      scripts/calculate_acceptance_rate.py は実装されているが、
+      過去のレビューデータが存在せず、現在の品質レベルが不明。
+    impact:
+      - "AIレビューの実用性が評価できない"
+      - "改善効果の測定ができない"
+      - "目標70%に対する現状が不明"
+    proposed_actions:
+      - "メトリクス収集ワークフローを有効化"
+      - "初期ベースライン値を計測"
+      - "定期実行スケジュールを設定"
+    effort_estimate: "Medium (2-4 hours)"
+    based_on_assumption: "ASM-005"
+
+  - id: "GAP-003"
+    priority: "high"
+    category: "Documentation"
+    title: "一部Actionのドキュメント構造が不整合"
+    intent_source: "QA-002 (intent.yml)"
+    current_state: "examples: 14, instructions: 15, actions: 13"
+    target_state: "全ActionにExampleとInstructionが1:1で存在"
+    gap_description: |
+      ファイル数に微妙な不一致があり、一部Actionのドキュメントが
+      重複しているか、不足している可能性がある。
+    impact:
+      - "ユーザーが混乱する可能性がある"
+      - "ドキュメントの完全性が担保されていない"
+    proposed_actions:
+      - "各ActionのExample-Instruction対応表を作成"
+      - "不足しているドキュメントを特定"
+      - "命名規則の統一"
+    effort_estimate: "Low (1 hour)"
+    based_on_assumption: "なし（事実に基づくギャップ）"
+
+  - id: "GAP-004"
+    priority: "high"
+    category: "Observability"
+    title: "組織導入状況が不明"
+    intent_source: "mission.desired_state (intent.yml)"
+    current_state: "外部リポジトリでの使用状況を追跡していない"
+    target_state: "組織内の複数リポジトリで採用されている"
+    gap_description: |
+      PURPOSE.md の成功条件に「組織内の複数のリポジトリで採用」とあるが、
+      導入数やフィードバックを収集する仕組みがない。
+    impact:
+      - "プロジェクトの成功定義を満たしているか判断できない"
+      - "ユーザーフィードバックが収集できない"
+    proposed_actions:
+      - "導入リポジトリを登録する仕組みを作成"
+      - "GitHub APIで利用状況をスキャン（可能な場合）"
+      - "アンケートやフィードバックフォームを用意"
+    effort_estimate: "Medium (3-5 hours)"
+    based_on_assumption: "なし（意図に基づくギャップ）"
+
+  - id: "GAP-005"
+    priority: "high"
+    category: "Performance"
+    title: "Action実行パフォーマンスのベンチマークがない"
+    intent_source: "constraints.performance (constraints.yml)"
+    current_state: "実行時間の目標値（5分以内）は設定されているが、計測されていない"
+    target_state: "全Actionが5分以内に実行完了"
+    gap_description: |
+      各Actionの実行時間を追跡しておらず、
+      パフォーマンス劣化やボトルネックを検知できない。
+    impact:
+      - "ユーザー体験の悪化を検知できない"
+      - "パフォーマンス改善の優先順位が決められない"
+    proposed_actions:
+      - "各Actionの実行時間をログに記録"
+      - "テレメトリーに実行時間を含める"
+      - "パフォーマンスレポートを生成"
+    effort_estimate: "Medium (2-3 hours)"
+    based_on_assumption: "なし（制約に基づくギャップ）"
+
+  - id: "GAP-006"
+    priority: "medium"
+    category: "Quality Assurance"
+    title: "エッジケースとエラーハンドリングの網羅性が不明"
+    intent_source: "non_goals (intent.yml)"
+    current_state: "Happy Pathのテストは存在するが、エッジケースの網羅性は不明"
+    target_state: "主要なエッジケースがカバレッジに含まれている"
+    gap_description: |
+      32個のテストファイルが存在するが、
+      どの程度のエッジケースをカバーしているか定量化されていない。
+    impact:
+      - "予期せぬ入力による障害リスク"
+      - "エラーメッセージの品質が不明"
+    proposed_actions:
+      - "各Actionのエッジケースをリストアップ"
+      - "エッジケースカバレッジをテスト計画に追加"
+      - "カオスエンジニアリング的なテストを検討"
+    effort_estimate: "High (5-8 hours)"
+    based_on_assumption: "なし（品質保証のベストプラクティス）"
+
+  - id: "GAP-007"
+    priority: "medium"
+    category: "Documentation"
+    title: "開発者ガイド（AGENTS.md）の具体的性が不足"
+    intent_source: "README.md:89, AGENTS.md"
+    current_state: "開発者ガイドは存在するが、具体的な手順が不十分"
+    target_state: "新しいActionを追加するための完全なテンプレート"
+    gap_description: |
+      AGENTS.md は「新しいActionを追加する場合」の参照を指定しているが、
+      テンプレートやチェックリストが不足している。
+    impact:
+      - "新しいActionの追加ハードルが高い"
+      - "実装の一貫性が保てない"
+    proposed_actions:
+      - "Action追加用テンプレートを作成"
+      - "ステップバイステップガイドを充実"
+      - "PRテンプレートを作成"
+    effort_estimate: "Medium (3-4 hours)"
+    based_on_assumption: "なし（開発者体験の改善）"
+
+  - id: "GAP-008"
+    priority: "low"
+    category: "Automation"
+    title: "メトリクスレポートの自動化が不完全"
+    intent_source: "QA-004, QA-005 (intent.yml)"
+    current_state: "レポート生成用Workflowは存在するが、定期実行の設定が不明"
+    target_state: "メトリクスレポートが定期的に自動生成される"
+    gap_description: |
+      .github/workflows/ にレポート生成用Workflowがあるが、
+      GitHub Actionsのscheduleトリガーが設定されているか確認が必要。
+    impact:
+      - "手動実行の負担が残る"
+      - "定期的なモニタリングが行われない可能性"
+    proposed_actions:
+      - "scheduleトリガーを設定（cron: '0 0 * * 0' など）"
+      - "レポートをIssueやPRで自動通知"
+      - "ダッシュボードを作成"
+    effort_estimate: "Low (1 hour)"
+    based_on_assumption: "なし（運用自動化の改善）"
+
+## assumption_validation_plan:
+  - id: "ASM-002"
+    assumption: "テストカバレッジ >= 70%"
+    validation_method: "pytest --cov=actions --cov=scripts --cov-report=term-missing"
+    priority: "High"
+    estimated_effort: "30 minutes"
+
+  - id: "ASM-005"
+    assumption: "AIレビュー受入率 >= 70%"
+    validation_method: "メトリクスデータの収集後に calculate_acceptance_rate.py を実行"
+    priority: "High"
+    estimated_effort: "1 hour (data collection required)"
+
+  - id: "ASM-003"
+    assumption: "ドキュメントカバレッジ 100%"
+    validation_method: "actions/、examples/、instructions/ のファイル対応表を作成"
+    priority: "Medium"
+    estimated_effort: "1 hour"
+
+## risk_assessment:
+  technical_risks:
+    - risk: "テストカバレッジが実際には70%を大きく下回っている可能性"
+      probability: "Medium"
+      impact: "High"
+      mitigation: "早急にカバレッジを計測し、不足分を補強"
+
+    - risk: "AIレビュー受入率が低く、実用的でない可能性"
+      probability: "Medium"
+      impact: "High"
+      mitigation: "ベースラインを計測し、閾値70%が妥当か検証"
+
+  operational_risks:
+    - risk: "導入リポジトリがゼロの可能性（開発チームの自己利用のみ）"
+      probability: "Medium"
+      impact: "Medium"
+      mitigation: "導入リポジトリを追跡し、成功事例を蓄積"
+
+    - risk: "メトリクス収集が有効化されていない可能性"
+      probability: "Low"
+      impact: "Medium"
+      mitigation: "有効化手順を明確にし、初期セットアップを自動化"
