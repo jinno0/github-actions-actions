@@ -241,15 +241,6 @@ class TechnicalDocumentAnalyzer:
                                    structure: List[str],
                                    content_gaps: List[str]) -> List[str]:
         """Prioritize improvement areas based on impact"""
-        # Prioritization weights
-        weights = {
-            'missing_critical': 3.0,  # Critical missing sections
-            'structure_major': 2.5,   # Major structure issues
-            'content_important': 2.0, # Important content gaps
-            'structure_minor': 1.0,   # Minor structure issues
-            'content_minor': 0.5      # Minor content gaps
-        }
-
         prioritized = []
 
         # Categorize and prioritize

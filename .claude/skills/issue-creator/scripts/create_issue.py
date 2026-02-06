@@ -8,6 +8,8 @@ from pathlib import Path
 script_dir = Path(__file__).parent
 sys.path.insert(0, str(script_dir))
 
+# Import after path modification
+# ruff: noqa: E402
 from issue_creator import IssueCreator
 
 

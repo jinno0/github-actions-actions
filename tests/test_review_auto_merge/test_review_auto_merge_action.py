@@ -1,7 +1,5 @@
 """Tests for the review-auto-merge GitHub Action."""
 
-import pytest
-from pathlib import Path
 
 
 class TestReviewAutoMergeAction:

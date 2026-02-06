@@ -1,7 +1,5 @@
 """Tests for the release-notes-ai GitHub Action."""
 
-import pytest
-from pathlib import Path
 
 
 class TestReleaseNotesAiAction:

@@ -40,7 +40,7 @@ def test_auto_merge_steps_exist():
     config = yaml.safe_load(action_yml.read_text())
 
     steps = config.get("runs", {}).get("steps", [])
-    step_names = [s.get("name", s.get("id", "")) for s in steps]
+    _step_names = [s.get("name", s.get("id", "")) for s in steps]
 
     # Check for critical steps
     assert len(steps) > 0, "auto-merge should have at least one step"

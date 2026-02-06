@@ -1,7 +1,5 @@
 """Tests for the bulk-merge-prs GitHub Action."""
 
-import pytest
-from pathlib import Path
 
 
 class TestBulkMergePrsAction:

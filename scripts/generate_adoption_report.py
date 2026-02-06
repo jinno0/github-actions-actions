@@ -172,7 +172,6 @@ def generate_report(
     action_usage_30d = calculate_action_usage(events_30d)
 
     success_rates_all = calculate_success_rate(all_events)
-    success_rates_30d = calculate_success_rate(events_30d)
 
     # Total executions
     total_executions_all = len(all_events)
@@ -278,7 +277,7 @@ Percentage of successful executions by Action.
     else:
         report += "| _No data yet_ | - | - |\n"
 
-    report += f"""
+    report += """
 
 ---
 
@@ -369,7 +368,7 @@ def main():
     if not all_events:
         print("⚠️  Warning: No telemetry data found. Report will show zeros.")
         print(f"   Expected file: {args.telemetry_data}")
-        print(f"   Telemetry collection may be disabled or not yet used.")
+        print("   Telemetry collection may be disabled or not yet used.")
 
     # Filter by time periods
     events_30d = filter_events_by_period(all_events, days=30)

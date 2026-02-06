@@ -1,7 +1,5 @@
 """Tests for the pr-review-enqueuer GitHub Action."""
 
-import pytest
-from pathlib import Path
 
 
 class TestPrReviewEnqueuerAction:

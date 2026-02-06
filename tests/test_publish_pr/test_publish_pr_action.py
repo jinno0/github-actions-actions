@@ -1,7 +1,5 @@
 """Tests for the publish-pr GitHub Action."""
 
-import pytest
-from pathlib import Path
 
 
 class TestPublishPrAction:

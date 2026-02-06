@@ -84,7 +84,7 @@ def run_decompose(goal: str, output: str, skill_root: Path) -> bool:
     print(f"コマンド: {' '.join(cmd)}")
 
     try:
-        result = subprocess.run(cmd, check=True, capture_output=False)
+        subprocess.run(cmd, check=True, capture_output=False)
         return True
     except subprocess.CalledProcessError as e:
         print(f"❌ 目標分解に失敗しました: {e}", file=sys.stderr)
@@ -120,7 +120,7 @@ def run_execute(goal_file: str, progress_file: str, skill_root: Path, interactiv
     print(f"コマンド: {' '.join(cmd)}")
 
     try:
-        result = subprocess.run(cmd, check=False, capture_output=False)
+        subprocess.run(cmd, check=False, capture_output=False)
         return True
     except FileNotFoundError:
         print(f"❌ Pythonが見つかりません: {sys.executable}", file=sys.stderr)

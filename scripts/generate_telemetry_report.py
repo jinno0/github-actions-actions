@@ -179,8 +179,8 @@ def generate_report(metrics: Dict[str, Dict], period_days: int) -> str:
         status_text = "Poor"
 
     report += f"{status_emoji} **Overall Status**: {status_text} ({overall_success_rate:.1f}% success rate)\n\n"
-    report += f"| Metric | Value |\n"
-    report += f"|--------|-------|\n"
+    report += "| Metric | Value |\n"
+    report += "|--------|-------|\n"
     report += f"| **Total Runs** | {total_runs} |\n"
     report += f"| **Overall Success Rate** | {overall_success_rate:.1f}% |\n"
     report += f"| **Unique Actions** | {len(metrics)} |\n\n"
@@ -212,8 +212,8 @@ To generate telemetry data, run any GitHub Action in this repository.
 
         success_rate = (data["successes"] / data["total_runs"] * 100)
         report += f"### {action_name}\n\n"
-        report += f"| Metric | Value |\n"
-        report += f"|--------|-------|\n"
+        report += "| Metric | Value |\n"
+        report += "|--------|-------|\n"
         report += f"| **Runs** | {data['total_runs']} |\n"
         report += f"| **Success Rate** | {success_rate:.1f}% |\n"
         report += f"| **Successes** | {data['successes']} |\n"
@@ -221,7 +221,7 @@ To generate telemetry data, run any GitHub Action in this repository.
 
         # Add error summary if there are errors
         if data["errors"]:
-            report += f"\n#### Common Errors\n\n"
+            report += "\n#### Common Errors\n\n"
             # Count error occurrences
             error_counts = defaultdict(int)
             for error in data["errors"]:

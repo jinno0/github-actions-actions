@@ -41,7 +41,7 @@ def test_spec_to_code_required_inputs():
     config = yaml.safe_load(action_yml.read_text())
 
     # Verify spec-path is required
-    assert config["inputs"]["spec-path"]["required"] == True
+    assert config["inputs"]["spec-path"]["required"] is True
 
 
 @pytest.mark.integration

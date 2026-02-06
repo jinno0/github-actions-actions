@@ -328,7 +328,7 @@ class IssueCreator:
 
                 if config.auto_execute:
                     print("\n🤖 Agent実行が開始されます (約3-5分)")
-                    print(f"進捗確認: GitHub Issueのコメント欄を確認してください")
+                    print("進捗確認: GitHub Issueのコメント欄を確認してください")
 
             return result
 

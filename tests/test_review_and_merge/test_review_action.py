@@ -1,11 +1,6 @@
 """Tests for the review-and-merge GitHub Action."""
 
 import pytest
-import subprocess
-import json
-import tempfile
-import shutil
-from pathlib import Path
 
 
 class TestReviewAction:

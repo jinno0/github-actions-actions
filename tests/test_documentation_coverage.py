@@ -1,7 +1,6 @@
 """
 Documentation coverage tests to ensure all actions have proper documentation.
 """
-import pytest
 from pathlib import Path
 
 
@@ -44,7 +43,7 @@ def test_all_actions_have_setup_guide():
 def test_readmes_have_required_sections():
     """README.mdに必要なセクションが含まれていること"""
     actions_dir = Path("actions")
-    required_sections = ["## Overview", "## Inputs", "## Example Usage"]
+    _required_sections = ["## Overview", "## Inputs", "## Example Usage"]
 
     issues = []
 

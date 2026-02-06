@@ -5,7 +5,6 @@ Tests that all actions have proper action.yml files with required fields
 
 import pytest
 import yaml
-from pathlib import Path
 
 
 class TestActionStructure:
@@ -76,7 +75,7 @@ class TestActionStructure:
             except Exception as e:
                 missing_metadata.append(f"{action_dir.name}: parsing error - {str(e)}")
 
-        assert len(missing_metadata) == 0, f"Metadata issues:\n" + "\n".join(missing_metadata)
+        assert len(missing_metadata) == 0, "Metadata issues:\n" + "\n".join(missing_metadata)
 
     def test_action_composite_steps_exist(self, action_path):
         """Verify composite actions have at least one step"""

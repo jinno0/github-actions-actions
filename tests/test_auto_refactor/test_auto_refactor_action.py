@@ -1,7 +1,5 @@
 """Tests for the auto-refactor GitHub Action."""
 
-import pytest
-from pathlib import Path
 
 
 class TestAutoRefactorAction:

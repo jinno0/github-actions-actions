@@ -2,7 +2,6 @@
 
 import pytest
 import yaml
-from pathlib import Path
 
 
 class TestActionFixer:
@@ -90,7 +89,7 @@ class TestActionFixer:
     def test_action_has_composite_run_type(self, action_path):
         """Test that action uses composite run type."""
         action_file = action_path / "action-fixer" / "action.yml"
-        content = action_file.read_text()
+        _ = action_file.read_text()  # File existence check
 
         # Parse YAML to check runs.using
         with open(action_file) as f:
@@ -135,7 +134,7 @@ class TestActionFixer:
     def test_action_description_meaningful(self, action_path):
         """Test that action has a meaningful description."""
         action_file = action_path / "action-fixer" / "action.yml"
-        content = action_file.read_text()
+        _ = action_file.read_text()  # File existence check
 
         # Parse YAML to check description
         with open(action_file) as f:
@@ -165,7 +164,7 @@ class TestActionFixerIntegration:
 
     def test_all_templates_defined(self, action_path):
         """Test that all referenced templates exist."""
-        action_file = action_path / "action-fixer" / "action.yml"
+        _action_file = action_path / "action-fixer" / "action.yml"
         templates_dir = action_path / "action-fixer" / "templates"
 
         # The action references fix_prompt.txt
@@ -177,7 +176,7 @@ class TestActionFixerIntegration:
         action_dir = action_path / "action-fixer"
 
         # Read action.yml content to check for script references
-        content = action_file.read_text()
+        _ = action_file.read_text()  # Verify file is readable
 
         # This action uses composite run type with inline bash commands
         # No external script references to validate

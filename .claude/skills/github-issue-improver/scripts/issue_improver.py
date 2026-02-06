@@ -37,7 +37,6 @@ if claude_lib_path:
 
     try:
         from diagnostics import run_skill_diagnostics
-        from env_utils import load_env_files, setup_python_path
         from skill_base import SkillBase
 
         COMMON_LIB_AVAILABLE = True
@@ -77,6 +76,9 @@ else:
             return True
 
 
+# Import local modules after path setup
+# These imports are after the dynamic path configuration above
+# ruff: noqa: E402
 from github_client import GitHubClient
 from issue_analyzer import IssueAnalysis, IssueAnalyzer
 

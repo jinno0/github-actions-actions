@@ -1,7 +1,5 @@
 """Tests for the auto-document GitHub Action."""
 
-import pytest
-from pathlib import Path
 
 
 class TestAutoDocumentAction:

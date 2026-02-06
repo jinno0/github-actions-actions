@@ -56,7 +56,7 @@ def detect_commit_type(files: list[str], diff_stats: str) -> str:
     if any("test" in f.lower() or "spec" in f.lower() for f in files):
         return "test"
 
-    if any("fix" in f.lower() or any("bugfix" in f.lower() for f in file_names)):
+    if any("fix" in f.lower() or "bugfix" in f.lower() for f in file_names):
         return "fix"
 
     # Check for feature indicators

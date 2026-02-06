@@ -1,7 +1,5 @@
 """Tests for the bulk-rebase-prs GitHub Action."""
 
-import pytest
-from pathlib import Path
 
 
 class TestBulkRebasePrsAction:
