@@ -1,5 +1,5 @@
 version: '0.3'
-updated_at: '2026-02-06T23:33:37Z'
+updated_at: '2026-02-06T17:33:27Z'
 canonical_terms:
   AIPoweredAction:
     id: TERM-AI-ACTION
@@ -1256,3 +1256,108 @@ canonical_terms:
         Needs Work (AI requested changes)'
     - source: scripts/calculate_acceptance_rate.py#L38-L41
       quote: 'Count outcomes from metrics: approved, modified, rejected, needs_work'
+  OracleAgent:
+    id: TERM-ORACLE
+    layer: aux
+    status: stable
+    definition: Specialized Claude Code agent for audits, debugging complex bugs, deep
+      research, second opinions, commit reviews, and complex problem analysis
+    synonyms:
+    - oracle
+    - Oracle analysis agent
+    - Audit agent
+    boundaries:
+      includes:
+      - Complex bug analysis
+      - Security auditing
+      - Architecture review
+      - Second opinion generation
+      excludes:
+      - Simple code changes
+      - Routine operations
+      - Non-analytical tasks
+    lifecycle:
+    - Invoked
+    - Analyzes
+    - Reports
+    related_terms:
+    - AIPoweredAction
+    - ClaudeCodeCLI
+    assumptions: []
+    evidence:
+    - source: .claude/agents/oracle.md#L1-L8
+      quote: Use this agent for audits, debugging nasty bugs, deep research, getting
+        second opinions on approaches, reviewing commits for correctness, or analyzing
+        complex problems
+  TestCoverage:
+    id: TERM-TEST-COVERAGE
+    layer: domain
+    status: stable
+    definition: Metric measuring the percentage of codebase exercised by automated
+      tests, with 70% minimum requirement for project quality gates
+    synonyms:
+    - Code coverage
+    - Test coverage rate
+    - Coverage percentage
+    boundaries:
+      includes:
+      - Unit test coverage
+      - Integration test coverage
+      - Coverage metrics
+      excludes:
+      - Manual testing
+      - Quality assurance without metrics
+    lifecycle:
+    - Measured
+    - Analyzed
+    - Improved
+    related_terms:
+    - BMADImplementation
+    - SuccessMetric
+    assumptions:
+    - id: ASM-COV-001
+      text: 'AUTO: Project requires minimum 70% test coverage for quality gate'
+      decision_key: AUTO:TestCoverage.minimum:70_percent
+      expires_after_runs: 20
+    evidence:
+    - source: .bmad/implementation-test-flow-report.md#L12-L13
+      quote: Project achieves 93.89% test coverage, significantly exceeding the 70%
+        requirement
+    - source: charter.yml#L60-L62
+      quote: 'quality_gates: test_coverage: minimum: 70%'
+  TokenPermission:
+    id: TERM-TOKEN-PERM
+    layer: core
+    status: stable
+    definition: GitHub Actions token permission scopes (contents:read/write, pull-requests:read/write,
+      issues:read/write) that control workflow access to repository resources
+    synonyms:
+    - Token permissions
+    - OAuth scopes
+    - GitHub token scopes
+    boundaries:
+      includes:
+      - contents: read vs write
+      - pull-requests: read vs write
+      - issues: read vs write
+      excludes:
+      - Excessive permissions
+      - Unscoped tokens
+    lifecycle:
+    - Defined
+    - Granted
+    - Used
+    - Revoked
+    related_terms:
+    - GitHubToken
+    - SecretHandling
+    assumptions:
+    - id: ASM-PERM-001
+      text: 'AUTO: Token permissions must be minimized (read vs write) for security'
+      decision_key: AUTO:TokenPermission.minimization:read_write_distinction
+      expires_after_runs: 20
+    evidence:
+    - source: .claude/agents/oracle.md#L64-L65
+      quote: Token permissions minimization (contents: read vs write)
+    - source: examples/release-notes-ai-example.yml#L8-L10
+      quote: 'permissions: contents: write'

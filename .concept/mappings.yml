@@ -1,4 +1,4 @@
-updated_at: "2026-02-06T23:33:37Z"
+updated_at: "2026-02-06T17:33:27Z"
 mappings:
   AIPoweredAction:
     code_symbols:
@@ -252,3 +252,29 @@ mappings:
       - "metrics/README.md"
       - "actions/lib/acceptance_tracker.py"
 
+  OracleAgent:
+    code_symbols:
+      - ".claude/agents/oracle.md"
+    db: []
+    api: []
+    docs:
+      - ".claude/agents/oracle.md"
+
+  TestCoverage:
+    code_symbols:
+      - "tests/test_*"
+      - "conftest.py"
+    db: []
+    api: []
+    docs:
+      - ".bmad/implementation-test-flow-report.md"
+      - "TESTING.md"
+
+  TokenPermission:
+    code_symbols: []
+    db: []
+    api: []
+    docs:
+      - ".claude/agents/oracle.md"
+      - "examples/release-notes-ai-example.yml"
+      - "ACTIONS.md"
