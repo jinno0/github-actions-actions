@@ -1,6 +1,6 @@
 {
-  "run_id": "2026-02-06T23:33:37Z",
-  "updated_at": "2026-02-06T23:33:37Z",
+  "run_id": "2026-02-06T16:27:11Z",
+  "updated_at": "2026-02-06T16:27:11Z",
   "ontology": {
     "total_terms": 34,
     "by_layer": {
@@ -40,8 +40,8 @@
     }
   },
   "claims": {
-    "total_lines": 189,
-    "retained_lines": 189,
+    "total_lines": 197,
+    "retained_lines": 197,
     "archived_lines": 0,
     "run_limit": 10000,
     "within_limits": true
@@ -63,36 +63,29 @@
   "bloat_control": {
     "actions_taken": {
       "merged": 0,
-      "deleted": 4,
+      "deleted": 0,
       "deprecated": 0,
       "added": 0
     },
-    "gc_triggered": true,
+    "gc_triggered": false,
     "duplicates_found": 0,
     "duplicate_ids": [],
-    "last_hygiene_run": "2026-02-06T16:01:57.000000Z",
-    "deleted_terms": [
-      "PRQualityGate",
-      "SpecDrivenDevelopment",
-      "NonGoal",
-      "AdoptionRegistry"
-    ]
+    "last_hygiene_run": "2026-02-06T16:27:11.000000Z",
+    "deleted_terms": []
   },
   "hygiene": {
     "decisions_md_lines": 75,
     "decisions_md_limit": 200,
     "decisions_md_within_limit": true,
-    "claims_ndjson_lines": 189,
-    "claims_ndjson_limit": 3000,
+    "claims_ndjson_lines": 197,
+    "claims_ndjson_limit": 10000,
     "claims_ndjson_within_limit": true,
     "tombstones_count": 4,
     "tombstones_limit": 200,
-    "unmapped_ratio": 0.0,
+    "unmapped_ratio": 0.005,
     "unmapped_ratio_limit": 0.2,
     "all_within_limits": true,
-    "last_hygiene_check": "2026-02-06T16:01:57.000000Z",
-    "integrity_fixes": [
-      "invariants.yml:INV-006 - replaced deleted 'NonGoal' reference with 'ProductGoal'"
-    ]
+    "last_hygiene_check": "2026-02-06T16:27:11.000000Z",
+    "integrity_fixes": []
   }
 }
