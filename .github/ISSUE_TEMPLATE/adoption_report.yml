@@ -1,0 +1,65 @@
+name: Adoption Report
+description: Report your adoption of AI Actions
+title: "[Adoption] Use AI Actions in my repository"
+labels: ["adoption", "user-feedback"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for adopting AI Actions! Please fill out this form to help us track usage and improve our tools.
+
+  - type: input
+    id: repository
+    attributes:
+      label: Repository URL
+      description: Link to your repository
+      placeholder: https://github.com/org/repo
+    validations:
+      required: true
+
+  - type: input
+    id: team
+    attributes:
+      label: Team/Organization
+      description: Your team or organization name
+      placeholder: Platform Team
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: actions
+    attributes:
+      label: Which actions are you using?
+      description: Select all that apply
+      options:
+        - label: review-and-merge
+        - label: spec-to-code
+        - label: auto-refactor
+        - label: auto-document
+        - label: release-notes-ai
+        - label: action-fixer
+        - label: auto-merge
+        - label: auto-rebase
+        - label: bulk-merge-prs
+        - label: bulk-rebase-prs
+        - label: pr-review-enqueuer
+        - label: publish-pr
+        - label: review-auto-merge
+
+  - type: textarea
+    id: experience
+    attributes:
+      label: How is your experience?
+      description: Tell us about your experience using these actions
+      placeholder: We've been using review-and-merge for 2 weeks and it's been great...
+    validations:
+      required: false
+
+  - type: textarea
+    id: feedback
+    attributes:
+      label: Feedback or suggestions
+      description: Any feedback or suggestions for improvement?
+      placeholder: It would be great if...
+    validations:
+      required: false

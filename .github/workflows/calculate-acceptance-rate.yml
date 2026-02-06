@@ -1,0 +1,88 @@
+name: Calculate Acceptance Rate
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # 毎週日曜日0時に実行
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  calculate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt 2>/dev/null || true
+
+      - name: Create metrics directory
+        run: mkdir -p metrics
+
+      - name: Calculate acceptance rate
+        run: |
+          python scripts/calculate_acceptance_rate.py \
+            --time-period 7d \
+            --output report \
+            --output-file metrics/acceptance_rate_weekly.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
+      - name: Create Issue for Report
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            try {
+              const data = JSON.parse(fs.readFileSync('metrics/acceptance_rate_weekly.json', 'utf8'));
+
+              const body = `## 📈 AI Review Acceptance Rate Report
+
+              **Period:** Last 7 days
+              **Generated:** ${new Date().toISOString()}
+
+              ### Summary
+              - **Total Reviews:** ${data.total_reviews || 0}
+              - **Acceptance Rate:** ${((data.acceptance_rate || 0)).toFixed(2)}%
+              - **Target:** >= 70%
+              - **Status:** ${(data.acceptance_rate || 0) >= 70 ? '✅ On Track' : '⚠️ Below Target'}
+
+              ### Outcomes
+              | Outcome | Count | Percentage |
+              |----------|-------|------------|
+              | ✅ Approved | ${data.outcomes?.approved || 0} | ${data.total_reviews ? ((data.outcomes?.approved || 0) / data.total_reviews * 100).toFixed(1) : '0.0'}% |
+              | 🔧 Modified | ${data.outcomes?.modified || 0} | ${data.total_reviews ? ((data.outcomes?.modified || 0) / data.total_reviews * 100).toFixed(1) : '0.0'}% |
+              | ❌ Rejected | ${data.outcomes?.rejected || 0} | ${data.total_reviews ? ((data.outcomes?.rejected || 0) / data.total_reviews * 100).toFixed(1) : '0.0'}% |
+              | 📝 Needs Work | ${data.outcomes?.needs_work || 0} | ${data.total_reviews ? ((data.outcomes?.needs_work || 0) / data.total_reviews * 100).toFixed(1) : '0.0'}% |
+
+              ### Insights
+              - **Avg Proposals per Review:** ${data.proposal_count_avg || 'N/A'}
+              ${data.common_rejection_reasons?.length ? `- **Top Rejection Reasons:**\n              ${data.common_rejection_reasons.map(r => `- ${r}`).join('\n              ')}` : ''}
+
+              ${data.acceptance_rate < 70 ? `### Action Required
+              Acceptance rate is below target. Consider:
+              - Reviewing custom rules for relevance
+              - Improving prompt templates
+              - Analyzing rejection reasons for patterns` : ''}`;
+
+              github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `📈 Weekly Acceptance Rate Report: ${((data.acceptance_rate || 0)).toFixed(1)}%`,
+                body: body,
+                labels: ['metrics', 'acceptance-rate']
+              });
+            } catch (error) {
+              console.log('Could not create report issue:', error.message);
+            }

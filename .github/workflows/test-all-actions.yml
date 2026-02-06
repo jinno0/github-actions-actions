@@ -127,12 +127,75 @@ jobs:
           echo "✓ All required files exist"
           echo "✓ YAML syntax is valid"
 
+  coverage:
+    name: 'Coverage Report'
+    needs: setup
+    if: needs.setup.outputs.should-run == 'true'
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pytest-cov
+
+      - name: Generate coverage report
+        run: |
+          pytest --cov=actions --cov=scripts --cov-report=term-missing --cov-report=xml --cov-report=json || true
+        continue-on-error: true
+
+      - name: Upload coverage to PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            try {
+              const coverage = JSON.parse(fs.readFileSync('coverage.json', 'utf8'));
+              const total = coverage.totals.percent_covered;
+
+              const output = `## 📊 Coverage Report
+
+              **Total Coverage:** ${total.toFixed(2)}%
+
+              ${total >= 70 ? '✅' : '❌'} Target: 70%
+
+              ${total < 70 ? '⚠️ Coverage is below target. Please add tests.' : ''}
+
+              ### Coverage by File
+              | File | Coverage |
+              |------|----------|
+              ${Object.entries(coverage.files || {})
+                .slice(0, 10)
+                .map(([file, data]) => `| ${file} | ${data.summary.percent_covered.toFixed(1)}% |`)
+                .join('\n')}`;
+
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: output
+              });
+            } catch (error) {
+              console.log('Could not generate coverage report:', error);
+            }
+
   summary:
     name: 'Test Summary'
-    needs: [setup, test-action]
+    needs: [setup, test-action, coverage]
     if: always()
     runs-on: self-hosted
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Generate summary
         env:
           ACTIONS_JSON: ${{ toJSON(needs.test-action.jobs) }}
@@ -155,3 +218,10 @@ jobs:
           echo "- **Dry Run**: Enabled (no actual changes made)" >> $GITHUB_STEP_SUMMARY
           echo "- **Claude CLI**: Uses pre-configured command on self-hosted runner" >> $GITHUB_STEP_SUMMARY
           echo "- **Total Actions Tested**: ${{ needs.setup.outputs.matrix }}" >> $GITHUB_STEP_SUMMARY
+
+          # Add coverage to summary if available
+          if [ -f coverage.json ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "## 📊 Coverage" >> $GITHUB_STEP_SUMMARY
+            python3 -c "import json; d=json.load(open('coverage.json')); print(f'- **Total Coverage**: {d[\"totals\"][\"percent_covered\"]:.2f}%')" >> $GITHUB_STEP_SUMMARY
+          fi
