@@ -1,6 +1,6 @@
 {
-  "run_id": "2026-02-07T02:40:00Z",
-  "updated_at": "2026-02-07T02:40:00Z",
+  "run_id": "2026-02-06T19:40:01Z",
+  "updated_at": "2026-02-06T19:40:01Z",
   "ontology": {
     "total_terms": 37,
     "by_layer": {
@@ -40,10 +40,10 @@
     }
   },
   "claims": {
-    "total_lines": 212,
-    "retained_lines": 212,
+    "total_lines": 227,
+    "retained_lines": 227,
     "archived_lines": 0,
-    "run_limit": 3000,
+    "run_limit": 10000,
     "within_limits": true
   },
   "queue": {
@@ -70,14 +70,14 @@
     "gc_triggered": false,
     "duplicates_found": 0,
     "duplicate_ids": [],
-    "last_hygiene_run": "2026-02-06T16:27:11.000000Z",
+    "last_hygiene_run": "2026-02-06T19:40:01.000000Z",
     "deleted_terms": []
   },
   "hygiene": {
     "decisions_md_lines": 75,
     "decisions_md_limit": 200,
     "decisions_md_within_limit": true,
-    "claims_ndjson_lines": 197,
+    "claims_ndjson_lines": 227,
     "claims_ndjson_limit": 10000,
     "claims_ndjson_within_limit": true,
     "tombstones_count": 4,
@@ -85,7 +85,7 @@
     "unmapped_ratio": 0.005,
     "unmapped_ratio_limit": 0.2,
     "all_within_limits": true,
-    "last_hygiene_check": "2026-02-07T02:40:00.000000Z",
+    "last_hygiene_check": "2026-02-06T19:40:01.000000Z",
     "integrity_fixes": []
   }
 }
