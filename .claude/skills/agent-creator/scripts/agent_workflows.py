@@ -26,20 +26,6 @@ class AgentWorkflows:
     ]
 
     @classmethod
-    def _get_templates_dir(cls) -> Path:
-        """Get the path to the templates directory
-
-        Returns:
-            Path: Path to the templates/workflows directory
-        """
-        # Get the directory containing this script
-        current_dir = Path(__file__).parent
-        # Navigate to templates/workflows (sibling of scripts/)
-        templates_dir = current_dir.parent / "templates" / "workflows"
-
-        return templates_dir
-
-    @classmethod
     def _load_workflow_template(cls, workflow_type: str) -> str:
         """Load a workflow template from a markdown file
 
@@ -52,8 +38,8 @@ class AgentWorkflows:
         Raises:
             FileNotFoundError: If the template file doesn't exist
         """
-        templates_dir = cls._get_templates_dir()
-        template_file = templates_dir / f"{workflow_type}.md"
+        current_dir = Path(__file__).parent
+        template_file = current_dir.parent / "templates" / "workflows" / f"{workflow_type}.md"
 
         if not template_file.exists():
             raise FileNotFoundError(
@@ -90,12 +76,6 @@ class AgentWorkflows:
         try:
             return cls._load_workflow_template("general-purpose")
         except FileNotFoundError:
-            # Final fallback: return a basic workflow
-            return """# General Workflow
-
-1. Analyze the task requirements
-2. Gather necessary information
-3. Plan the approach
-4. Execute the plan
-5. Document results
-"""
+            raise FileNotFoundError(
+                f"No workflow templates found. Please ensure templates/workflows/ directory exists."
+            )
