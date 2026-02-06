@@ -1,7 +1,0 @@
-name: 'Invalid Action'
-description: 'This action has invalid YAML for testing error handling'
-inputs:
-  invalid-input
-    description: 'Missing colon'
-runs:
-  using: 'composite'
