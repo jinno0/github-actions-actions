@@ -1,0 +1,81 @@
+[
+  {
+    "function_id": "CF-001",
+    "scenario_name": "13種類のAI Actions提供",
+    "passed": true,
+    "actual_output": "13 actions: ['action-fixer', 'auto-document', 'auto-merge', 'auto-rebase', 'auto-refactor', 'bulk-merge-prs', 'bulk-rebase-prs', 'pr-review-enqueuer', 'publish-pr', 'release-notes-ai', 'review-and-merge', 'review-auto-merge', 'spec-to-code']",
+    "expected_output": "13 actions: ['action-fixer', 'auto-document', 'auto-merge', 'auto-rebase', 'auto-refactor', 'bulk-merge-prs', 'bulk-rebase-prs', 'pr-review-enqueuer', 'publish-pr', 'release-notes-ai', 'review-and-merge', 'review-auto-merge', 'spec-to-code']",
+    "error_message": null,
+    "interpretation": "✅ 正常に13個のActionsが提供されている",
+    "evidence_files": [
+      "actions/action-fixer/action.yml",
+      "actions/pr-review-enqueuer/action.yml",
+      "actions/review-and-merge/action.yml",
+      "actions/spec-to-code/action.yml",
+      "actions/bulk-rebase-prs/action.yml",
+      "actions/auto-document/action.yml",
+      "actions/release-notes-ai/action.yml",
+      "actions/auto-rebase/action.yml",
+      "actions/review-auto-merge/action.yml",
+      "actions/auto-merge/action.yml",
+      "actions/bulk-merge-prs/action.yml",
+      "actions/auto-refactor/action.yml",
+      "actions/publish-pr/action.yml"
+    ]
+  },
+  {
+    "function_id": "CF-002",
+    "scenario_name": "instructions/とexamples/の存在確認",
+    "passed": false,
+    "actual_output": "{\n  \"total_actions\": 13,\n  \"instructions_count\": 15,\n  \"examples_count\": 14,\n  \"missing_instructions\": [],\n  \"missing_examples\": [\n    \"action-fixer\",\n    \"auto-document\",\n    \"auto-merge\",\n    \"auto-rebase\",\n    \"auto-refactor\",\n    \"bulk-merge-prs\",\n    \"bulk-rebase-prs\",\n    \"pr-review-enqueuer\",\n    \"publish-pr\",\n    \"release-notes-ai\",\n    \"review-and-merge\",\n    \"review-auto-merge\",\n    \"spec-to-code\"\n  ]\n}",
+    "expected_output": "{\n  \"total_actions\": 13,\n  \"instructions_count\": 13,\n  \"examples_count\": 13,\n  \"missing_instructions\": [],\n  \"missing_examples\": []\n}",
+    "error_message": null,
+    "interpretation": "⚠️ ドキュメント不足: instructionsなし=0, examplesなし=13",
+    "evidence_files": [
+      "instructions/bulk-rebase-prs.md",
+      "instructions/bulk-merge-prs.md",
+      "instructions/action-fixer.md",
+      "instructions/auto-merge.md",
+      "instructions/spec-to-code.md",
+      "examples/pr-review-enqueuer-example.yml",
+      "examples/auto-refactor-example.yml",
+      "examples/review-and-merge-example.yml",
+      "examples/auto-document-example.yml",
+      "examples/spec-to-code-example.yml"
+    ]
+  },
+  {
+    "function_id": "CF-003",
+    "scenario_name": "Dry Run検証の存在",
+    "passed": true,
+    "actual_output": "has_dry_run_markers=True, pytest_dry_run_tests=True",
+    "expected_output": "Dry Run検証テストが存在する",
+    "error_message": null,
+    "interpretation": "✅ Dry Run検証機能が実装されている",
+    "evidence_files": []
+  },
+  {
+    "function_id": "QA-001",
+    "scenario_name": "テストカバレッジ >= 70%",
+    "passed": true,
+    "actual_output": "93.89%",
+    "expected_output": ">= 70.0%",
+    "error_message": null,
+    "interpretation": "✅ テストカバレッジ93.9%は目標70.0%を満たしている",
+    "evidence_files": [
+      "coverage.json"
+    ]
+  },
+  {
+    "function_id": "QA-004",
+    "scenario_name": "ドキュメントカバレッジ検証",
+    "passed": false,
+    "actual_output": "FAILED",
+    "expected_output": "PASSED",
+    "error_message": null,
+    "interpretation": "❌ ドキュメントカバレッジ検証テストが失敗している",
+    "evidence_files": [
+      "tests/test_documentation_coverage.py"
+    ]
+  }
+]

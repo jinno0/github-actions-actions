@@ -1,0 +1,187 @@
+version: "2.0"
+generated_at: "2026-02-06T22:30:00Z"
+generated_by: "audit-run-001"
+
+# === Gap Analysis ===
+
+## Critical Gaps (Blocking - 品質目標未達)
+critical_gaps:
+  - gap_id: "GAP-001"
+    severity: "critical"
+    category: "quality"
+    qa_id: "QA-001"
+    current_state: "テストカバレッジ21.29%"
+    desired_state: "テストカバレッジ>=70%"
+    gap_size: "-48.71%"
+    source_assertion: "C-005, C-006, C-007"
+    based_on_assumption: "ASM-002（目標カバレッジ70%）"
+    impact:
+      - "pytest実行時にCIが失敗し続けている"
+      - "コードの54%がテストされていない"
+    root_cause_hypothesis:
+      - "テストケース（301件）はあるが、各テストが狭い範囲のみをカバーしている"
+      - "モックやフィクスチャが過度に使用され、実際のコードパスを通っていない可能性"
+      - "エラーケースやエッジケースのテストが不足している"
+    proposed_solutions:
+      - id: "SOL-001-1"
+        priority: 1
+        approach: "カバレッジ不足モジュールの特定"
+        effort: "low"
+        description: "coverage.jsonから最もカバレッジが低いファイルtop10を特定し、優先的にテスト追加"
+        expected_impact: "+20-30%カバレッジ向上"
+
+      - id: "SOL-001-2"
+        priority: 2
+        approach: "統合テストの強化"
+        effort: "medium"
+        description: "各Actionのend-to-endテストを追加し、実際のワークフロー実行パスをカバー"
+        expected_impact: "+15-25%カバレッジ向上"
+
+      - id: "SOL-001-3"
+        priority: 3
+        approach: "エッジケーステストの追加"
+        effort: "low"
+        description: "エラー処理、例外パス、境界値テストを追加"
+        expected_impact: "+10-15%カバレッジ向上"
+
+## High Priority Gaps (運用・品質への影響大)
+high_priority_gaps:
+  - gap_id: "GAP-002"
+    severity: "high"
+    category: "observability"
+    qa_id: "QA-002"
+    current_state: "AIレビュー受入率（Acceptance Rate）が不明"
+    desired_state: "AIレビュー受入率>=70%を実績値として把握"
+    gap_size: "データなし"
+    source_assertion: "C-017"
+    based_on_assumption: "ASM-003（目標受入率70%）"
+    impact:
+      - "AIレビューの品質を評価できない"
+      - "改善の効果測定ができない"
+    proposed_solutions:
+      - id: "SOL-002-1"
+        priority: 1
+        approach: "メトリクス収集スクリプトの実行"
+        effort: "low"
+        description: "scripts/calculate_acceptance_rate.pyを定期的（週次）に実行し、レポート生成"
+        expected_impact: "受入率の可視化"
+
+      - id: "SOL-002-2"
+        priority: 2
+        approach: "メトリクスダッシュボードの構築"
+        effort: "medium"
+        description: "GitHub Actionsのworkflowで定期的にメトリクス収集し、artifactsに保存"
+        expected_impact: "継続的なモニタリング"
+
+  - gap_id: "GAP-003"
+    severity: "high"
+    category: "adoption"
+    current_state: "組織内プロジェクトへの導入状況が不明"
+    desired_state: "組織内の複数のリポジトリで採用されている状態"
+    gap_size: "未完了（PURPOSE.md:25）"
+    source_assertion: "C-015"
+    based_on_assumption: "ASM-001, ASM-005（ターゲットユーザーとフェーズ）"
+    impact:
+      - "プロジェクトの成功条件「組織内の複数のリポジトリで採用される」の達成度が不明"
+      - "フィードバックが収集できず、改善の方向性が定まらない"
+    proposed_solutions:
+      - id: "SOL-003-1"
+        priority: 1
+        approach: "導入状況調査の実施"
+        effort: "medium"
+        description: "組織内のDevOps/開発チームに対し、Actions利用状況アンケート実施"
+        expected_impact: "導入実績と課題の把握"
+
+      - id: "SOL-003-2"
+        priority: 2
+        approach: "パイロット導入プログラムの推進"
+        effort: "high"
+        description: "2-3つのプロジェクトでパイロット導入し、成功事例としてドキュメント化"
+        expected_impact: "導入障壁の低下と組織内展開の加速"
+
+## Medium Priority Gaps (改善推奨)
+medium_priority_gaps:
+  - gap_id: "GAP-004"
+    severity: "medium"
+    category: "observability"
+    current_state: "本番環境での動作実績（エラー率、実行時間）が不明"
+    desired_state: "主要なメトリクス（成功率、実行時間、エラー率）をモニタリング"
+    gap_size: "データなし"
+    source_assertion: "C-019"
+    based_on_assumption: "ASM-004（Self-hosted runner利用）"
+    impact:
+      - "運用上の問題を早期検知できない"
+      - "パフォーマンス劣化に気づけない"
+    proposed_solutions:
+      - id: "SOL-004-1"
+        priority: 1
+        approach: "テレメトリー機能の活用"
+        effort: "low"
+        description: "既存のテレメトリー収集機能（CF-006）を有効化し、データ分析"
+        expected_impact: "実行状況の可視化"
+
+      - id: "SOL-004-2"
+        priority: 2
+        approach: "アラートルールの設定"
+        effort: "medium"
+        description: "エラー率閾値超過時に通知する仕組みを追加"
+        expected_impact: "早期問題検知"
+
+  - gap_id: "GAP-005"
+    severity: "medium"
+    category: "documentation"
+    current_state: "ドキュメントは整備されているが、実際の利用手順が不親切な可能性"
+    desired_state: "初学者でも15分で試せるクイックスタートガイド"
+    gap_size: "主観的評価による"
+    source_assertion: "C-014（instructions/examplesは存在）"
+    based_on_assumption: "ASM-001（ターゲットはDevOpsエンジニアだが、初学者も含まれる可能性）"
+    impact:
+      - "導入ハードルが高い"
+      - "試行されないまま放置される"
+    proposed_solutions:
+      - id: "SOL-005-1"
+        priority: 1
+        approach: "クイックスタートガイドの作成"
+        effort: "low"
+        description: "最もシンプルなAction（例：auto-merge）の15分チュートリアルを作成"
+        expected_impact: "導入ハードルの低下"
+
+## Low Priority Gaps (将来の改善)
+low_priority_gaps:
+  - gap_id: "GAP-006"
+    severity: "low"
+    category: "performance"
+    current_state: "Claude Code CLIの実行時間とコストが不明"
+    desired_state: "コストパフォーマンスの最適化"
+    gap_size: "データなし"
+    source_assertion: "C-020"
+    based_on_assumption: "ASM-004（Self-hosted runner利用）"
+    impact:
+      - "コスト最適化の判断ができない"
+      - "予算策定が困難"
+    proposed_solutions:
+      - id: "SOL-006-1"
+        priority: 2
+        approach: "コスト追跡機能の追加"
+        effort: "medium"
+        description: "各Action実行時にtoken使用量と実行時間をログ出力"
+        expected_impact: "コスト可視化"
+
+## Gap Summary Statistics
+gap_summary:
+  total_gaps: 6
+  critical: 1
+  high_priority: 2
+  medium_priority: 2
+  low_priority: 1
+
+  effort_distribution:
+    low: 4
+    medium: 5
+    high: 1
+
+  quick_wins:  # effort: low + severity: critical/high
+    - "SOL-001-1: カバレッジ不足モジュールの特定"
+    - "SOL-002-1: メトリクス収集スクリプトの実行"
+    - "SOL-004-1: テレメトリー機能の活用"
+    - "SOL-005-1: クイックスタートガイドの作成"

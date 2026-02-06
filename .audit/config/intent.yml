@@ -1,0 +1,137 @@
+version: "2.0"
+updated_at: "2026-02-06T22:30:00Z"
+updated_by: "audit-run-001"
+
+# === Mission ===
+mission:
+  target_user: "GitHub組織のDevOpsエンジニアおよび開発者"
+  provided_value: "Self-hosted runner上でClaude Code CLIを活用し、文脈を理解した高度な自動化（AIレビュー、自動修正、ドキュメント生成）を実現するGitHub Actionsを提供する"
+  desired_state: "組織内の複数リポジトリで採用され、AIに任せられる雑務が増加し、人間が本質的な設計・意思決定に集中できる時間が増加している状態"
+
+# === Assumptions ===
+assumptions:
+  - id: "ASM-001"
+    field: "mission.target_user"
+    value: "GitHub組織のDevOpsエンジニアおよび開発者"
+    reason: "README.mdでSelf-hosted runnerの利用と組織全体の導入を想定している記述がある"
+    confidence: "high"
+
+  - id: "ASM-002"
+    field: "quality_attributes.test_coverage"
+    value: "70%"
+    reason: "pytest.iniで--cov-fail-under=70が設定されている"
+    confidence: "high"
+
+  - id: "ASM-003"
+    field: "quality_attributes.ai_acceptance_rate"
+    value: "70%"
+    reason: "README.mdでreview-and-mergeの受入率目標として記載されている"
+    confidence: "high"
+
+  - id: "ASM-004"
+    field: "runtime.claude_cli_available"
+    value: "Self-hosted runner上でClaude Code CLIが実行可能"
+    reason: "README.mdとAGENTS.mdで前提条件として明記されている"
+    confidence: "high"
+
+  - id: "ASM-005"
+    field: "deployment.target_stage"
+    value: "Phase 3: Stabilization & Adoption（組織内導入とフィードバック収集中）"
+    reason: "PURPOSE.mdのCurrent Statusによる"
+    confidence: "high"
+
+# === Core Functions ===
+core_functions:
+  - id: "CF-001"
+    claim: "13種類のAI Actionsを提供している（review-and-merge, spec-to-code, action-fixer, auto-refactor, auto-document, release-notes-ai, auto-merge, auto-rebase, review-auto-merge, publish-pr, bulk-merge-prs, bulk-rebase-prs, pr-review-enqueuer）"
+    source: "README.md:8-47"
+    testable: true
+
+  - id: "CF-002"
+    claim: "各Actionには利用例（examples/）と導入手順（instructions/）が存在する"
+    source: "README.md:49-59"
+    testable: true
+
+  - id: "CF-003"
+    claim: "全てのAI ActionsはDry Runモードで自動検証される（構造チェック・YAML構文・モック実行）"
+    source: "README.md:92-96"
+    testable: true
+
+  - id: "CF-004"
+    claim: "カスタムレビュールール注入機能（review-and-merge）でプロジェクト固有のコーディング規約やセキュリティ要件を反映できる"
+    source: "README.md:64-76"
+    testable: true
+
+  - id: "CF-005"
+    claim: "AIレビュー品質メトリクス（受入率Acceptance Rate）を追跡・計算できる"
+    source: "README.md:121-139"
+    testable: true
+
+  - id: "CF-006"
+    claim: "匿名テレメトリー収集機能を提供し、オプトアウト可能"
+    source: "README.md:98-119"
+    testable: true
+
+# === Quality Attributes ===
+quality_attributes:
+  - id: "QA-001"
+    name: "テストカバレッジ"
+    target: ">= 70%"
+    verification:
+      type: "measurement"
+      command: "python -m pytest --cov=. --cov-fail-under=70"
+      criteria:
+        operator: ">="
+        value: 70
+        unit: "%"
+      interpretation:
+        success_means: "コードの70%以上がテストで実行される"
+        failure_means: "テストされていないコードパスが30%以上ある"
+        warning: "カバレッジが高くてもアサーションが弱ければ意味がない"
+
+  - id: "QA-002"
+    name: "AIレビュー受入率（Acceptance Rate）"
+    target: ">= 70%"
+    verification:
+      type: "measurement"
+      command: "python scripts/calculate_acceptance_rate.py --output report --time-period 7d"
+      criteria:
+        operator: ">="
+        value: 70
+        unit: "%"
+      interpretation:
+        success_means: "AIレビュー提案の70%以上が人間に受け入れられている"
+        failure_means: "AIレビューの精度が不十分で、人間による修正・棄却が多い"
+
+  - id: "QA-003"
+    name: "全Actionの構造的整合性"
+    target: "100%のActionsがDry Run検証に合格"
+    verification:
+      type: "validation"
+      command: "python -m pytest tests/ -k dry_run"
+      criteria:
+        operator: "=="
+        value: 100
+        unit: "%"
+      interpretation:
+        success_means: "全てのAction.ymlが有効で、テンプレート構造が正しい"
+        failure_means: "一部のActionにYAML構文エラーまたはテンプレート不備がある"
+
+  - id: "QA-004"
+    name: "ドキュメントカバレッジ"
+    target: "全Actionにinstructions/とexamples/が存在"
+    verification:
+      type: "validation"
+      command: "python -m pytest tests/test_documentation_coverage.py"
+      criteria:
+        operator: "=="
+        value: 100
+        unit: "%"
+      interpretation:
+        success_means: "全てのActionに導入ガイドと利用例が整備されている"
+        failure_means: "一部のActionのドキュメントが不足している"
+
+non_goals:
+  - "単なるシェルスクリプトのラッパー（既存のActionsで十分なもの）"
+  - "完全に無人での運用（AIのハルシネーションリスクを考慮）"
+  - "特定プロダクトに強く結合しすぎたロジック（再利用性を重視）"

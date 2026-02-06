@@ -1,0 +1,12 @@
+name: 'Sample Action for Testing'
+description: 'A sample GitHub Action for verification testing'
+inputs:
+  sample-input:
+    description: 'A sample input parameter'
+    required: true
+    default: 'default-value'
+runs:
+  using: 'composite'
+  steps:
+    - run: echo "Sample action executed"
+      shell: bash

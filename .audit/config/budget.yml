@@ -1,0 +1,23 @@
+version: "2.0"
+updated_at: "2026-02-06T22:30:00Z"
+updated_by: "audit-run-001"
+
+# === Scan Budget ===
+scan_budget:
+  max_files_per_run: 200
+  max_total_tokens: 100000
+
+# === Log Budget ===
+log_budget:
+  max_log_entries: 1000
+  keep_last_n_entries: 500
+
+# === Proposal Budget ===
+proposal_budget:
+  max_prs_per_run: 10
+  max_analysis_depth: 5  # ディレクトリ再帰の深さ
+
+# === Verification Budget ===
+verification_budget:
+  max_test_scenarios: 20
+  max_verification_time_seconds: 300
