@@ -2,7 +2,7 @@ name: Calculate Acceptance Rate
 
 on:
   schedule:
-    - cron: '0 0 * * 0'  # 毎週日曜日0時に実行
+    - cron: '0 0 * * 0'  # Runs every Sunday at 00:00 UTC
   workflow_dispatch:
 
 permissions:
@@ -18,34 +18,87 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.x'  # Use latest stable for consistency with other metrics workflows
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt 2>/dev/null || true
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            echo "No requirements.txt found, installing minimal dependencies"
+            pip install PyYAML
+          fi
 
       - name: Create metrics directory
         run: mkdir -p metrics
 
       - name: Calculate acceptance rate
+        id: calculate
         run: |
           python scripts/calculate_acceptance_rate.py \
             --time-period 7d \
             --output report \
-            --output-file metrics/acceptance_rate_weekly.json
+            --output-file metrics/acceptance_rate_weekly.json \
+            2>&1 | tee acceptance-rate.log
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}  # Use github.token instead of secrets.GITHUB_TOKEN
         continue-on-error: true
 
+      - name: Check calculation result
+        if: steps.calculate.outcome == 'failure'
+        run: |
+          echo "::error::Acceptance rate calculation failed"
+          echo "::group::Error log"
+          cat acceptance-rate.log
+          echo "::endgroup::"
+
       - name: Create Issue for Report
-        if: success()
+        if: success() && hashFiles('metrics/acceptance_rate_weekly.json') != ''
+        timeout-minutes: 5
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const fs = require('fs');
+
+            // Check if file exists
+            if (!fs.existsSync('metrics/acceptance_rate_weekly.json')) {
+              console.log('⚠️  Acceptance rate report not found. Skipping issue creation.');
+              return;
+            }
+
             try {
-              const data = JSON.parse(fs.readFileSync('metrics/acceptance_rate_weekly.json', 'utf8'));
+              const rawData = fs.readFileSync('metrics/acceptance_rate_weekly.json', 'utf8');
+
+              // Parse with error handling
+              let data;
+              try {
+                data = JSON.parse(rawData);
+              } catch (parseError) {
+                throw new Error('Invalid JSON in acceptance rate report: ' + parseError.message);
+              }
+
+              // Validate required fields
+              if (typeof data !== 'object' || data === null) {
+                throw new Error('Acceptance rate data is not an object');
+              }
+
+              // Safely access with defaults and proper number conversion
+              const totalReviews = Number(data.total_reviews) || 0;
+              const acceptanceRate = Number(data.acceptance_rate) || 0;
+              const outcomes = data.outcomes || {};
+
+              const approved = Number(outcomes.approved) || 0;
+              const modified = Number(outcomes.modified) || 0;
+              const rejected = Number(outcomes.rejected) || 0;
+              const needsWork = Number(outcomes.needs_work) || 0;
+
+              // Calculate percentages safely
+              const approvedPct = totalReviews > 0 ? (approved / totalReviews * 100).toFixed(1) : '0.0';
+              const modifiedPct = totalReviews > 0 ? (modified / totalReviews * 100).toFixed(1) : '0.0';
+              const rejectedPct = totalReviews > 0 ? (rejected / totalReviews * 100).toFixed(1) : '0.0';
+              const needsWorkPct = totalReviews > 0 ? (needsWork / totalReviews * 100).toFixed(1) : '0.0';
 
               const body = `## 📈 AI Review Acceptance Rate Report
 
@@ -53,36 +106,57 @@ jobs:
               **Generated:** ${new Date().toISOString()}
 
               ### Summary
-              - **Total Reviews:** ${data.total_reviews || 0}
-              - **Acceptance Rate:** ${((data.acceptance_rate || 0)).toFixed(2)}%
+              - **Total Reviews:** ${totalReviews}
+              - **Acceptance Rate:** ${acceptanceRate.toFixed(2)}%
               - **Target:** >= 70%
-              - **Status:** ${(data.acceptance_rate || 0) >= 70 ? '✅ On Track' : '⚠️ Below Target'}
+              - **Status:** ${acceptanceRate >= 70 ? '✅ On Track' : '⚠️ Below Target'}
 
               ### Outcomes
               | Outcome | Count | Percentage |
               |----------|-------|------------|
-              | ✅ Approved | ${data.outcomes?.approved || 0} | ${data.total_reviews ? ((data.outcomes?.approved || 0) / data.total_reviews * 100).toFixed(1) : '0.0'}% |
-              | 🔧 Modified | ${data.outcomes?.modified || 0} | ${data.total_reviews ? ((data.outcomes?.modified || 0) / data.total_reviews * 100).toFixed(1) : '0.0'}% |
-              | ❌ Rejected | ${data.outcomes?.rejected || 0} | ${data.total_reviews ? ((data.outcomes?.rejected || 0) / data.total_reviews * 100).toFixed(1) : '0.0'}% |
-              | 📝 Needs Work | ${data.outcomes?.needs_work || 0} | ${data.total_reviews ? ((data.outcomes?.needs_work || 0) / data.total_reviews * 100).toFixed(1) : '0.0'}% |
+              | ✅ Approved | ${approved} | ${approvedPct}% |
+              | 🔧 Modified | ${modified} | ${modifiedPct}% |
+              | ❌ Rejected | ${rejected} | ${rejectedPct}% |
+              | 📝 Needs Work | ${needsWork} | ${needsWorkPct}% |
 
               ### Insights
-              - **Avg Proposals per Review:** ${data.proposal_count_avg || 'N/A'}
-              ${data.common_rejection_reasons?.length ? `- **Top Rejection Reasons:**\n              ${data.common_rejection_reasons.map(r => `- ${r}`).join('\n              ')}` : ''}
+              - **Avg Proposals per Review:** ${data.proposal_count_avg ? data.proposal_count_avg.toFixed(1) : 'N/A'}
+              ${data.common_rejection_reasons && data.common_rejection_reasons.length ? `- **Top Rejection Reasons:**
+              ${data.common_rejection_reasons.map(r => `- ${r}`).join('\n              ')}` : ''}
 
-              ${data.acceptance_rate < 70 ? `### Action Required
+              ${acceptanceRate < 70 ? `### Action Required
               Acceptance rate is below target. Consider:
               - Reviewing custom rules for relevance
               - Improving prompt templates
               - Analyzing rejection reasons for patterns` : ''}`;
 
-              github.rest.issues.create({
+              const result = await github.rest.issues.create({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                title: `📈 Weekly Acceptance Rate Report: ${((data.acceptance_rate || 0)).toFixed(1)}%`,
+                title: `📈 Weekly Acceptance Rate Report: ${acceptanceRate.toFixed(1)}%`,
                 body: body,
                 labels: ['metrics', 'acceptance-rate']
               });
+
+              console.log('✅ Issue created successfully:', result.data.html_url);
+
             } catch (error) {
-              console.log('Could not create report issue:', error.message);
+              console.error('❌ Could not create report issue:', error.message);
+              console.error('Stack trace:', error.stack);
+
+              // Create a warning issue instead of failing silently
+              try {
+                await github.rest.issues.create({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  title: `⚠️ Acceptance Rate Report Error`,
+                  body: `Could not generate acceptance rate report: ${error.message}`,
+                  labels: ['metrics', 'error']
+                });
+              } catch (createError) {
+                console.error('❌ Could not create error issue:', createError.message);
+              }
+
+              throw error;
             }
+
