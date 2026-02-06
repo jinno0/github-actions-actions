@@ -70,7 +70,7 @@
     "gc_triggered": true,
     "duplicates_found": 0,
     "duplicate_ids": [],
-    "last_hygiene_run": "2026-02-06T23:33:37.000000Z",
+    "last_hygiene_run": "2026-02-06T16:01:57.000000Z",
     "deleted_terms": [
       "PRQualityGate",
       "SpecDrivenDevelopment",
@@ -90,7 +90,9 @@
     "unmapped_ratio": 0.0,
     "unmapped_ratio_limit": 0.2,
     "all_within_limits": true,
-    "last_hygiene_check": "2026-02-06T23:33:37.000000Z",
-    "integrity_fixes": []
+    "last_hygiene_check": "2026-02-06T16:01:57.000000Z",
+    "integrity_fixes": [
+      "invariants.yml:INV-006 - replaced deleted 'NonGoal' reference with 'ProductGoal'"
+    ]
   }
 }

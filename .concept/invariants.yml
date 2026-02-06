@@ -83,7 +83,7 @@ invariants:
         target: "tests/actions/review_and_merge/test_lgtm_threshold.test.ts"
 
   - id: "INV-006"
-    related_terms: ["NonGoal", "AIPoweredAction"]
+    related_terms: ["ProductGoal", "AIPoweredAction"]
     status: "stable"
     strength: "hard"
     statement: "Actions MUST NOT be simple shell script wrappers or provide fully unmanned operation without human oversight"
