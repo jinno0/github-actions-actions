@@ -1,6 +1,4 @@
 # Security Best Practices Rules
-# Enforce security guidelines to prevent common vulnerabilities
-
 custom-rules: |
   Credential Management:
   - No hardcoded credentials, API keys, or secrets in code
@@ -53,27 +51,29 @@ custom-rules: |
   - Regular security audits
 
   Examples to Follow:
-  ```typescript
-  // Good: Environment variables for secrets
-  const apiKey = process.env.API_KEY;
-  if (!apiKey) {
-    throw new Error('API_KEY not configured');
-  }
+  ```python
+  # Good: Environment variables for secrets
+  import os
+  api_key = os.getenv('API_KEY')
+  if not api_key:
+      raise ValueError('API_KEY not configured')
 
-  // Good: Input validation with schema
-  const schema = z.object({
-    email: z.string().email(),
-    password: z.string().min(8),
-  });
-  const validatedData = schema.parse(userInput);
+  # Good: Input validation with schema
+  from pydantic import BaseModel, EmailStr, Field
+  class UserInput(BaseModel):
+      email: EmailStr
+      password: str = Field(min_length=8)
 
-  // Good: Parameterized query (SQL injection prevention)
-  const query = 'SELECT * FROM users WHERE id = $1';
-  await db.query(query, [userId]);
+  validated_data = UserInput(**user_input)
 
-  // Bad: Hardcoded credentials
-  const apiKey = 'sk_live_1234567890abcdef';  // NEVER DO THIS
+  # Good: Parameterized query (SQL injection prevention)
+  import psycopg2
+  query = 'SELECT * FROM users WHERE id = %s'
+  cursor.execute(query, (user_id,))
 
-  // Bad: Direct string concatenation (SQL injection risk)
-  const query = `SELECT * FROM users WHERE id = '${userId}'`;  // NEVER DO THIS
+  # Bad: Hardcoded credentials
+  api_key = 'sk_live_1234567890abcdef'  # NEVER DO THIS
+
+  # Bad: Direct string concatenation (SQL injection risk)
+  query = f"SELECT * FROM users WHERE id = '{user_id}'"  # NEVER DO THIS
   ```
