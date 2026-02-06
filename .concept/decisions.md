@@ -72,4 +72,4 @@
 - Revert Triggers: primary_evidence_contradiction, privacy_risk, legal_noncompliance
 - Evidence: docs/telemetry.md#L129-L139
 
-_last_updated: 2026-02-03T15:29:24Z_
+_last_updated: 2026-02-06T12:55:40Z_

@@ -1,6 +1,6 @@
 {
-  "run_id": "2026-02-04T04:42:30Z",
-  "updated_at": "2026-02-04T04:42:30Z",
+  "run_id": "2026-02-06T12:55:40Z",
+  "updated_at": "2026-02-06T12:55:40Z",
   "ontology": {
     "total_terms": 38,
     "by_layer": {
@@ -70,7 +70,7 @@
     "gc_triggered": false,
     "duplicates_found": 0,
     "duplicate_ids": [],
-    "last_hygiene_run": "2026-02-04T04:42:30.000000Z"
+    "last_hygiene_run": "2026-02-06T12:55:40.000000Z"
   },
   "hygiene": {
     "decisions_md_lines": 75,
@@ -84,7 +84,7 @@
     "unmapped_ratio": 0.026,
     "unmapped_ratio_limit": 0.2,
     "all_within_limits": true,
-    "last_hygiene_check": "2026-02-04T04:42:30.000000Z",
+    "last_hygiene_check": "2026-02-06T12:55:40.000000Z",
     "integrity_fixes": {
       "references_updated": [
         "conflicts.yml: Updated CLIAvailabilityCheck → TERM-CLI-CHECK"
