@@ -10,24 +10,17 @@ permissions:
 
 jobs:
   release-notes:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Get previous tag
-        id: previoustag
-        run: |
-          # Get the second most recent tag
-          PREV_TAG=$(git tag --sort=-v:refname | sed -n '2p')
-          echo "prev_tag=$PREV_TAG" >> $GITHUB_OUTPUT
-
       - name: Run AI Release Notes
         uses: ./actions/release-notes-ai
         with:
-          base-ref: ${{ steps.previoustag.outputs.prev_tag || 'main' }}
+          base-ref: 'main'
           head-ref: ${{ github.ref_name }}
           output-file: 'RELEASE_NOTES.md'
           github-token: ${{ secrets.GITHUB_TOKEN }}
