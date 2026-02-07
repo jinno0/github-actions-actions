@@ -65,13 +65,15 @@ def filter_events_by_period(events: list, days: int) -> list:
     if days == 0:
         return events
 
-    cutoff = datetime.now() - timedelta(days=days)
+    cutoff = datetime.now().replace(tzinfo=None) - timedelta(days=days)
     filtered = []
 
     for event in events:
         try:
             timestamp = datetime.fromisoformat(event["timestamp"].replace('Z', '+00:00'))
-            if timestamp > cutoff:
+            # Convert to naive datetime for comparison
+            timestamp_naive = timestamp.replace(tzinfo=None)
+            if timestamp_naive > cutoff:
                 filtered.append(event)
         except (KeyError, ValueError):
             # Skip events with invalid timestamps
