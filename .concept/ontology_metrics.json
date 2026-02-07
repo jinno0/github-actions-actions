@@ -1,6 +1,6 @@
 {
-  "run_id": "2026-02-07T03:54:57Z",
-  "updated_at": "2026-02-07T04:58:18.956778Z",
+  "run_id": "2026-02-07T05:14:50Z",
+  "updated_at": "2026-02-07T05:14:50Z",
   "ontology": {
     "total_terms": 37,
     "by_layer": {
@@ -40,8 +40,8 @@
     }
   },
   "claims": {
-    "total_lines": 227,
-    "retained_lines": 227,
+    "total_lines": 238,
+    "retained_lines": 238,
     "archived_lines": 0,
     "run_limit": 10000,
     "within_limits": true
@@ -70,14 +70,14 @@
     "gc_triggered": false,
     "duplicates_found": 0,
     "duplicate_ids": [],
-    "last_hygiene_run": "2026-02-07T04:58:18.956817Z",
+    "last_hygiene_run": "2026-02-07T05:14:50Z",
     "deleted_terms": []
   },
   "hygiene": {
     "decisions_md_lines": 75,
     "decisions_md_limit": 200,
     "decisions_md_within_limit": true,
-    "claims_ndjson_lines": 227,
+    "claims_ndjson_lines": 238,
     "claims_ndjson_limit": 3000,
     "claims_ndjson_within_limit": true,
     "tombstones_count": 4,
@@ -85,10 +85,8 @@
     "unmapped_ratio": 0.0,
     "unmapped_ratio_limit": 0.2,
     "all_within_limits": true,
-    "last_hygiene_check": "2026-02-07T03:54:57Z",
-    "integrity_fixes": [
-      "Fixed YAML syntax error in ontology.yml line 1361"
-    ]
+    "last_hygiene_check": "2026-02-07T05:14:50Z",
+    "integrity_fixes": []
   },
-  "last_hygiene_check": "2026-02-07T04:58:18.956805Z"
+  "last_hygiene_check": "2026-02-07T05:14:50Z"
 }
