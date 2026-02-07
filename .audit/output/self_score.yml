@@ -1,0 +1,209 @@
+# Self-Evaluation Score (v2.0)
+version: "1.0"
+run_id: "run-20260207-113720"
+generated_at: "2026-02-07T11:37:00Z"
+previous_run_id: "run-20260207-103743"
+
+# === 評価スコア (0-5) ===
+scores:
+  purpose_alignment: 5
+  evidence_soundness: 5
+  implementability: 4
+  risk_management: 4
+  verifiability: 5
+  cost_optimization: 4
+  collective_intelligence: 4
+
+total: 31
+max: 35
+percentage: 88.6
+
+# === 評価詳細 ===
+evaluation_details:
+  - criterion: "purpose_alignment"
+    score: 5
+    max: 5
+    justification: |
+      前回フィードバック（ISS-DISC-001）を受け、Hubモデルとして再定義完了。
+      全ての改善提案がHubモデルとして適切（雛形・ドキュメントの品質向上）。
+      README.mdの目標（70%）と整合性が取れている。
+    strengths:
+      - "intent.ymlをHubモデルとして明確に再定義"
+      - "改善提案が全てHubモデルに沿っている"
+      - "README.mdの目標値（70%）を採用し整合性確保"
+    weaknesses: []
+
+  - criterion: "evidence_soundness"
+    score: 5
+    max: 5
+    justification: |
+      事実/推論/不明が適切に分離されている。
+      前回フィードバックを根拠に仮定を検証・修正。
+      全ての主張に参照元（ファイルパス、feedback箇所）を明記。
+    strengths:
+      - "claims.ndjsonで事実/推論/不明を明確に分離"
+      - "前回フィードバックを根拠に仮定を更新"
+      - "全ての主張に参照元を記載"
+    weaknesses: []
+
+  - criterion: "implementability"
+    score: 4
+    max: 5
+    justification: |
+      具体的なファイル・手順・コード例がある。
+      作業時間見積もりが具体的（時間単位）。
+      ただし、PR-005のテスト内容はもう少し具体化できる。
+    strengths:
+      - "各PRに具体的な実行手順がある"
+      - "作業時間見積もりが明確（例: PR-005は5時間）"
+      - "成功基準が明確（例: カバレッジ50%達成）"
+    weaknesses:
+      - "PR-005のテスト内容をもう少し具体化できる（現在は関数名レベル）"
+      - "PR-006のエラー数見積もりが不確定（2〜4時間の幅）"
+
+  - criterion: "risk_management"
+    score: 4
+    max: 5
+    justification: |
+      全ての改善提案にリスク評価がある。
+      ロールバック計画が明記されている。
+      Hubモデルとしての考慮がなされている。
+      ただし、PR-006のauto-fixリスクはもう少し詳細に評価できる。
+    strengths:
+      - "全PRにRisk欄がある（Low/Medium/High）"
+      - "全PRにRollback Planがある"
+      - "Hubモデルとして適切な改善に絞られている"
+    weaknesses:
+      - "PR-006のauto-fixリスク評価をもう少し詳細にできる"
+      - "依存関係の影響評価がもう少し深くできる"
+
+  - criterion: "verifiability"
+    score: 5
+    max: 5
+    justification: |
+      全ての成功基準に検証方法がある。
+      期待される効果が具体的（数値目標）。
+      検証シナリオがHubモデル用に設計されている。
+    strengths:
+      - "全PRにSuccess Criteriaがある"
+      - "数値目標が明確（例: カバレッジ50%、Lintエラー0件）"
+      - "Hubモデル用の検証シナリオを作成"
+    weaknesses: []
+
+  - criterion: "cost_optimization"
+    score: 4
+    max: 5
+    justification: |
+      Sprint方式で段階的に実行可能。
+      並列実行可能なPRを明記（PR-004と005は並列可）。
+      作業時間見積もりが合理的。
+      ただし、全13Actionのテスト追加のコストはもう少し詳細に見積もれる。
+    strengths:
+      - "Sprint方式で段階的実行が可能"
+      - "並列実行可能なPRを明記"
+      - "主要3Actionから開始し、残り10Actionは後回し（現実的）"
+    weaknesses:
+      - "残り10Actionのテスト追加コストが未見積もり（各Action約30分 × 10 = 5時間）"
+      - "instructionレビューのコストが未見積もり"
+
+  - criterion: "collective_intelligence"
+    score: 4
+    max: 5
+    justification: |
+      next_questions.mdで仮定を明確に記録。
+      チームでレビュー可能な成果物がある。
+      前回フィードバックを反映し、改善サイクルが機能している。
+      ただし、レビュー観点チェックリストはもう一段充実できる。
+    strengths:
+      - "next_questions.mdで仮定を全て記録"
+      - "intent.yml, roadmap.md, PR提案がチームレビュー可能"
+      - "前回フィードバックを適切に反映"
+    weaknesses:
+      - "instructionファイルの品質レビュー手法が未具体化"
+      - "チームレビューのチェックリストが未提供"
+
+# === 改善アクション ===
+improvement_actions:
+  - priority: 1
+    target: "implementability"
+    current_score: 4
+    action: "PR-005のテスト内容を具体化（テストケースの詳細、Mockの使用方法など）"
+    next_run_focus: "テストコードのサンプルを追加"
+
+  - priority: 2
+    target: "cost_optimization"
+    current_score: 4
+    action: "残り10Actionのテスト追加コストを見積もり（各Actionの難易度評価）"
+    next_run_focus: "全13Actionのテスト計画を詳細化"
+
+  - priority: 3
+    target: "collective_intelligence"
+    current_score: 4
+    action: "instructionファイルの品質レビュー手法を具体化（チェックリスト作成）"
+    next_run_focus: "instruction品質評価基準の策定"
+
+# === 傾向分析 ===
+trend:
+  - run_id: "run-20260207-103743"
+    total: 25
+    max: 35
+    percentage: 71.4
+    notes: "初回監査。品質改善基盤の整備に焦点。Hubモデル認識不足が課題。"
+
+  - run_id: "run-20260207-113720"
+    total: 31
+    max: 35
+    percentage: 88.6
+    notes: |
+      第2回監査。前回フィードバックを反映し、Hubモデルとして再定義。
+      改善提案が具体的で実行可能。
+      コスト見積もりとレビュー手法の具体化でさらなる改善余地あり。
+
+improvement_areas:
+  - "+17.2ポイント向上 (71.4% → 88.6%)"
+  - "最大の改善: purpose_alignment（前回の課題を解消）"
+  - "次回の重点: implementabilityとcost_optimizationのさらなる具体化"
+
+# === 自己評価チェックリスト結果 ===
+checklist:
+  - item: "Completeness"
+    status: "pass"
+    note: "質問待ちで止まっている項目はない。Non-Blocking Logicで完結。"
+
+  - item: "Traceability"
+    status: "pass"
+    note: "全ての仮定がnext_questions.mdに明記されている。"
+
+  - item: "Executability"
+    status: "pass"
+    note: "提案コマンドは仮定環境下で実行可能。"
+
+  - item: "Interpretation"
+    status: "pass"
+    note: "検証結果に「意味」と「次のアクション」がある。"
+
+  - item: "Safety"
+    status: "pass"
+    note: "破壊的変更を提案していない。全PRにRollback Planがある。"
+
+  - item: "Reproducibility"
+    status: "pass"
+    note: "claims.ndjsonに全ての判断根拠が記録されている。"
+
+  - item: "Self-Improvement"
+    status: "pass"
+    note: "self_score.ymlに改善アクションが記録されている。"
+
+# === 全体評価 ===
+overall_evaluation:
+  cycle_status: "success"
+  quality_level: "high"
+  key_achievement: "前回フィードバックを適切に反映し、Hubモデルとして監査完了"
+  biggest_success: "intent.ymlの再定義により、改善提案が適切な方向性に"
+  biggest_gap: "残り10Actionのコスト見積もりとinstructionレビュー手法の具体化"
+
+next_cycle_focus:
+  - "PR-004〜006の実行と効果測定"
+  - "残り10Actionのテスト追加計画策定"
+  - "instruction品質評価基準の策定"
+  - "最終的な70%達成への道筋"

@@ -1,0 +1,190 @@
+# Verification Scenarios for Hub Model
+# This repository is an Action Hub (provides templates and documentation)
+
+version: "2.0"
+created_at: "2026-02-07T11:37:00Z"
+run_id: "run-20260207-113720"
+
+model_type: "action_hub"
+# action_hub: Provides templates and documentation for users to copy
+# direct_execution: Executes workflows directly (NOT this repository)
+
+verification_philosophy: |
+  For an Action Hub, "Core Function Verification" means:
+  1. All Actions have complete instructions (instructions/*.md)
+  2. All Actions have working examples (examples/*)
+  3. Instructions are clear, actionable, and complete
+  4. Examples are syntactically valid and follow best practices
+
+scenarios:
+  - function_id: "CF-001"
+    name: "review-and-merge雛形の提供"
+    hub_verification:
+      type: "documentation_and_example"
+      checks:
+        - check: "instruction_exists"
+          path: "instructions/review-and-merge.md"
+          expected: "exists and complete"
+          verification_method: "file_exists && content_review"
+
+        - check: "example_exists"
+          path: "examples/review-and-merge-example.yml"
+          expected: "exists and valid YAML"
+          verification_method: "yamllint examples/review-and-merge-example.yml"
+
+        - check: "instruction_quality"
+          criteria:
+            - "導入手順が説明されている"
+            - "前提条件が記載されている"
+            - "使用例が含まれている"
+            - "トラブルシューティングがある"
+          verification_method: "manual_review"
+
+        - check: "example_quality"
+          criteria:
+            - "YAML構文が正しい"
+            - "必須パラメータが設定されている"
+            - "ベストプラクティスに従っている"
+          verification_method: "yamllint + structure_check"
+
+    current_status:
+      instruction_exists: true
+      example_exists: true
+      instruction_quality: "needs_review"
+      example_quality: "needs_validation"
+      passed: false
+      reason: "exampleファイルのYAML構文検証が必要"
+
+  - function_id: "CF-002"
+    name: "spec-to-code雛形の提供"
+    hub_verification:
+      type: "documentation_and_example"
+      checks:
+        - check: "instruction_exists"
+          path: "instructions/spec-to-code.md"
+          expected: "exists and complete"
+
+        - check: "example_exists"
+          path: "examples/spec-to-code-example.yml"
+          expected: "exists and valid YAML"
+
+    current_status:
+      instruction_exists: true
+      example_exists: true
+      instruction_quality: "needs_review"
+      example_quality: "needs_validation"
+      passed: false
+
+  - function_id: "CF-003"
+    name: "auto-refactor雛形の提供"
+    hub_verification:
+      type: "documentation_and_example"
+      checks:
+        - check: "instruction_exists"
+          path: "instructions/auto-refactor.md"
+          expected: "exists and complete"
+
+        - check: "example_exists"
+          path: "examples/auto-refactor-example.yml"
+          expected: "exists and valid YAML"
+
+    current_status:
+      instruction_exists: true
+      example_exists: true
+      instruction_quality: "needs_review"
+      example_quality: "needs_validation"
+      passed: false
+
+  - function_id: "CF-004"
+    name: "action-fixer雛形の提供"
+    hub_verification:
+      type: "documentation_and_example"
+      checks:
+        - check: "instruction_exists"
+          path: "instructions/action-fixer.md"
+          expected: "exists and complete"
+
+        - check: "example_exists"
+          path: "examples/action-fixer-example.yml"
+          expected: "exists and valid YAML"
+
+    current_status:
+      instruction_exists: true
+      example_exists: true
+      instruction_quality: "needs_review"
+      example_quality: "needs_validation"
+      passed: false
+
+  - function_id: "CF-005"
+    name: "auto-document雛形の提供"
+    hub_verification:
+      type: "documentation_and_example"
+      checks:
+        - check: "instruction_exists"
+          path: "instructions/auto-document.md"
+          expected: "exists and complete"
+
+        - check: "example_exists"
+          path: "examples/auto-document-example.yml"
+          expected: "exists and valid YAML"
+
+    current_status:
+      instruction_exists: true
+      example_exists: true
+      instruction_quality: "needs_review"
+      example_quality: "needs_validation"
+      passed: false
+
+  - function_id: "CF-006"
+    name: "release-notes-ai雛形の提供"
+    hub_verification:
+      type: "documentation_and_example"
+      checks:
+        - check: "instruction_exists"
+          path: "instructions/release-notes-ai.md"
+          expected: "exists and complete"
+
+        - check: "example_exists"
+          path: "examples/release-notes-ai-example.yml"
+          expected: "exists and valid YAML"
+
+    current_status:
+      instruction_exists: true
+      example_exists: true
+      instruction_quality: "needs_review"
+      example_quality: "needs_validation"
+      passed: false
+
+verification_summary:
+  total_actions: 13
+  actions_with_instructions: 13
+  actions_with_examples: 13
+  instructions_coverage: "100%"
+  examples_coverage: "100%"
+  overall_passed: false
+  blocking_issues:
+    - "exampleファイルのYAML構文検証が未完了"
+    - "instructionファイルの品質レビューが未完了"
+  next_steps:
+    - "step: 1"
+      action: "全exampleファイルのYAML構文検証を実行"
+      command: "find examples/ -name '*.yml' -exec yamllint {} \\;"
+    - "step: 2"
+      action: "主要なActionのinstruction品質レビューを実行"
+      target_actions: ["review-and-merge", "spec-to-code", "action-fixer"]
+    - "step: 3"
+      action: "各Actionの使用方法ガイドの品質チェック"
+      method: "実際にガイドに従ってActionを導入してみる"
+
+edge_cases_to_consider:
+  - case: "exampleファイルが実際の動作環境で動作するか"
+    verification_method: "GitHub Actionsで実際に実行"
+    priority: "high"
+
+  - case: "instructionの前提条件が正確か"
+    verification_method: "前提条件のドキュメント参照"
+    priority: "medium"
+
+  - case: "初学者でも導入できるか"
+    verification_method: "実際に初学者が導入してみる"
+    priority: "medium"

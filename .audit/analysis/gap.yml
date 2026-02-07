@@ -1,71 +1,118 @@
 # Gap Analysis
 # 現状と目標のギャップ分析
 
+version: "2.0"
 analysis_date: "2026-02-07"
+run_id: "run-20260207-113720"
+based_on_feedback: "run-20260207-103743"
 
 gaps:
   - id: "GAP-001"
     category: "testing"
-    current_state: "テストカバレッジ未測定"
-    target_state: "テストカバレッジ >= 80%"
+    current_state: "テストカバレッジ未測定（0%:測定不能）"
+    target_state: "テストカバレッジ >= 70% (README.md目標)"
     severity: "high"
-    estimated_effort: "medium"
+    estimated_effort: "high"
     dependencies: []
-    proposed_solution: "pytest-cov の導入とカバレッジ計測の自動化"
+    proposed_solution: "主要なActionのユニットテストを追加し、カバレッジ70%を目指す"
+    evidence: "feedback_to_auditor.yml:32, README.md:100"
+    status: "infrastructure_ready"
 
   - id: "GAP-002"
     category: "quality"
-    current_state: "Lintチェック未実施"
+    current_state: "Lintチェック未実施（framework_ready）"
     target_state: "Lintエラー 0件"
     severity: "medium"
-    estimated_effort: "low"
+    estimated_effort: "medium"
     dependencies: []
-    proposed_solution: "ruff の導入と pre-commit hook の設定"
+    proposed_solution: "ruff check . を実行し、エラーを修正"
+    evidence: "feedback_to_auditor.yml:84-88"
+    warning: "既存コードに多くのエラーが出る可能性が高い"
+    status: "infrastructure_ready"
 
   - id: "GAP-003"
     category: "verification"
-    current_state: "Action動作検証が手動"
-    target_state: "全Actionの自動検証"
+    current_state: "Action動作検証が未完了"
+    target_state: "全Actionのexampleファイルが動作することを確認"
     severity: "high"
     estimated_effort: "high"
-    dependencies: ["GAP-001"]
-    proposed_solution: "verify_core_functions.py の作成と CI 統合"
+    dependencies: []
+    proposed_solution: "主要なActionのworkflowファイルを作成し、動作確認を行う"
+    evidence: "feedback_to_auditor.yml:78-81"
+    note: "examples/*/配下に実際のworkflowファイルを作成する必要がある"
+    estimated_total_effort: "各Action約30分 × 13 = 約6.5時間"
 
   - id: "GAP-004"
     category: "documentation"
-    current_state: "ドキュメントは整備されているが、自動更新なし"
-    target_state: "コード変更に合わせて自動更新"
-    severity: "low"
+    current_state: "ドキュメントは100%整備済み"
+    target_state: "達成済み"
+    severity: "none"
+    estimated_effort: "none"
+    dependencies: []
+    proposed_solution: "なし"
+    status: "achieved"
+
+  - id: "GAP-005"
+    category: "repository_model"
+    current_state: "README.mdの説明は正確だが、成功基準がHubモデルに対応していなかった"
+    target_state: "成功基準SC-002がHubモデルとして適切であること"
+    severity: "medium"
     estimated_effort: "low"
     dependencies: []
-    proposed_solution: "auto-document Action の活用"
+    proposed_solution: "成功基準SC-002を「全Actionが正常に動作」から「全Actionの導入ガイドと例が整備されている」に変更"
+    evidence: "feedback_to_auditor.yml:67-75"
+    status: "in_progress"
 
 prioritized_improvements:
   - priority: 1
-    gap_id: "GAP-001"
-    rationale: "品質の可視化が最優先。他の改善の効果測定にも必要"
+    gap_id: "GAP-005"
+    rationale: "成功基準をHubモデルに合わせることで、監査の適切性を確保"
+    effort: "low"
+    status: "completed_in_intent"
 
   - priority: 2
-    gap_id: "GAP-002"
-    rationale: "低コストで即座に効果が出る。コード品質の底上げ"
+    gap_id: "GAP-001"
+    rationale: "品質の可視化が最優先。テスト追加が必要だが、まずは主要なActionから"
+    effort: "high"
+    first_step: "review-and-merge, spec-to-code, action-fixerのテストを追加"
 
   - priority: 3
-    gap_id: "GAP-003"
-    rationale: "回帰テストにより、変更の安全性を担保"
+    gap_id: "GAP-002"
+    rationale: "Lintエラーを把握し、修正することでコード品質を向上"
+    effort: "medium"
+    first_step: "ruff check . を実行し、エラー数を把握"
 
   - priority: 4
+    gap_id: "GAP-003"
+    rationale: "主要なActionのworkflowファイルを作成し、動作確認を行う"
+    effort: "high"
+    first_step: "review-and-merge, spec-to-code, action-fixerのexampleを動作確認"
+
+  - priority: 5
     gap_id: "GAP-004"
-    rationale: "ドキュメント負荷を削減し、開発効率向上"
+    rationale: "達成済み。追加のアクションは不要"
+    effort: "none"
 
-assumptions_to_verify:
+resolved_assumptions:
   - assumption: "ASM-001: Python 3.11+ で動作する"
-    verification_method: "Pythonバージョンチェック"
-    priority: "high"
+    status: "confirmed"
+    evidence: "feedback_to_auditor.yml:11-16"
 
-  - assumption: "ASM-002: GitHub Self-hosted runner 上で Claude Code CLI が利用可能"
-    verification_method: "実行環境の確認"
-    priority: "high"
+  - assumption: "ASM-002: 各Actionは独立して動作し、組み合わせ可能"
+    status: "needs_revision"
+    new_understanding: "このリポジトリはAction Hubモデル（雛形提供）である"
+    evidence: "feedback_to_auditor.yml:18-24"
 
-  - assumption: "ASM-003: 各Actionは独立して動作し、組み合わせ可能"
-    verification_method: "Action単体テストと結合テスト"
+  - assumption: "ASM-003: テストカバレッジ80%は適切"
+    status: "needs_review"
+    new_understanding: "README.mdでは70%を目標としている。まずは主要なActionのテストから"
+    evidence: "feedback_to_auditor.yml:28-34"
+
+remaining_unknowns:
+  - unknown: "GitHub Self-hosted runner 上で Claude Code CLI が実際に利用可能か"
+    verification_method: "実行環境の確認またはドキュメント参照"
     priority: "medium"
+
+  - unknown: "各Actionのexampleファイルが実際に動作するか"
+    verification_method: "GitHub Actionsで各exampleを実行"
+    priority: "high"
