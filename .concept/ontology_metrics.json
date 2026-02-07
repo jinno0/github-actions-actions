@@ -1,6 +1,6 @@
 {
   "run_id": "2026-02-06T19:40:01Z",
-  "updated_at": "2026-02-06T19:40:01Z",
+  "updated_at": "2026-02-07T01:55:18.013491Z",
   "ontology": {
     "total_terms": 37,
     "by_layer": {
@@ -70,7 +70,7 @@
     "gc_triggered": false,
     "duplicates_found": 0,
     "duplicate_ids": [],
-    "last_hygiene_run": "2026-02-06T19:40:01.000000Z",
+    "last_hygiene_run": "2026-02-07T01:55:18.013491Z",
     "deleted_terms": []
   },
   "hygiene": {
@@ -78,14 +78,16 @@
     "decisions_md_limit": 200,
     "decisions_md_within_limit": true,
     "claims_ndjson_lines": 227,
-    "claims_ndjson_limit": 10000,
+    "claims_ndjson_limit": 3000,
     "claims_ndjson_within_limit": true,
     "tombstones_count": 4,
     "tombstones_limit": 200,
     "unmapped_ratio": 0.005,
     "unmapped_ratio_limit": 0.2,
     "all_within_limits": true,
-    "last_hygiene_check": "2026-02-06T19:40:01.000000Z",
-    "integrity_fixes": []
+    "last_hygiene_check": "2026-02-07T01:55:18.013491Z",
+    "integrity_fixes": [
+      "Fixed YAML syntax error in ontology.yml line 1361"
+    ]
   }
 }

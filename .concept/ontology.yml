@@ -1358,6 +1358,6 @@ canonical_terms:
       expires_after_runs: 20
     evidence:
     - source: .claude/agents/oracle.md#L64-L65
-      quote: Token permissions minimization (contents: read vs write)
+      quote: 'Token permissions minimization (contents: read vs write)'
     - source: examples/release-notes-ai-example.yml#L8-L10
       quote: 'permissions: contents: write'
