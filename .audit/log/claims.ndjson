@@ -19,3 +19,12 @@
 {"type": "inference", "id": "C-106", "claim": "実際のパイロットプロジェクトが不明確（プレースホルダーのまま）", "source": "C-010, ISS-NEW-002", "confidence": 0.9}
 {"type": "unknown", "id": "C-204", "claim": "review-and-merge Actionの実際の稼働状況", "needed_info": "Pilot project verification", "confidence": 0.0}
 {"type": "unknown", "id": "C-205", "claim": "パイロットプロジェクトの連絡先情報", "needed_info": "ADOPTION.md update", "confidence": 0.0}
+{"type": "fact", "id": "C-011", "claim": "15個のアクションディレクトリが存在する（_sharedとlibを除く）", "source": "filesystem scan (2026-02-07T10:44:13Z)", "confidence": 1.0}
+{"type": "fact", "id": "C-012", "claim": "テストカバレッジ92.99%が維持されている（pytest --covとcoverage.jsonの両方で確認）", "source": "pytest execution (2026-02-07T10:44:13Z)", "confidence": 1.0}
+{"type": "fact", "id": "C-013", "claim": "455個のテストが全てパスする（2個はskip）", "source": "pytest execution (2026-02-07T10:44:13Z)", "confidence": 1.0}
+{"type": "inference", "id": "C-107", "claim": "ISS-NEW-002（パイロットプロジェクト特定）が依然として未解決", "source": "ADOPTION.md still contains placeholders", "confidence": 1.0}
+{"type": "inference", "id": "C-108", "claim": "ISS-NEW-001（レビューデータ収集）が依然として未解決", "source": "metrics/review_metrics.json still missing", "confidence": 1.0}
+{"type": "inference", "id": "C-109", "claim": "自律的な改善実行の限界に到達（ISS-NEW-002の解決には人間の入力が必須）", "source": "Executor feedback analysis", "confidence": 0.95}
+{"type": "inference", "id": "C-110", "claim": "README.mdの「Current adopters: 2」記載が誤解を招く（ADOPTION.mdはプレースホルダー）", "source": "C-010 + README.md cross-reference", "confidence": 0.9}
+{"type": "unknown", "id": "C-206", "claim": "実際のパイロットプロジェクトが存在するか否か", "needed_info": "Human stakeholder confirmation", "confidence": 0.0}
+{"type": "unknown", "id": "C-207", "claim": "review-and-merge Actionがパイロットプロジェクトで実際に実行された実績", "needed_info": "Pilot project workflow runs", "confidence": 0.0}

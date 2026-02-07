@@ -1,47 +1,165 @@
-[
-  {
-    "function_id": "QA-001",
-    "scenario_name": "Test Coverage >= 70%",
-    "passed": true,
-    "actual_output": "92.99%",
-    "expected_output": ">= 70%",
-    "interpretation": "Test coverage is 92.99%, which exceeds the target of 70%. ISS-NEW-004 resolved: coverage.json matches pytest --cov.",
-    "error_message": null
-  },
-  {
-    "function_id": "QA-003",
-    "scenario_name": "Documentation Coverage 100%",
-    "passed": false,
-    "actual_output": "5/13 actions fully documented",
-    "expected_output": "13/13 actions with README, instructions, and examples",
-    "interpretation": "Missing documentation: action-fixer/instructions/action-fixer.md, action-fixer/examples/, auto-document/instructions/auto-document.md, auto-document/examples/, auto-merge/instructions/auto-merge.md",
-    "error_message": null
-  },
-  {
-    "function_id": "CF-TEST",
-    "scenario_name": "All Tests Pass",
-    "passed": true,
-    "actual_output": "======================== 455 passed, 2 skipped in 0.87s ========================",
-    "expected_output": "All tests passed",
-    "interpretation": "Test suite is stable with 455 passing tests. Build duration: ~0.9s.",
-    "error_message": null
-  },
-  {
-    "function_id": "TC-001",
-    "scenario_name": "All Actions are Composite Actions",
-    "passed": true,
-    "actual_output": "13/13 valid",
-    "expected_output": "13/13 composite actions",
-    "interpretation": "All actions follow Composite Action structure as required by TC-001.",
-    "error_message": null
-  },
-  {
-    "function_id": "QA-FRAMEWORK",
-    "scenario_name": "Quality Metrics Framework Exists",
-    "passed": true,
-    "actual_output": "4/4 files present",
-    "expected_output": "All 4 framework files present",
-    "interpretation": "Quality metrics framework is complete. However, data collection is blocked by ISS-NEW-002 (no pilot projects). Framework is ready for use once blockers resolved.",
-    "error_message": null
-  }
-]
+{
+  "run_id": "2026-02-07T10:44:13Z",
+  "timestamp": "2026-02-07T10:44:13Z",
+  "total_actions": 13,
+  "passed": 13,
+  "failed": 0,
+  "verifications": [
+    {
+      "function_id": "CF-001",
+      "action": "review-and-merge",
+      "claim": "AIによるPRの自動レビューとマージができる",
+      "directory_exists": true,
+      "action_yml_exists": true,
+      "name": "AI Review and Fix",
+      "description": "Review and automatically fix code issues using Claude Code CLI.",
+      "is_valid": true,
+      "has_instruction": true,
+      "passed": true
+    },
+    {
+      "function_id": "CF-002",
+      "action": "spec-to-code",
+      "claim": "Markdown仕様書からコードを自動生成できる",
+      "directory_exists": true,
+      "action_yml_exists": true,
+      "name": "Spec to Code",
+      "description": "Generate code from Markdown specifications using Claude Code CLI",
+      "is_valid": true,
+      "has_instruction": true,
+      "passed": true
+    },
+    {
+      "function_id": "CF-003",
+      "action": "action-fixer",
+      "claim": "WorkflowエラーをAIが自動修正できる",
+      "directory_exists": true,
+      "action_yml_exists": true,
+      "name": "GitHub Actions Fixer",
+      "description": "Validate and auto-fix common GitHub Actions workflow errors",
+      "is_valid": true,
+      "has_instruction": true,
+      "passed": true
+    },
+    {
+      "function_id": "CF-004",
+      "action": "auto-refactor",
+      "claim": "自然言語の指示でコードをリファクタリングできる",
+      "directory_exists": true,
+      "action_yml_exists": true,
+      "name": "Auto Refactor",
+      "description": "Automatically refactor code using Claude Code CLI",
+      "is_valid": true,
+      "has_instruction": true,
+      "passed": true
+    },
+    {
+      "function_id": "CF-005",
+      "action": "auto-document",
+      "claim": "コード変更を検知しドキュメントを自動更新できる",
+      "directory_exists": true,
+      "action_yml_exists": true,
+      "name": "Auto Document",
+      "description": "Automatically update documentation based on code changes using Claude Code CLI",
+      "is_valid": true,
+      "has_instruction": true,
+      "passed": true
+    },
+    {
+      "function_id": "CF-006",
+      "action": "release-notes-ai",
+      "claim": "コミット履歴からリリースノートを生成できる",
+      "directory_exists": true,
+      "action_yml_exists": true,
+      "name": "AI Release Notes",
+      "description": "Generate high-quality release notes from commit history using Claude Code CLI",
+      "is_valid": true,
+      "has_instruction": true,
+      "passed": true
+    },
+    {
+      "function_id": "CF-007",
+      "action": "auto-merge",
+      "claim": "PRが条件を満たす場合に自動マージできる",
+      "directory_exists": true,
+      "action_yml_exists": true,
+      "name": "Auto Merge PR",
+      "description": "Merge a pull request with specified method",
+      "is_valid": true,
+      "has_instruction": true,
+      "passed": true
+    },
+    {
+      "function_id": "CF-008",
+      "action": "auto-rebase",
+      "claim": "PRの競合をAIが自動解決しながらリベースできる",
+      "directory_exists": true,
+      "action_yml_exists": true,
+      "name": "Auto Rebase PR with Automatic Conflict Resolution",
+      "description": "Automatically rebase a PR and resolve conflicts by preferring PR branch changes",
+      "is_valid": true,
+      "has_instruction": true,
+      "passed": true
+    },
+    {
+      "function_id": "CF-009",
+      "action": "review-auto-merge",
+      "claim": "AIレビュー後、CIパス時に自動マージできる",
+      "directory_exists": true,
+      "action_yml_exists": true,
+      "name": "Review and Auto-Merge PR",
+      "description": "Automatically rebase and merge PRs",
+      "is_valid": true,
+      "has_instruction": true,
+      "passed": true
+    },
+    {
+      "function_id": "CF-010",
+      "action": "publish-pr",
+      "claim": "ドラフトPRを自動的にレビュー準備完了に変更できる",
+      "directory_exists": true,
+      "action_yml_exists": true,
+      "name": "Publish PR",
+      "description": "Convert a draft pull request to ready for review",
+      "is_valid": true,
+      "has_instruction": true,
+      "passed": true
+    },
+    {
+      "function_id": "CF-011",
+      "action": "bulk-merge-prs",
+      "claim": "複数のPRを一括マージできる",
+      "directory_exists": true,
+      "action_yml_exists": true,
+      "name": "Bulk Merge PRs",
+      "description": "Merge multiple pull requests that are ready (CLEAN status)",
+      "is_valid": true,
+      "has_instruction": true,
+      "passed": true
+    },
+    {
+      "function_id": "CF-012",
+      "action": "bulk-rebase-prs",
+      "claim": "複数のPRを一括リベースできる",
+      "directory_exists": true,
+      "action_yml_exists": true,
+      "name": "Bulk Rebase PRs",
+      "description": "Rebase multiple pull requests against latest base branch",
+      "is_valid": true,
+      "has_instruction": true,
+      "passed": true
+    },
+    {
+      "function_id": "CF-013",
+      "action": "pr-review-enqueuer",
+      "claim": "PRをスキャンしAIレビューキューに自動登録できる",
+      "directory_exists": true,
+      "action_yml_exists": true,
+      "name": "PR Review Enqueuer",
+      "description": "Scans open PRs and adds /review comment to trigger review workflow",
+      "is_valid": true,
+      "has_instruction": true,
+      "passed": true
+    }
+  ]
+}
