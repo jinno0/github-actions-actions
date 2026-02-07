@@ -173,6 +173,7 @@ ENV/
 
 # Telemetry data (anonymous usage metrics)
 metrics/telemetry/
+metrics/adoption_report.json
 
 # Temporary analysis and review files
 CODE_REVIEW_SUMMARY.md
