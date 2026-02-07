@@ -1,6 +1,6 @@
 {
-  "run_id": "2026-02-08T00:34:22Z",
-  "updated_at": "2026-02-08T00:34:22Z",
+  "run_id": "2026-02-08T03:40:01Z",
+  "updated_at": "2026-02-08T03:40:01Z",
   "ontology": {
     "total_terms": 38,
     "by_layer": {
@@ -70,7 +70,7 @@
     "gc_triggered": false,
     "duplicates_found": 0,
     "duplicate_ids": [],
-    "last_hygiene_run": "2026-02-08T00:34:22Z",
+    "last_hygiene_run": "2026-02-08T03:40:01Z",
     "deleted_terms": [],
     "integrity_fixes": []
   },
@@ -86,7 +86,7 @@
     "unmapped_ratio": 0.0,
     "unmapped_ratio_limit": 0.2,
     "all_within_limits": true,
-    "last_hygiene_check": "2026-02-08T00:34:22Z",
+    "last_hygiene_check": "2026-02-08T03:40:01Z",
     "integrity_fixes": [],
     "tombstones_within_limit": true,
     "unmapped_ratio_within_limit": true
