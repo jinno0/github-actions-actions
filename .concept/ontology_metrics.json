@@ -1,6 +1,6 @@
 {
-  "run_id": "2026-02-07T06:52:21.766729Z",
-  "updated_at": "2026-02-07T06:52:21.766729Z",
+  "run_id": "2026-02-07T08:54:58Z",
+  "updated_at": "2026-02-07T08:54:58Z",
   "ontology": {
     "total_terms": 37,
     "by_layer": {
@@ -70,7 +70,7 @@
     "gc_triggered": false,
     "duplicates_found": 0,
     "duplicate_ids": [],
-    "last_hygiene_run": "2026-02-07T17:30:33Z",
+    "last_hygiene_run": "2026-02-07T08:54:58Z",
     "deleted_terms": []
   },
   "hygiene": {
@@ -85,8 +85,8 @@
     "unmapped_ratio": 0.0,
     "unmapped_ratio_limit": 0.2,
     "all_within_limits": true,
-    "last_hygiene_check": "2026-02-07T17:30:33Z",
+    "last_hygiene_check": "2026-02-07T08:54:58Z",
     "integrity_fixes": []
   },
-  "last_hygiene_check": "2026-02-07T17:30:33Z"
+  "last_hygiene_check": "2026-02-07T08:54:58Z"
 }
