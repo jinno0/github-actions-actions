@@ -1,0 +1,259 @@
+[
+  {
+    "function_id": "CF-001",
+    "function_name": "review-and-merge",
+    "scenario_name": "AIレビューと自動マージの構造検証",
+    "passed": false,
+    "actual_output": [
+      "✓ review-and-merge/action.yml is valid YAML",
+      "✓ All required fields present: ['name', 'description', 'runs']",
+      "✓ Appears to use Claude Code CLI",
+      "✓ Instruction file exists: review-and-merge.md",
+      "✓ Example file exists: review-and-merge-example.yml"
+    ],
+    "expected_output": [
+      "action.yml exists and is valid YAML",
+      "Required fields present",
+      "Uses Claude Code CLI",
+      "Instruction file exists",
+      "Example file exists",
+      "Test files exist"
+    ],
+    "error_message": "No test files found for review-and-merge",
+    "interpretation": "構造上の問題: No test files found for review-and-merge",
+    "evidence": [
+      "✓ review-and-merge/action.yml is valid YAML",
+      "✓ All required fields present: ['name', 'description', 'runs']",
+      "✓ Appears to use Claude Code CLI",
+      "✓ Instruction file exists: review-and-merge.md",
+      "✓ Example file exists: review-and-merge-example.yml"
+    ]
+  },
+  {
+    "function_id": "CF-002",
+    "function_name": "spec-to-code",
+    "scenario_name": "仕様書からコード生成の構造検証",
+    "passed": false,
+    "actual_output": [
+      "✓ spec-to-code/action.yml is valid YAML",
+      "✓ All required fields present: ['name', 'description', 'runs']",
+      "✓ Appears to use Claude Code CLI",
+      "✓ Instruction file exists: spec-to-code.md",
+      "✓ Example file exists: spec-to-code-example.yml"
+    ],
+    "expected_output": [
+      "Valid action structure",
+      "Spec input parameter"
+    ],
+    "error_message": "No test files found for spec-to-code",
+    "interpretation": "構造上の問題: No test files found for spec-to-code",
+    "evidence": [
+      "✓ spec-to-code/action.yml is valid YAML",
+      "✓ All required fields present: ['name', 'description', 'runs']",
+      "✓ Appears to use Claude Code CLI",
+      "✓ Instruction file exists: spec-to-code.md",
+      "✓ Example file exists: spec-to-code-example.yml"
+    ]
+  },
+  {
+    "function_id": "CF-003",
+    "function_name": "action-fixer",
+    "scenario_name": "Workflow修正機能の構造検証",
+    "passed": false,
+    "actual_output": [
+      "✓ action-fixer/action.yml is valid YAML",
+      "✓ All required fields present: ['name', 'description', 'runs']",
+      "✓ Appears to use Claude Code CLI",
+      "✓ Instruction file exists: action-fixer.md",
+      "✓ Example file exists: action-fixer-example.yml"
+    ],
+    "expected_output": [
+      "Valid action structure"
+    ],
+    "error_message": "No test files found for action-fixer",
+    "interpretation": "構造上の問題: No test files found for action-fixer",
+    "evidence": [
+      "✓ action-fixer/action.yml is valid YAML",
+      "✓ All required fields present: ['name', 'description', 'runs']",
+      "✓ Appears to use Claude Code CLI",
+      "✓ Instruction file exists: action-fixer.md",
+      "✓ Example file exists: action-fixer-example.yml"
+    ]
+  },
+  {
+    "function_id": "CF-004",
+    "function_name": "auto-refactor",
+    "scenario_name": "リファクタリング機能の構造検証",
+    "passed": false,
+    "actual_output": [
+      "✓ auto-refactor/action.yml is valid YAML",
+      "✓ All required fields present: ['name', 'description', 'runs']",
+      "✓ Appears to use Claude Code CLI",
+      "✓ Instruction file exists: auto-refactor.md",
+      "✓ Example file exists: auto-refactor-example.yml"
+    ],
+    "expected_output": [
+      "Valid action structure"
+    ],
+    "error_message": "No test files found for auto-refactor",
+    "interpretation": "構造上の問題: No test files found for auto-refactor",
+    "evidence": [
+      "✓ auto-refactor/action.yml is valid YAML",
+      "✓ All required fields present: ['name', 'description', 'runs']",
+      "✓ Appears to use Claude Code CLI",
+      "✓ Instruction file exists: auto-refactor.md",
+      "✓ Example file exists: auto-refactor-example.yml"
+    ]
+  },
+  {
+    "function_id": "CF-005",
+    "function_name": "auto-document",
+    "scenario_name": "ドキュメント自動更新の構造検証",
+    "passed": false,
+    "actual_output": [
+      "✓ auto-document/action.yml is valid YAML",
+      "✓ All required fields present: ['name', 'description', 'runs']",
+      "✓ Appears to use Claude Code CLI",
+      "✓ Instruction file exists: auto-document.md",
+      "✓ Example file exists: auto-document-example.yml"
+    ],
+    "expected_output": [
+      "Valid action structure"
+    ],
+    "error_message": "No test files found for auto-document",
+    "interpretation": "構造上の問題: No test files found for auto-document",
+    "evidence": [
+      "✓ auto-document/action.yml is valid YAML",
+      "✓ All required fields present: ['name', 'description', 'runs']",
+      "✓ Appears to use Claude Code CLI",
+      "✓ Instruction file exists: auto-document.md",
+      "✓ Example file exists: auto-document-example.yml"
+    ]
+  },
+  {
+    "function_id": "CF-006",
+    "function_name": "release-notes-ai",
+    "scenario_name": "リリースノート生成の構造検証",
+    "passed": false,
+    "actual_output": [
+      "✓ release-notes-ai/action.yml is valid YAML",
+      "✓ All required fields present: ['name', 'description', 'runs']",
+      "✓ Appears to use Claude Code CLI",
+      "✓ Instruction file exists: release-notes-ai.md",
+      "✓ Example file exists: release-notes-ai-example.yml"
+    ],
+    "expected_output": [
+      "Valid action structure"
+    ],
+    "error_message": "No test files found for release-notes-ai",
+    "interpretation": "構造上の問題: No test files found for release-notes-ai",
+    "evidence": [
+      "✓ release-notes-ai/action.yml is valid YAML",
+      "✓ All required fields present: ['name', 'description', 'runs']",
+      "✓ Appears to use Claude Code CLI",
+      "✓ Instruction file exists: release-notes-ai.md",
+      "✓ Example file exists: release-notes-ai-example.yml"
+    ]
+  },
+  {
+    "function_id": "CF-007",
+    "function_name": "auto-merge & review-auto-merge",
+    "scenario_name": "PR自動マージ機能の構造検証（2つのアクション）",
+    "passed": false,
+    "actual_output": [
+      "[auto-merge] ✓ auto-merge/action.yml is valid YAML",
+      "[auto-merge] ✓ All required fields present: ['name', 'description', 'runs']",
+      "[auto-merge] ✓ Instruction file exists: auto-merge.md",
+      "[auto-merge] ✓ Example file exists: auto-merge-example.yml",
+      "[review-auto-merge] ✓ review-auto-merge/action.yml is valid YAML",
+      "[review-auto-merge] ✓ All required fields present: ['name', 'description', 'runs']",
+      "[review-auto-merge] ✓ Instruction file exists: review-auto-merge.md",
+      "[review-auto-merge] ✓ Example file exists: review-auto-merge-example.yml"
+    ],
+    "expected_output": [
+      "Both actions have valid structure"
+    ],
+    "error_message": "auto-merge: No test files found for auto-merge; review-auto-merge: No test files found for review-auto-merge",
+    "interpretation": "構造上の問題: auto-merge: No test files found for auto-merge; review-auto-merge: No test files found for review-auto-merge",
+    "evidence": [
+      "[auto-merge] ✓ auto-merge/action.yml is valid YAML",
+      "[auto-merge] ✓ All required fields present: ['name', 'description', 'runs']",
+      "[auto-merge] ✓ Instruction file exists: auto-merge.md",
+      "[auto-merge] ✓ Example file exists: auto-merge-example.yml",
+      "[review-auto-merge] ✓ review-auto-merge/action.yml is valid YAML",
+      "[review-auto-merge] ✓ All required fields present: ['name', 'description', 'runs']",
+      "[review-auto-merge] ✓ Instruction file exists: review-auto-merge.md",
+      "[review-auto-merge] ✓ Example file exists: review-auto-merge-example.yml"
+    ]
+  },
+  {
+    "function_id": "CF-008",
+    "function_name": "bulk-merge-prs & bulk-rebase-prs",
+    "scenario_name": "一括PR操作の構造検証（2つのアクション）",
+    "passed": false,
+    "actual_output": [
+      "[bulk-merge-prs] ✓ bulk-merge-prs/action.yml is valid YAML",
+      "[bulk-merge-prs] ✓ All required fields present: ['name', 'description', 'runs']",
+      "[bulk-merge-prs] ✓ Instruction file exists: bulk-merge-prs.md",
+      "[bulk-merge-prs] ✓ Example file exists: bulk-merge-prs-example.yml",
+      "[bulk-rebase-prs] ✓ bulk-rebase-prs/action.yml is valid YAML",
+      "[bulk-rebase-prs] ✓ All required fields present: ['name', 'description', 'runs']",
+      "[bulk-rebase-prs] ✓ Instruction file exists: bulk-rebase-prs.md",
+      "[bulk-rebase-prs] ✓ Example file exists: bulk-rebase-prs-example.yml"
+    ],
+    "expected_output": [
+      "Both actions have valid structure"
+    ],
+    "error_message": "bulk-merge-prs: No test files found for bulk-merge-prs; bulk-rebase-prs: No test files found for bulk-rebase-prs",
+    "interpretation": "構造上の問題: bulk-merge-prs: No test files found for bulk-merge-prs; bulk-rebase-prs: No test files found for bulk-rebase-prs",
+    "evidence": [
+      "[bulk-merge-prs] ✓ bulk-merge-prs/action.yml is valid YAML",
+      "[bulk-merge-prs] ✓ All required fields present: ['name', 'description', 'runs']",
+      "[bulk-merge-prs] ✓ Instruction file exists: bulk-merge-prs.md",
+      "[bulk-merge-prs] ✓ Example file exists: bulk-merge-prs-example.yml",
+      "[bulk-rebase-prs] ✓ bulk-rebase-prs/action.yml is valid YAML",
+      "[bulk-rebase-prs] ✓ All required fields present: ['name', 'description', 'runs']",
+      "[bulk-rebase-prs] ✓ Instruction file exists: bulk-rebase-prs.md",
+      "[bulk-rebase-prs] ✓ Example file exists: bulk-rebase-prs-example.yml"
+    ]
+  },
+  {
+    "function_id": "CF-009",
+    "function_name": "custom-review-rules",
+    "scenario_name": "カスタムレビュールール機能の検証",
+    "passed": true,
+    "actual_output": [
+      "✓ Custom rules documentation exists",
+      "✓ Custom rules examples directory exists"
+    ],
+    "expected_output": [
+      "Custom rules documentation and examples exist"
+    ],
+    "error_message": null,
+    "interpretation": "カスタムレビュールールのドキュメントが整備されている",
+    "evidence": [
+      "✓ Custom rules documentation exists",
+      "✓ Custom rules examples directory exists"
+    ]
+  },
+  {
+    "function_id": "CF-010",
+    "function_name": "dry-run",
+    "scenario_name": "Dry Run検証機能",
+    "passed": false,
+    "actual_output": [
+      "✓ Dry-run workflow exists",
+      "  pytest output: ============================= test session starts ==============================\nplatform linux -- Python 3.14.2, pytest-9.0.2, pluggy-1.6.0 -- /home/jinno/.local/share/mise/installs/python/3.14.2/bin"
+    ],
+    "expected_output": [
+      "Dry-run workflow exists",
+      "Tests pass"
+    ],
+    "error_message": "Dry-run tests failed",
+    "interpretation": "Dry Run検証に問題: Dry-run tests failed",
+    "evidence": [
+      "✓ Dry-run workflow exists",
+      "  pytest output: ============================= test session starts ==============================\nplatform linux -- Python 3.14.2, pytest-9.0.2, pluggy-1.6.0 -- /home/jinno/.local/share/mise/installs/python/3.14.2/bin"
+    ]
+  }
+]
