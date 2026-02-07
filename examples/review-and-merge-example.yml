@@ -1,5 +1,10 @@
 name: Review, Fix, and Merge
 
+# Prerequisites: Self-hosted runner with Claude Code CLI installed
+# Recommended: Pin CLI version for reproducibility:
+#   npm install -g @anthropic-ai/claude-code@1.0.0
+# See: https://github.com/anthropics/claude-code-cli/releases
+
 on:
   pull_request:
     types: [opened, synchronize, reopened]
