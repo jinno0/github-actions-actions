@@ -1,0 +1,97 @@
+version: "1.0"
+updated_at: "2026-02-08T04:40:00Z"
+
+# === 技術的制約 ===
+technical:
+  runtime_environment:
+    - "Self-hosted GitHub Actions runner"
+    - "Claude Code CLI (npm install -g @anthropic-ai/claude-code)"
+
+  supported_languages:
+    - "TypeScript"
+    - "Python"
+    - "JavaScript"
+    - "Go"
+    - "Rust"
+    - "任意のテキストベースのコード"
+
+  version_control:
+    system: "Git"
+    platform: "GitHub"
+    required_features:
+      - "Pull Requests"
+      - "Actions"
+      - "Self-hosted runners"
+
+# === セキュリティ制約 ===
+security:
+  path_validation: "必須（全Actionで入力パスの検証が必要）"
+  cli_command_check: "必須（claude CLIの存在チェックが必要）"
+  token_management:
+    - "GITHUB_TOKENは自動提供"
+    - "カスタムトークンはencrypted secretとして管理"
+
+  data_privacy:
+    - "コードはself-hosted runner上で処理"
+    - "外部APIへの送信は最小限"
+    - "テレメトリーはオプトアウト可能"
+
+# === 運用制約 ===
+operational:
+  human_in_the_loop: "必須（最終決定権は人間が保持）"
+  ai_role: "提案・準備・検査（AIのハルシネーションリスク考慮）"
+
+  deployment:
+    - "Dry Run検証が必須"
+    - "ステージング環境でのテスト推奨"
+    - "段階的ロールアウト"
+
+# === 品質制約 ===
+quality:
+  test_coverage:
+    minimum: 70%
+    target: 80%
+
+  ai_review_quality:
+    acceptance_rate_minimum: 70%
+    measurement_period: "30日"
+
+  documentation:
+    - "各Actionにexampleファイル必須"
+    - "各Actionにinstructionドキュメント必須"
+
+# === リソース制約 ===
+resources:
+  runner:
+    type: "Self-hosted"
+    location: "Organization infrastructure"
+    availability: "High availability（組織依存）"
+
+  costs:
+    claude_api_usage: "回数・コスト削減のためキャッシュ推奨"
+    runner_maintenance: "組織負担"
+
+# === 互換性制約 ===
+compatibility:
+  claude_cli_version: "Stable（バージョン固定推奨）"
+  github_features:
+    - "Actions"
+    - "Pull Requests"
+    - "Checks API"
+    - "Issues API（一部Action）"
+
+# === ガバナンス制約 ===
+governance:
+  constitution:
+    document: "SYSTEM_CONSTITUTION.md"
+    status: "絶対的（変更不可）"
+
+  policy:
+    document: ".bmad/hub/policy/policy.current.md"
+    status: "進化的（評価結果に基づいて更新）"
+
+  adoption_process:
+    phases:
+      - "Phase 1: Foundation & POC - COMPLETED"
+      - "Phase 2: AI Action Hub Implementation - COMPLETED"
+      - "Phase 3: Stabilization & Adoption - IN PROGRESS"

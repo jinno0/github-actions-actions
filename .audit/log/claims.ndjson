@@ -1,0 +1,16 @@
+{"type": "fact", "id": "C-001", "claim": "13個のAI Actionsが提供されている", "source": "README.md:8-47, actions/ directory listing", "confidence": 1.0, "evidence": "actions/ ディレクトリに13個のaction.ymlファイルが存在する"}
+{"type": "fact", "id": "C-002", "claim": "全てのActionにexampleファイルが存在する", "source": "examples/ directory listing", "confidence": 1.0, "evidence": "examples/ ディレクトリに13個のexample.ymlファイルが存在"}
+{"type": "fact", "id": "C-003", "claim": "全てのActionにinstructionドキュメントが存在する", "source": "instructions/ directory listing", "confidence": 1.0, "evidence": "instructions/ ディレクトリに14個のmdファイルが存在"}
+{"type": "fact", "id": "C-004", "claim": "テストカバレッジは92.99%", "source": "pytest --cov execution result", "confidence": 1.0, "evidence": "455 passed, 2 skipped in 1.39s, coverage: 92.99%"}
+{"type": "fact", "id": "C-005", "claim": "Phase 3: Stabilization & Adoptionが進行中", "source": "PURPOSE.md:22-27", "confidence": 1.0, "evidence": "⬜ 組織内プロジェクトへの導入とフィードバック収集が未完了"}
+{"type": "fact", "id": "C-006", "claim": "AIレビュー受入率のデータが存在しない", "source": "README.md:174-191, metrics/telemetry/ directory", "confidence": 1.0, "evidence": "metrics/review_metrics.json が存在せず、telemetry/ ディレクトリが空"}
+{"type": "fact", "id": "C-007", "claim": "13個のActions全てがcomposite action", "source": "actions/*/action.yml files", "confidence": 1.0, "evidence": "全action.ymlファイルで 'runs.using: composite' が使用されている"}
+{"type": "fact", "id": "C-008", "claim": "テレメトリー収集機能が実装されている", "source": "scripts/generate_telemetry_report.py, docs/telemetry.md", "confidence": 1.0, "evidence": "テレメトリー収集スクリプトとドキュメントが存在"}
+{"type": "fact", "id": "C-009", "claim": "テストは構造検証のみで機能検証ではない", "source": "TESTING.md:9-50", "confidence": 1.0, "evidence": "TESTING.mdに「Our tests validate that actions are properly structured and ready to execute, but do not validate their runtime behavior」と明記"}
+{"type": "fact", "id": "C-010", "claim": "Integration Test Coverageが100%達成されている", "source": "TESTING.md:276-313", "confidence": 1.0, "evidence": "Integration Test Coverage: 100% (13/13 actions)"}
+{"type": "inference", "id": "C-101", "claim": "実際の運用実績が不足している", "source": "C-005, C-006", "confidence": 0.8, "reasoning": "Phase 3が進行中で、AIレビュー受入率のデータが収集されていないことから、パイロット導入がまだ本格化していないと推測"}
+{"type": "inference", "id": "C-102", "claim": "Actionsの実動作は検証されていない", "source": "C-009", "confidence": 0.9, "reasoning": "テストが構造検証のみであることから、実際にGitHub Actions環境で動作させた検証が行われていない"}
+{"type": "inference", "id": "C-103", "claim": "テレメトリー収集は実装されているが有効化されていない", "source": "C-006, C-008", "confidence": 0.7, "reasoning": "テレメトリー機能は実装されているが、metrics/telemetry/ ディレクトリが空であることから、実際の収集は開始されていない"}
+{"type": "unknown", "id": "C-201", "claim": "組織内で実際に使用されているリポジトリの数", "source": "ADOPTION.md", "confidence": 0.0, "needed_info": "Adopters list", "verification_method": "ADOPTION.mdを確認し、実際の採用リポジトリをカウント"}
+{"type": "unknown", "id": "C-202", "claim": "AIレビューの実際の品質（ハルシネーション率）", "source": "C-006", "confidence": 0.0, "needed_info": "レビューデータとフィードバック", "verification_method": "metrics/review_metrics.json を収集し、修正率を計測"}
+{"type": "unknown", "id": "C-203", "claim": "Claude CLIのバージョン互換性", "source": "README.md:87-113", "confidence": 0.0, "needed_info": "各バージョンでのテスト結果", "verification_method": "複数のClaude CLIバージョンで全Actionを実行し、互換性を検証"}

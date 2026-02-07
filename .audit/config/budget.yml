@@ -1,0 +1,49 @@
+version: "1.0"
+updated_at: "2026-02-08T04:40:00Z"
+
+# === スキャン予算 ===
+scan_budget:
+  max_files_per_run: 500
+  max_total_tokens: 100000
+  max_directory_depth: 5
+
+# === ログ予算 ===
+log_budget:
+  max_log_entries: 1000
+  keep_last_n_entries: 500
+  rotation_trigger: "audit開始時"
+
+# === 提案予算 ===
+proposal_budget:
+  max_prs_per_run: 10
+  max_actions_per_proposal: 5
+  priority_threshold: "medium"
+
+# === 実行予算 ===
+execution_budget:
+  max_runtime_minutes: 30
+  max_test_runs: 3
+  max_verification_failures: 5
+
+# === 保持ポリシー ===
+retention_policy:
+  execution_runs:
+    max_folders: 3
+    strategy: "keep_latest"
+    enforcement: "strict"
+
+  always_overwrite:
+    - "analysis/as_is.yml"
+    - "analysis/gap.yml"
+    - "analysis/verification_scenarios.yml"
+    - "proposal/roadmap.md"
+    - "proposal/changes/*.md"
+    - "output/summary.md"
+    - "output/next_questions.md"
+    - "output/self_score.yml"
+    - "output/verification_result.json"
+
+  never_delete:
+    - "config/intent.yml"
+    - "config/constraints.yml"
+    - "config/budget.yml"
