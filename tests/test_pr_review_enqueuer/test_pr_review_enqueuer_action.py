@@ -1,7 +1,6 @@
 """Tests for the pr-review-enqueuer GitHub Action."""
 
 
-
 class TestPrReviewEnqueuerAction:
     """Test suite for pr-review-enqueuer action."""
 

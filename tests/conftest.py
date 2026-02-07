@@ -99,3 +99,18 @@ def mock_repo(temp_dir):
 def action_path():
     """Get the path to the actions directory."""
     return Path(__file__).parent.parent / "actions"
+
+
+@pytest.fixture
+def load_action_yaml():
+    """Helper fixture to load and parse action.yml files."""
+    def _loader(action_name: str):
+        """Load action.yml for a specific action."""
+        action_file = action_path() / action_name / "action.yml"
+        if not action_file.exists():
+            raise FileNotFoundError(f"Action file not found: {action_file}")
+
+        import yaml
+        with open(action_file) as f:
+            return yaml.safe_load(f), action_file.read_text()
+    return _loader

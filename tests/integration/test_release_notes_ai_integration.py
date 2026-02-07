@@ -8,15 +8,20 @@ import yaml
 from pathlib import Path
 
 
-@pytest.mark.integration
-def test_release_notes_ai_action_structure():
-    """Test release-notes-ai action has proper structure"""
+def _load_action_config():
+    """Helper to load release-notes-ai action.yml configuration."""
     action_yml = Path("actions/release-notes-ai/action.yml")
 
     if not action_yml.exists():
         pytest.skip("release-notes-ai action not found")
 
-    config = yaml.safe_load(action_yml.read_text())
+    return yaml.safe_load(action_yml.read_text()), action_yml
+
+
+@pytest.mark.integration
+def test_release_notes_ai_action_structure():
+    """Test release-notes-ai action has proper structure"""
+    config, _ = _load_action_config()
 
     # Verify required fields
     assert "name" in config
@@ -33,12 +38,7 @@ def test_release_notes_ai_action_structure():
 @pytest.mark.integration
 def test_release_notes_ai_default_values():
     """Test release-notes-ai action has proper defaults"""
-    action_yml = Path("actions/release-notes-ai/action.yml")
-
-    if not action_yml.exists():
-        pytest.skip("release-notes-ai action not found")
-
-    config = yaml.safe_load(action_yml.read_text())
+    config, _ = _load_action_config()
 
     # Verify default values
     base_ref = config["inputs"]["base-ref"]
@@ -54,12 +54,7 @@ def test_release_notes_ai_default_values():
 @pytest.mark.integration
 def test_release_notes_ai_template_support():
     """Test release-notes-ai action supports custom templates"""
-    action_yml = Path("actions/release-notes-ai/action.yml")
-
-    if not action_yml.exists():
-        pytest.skip("release-notes-ai action not found")
-
-    config = yaml.safe_load(action_yml.read_text())
+    config, _ = _load_action_config()
 
     # Verify template input
     assert "release-prompt-template" in config["inputs"]
@@ -69,12 +64,7 @@ def test_release_notes_ai_template_support():
 @pytest.mark.integration
 def test_release_notes_ai_steps_exist():
     """Verify release-notes-ai has required steps"""
-    action_yml = Path("actions/release-notes-ai/action.yml")
-
-    if not action_yml.exists():
-        pytest.skip("release-notes-ai action not found")
-
-    config = yaml.safe_load(action_yml.read_text())
+    config, _ = _load_action_config()
 
     steps = config.get("runs", {}).get("steps", [])
 
