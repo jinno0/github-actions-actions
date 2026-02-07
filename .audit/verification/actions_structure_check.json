@@ -1,0 +1,132 @@
+[
+  {
+    "action": "review-and-merge",
+    "exists": true,
+    "has_action_yml": true,
+    "has_templates": true,
+    "has_scripts": true,
+    "has_example": false,
+    "has_instruction": true,
+    "is_complete": false
+  },
+  {
+    "action": "spec-to-code",
+    "exists": true,
+    "has_action_yml": true,
+    "has_templates": true,
+    "has_scripts": false,
+    "has_example": false,
+    "has_instruction": true,
+    "is_complete": false
+  },
+  {
+    "action": "action-fixer",
+    "exists": true,
+    "has_action_yml": true,
+    "has_templates": true,
+    "has_scripts": false,
+    "has_example": false,
+    "has_instruction": true,
+    "is_complete": false
+  },
+  {
+    "action": "auto-refactor",
+    "exists": true,
+    "has_action_yml": true,
+    "has_templates": true,
+    "has_scripts": false,
+    "has_example": false,
+    "has_instruction": true,
+    "is_complete": false
+  },
+  {
+    "action": "auto-document",
+    "exists": true,
+    "has_action_yml": true,
+    "has_templates": true,
+    "has_scripts": false,
+    "has_example": false,
+    "has_instruction": true,
+    "is_complete": false
+  },
+  {
+    "action": "release-notes-ai",
+    "exists": true,
+    "has_action_yml": true,
+    "has_templates": true,
+    "has_scripts": false,
+    "has_example": false,
+    "has_instruction": true,
+    "is_complete": false
+  },
+  {
+    "action": "auto-merge",
+    "exists": true,
+    "has_action_yml": true,
+    "has_templates": false,
+    "has_scripts": false,
+    "has_example": false,
+    "has_instruction": true,
+    "is_complete": false
+  },
+  {
+    "action": "auto-rebase",
+    "exists": true,
+    "has_action_yml": true,
+    "has_templates": true,
+    "has_scripts": false,
+    "has_example": false,
+    "has_instruction": true,
+    "is_complete": false
+  },
+  {
+    "action": "review-auto-merge",
+    "exists": true,
+    "has_action_yml": true,
+    "has_templates": false,
+    "has_scripts": false,
+    "has_example": false,
+    "has_instruction": true,
+    "is_complete": false
+  },
+  {
+    "action": "publish-pr",
+    "exists": true,
+    "has_action_yml": true,
+    "has_templates": false,
+    "has_scripts": false,
+    "has_example": false,
+    "has_instruction": true,
+    "is_complete": false
+  },
+  {
+    "action": "bulk-merge-prs",
+    "exists": true,
+    "has_action_yml": true,
+    "has_templates": false,
+    "has_scripts": false,
+    "has_example": false,
+    "has_instruction": true,
+    "is_complete": false
+  },
+  {
+    "action": "bulk-rebase-prs",
+    "exists": true,
+    "has_action_yml": true,
+    "has_templates": false,
+    "has_scripts": false,
+    "has_example": false,
+    "has_instruction": true,
+    "is_complete": false
+  },
+  {
+    "action": "pr-review-enqueuer",
+    "exists": true,
+    "has_action_yml": true,
+    "has_templates": false,
+    "has_scripts": false,
+    "has_example": false,
+    "has_instruction": true,
+    "is_complete": false
+  }
+]
