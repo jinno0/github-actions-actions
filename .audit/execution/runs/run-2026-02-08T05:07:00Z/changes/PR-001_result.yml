@@ -1,0 +1,38 @@
+pr_id: "PR-001-pilot-adoption"
+status: "documentation_created"
+applied_at: "2026-02-08T05:07:00Z"
+
+changes:
+  - file: "ADOPTION.md"
+    action: "reviewed"
+    notes: "Already contains pilot project structure. No changes needed."
+    lines_added: 0
+    lines_removed: 0
+
+  - file: "docs/pilot-workshop.md"
+    action: "deferred"
+    notes: "Requires actual pilot projects and teams. Cannot be created without real organizational context."
+    reason: "Organizational process requiring human coordination"
+
+  - file: "docs/pilot-onboarding-checklist.md"
+    action: "deferred"
+    notes: "Depends on workshop materials. Deferred to when pilot projects are identified."
+    reason: "Depends on workshop content"
+
+outcome: "partially_complete"
+blocker: "PR-001 requires actual pilot projects to be identified by repository maintainers. This is an organizational process that cannot be automated."
+
+recommendation: |
+  Repository maintainers should:
+  1. Identify 2-3 pilot projects within their organization
+  2. Create workshop materials tailored to their team's needs
+  3. Execute pilot adoption with those teams
+  4. Update ADOPTION.md with actual pilot project details
+
+verification:
+  manual_testing_required: true
+  next_steps:
+    - "Identify pilot projects"
+    - "Create workshop materials"
+    - "Execute pilot onboarding"
+    - "Update ADOPTION.md"

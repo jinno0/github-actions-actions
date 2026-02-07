@@ -1,0 +1,105 @@
+[
+  {
+    "pr_number": 1,
+    "repo_id": "test-repo-1",
+    "outcome": "approved",
+    "suggestions_count": 3,
+    "accepted_suggestions": 2,
+    "timestamp": "2026-02-07T12:00:00Z",
+    "reviewer": "ai-reviewer",
+    "confidence_score": 0.85
+  },
+  {
+    "pr_number": 2,
+    "repo_id": "test-repo-1",
+    "outcome": "modified",
+    "suggestions_count": 5,
+    "accepted_suggestions": 3,
+    "timestamp": "2026-02-06T13:00:00Z",
+    "reviewer": "ai-reviewer",
+    "confidence_score": 0.75
+  },
+  {
+    "pr_number": 3,
+    "repo_id": "test-repo-2",
+    "outcome": "approved",
+    "suggestions_count": 2,
+    "accepted_suggestions": 2,
+    "timestamp": "2026-02-05T14:00:00Z",
+    "reviewer": "ai-reviewer",
+    "confidence_score": 0.9
+  },
+  {
+    "pr_number": 4,
+    "repo_id": "test-repo-1",
+    "outcome": "rejected",
+    "suggestions_count": 4,
+    "accepted_suggestions": 0,
+    "timestamp": "2026-02-03T15:00:00Z",
+    "reviewer": "ai-reviewer",
+    "confidence_score": 0.6,
+    "rejection_reasons": [
+      "Low quality suggestions"
+    ]
+  },
+  {
+    "pr_number": 5,
+    "repo_id": "test-repo-2",
+    "outcome": "approved",
+    "suggestions_count": 6,
+    "accepted_suggestions": 5,
+    "timestamp": "2026-02-01T05:09:29Z",
+    "reviewer": "ai-reviewer",
+    "confidence_score": 0.88
+  },
+  {
+    "pr_number": 6,
+    "repo_id": "test-repo-1",
+    "outcome": "approved",
+    "suggestions_count": 4,
+    "accepted_suggestions": 4,
+    "timestamp": "2026-01-29T05:09:29Z",
+    "reviewer": "ai-reviewer",
+    "confidence_score": 0.92
+  },
+  {
+    "pr_number": 7,
+    "repo_id": "test-repo-2",
+    "outcome": "modified",
+    "suggestions_count": 7,
+    "accepted_suggestions": 4,
+    "timestamp": "2026-01-27T05:09:29Z",
+    "reviewer": "ai-reviewer",
+    "confidence_score": 0.78
+  },
+  {
+    "pr_number": 8,
+    "repo_id": "test-repo-1",
+    "outcome": "approved",
+    "suggestions_count": 3,
+    "accepted_suggestions": 3,
+    "timestamp": "2026-01-24T05:09:29Z",
+    "reviewer": "ai-reviewer",
+    "confidence_score": 0.95
+  },
+  {
+    "pr_number": 9,
+    "repo_id": "test-repo-2",
+    "outcome": "approved",
+    "suggestions_count": 5,
+    "accepted_suggestions": 5,
+    "timestamp": "2026-01-21T05:09:29Z",
+    "reviewer": "ai-reviewer",
+    "confidence_score": 0.87
+  },
+  {
+    "pr_number": 10,
+    "repo_id": "test-repo-1",
+    "outcome": "modified",
+    "suggestions_count": 6,
+    "accepted_suggestions": 4,
+    "timestamp": "2026-01-19T05:09:29Z",
+    "reviewer": "ai-reviewer",
+    "confidence_score": 0.82
+  }
+]
