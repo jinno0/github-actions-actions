@@ -154,7 +154,13 @@ env:
 
 **現状:** パイロットフェーズのため、レビューデータの収集を開始しています。20件以上のレビューが集まり次第、統計的に有意なベースライン値を算出します。
 
-> ⚠️ **データ収集状態:** `metrics/review_metrics.json` が存在しません。現在、レビューデータの収集プロセスを診断中です。詳細は [Data Collection Diagnosis](docs/data_collection_diagnosis.md) を参照してください。
+> ⚠️ **データ収集状態:** `metrics/review_metrics.json` が存在しません。
+>
+> **現在の状況:**
+> - パイロットプロジェクトでのレビューデータ収集が有効化されていません
+> - データ収集プロセスの診断と改善計画を策定中です
+>
+> **詳細:** [Data Collection Diagnosis](docs/data_collection_diagnosis.md) を参照してください。
 
 ### 品質メトリクスの概要
 

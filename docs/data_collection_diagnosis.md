@@ -3,122 +3,108 @@
 **Date:** 2026-02-07
 **Issue:** `metrics/review_metrics.json` does not exist
 **Impact:** Cannot calculate baseline acceptance rate
-**Priority:** HIGH
+**Related:** ISS-NEW-001, GAP-001
 
 ---
 
 ## Current Status
 
 ❌ **File Missing:** `metrics/review_metrics.json` does not exist
-⚠️ **Pilot Projects:** Unverified (currently placeholders in ADOPTION.md)
+⚠️ **Pilot Projects:** Unverified (ISS-NEW-002 - placeholders in ADOPTION.md)
 ❓ **Action Status:** Unknown if running in pilot projects
-
-### Evidence
-```bash
-$ ls -la metrics/review_metrics.json
-ls: cannot access 'metrics/review_metrics.json': No such file or directory
-```
-
-### Impact on Project Goals
-
-This issue blocks:
-- **GAP-001 Completion:** Baseline acceptance rate cannot be calculated without data
-- **Phase 2 Execution:** User feedback collection requires actual review data
-- **Phase 4 Execution:** False positive analysis needs 20+ reviews
-- **Weekly Reports:** Automated quality reports have no data to report
+✅ **Calculation Script:** `scripts/calculate_acceptance_rate.py` works correctly
 
 ---
 
 ## Root Cause Hypotheses
 
-### Hypothesis 1: Pilot Projects Not Using Action (HIGH LIKELIHOOD - 70%)
+### 1. Pilot Projects Not Using Action (HIGH LIKELIHOOD)
 
 **Evidence:**
 - ADOPTION.md shows placeholder repos (`example/repo-1`, `example/repo-2`)
-- No actual pilot projects verified yet (ISS-NEW-002)
-- If Actions aren't running, no data is collected
+- No actual pilot projects verified
+- README mentions "2 pilot projects" but no actual repos listed
 
 **Impact:**
 - No Action runs = No data collected
-- Baseline cannot be calculated
-- Quality improvements cannot be measured
+- Cannot measure AI review quality
+- Cannot calculate baseline acceptance rate
 
 **Resolution Required:**
-1. Complete PR-003 to identify real pilot projects
-2. Verify these projects have `review-and-merge` workflows enabled
-3. Check recent workflow runs to confirm Action is triggering
+1. Identify real pilot projects (contact team leads, check GitHub organization logs)
+2. Update ADOPTION.md with actual repository URLs
+3. Verify Actions are actually running in these projects
+4. Document contact information for pilot teams
 
-**Verification Commands:**
-```bash
-# For each pilot project:
-gh repo view ORG/REPO --json workflows
-gh workflow list --repo ORG/REPO
-gh workflow view review-and-merge --repo ORG/REPO
-gh run list --workflow=review-and-merge --repo ORG/REPO --limit 10
-```
+**Related:** ISS-NEW-002, PR-003
 
 ---
 
-### Hypothesis 2: Metrics Collection Not Enabled (MEDIUM LIKELIHOOD - 25%)
+### 2. Metrics Collection Not Enabled (MEDIUM LIKELIHOOD)
 
 **Evidence:**
-- `scripts/calculate_acceptance_rate.py` exists and works
-- Infrastructure ready, but no input data
-- May not be configured in pilot project workflows
+- Needs verification in pilot project workflows
+- `REVIEW_METRICS_FILE` environment variable may not be set
+- Pilot projects may not have metrics collection configured
 
 **Impact:**
-- Action runs but doesn't save review outcomes
-- `metrics/review_metrics.json` never gets created
-- No data for baseline calculation
-
-**Possible Causes:**
-1. `REVIEW_METRICS_FILE` environment variable not set
-2. Workflow lacks `contents: write` permission
-3. Metrics collection code commented out or missing
-4. File path incorrect (relative vs absolute)
+- Action runs but doesn't save data
+- Weekly reports have no data to process
+- Cannot track AI review quality over time
 
 **Resolution Required:**
-1. Check pilot project workflow files
-2. Verify `REVIEW_METRICS_FILE` is configured
-3. Confirm workflow has write permissions
-4. Check Action template code for metrics writing
+1. Check pilot project workflow files for `REVIEW_METRICS_FILE` configuration
+2. Verify environment variables are set in workflows
+3. Check if Action templates include metrics collection code
 
-**Verification Commands:**
-```bash
-# Check workflow configuration
-cat .github/workflows/*review*.yml | grep -A 5 -B 5 "REVIEW_METRICS_FILE"
-
-# Check permissions
-cat .github/workflows/*review*.yml | grep -A 3 "permissions:"
-
-# Check for write permission
-cat .github/workflows/*review*.yml | grep "contents: write"
-```
-
-**Example Fix:**
+**Example Configuration:**
 ```yaml
-# Add to pilot project workflow:
 env:
   REVIEW_METRICS_FILE: ${{ github.workspace }}/metrics/review_metrics.json
 
 permissions:
   contents: write  # Allow writing to repository
+```
+
+---
+
+### 3. Permissions Issue (LOW-MEDIUM LIKELIHOOD)
+
+**Evidence:**
+- Needs verification
+- Workflow may lack write permissions
+- Action may try to write but fail silently
+
+**Impact:**
+- Action runs, attempts to save data, but fails
+- No error messages visible to users
+- Silent failure makes diagnosis difficult
+
+**Resolution Required:**
+1. Check workflow permissions in pilot projects
+2. Verify `contents: write` permission is granted
+3. Review GitHub Actions logs for permission errors
+
+**Required Permissions:**
+```yaml
+permissions:
+  contents: write
   pull-requests: write
 ```
 
 ---
 
-### Hypothesis 3: Metrics File Path Issue (LOW LIKELIHOOD - 5%)
+### 4. Metrics File Path Issue (LOW LIKELIHOOD)
 
 **Evidence:**
 - File path may be relative vs absolute
 - Working directory may differ from expected
-- GitHub Actions workspace context issue
+- GitHub Actions workspace context may be misunderstood
 
 **Impact:**
-- Action tries to write but fails silently
-- File created in wrong location
-- Cannot find file when calculating metrics
+- Action writes to wrong location
+- File created but not in expected `metrics/` directory
+- Weekly workflow cannot find the file
 
 **Resolution Required:**
 1. Check Action code for file path construction
@@ -127,211 +113,317 @@ permissions:
 
 ---
 
-## Diagnostic Checklist for Pilot Project Administrators
+## Diagnostic Commands
 
-Please run these commands in each pilot project repository:
+### For Pilot Project Administrators
 
-### Step 1: Verify Workflow Exists
+Run these commands in each pilot project repository:
+
 ```bash
-# Check if review-and-merge workflow exists
+# 1. Check if review-and-merge workflow exists
 gh workflow list --search review-and-merge
 
-# Expected output: review-and-merge.yml active
-```
+# 2. Check workflow runs (last 30 days)
+gh run list --workflow=review-and-merge.yml --limit 20
 
-### Step 2: Check Workflow Runs
-```bash
-# Check recent workflow runs
-gh run list --workflow=review-and-merge.yml --limit 10
-
-# Look for: recent runs (last 30 days)
-# If no runs: workflow not triggering
-```
-
-### Step 3: Check Workflow Configuration
-```bash
-# View workflow file
+# 3. Check workflow configuration for metrics settings
 cat .github/workflows/*review*.yml | grep -A 5 -B 5 "REVIEW_METRICS_FILE"
 
-# Expected: env.REVIEW_METRICS_FILE is set
-# If missing: metrics collection not enabled
-```
+# 4. Check permissions
+cat .github/workflows/*review*.yml | grep -A 10 "permissions:"
 
-### Step 4: Check Permissions
-```bash
-# Check workflow permissions
-cat .github/workflows/*review*.yml | grep -A 3 "permissions:"
-
-# Expected: contents: write
-# If missing: cannot write to metrics file
-```
-
-### Step 5: Check Recent Logs for Errors
-```bash
-# Check recent workflow logs
+# 5. Check recent logs for errors
 gh run view --log-failed | tail -100
 
-# Look for: Permission denied, File not found, etc.
-```
+# 6. Check if metrics file exists
+ls -la metrics/review_metrics.json
 
-### Step 6: Verify metrics Directory
-```bash
-# Check if metrics directory exists
-ls -la metrics/
-
-# Expected: metrics/review_metrics.json exists
-# If missing: data collection not working
+# 7. Check file contents if it exists
+cat metrics/review_metrics.json | jq '.reviews | length'
 ```
 
 ---
 
 ## Resolution Steps
 
-### Phase 1: Verify Pilot Projects (PR-003) - IMMEDIATE
+### Step 1: Verify Pilot Projects (PR-003)
 
-**Status:** BLOCKED (requires human input)
+**Priority:** CRITICAL (blocks all data collection)
 
-1. [ ] Identify actual repositories using `review-and-merge`
-2. [ ] Confirm workflows are enabled
-3. [ ] Check recent workflow runs
-4. [ ] Document contact information
+- [ ] Identify actual repositories using review-and-merge Action
+- [ ] Confirm workflows are enabled and running
+- [ ] Check recent workflow runs for errors
+- [ ] Document contact information for pilot teams
 
-**Estimated Time:** 2-4 hours (human time)
-
----
-
-### Phase 2: Enable Metrics Collection - SHORT-TERM
-
-**Once pilot projects are identified:**
-
-If workflows exist but don't collect metrics:
-
-1. **Add Environment Variable:**
-   ```yaml
-   env:
-     REVIEW_METRICS_FILE: ${{ github.workspace }}/metrics/review_metrics.json
-   ```
-
-2. **Add Write Permission:**
-   ```yaml
-   permissions:
-     contents: write  # Allow writing to repository
-     pull-requests: write
-     issues: write
-   ```
-
-3. **Create metrics Directory:**
-   ```bash
-   mkdir -p metrics
-   echo '{"reviews":[]}' > metrics/review_metrics.json
-   git add metrics/
-   git commit -m "chore: initialize review metrics file"
-   ```
-
-4. **Push Changes:**
-   ```bash
-   git push
-   ```
-
-**Estimated Time:** 1-2 hours per pilot project
-
----
-
-### Phase 3: Verify Data Collection - AFTER 7 DAYS
-
-1. [ ] Check that `metrics/review_metrics.json` exists
-2. [ ] Verify file contains review data
-3. [ ] Run: `python scripts/calculate_acceptance_rate.py`
-4. [ ] Calculate baseline acceptance rate
-5. [ ] Update baseline report with actual values
-
-**Verification Commands:**
+**Commands:**
 ```bash
-# Check file exists and has data
-test -f metrics/review_metrics.json && cat metrics/review_metrics.json | jq '.reviews | length'
+# List all repos in organization
+gh repo list --limit 100
 
-# Should show: > 0 (at least 5 reviews recommended)
+# For each candidate repo, check workflows:
+gh workflow list --repo ORG/REPO
+gh run list --repo ORG/REPO --workflow=review-and-merge.yml --limit 10
+```
+
+**Expected Output:**
+- Real repository URLs (not `example/*`)
+- Evidence of recent workflow runs
+- Contact information (email or Slack)
+
+---
+
+### Step 2: Enable Metrics Collection
+
+If workflows exist but don't collect metrics, add this configuration:
+
+```yaml
+# .github/workflows/review-and-merge.yml
+
+name: Review and Merge
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  REVIEW_METRICS_FILE: ${{ github.workspace }}/metrics/review_metrics.json
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Ensure metrics directory exists
+      - name: Setup metrics directory
+        run: mkdir -p metrics
+
+      # Initialize metrics file if it doesn't exist
+      - name: Initialize metrics file
+        run: |
+          if [ ! -f ${{ env.REVIEW_METRICS_FILE }} ]; then
+            echo '{"reviews":[]}' > ${{ env.REVIEW_METRICS_FILE }}
+          fi
+
+      # Run review-and-merge action
+      - uses: your-org/github-actions-actions/review-and-merge@v1
+        with:
+          # ... your existing parameters ...
 ```
 
 ---
 
-## Success Criteria
+### Step 3: Create Metrics Directory and Initial File
 
-This issue is resolved when:
-
-- [ ] Both pilot projects identified and verified
-- [ ] Both have metrics collection enabled in workflows
-- [ ] `metrics/review_metrics.json` exists in both projects
-- [ ] At least 5 reviews collected within 7 days
-- [ ] `scripts/calculate_acceptance_rate.py` can read the file
-- [ ] Baseline acceptance rate can be calculated
-- [ ] Baseline report updated with actual values
+```bash
+# In pilot project repository
+mkdir -p metrics
+echo '{"reviews":[]}' > metrics/review_metrics.json
+git add metrics/
+git commit -m "chore: initialize review metrics file"
+git push
+```
 
 ---
 
-## Timeline Estimate
+### Step 4: Verify Data Collection
 
-| Phase | Action | Duration | Dependencies |
-|-------|--------|----------|--------------|
-| **Phase 1** | Identify pilot projects | 2-4 hours | Human input required |
-| **Phase 2** | Enable metrics collection | 1-2 hours | Phase 1 complete |
-| **Phase 3** | Verify data collection | 7 days | Phase 2 complete |
-| **Phase 4** | Calculate baseline | 1 hour | 20+ reviews collected |
+After enabling metrics collection:
 
-**Total Estimated Time:** 10-14 days (mostly waiting for data collection)
+- [ ] Wait for next PR to be reviewed (1-7 days)
+- [ ] Check that `metrics/review_metrics.json` is updated
+- [ ] Verify file contains review data
+- [ ] Run acceptance rate calculation script
+
+**Verification Commands:**
+```bash
+# Check file exists and has data
+test -f metrics/review_metrics.json && echo "✅ File exists"
+cat metrics/review_metrics.json | jq '.reviews | length'
+
+# Calculate acceptance rate (if 20+ reviews collected)
+python scripts/calculate_acceptance_rate.py
+```
+
+---
+
+## Expected File Format
+
+`metrics/review_metrics.json` should follow this structure:
+
+```json
+{
+  "reviews": [
+    {
+      "pr_number": 123,
+      "repo": "org/repo",
+      "timestamp": "2026-02-07T10:00:00Z",
+      "outcome": "accepted|modified|rejected",
+      "suggestions_count": 5,
+      "accepted_count": 4,
+      "modified_count": 1,
+      "rejected_count": 0,
+      "reviewer": "claude-4-5",
+      "files_touched": ["src/main.py", "tests/test_main.py"]
+    }
+  ]
+}
+```
+
+---
+
+## Troubleshooting
+
+### Issue: File exists but is empty
+
+**Symptoms:**
+```bash
+$ cat metrics/review_metrics.json
+{"reviews":[]}
+```
+
+**Diagnosis:**
+- Action may not be recording outcomes
+- Check Action logs for errors
+- Verify Action has metrics recording code
+
+**Resolution:**
+- Check review-and-merge Action source code
+- Verify metrics writing logic is implemented
+- Test with a sample PR
+
+---
+
+### Issue: Permission denied error
+
+**Symptoms:**
+```
+Error: Permission denied (metrics/review_metrics.json)
+```
+
+**Diagnosis:**
+- Workflow lacks `contents: write` permission
+- GitHub Actions token has insufficient scopes
+
+**Resolution:**
+```yaml
+permissions:
+  contents: write  # Add this to workflow
+```
+
+---
+
+### Issue: File not created
+
+**Symptoms:**
+```bash
+$ ls metrics/review_metrics.json
+ls: cannot access 'metrics/review_metrics.json': No such file or directory
+```
+
+**Diagnosis:**
+- Action not running
+- Metrics collection not enabled
+- File path incorrect
+
+**Resolution:**
+- Verify Action is triggering on PR events
+- Check `REVIEW_METRICS_FILE` environment variable
+- Use absolute path: `${{ github.workspace }}/metrics/review_metrics.json`
 
 ---
 
 ## Next Actions
 
 ### Immediate (This Week)
-1. **CRITICAL:** Complete PR-003 to identify real pilot projects
-2. Contact pilot project administrators
-3. Share this diagnosis document with them
 
-### Short-term (Next 7 Days)
-1. Work with pilot teams to enable metrics collection
-2. Verify workflows are running
-3. Create `metrics/review_metrics.json` in pilot repos
+1. **Complete PR-003** to identify real pilot projects
+2. **Contact pilot teams** to verify Action usage
+3. **Share this diagnostic document** with pilot project administrators
 
-### Medium-term (Days 8-14)
-1. Monitor data collection
-2. Calculate baseline acceptance rate
-3. Update `metrics/acceptance-rate-baseline-2026-02-07.md`
+### Short-term (Next 1-2 Weeks)
 
-### Long-term (Ongoing)
-1. Weekly automated reports (already scheduled)
-2. Monitor acceptance rate trends
-3. Phase 4: False positive analysis (after 20+ reviews)
+4. **Enable metrics collection** in pilot project workflows
+5. **Verify data collection** after next PR review
+6. **Calculate baseline acceptance rate** once 20+ reviews collected
+
+### Medium-term (Month 1)
+
+7. **Generate weekly reports** using automated workflow
+8. **Analyze acceptance rate trends**
+9. **Identify improvement opportunities**
 
 ---
 
-## Related Issues and PRs
+## Success Criteria
 
-- **ISS-NEW-001:** This issue (Review data collection not working)
-- **ISS-NEW-002:** Pilot projects are placeholders (blocks verification)
-- **PR-003:** Information request for real pilot projects
-- **GAP-001:** Baseline acceptance rate not established (blocked by this)
-- **GAP-002:** User feedback collection incomplete (blocked by this)
+- [ ] Both pilot projects identified and contacted
+- [ ] `metrics/review_metrics.json` exists in pilot projects
+- [ ] At least 5 reviews collected within 7 days of enabling
+- [ ] `scripts/calculate_acceptance_rate.py` can read the file successfully
+- [ ] Baseline acceptance rate calculated (after 20+ reviews)
+- [ ] Weekly reports generating automatically
 
 ---
 
-## Questions?
+## Related Documentation
 
-If you need help diagnosing or fixing this issue:
+- [Quality Metrics Methodology](quality_metrics_methodology.md)
+- [Baseline Report](../metrics/acceptance-rate-baseline-2026-02-07.md)
+- [Review and Merge Action Instructions](../instructions/review-and-merge.md)
+- [Custom Rules Tutorial](../examples/custom-rules-tutorial.md)
 
-1. Check if your pilot project is listed in [ADOPTION.md](../ADOPTION.md)
-2. Verify your workflow has the configuration shown in Phase 2
-3. Check workflow logs for errors
-4. Open a GitHub Issue with:
-   - Pilot project repository URL
-   - Workflow configuration (sanitized)
-   - Recent workflow run logs (if available)
-   - Error messages (if any)
+---
+
+## Appendix: Data Flow Diagram
+
+```
+┌─────────────────┐
+│  PR Opens       │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────────────┐
+│ review-and-merge Action │
+│ triggers on PR          │
+└────────┬────────────────┘
+         │
+         ▼
+┌──────────────────────────────┐
+│ Claude Code CLI generates    │
+│ review suggestions           │
+└────────┬─────────────────────┘
+         │
+         ▼
+┌──────────────────────────────┐
+│ Developer applies/modifies/  │
+│ rejects suggestions          │
+└────────┬─────────────────────┘
+         │
+         ▼
+┌──────────────────────────────┐
+│ Action records outcome to    │
+│ metrics/review_metrics.json  │
+└────────┬─────────────────────┘
+         │
+         ▼
+┌──────────────────────────────┐
+│ Weekly workflow reads file   │
+│ and generates report         │
+└────────┬─────────────────────┘
+         │
+         ▼
+┌──────────────────────────────┐
+│ Acceptance rate calculated   │
+│ and trend analysis           │
+└──────────────────────────────┘
+```
 
 ---
 
 **Document Owner:** DevOps Team
-**Last Updated:** 2026-02-07
 **Next Review:** After PR-003 completion or 2026-02-14
-**Status:** 🟡 AWAITING PILOT PROJECT IDENTIFICATION
+**Status:** 🔍 AWAITING PILOT PROJECT VERIFICATION

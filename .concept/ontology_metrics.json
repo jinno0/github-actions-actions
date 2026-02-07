@@ -1,6 +1,6 @@
 {
-  "run_id": "2026-02-07T06:44:47Z",
-  "updated_at": "2026-02-07T06:44:47Z",
+  "run_id": "2026-02-07T06:52:21.766729Z",
+  "updated_at": "2026-02-07T06:52:21.766729Z",
   "ontology": {
     "total_terms": 37,
     "by_layer": {
@@ -40,8 +40,8 @@
     }
   },
   "claims": {
-    "total_lines": 250,
-    "retained_lines": 250,
+    "total_lines": 254,
+    "retained_lines": 254,
     "archived_lines": 0,
     "run_limit": 10000,
     "within_limits": true
@@ -77,7 +77,7 @@
     "decisions_md_lines": 75,
     "decisions_md_limit": 200,
     "decisions_md_within_limit": true,
-    "claims_ndjson_lines": 250,
+    "claims_ndjson_lines": 254,
     "claims_ndjson_limit": 3000,
     "claims_ndjson_within_limit": true,
     "tombstones_count": 4,
@@ -88,5 +88,5 @@
     "last_hygiene_check": "2026-02-07T06:44:47Z",
     "integrity_fixes": []
   },
-  "last_hygiene_check": "2026-02-07T06:44:47Z"
+  "last_hygiene_check": "2026-02-07T06:52:21.767299Z"
 }
