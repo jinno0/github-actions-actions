@@ -34,7 +34,7 @@ jobs:
             --output metrics/acceptance_report.md
 
       - name: Upload metrics artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: acceptance-metrics-${{ github.run_number }}
           path: metrics/
