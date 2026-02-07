@@ -1,6 +1,6 @@
 {
   "run_id": "2026-02-07T03:54:57Z",
-  "updated_at": "2026-02-07T03:54:57Z",
+  "updated_at": "2026-02-07T04:58:18.956778Z",
   "ontology": {
     "total_terms": 37,
     "by_layer": {
@@ -70,7 +70,7 @@
     "gc_triggered": false,
     "duplicates_found": 0,
     "duplicate_ids": [],
-    "last_hygiene_run": "2026-02-07T03:54:57Z",
+    "last_hygiene_run": "2026-02-07T04:58:18.956817Z",
     "deleted_terms": []
   },
   "hygiene": {
@@ -82,12 +82,13 @@
     "claims_ndjson_within_limit": true,
     "tombstones_count": 4,
     "tombstones_limit": 200,
-    "unmapped_ratio": 0.005,
+    "unmapped_ratio": 0.0,
     "unmapped_ratio_limit": 0.2,
     "all_within_limits": true,
     "last_hygiene_check": "2026-02-07T03:54:57Z",
     "integrity_fixes": [
       "Fixed YAML syntax error in ontology.yml line 1361"
     ]
-  }
+  },
+  "last_hygiene_check": "2026-02-07T04:58:18.956805Z"
 }
