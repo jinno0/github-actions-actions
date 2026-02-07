@@ -1,0 +1,20 @@
+version: "2.0"
+updated_at: "2026-02-07T10:06:42Z"
+updated_by: "audit-run-20260207-100642"
+
+# === 予算設定 ===
+scan_budget:
+  max_files_per_run: 100
+  max_total_tokens: 50000
+  timeout_seconds: 3600
+
+log_budget:
+  max_log_entries: 500
+  keep_last_n_entries: 300
+
+proposal_budget:
+  max_prs_per_run: 5
+
+execution_budget:
+  max_runs_to_keep: 3
+  gc_trigger: "on_every_audit_completion"

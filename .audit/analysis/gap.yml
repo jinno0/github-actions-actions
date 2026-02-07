@@ -1,0 +1,173 @@
+version: "2.0"
+generated_at: "2026-02-07T10:06:42Z"
+generated_by: "audit-run-20260207-100642"
+
+# === ギャップ分析（Gap Analysis）===
+
+## 概要
+summary:
+  total_gaps: 5
+  critical: 0
+  high: 2
+  medium: 2
+  low: 1
+
+## ギャップ詳細
+gaps:
+  ### GAP-001: AIレビュー受入率のベースライン未策定
+  - id: "GAP-001"
+    severity: "high"
+    category: "quality_tracking"
+    source_intent: "ASM-003, QA-002"
+    current_state: "受入率がUNKNOWN（ベースライン策定中）"
+    desired_state: "受入率 >= 70% を達成し、計測されている"
+    delta:
+      measure: "acceptance_rate"
+      current: "UNKNOWN"
+      target: ">= 70%"
+      achievable: true
+    impact: "品質改善の効果測定ができない"
+    blockers:
+      - "実際のレビューデータが不足"
+      - "受入率計算スクリプトは存在するが、データがない"
+    assumptions:
+      - id: "ASM-003"
+        description: "目標受入率は >= 70%"
+        confidence: "high"
+
+  ### GAP-002: 組織全体への展開が未完了
+  - id: "GAP-002"
+    severity: "high"
+    category: "adoption"
+    source_intent: "mission.desired_state, PURPOSE.md:70-71"
+    current_state: "2件のパイロットプロジェクトのみ"
+    desired_state: "組織内の複数リポジトリで採用されている"
+    delta:
+      measure: "adopting_repositories"
+      current: 2
+      target: ">= 5"  # 暫定的な目標
+      unit: "repositories"
+      achievable: true
+    impact: "プロジェクトの成功条件が未達成"
+    blockers:
+      - "Phase 3の「組織内プロジェクトへの導入とフィードバック収集」が未完了"
+      - "本番環境での実績が不足"
+    assumptions:
+      - id: "ASM-005"
+        description: "2件のパイロットプロジェクトが存在"
+        confidence: "high"
+
+  ### GAP-003: 本番環境での使用データが不足
+  - id: "GAP-003"
+    severity: "medium"
+    category: "usage_tracking"
+    source_intent: "README.md:119-170（テレメトリー説明）"
+    current_state: "テレメトリー機能は実装済みだが、実際のデータが不足"
+    desired_state: "十分な使用データが収集され、分析されている"
+    delta:
+      measure: "telemetry_data_points"
+      current: "INSUFFICIENT"
+      target: "STATISTICALLY_SIGNIFICANT"
+      achievable: true
+    impact: "Actionsの使用頻度、成功率、改善箇所が不明"
+    blockers:
+      - "本番運用がパイロット段階"
+      - "テレメトリーデータの収集期間が短い"
+    assumptions:
+      - id: "C-020"
+        description: "実際の使用データは不明"
+        confidence: "medium"
+
+  ### GAP-004: 一部のinputsでバリデーションが不十分
+  - id: "GAP-004"
+    severity: "medium"
+    category: "security"
+    source_intent: "CON-102（入力値のバリデーション必須）"
+    current_state: "一部のActionでinputsのバリデーションが不十分な可能性"
+    desired_state: "全てのinputsで適切なバリデーションが実装されている"
+    delta:
+      measure: "input_validation_coverage"
+      current: "PARTIAL"
+      target: "100%"
+      achievable: true
+    impact: "不正な入力によるセキュリティリスクや動作不良の可能性"
+    blockers:
+      - "各Actionのaction.ymlでのバリデーション定義の不統一"
+    assumptions:
+      - id: "CON-102"
+        description: "全inputsでバリデーション必須"
+        confidence: "high"
+
+  ### GAP-005: テストカバレッジの一部未達
+  - id: "GAP-005"
+    severity: "low"
+    category: "testing"
+    source_intent: "QA-001（テストカバレッジ >= 70%）"
+    current_state: "78.63%（目標達成済みだが、一部ファイルでカバレッジが低い）"
+    desired_state: "全ての重要なファイルでカバレッジ >= 70%"
+    delta:
+      measure: "test_coverage"
+      current: 78.63
+      target: 70
+      unit: "%"
+      status: "ACHIEVED"
+      gap_detail: "全体では目標達成だが、個別ファイルで未達のものあり"
+    impact: "一部のコードパスでテストが不足"
+    blockers:
+      - "特定のエッジケースやエラーハンドリングのテスト不足"
+    assumptions:
+      - id: "ASM-002"
+        description: "目標カバレッジ >= 70%"
+        confidence: "high"
+
+## 優先順位付け
+priority_ordering:
+  1:
+    gap_id: "GAP-001"
+    reason: "品質測定の基礎となるため、最優先"
+    estimated_effort: "medium"
+    expected_value: "high"
+
+  2:
+    gap_id: "GAP-002"
+    reason: "プロジェクトの成功条件に直結"
+    estimated_effort: "high"
+    expected_value: "high"
+
+  3:
+    gap_id: "GAP-004"
+    reason: "セキュリティと安定性に影響"
+    estimated_effort: "medium"
+    expected_value: "medium"
+
+  4:
+    gap_id: "GAP-003"
+    reason: "改善の優先順位決定に役立つ"
+    estimated_effort: "low"
+    expected_value: "medium"
+
+  5:
+    gap_id: "GAP-005"
+    reason: "目標は達成済みだが、品質向上のため"
+    estimated_effort: "low"
+    expected_value: "low"
+
+## 依存関係
+dependencies:
+  - "GAP-001 → GAP-002": 受入率が計測できてから組織展開を加速できる"
+  - "GAP-003 → GAP-001": テレメトリーデータが増えれば受入率も計算可能"
+  - "GAP-004 → GAP-002": セキュリティ強化後、組織展開の信頼性向上"
+
+## 総合評価
+overall_assessment:
+  critical_blocking_gaps: 0
+  solvable_gaps: 5
+  requires_external_input: 2  # GAP-001, GAP-002は本番データが必要
+  estimated_time_to_closure: "2-4週間"
+
+## 成功の指標
+success_metrics:
+  - "受入率ベースラインが策定され、目標70%に対する現状が明らかになる"
+  - "組織内の採用リポジトリ数が5件以上に増加"
+  - "全Actionのinputsでバリデーションが100%実装される"
+  - "テレメトリーデータに基づく改善提案が生成される"

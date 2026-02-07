@@ -1,0 +1,176 @@
+version: "2.0"
+generated_at: "2026-02-07T10:06:42Z"
+generated_by: "audit-run-20260207-100642"
+
+# === Core Functions 検証シナリオ ===
+
+scenarios:
+  ### CF-001: review-and-merge
+  - function_id: "CF-001"
+    name: "PRのAIレビューと自動マージ"
+    verification_method: "dry_run"
+    test_path: "tests/test_review_and_merge/"
+    evidence:
+      - "actions/review-and-merge/action.ymlの存在"
+      - "examples/review-and-merge-example.ymlの存在"
+      - "tests/test_review_and_merge/test_review_action.pyの存在"
+    expected_outcome:
+      - "Dry RunモードでActionが実行可能"
+      - "レビューコメントが生成される"
+      - "LGTMの場合はマージ実行のシミュレーションが行われる"
+
+  ### CF-002: spec-to-code
+  - function_id: "CF-002"
+    name: "Markdown仕様書からコードを自動生成"
+    verification_method: "dry_run"
+    test_path: "tests/test_spec_to_code/"
+    evidence:
+      - "actions/spec-to-code/action.ymlの存在"
+      - "examples/spec-to-code-example.ymlの存在"
+      - "tests/test_spec_to_code/test_spec_to_code_action.pyの存在"
+    expected_outcome:
+      - "Dry Runモードで仕様書からコード生成がシミュレートされる"
+      - "生成されたコードがテンプレートに従っている"
+
+  ### CF-003: action-fixer
+  - function_id: "CF-003"
+    name: "WorkflowエラーをAIが自動修正"
+    verification_method: "dry_run"
+    test_path: "tests/test_action_fixer/"
+    evidence:
+      - "actions/action-fixer/action.ymlの存在"
+      - "examples/action-fixer-example.ymlの存在"
+      - "tests/test_action_fixer/test_action_fixer.pyの存在"
+    expected_outcome:
+      - "Dry Runモードでエラー検出と修正提案が行われる"
+      - "修正パッチが生成される"
+
+  ### CF-004: auto-refactor
+  - function_id: "CF-004"
+    name: "自然言語の指示でコードをリファクタリング"
+    verification_method: "dry_run"
+    test_path: "tests/test_auto_refactor/"
+    evidence:
+      - "actions/auto-refactor/action.ymlの存在"
+      - "examples/auto-refactor-example.ymlの存在"
+      - "tests/test_auto_refactor/test_auto_refactor_action.pyの存在"
+    expected_outcome:
+      - "Dry Runモードでリファクタリング指示に基づく変更がシミュレートされる"
+
+  ### CF-005: auto-document
+  - function_id: "CF-005"
+    name: "コードの変更を検知しドキュメントを自動更新"
+    verification_method: "dry_run"
+    test_path: "tests/test_auto_document/"
+    evidence:
+      - "actions/auto-document/action.ymlの存在"
+      - "examples/auto-document-example.ymlの存在"
+      - "tests/test_auto_document/test_auto_document_action.pyの存在"
+    expected_outcome:
+      - "Dry Runモードでドキュメント更新がシミュレートされる"
+
+  ### CF-006: release-notes-ai
+  - function_id: "CF-006"
+    name: "コミット履歴からリリースノートを生成"
+    verification_method: "dry_run"
+    test_path: "tests/test_release_notes_ai/"
+    evidence:
+      - "actions/release-notes-ai/action.ymlの存在"
+      - "examples/release-notes-ai-example.ymlの存在"
+      - "tests/test_release_notes_ai/test_release_notes_ai_action.pyの存在"
+    expected_outcome:
+      - "Dry Runモードでリリースノートが生成される"
+
+  ### CF-007: auto-merge
+  - function_id: "CF-007"
+    name: "PRの条件を満たす場合に自動マージ"
+    verification_method: "dry_run"
+    test_path: "tests/test_auto_merge/"
+    evidence:
+      - "actions/auto-merge/action.ymlの存在"
+      - "examples/auto-merge-example.ymlの存在"
+      - "tests/test_auto_merge/test_auto_merge_action.pyの存在"
+    expected_outcome:
+      - "Dry Runモードでマージ条件チェックが行われる"
+
+  ### CF-008: auto-rebase
+  - function_id: "CF-008"
+    name: "PRの競合をAIが自動解決しながらリベース"
+    verification_method: "dry_run"
+    test_path: "tests/test_auto_rebase/"
+    evidence:
+      - "actions/auto-rebase/action.ymlの存在"
+      - "examples/auto-rebase-example.ymlの存在"
+      - "tests/test_auto_rebase/test_auto_rebase_action.pyの存在"
+    expected_outcome:
+      - "Dry Runモードでリベース処理がシミュレートされる"
+
+  ### CF-009: review-auto-merge
+  - function_id: "CF-009"
+    name: "AIレビュー後にCIパス時で自動マージ"
+    verification_method: "dry_run"
+    test_path: "tests/test_review_auto_merge/"
+    evidence:
+      - "actions/review-auto-merge/action.ymlの存在"
+      - "examples/review-auto-merge-example.ymlの存在"
+      - "tests/test_review_auto_merge/test_review_auto_merge_action.pyの存在"
+    expected_outcome:
+      - "Dry Runモードでレビュー後の自動マージがシミュレートされる"
+
+  ### CF-010: bulk-merge-prs
+  - function_id: "CF-010"
+    name: "複数のPRを一括マージ"
+    verification_method: "dry_run"
+    test_path: "tests/test_bulk_merge_prs/"
+    evidence:
+      - "actions/bulk-merge-prs/action.ymlの存在"
+      - "examples/bulk-merge-prs-example.ymlの存在"
+      - "tests/test_bulk_merge_prs/test_bulk_merge_prs_action.pyの存在"
+    expected_outcome:
+      - "Dry Runモードで一括マージ処理がシミュレートされる"
+
+  ### CF-011: bulk-rebase-prs
+  - function_id: "CF-011"
+    name: "複数のPRを一括リベース"
+    verification_method: "dry_run"
+    test_path: "tests/test_bulk_rebase_prs/"
+    evidence:
+      - "actions/bulk-rebase-prs/action.ymlの存在"
+      - "examples/bulk-rebase-prs-example.ymlの存在"
+      - "tests/test_bulk_rebase_prs/test_bulk_rebase_prs_action.pyの存在"
+    expected_outcome:
+      - "Dry Runモードで一括リベース処理がシミュレートされる"
+
+  ### CF-012: pr-review-enqueuer
+  - function_id: "CF-012"
+    name: "PRをスキャンしAIレビューキューに登録"
+    verification_method: "dry_run"
+    test_path: "tests/test_pr_review_enqueuer/"
+    evidence:
+      - "actions/pr-review-enqueuer/action.ymlの存在"
+      - "examples/pr-review-enqueuer-example.ymlの存在"
+      - "tests/test_pr_review_enqueuer/test_pr_review_enqueuer_action.pyの存在"
+    expected_outcome:
+      - "Dry RunモードでPRスキャンとキュー登録がシミュレートされる"
+
+  ### CF-013: publish-pr
+  - function_id: "CF-013"
+    name: "ドラフトPRを自動的にレビュー準備完了に変更"
+    verification_method: "dry_run"
+    test_path: "tests/test_publish_pr/"
+    evidence:
+      - "actions/publish-pr/action.ymlの存在"
+      - "examples/publish-pr-example.ymlの存在"
+      - "tests/test_publish_pr/test_publish_pr_action.pyの存在"
+    expected_outcome:
+      - "Dry RunモードでドラフトPRの公開がシミュレートされる"
+
+## 検証実行計画
+verification_plan:
+  approach: "Dry Run検証（モック実行）"
+  test_command: "pytest tests/integration/ -k dry_run -v"
+  expected_duration: "< 2 minutes"
+  success_criteria:
+    - "全13のCore FunctionsがDry Runで実行可能"
+    - "0件のエラー"
+    - "全テストケースがパス"

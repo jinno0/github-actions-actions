@@ -1,0 +1,178 @@
+version: "2.0"
+updated_at: "2026-02-07T10:06:42Z"
+updated_by: "audit-run-20260207-100642"
+
+# === Mission ===
+mission:
+  target_user: "GitHub組織の開発チームとDevOpsエンジニア"
+  provided_value: "AIネイティブなGitHub Actions（Composite Actions）を提供し、開発効率と品質を向上させる"
+  desired_state: "組織内の複数リポジトリでAI Actionsが採用され、AIに任せられる雑務が増加し、人間が本質的な設計に集中できる状態"
+
+# === Assumptions ===
+assumptions:
+  - id: "ASM-001"
+    field: "mission.target_user"
+    value: "GitHub組織の開発チームとDevOpsエンジニア"
+    reason: "README.mdで「GitHub組織全体の開発効率と品質を向上」と明記されており、DevOps関連のActionsを提供しているため"
+    confidence: "high"
+
+  - id: "ASM-002"
+    field: "quality_attributes.test_coverage"
+    value: ">= 70%"
+    reason: "README.mdで「テストカバレッジ >= 70% を目標」と明記されているため"
+    confidence: "high"
+
+  - id: "ASM-003"
+    field: "quality_attributes.ai_review_acceptance_rate"
+    value: ">= 70%"
+    reason: "README.mdで「受入率（Acceptance Rate）目標: >= 70%」と明記されているため"
+    confidence: "high"
+
+  - id: "ASM-004"
+    field: "runtime.claude_cli"
+    value: "Self-hosted runner上でClaude Code CLIが利用可能"
+    reason: "README.mdで「Self-hosted runner上で動作するClaude Code CLIを活用」と記載されており、実際のaction.ymlでclaudeコマンドを使用しているため"
+    confidence: "high"
+
+  - id: "ASM-005"
+    field: "adoption.pilot_projects"
+    value: "2件のパイロットプロジェクト"
+    reason: "README.mdで「Current adopters: (2 pilot projects)」と記載されているため"
+    confidence: "high"
+
+# === Core Functions（本質的機能）===
+core_functions:
+  - id: "CF-001"
+    claim: "PRのAIレビューと自動マージができる"
+    source: "README.md:14, actions/review-and-merge/action.yml"
+    testable: true
+
+  - id: "CF-002"
+    claim: "Markdown仕様書からコードを自動生成できる"
+    source: "README.md:16, actions/spec-to-code/action.yml"
+    testable: true
+
+  - id: "CF-003"
+    claim: "WorkflowエラーをAIが自動修正できる"
+    source: "README.md:17, actions/action-fixer/action.yml"
+    testable: true
+
+  - id: "CF-004"
+    claim: "自然言語の指示でコードをリファクタリングできる"
+    source: "README.md:18, actions/auto-refactor/action.yml"
+    testable: true
+
+  - id: "CF-005"
+    claim: "コードの変更を検知しドキュメントを自動更新できる"
+    source: "README.md:23, actions/auto-document/action.yml"
+    testable: true
+
+  - id: "CF-006"
+    claim: "コミット履歴からリリースノートを生成できる"
+    source: "README.md:25, actions/release-notes-ai/action.yml"
+    testable: true
+
+  - id: "CF-007"
+    claim: "PRの条件を満たす場合に自動マージできる"
+    source: "README.md:30, actions/auto-merge/action.yml"
+    testable: true
+
+  - id: "CF-008"
+    claim: "PRの競合をAIが自動解決しながらリベースできる"
+    source: "README.md:31, actions/auto-rebase/action.yml"
+    testable: true
+
+  - id: "CF-009"
+    claim: "AIレビュー後にCIパス時で自動マージできる"
+    source: "README.md:32, actions/review-auto-merge/action.yml"
+    testable: true
+
+  - id: "CF-010"
+    claim: "複数のPRを一括マージできる"
+    source: "README.md:39, actions/bulk-merge-prs/action.yml"
+    testable: true
+
+  - id: "CF-011"
+    claim: "複数のPRを一括リベースできる"
+    source: "README.md:40, actions/bulk-rebase-prs/action.yml"
+    testable: true
+
+  - id: "CF-012"
+    claim: "PRをスキャンしAIレビューキューに登録できる"
+    source: "README.md:46, actions/pr-review-enqueuer/action.yml"
+    testable: true
+
+  - id: "CF-013"
+    claim: "ドラフトPRを自動的にレビュー準備完了に変更できる"
+    source: "README.md:33, actions/publish-pr/action.yml"
+    testable: true
+
+# === Quality Attributes（検証方法とセット）===
+quality_attributes:
+  - id: "QA-001"
+    name: "テストカバレッジ"
+    target: ">= 70%"
+    verification:
+      type: "measurement"
+      command: "pytest --cov=actions --cov=scripts --cov-fail-under=70"
+      criteria:
+        operator: ">="
+        value: 70
+        unit: "%"
+      interpretation:
+        success_means: "コードの70%以上がテストで実行された"
+        failure_means: "テストされていないコードパスが30%以上ある"
+        warning: "カバレッジが高くてもアサーションが弱ければ意味がない"
+
+  - id: "QA-002"
+    name: "AIレビュー受入率"
+    target: ">= 70%"
+    verification:
+      type: "measurement"
+      command: "python scripts/calculate_acceptance_rate.py --output report --time-period 7d"
+      criteria:
+        operator: ">="
+        value: 70
+        unit: "%"
+      interpretation:
+        success_means: "AIレビューの提案が人間に70%以上受け入れられている"
+        failure_means: "AIレビューの品質が低く、修正が必要"
+        warning: "受入率が高くても重要なバグを見逃している可能性がある"
+
+  - id: "QA-003"
+    name: "Action構造検証"
+    target: "100%のActionsが構造チェックをパス"
+    verification:
+      type: "validation"
+      command: "pytest tests/integration/test_action_structure.py"
+      criteria:
+        operator: "=="
+        value: 100
+        unit: "%"
+      interpretation:
+        success_means: "全てのActionが必須ファイル(action.yml, README.md)を持つ"
+        failure_means: "Actionの構造が不整合でドキュメントが不足している"
+
+  - id: "QA-004"
+    name: "Dry Run検証"
+    target: "全ActionがDry Runモードで実行可能"
+    verification:
+      type: "validation"
+      command: "pytest tests/integration/ -k dry_run"
+      criteria:
+        operator: "=="
+        value: 0
+        unit: "errors"
+      interpretation:
+        success_means: "全てのActionがモック実行でエラーなく動作する"
+        failure_means: "Actionの依存関係や設定に問題がある"
+
+# === Non-Goals ===
+non_goals:
+  - "単なるシェルスクリプトのラッパー（既存のActionsで十分なもの）"
+  - "完全に無人での運用（AIのハルシネーションリスクを考慮）"
+  - "特定プロダクトに強く結合しすぎたロジック（再利用性を重視）"
+  - "再利用可能Workflowテンプレート（これは github-actions-templates リポジトリの責務）"
+  - "アプリケーション固有のCI/CD（汎用的で再利用可能なActionのみを提供）"
+  - "Runner管理（これは github-actions-hub の責務）"
+  - "Docker container actions, JavaScript actions（Composite Actionsのみに焦点）"
