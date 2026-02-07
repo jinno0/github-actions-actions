@@ -1,6 +1,6 @@
 {
-  "run_id": "2026-02-07T15:45:14.813218Z",
-  "updated_at": "2026-02-07T15:45:14.813218Z",
+  "run_id": "2026-02-08T00:34:22Z",
+  "updated_at": "2026-02-08T00:34:22Z",
   "ontology": {
     "total_terms": 38,
     "by_layer": {
@@ -40,8 +40,8 @@
     }
   },
   "claims": {
-    "total_lines": 264,
-    "retained_lines": 264,
+    "total_lines": 274,
+    "retained_lines": 274,
     "archived_lines": 0,
     "run_limit": 10000,
     "within_limits": true
@@ -56,7 +56,7 @@
   },
   "decisions": {
     "active_auto_decisions": 8,
-    "lines": 66,
+    "lines": 75,
     "limit": 200,
     "within_limits": true
   },
@@ -70,7 +70,7 @@
     "gc_triggered": false,
     "duplicates_found": 0,
     "duplicate_ids": [],
-    "last_hygiene_run": "2026-02-07T15:45:14.813218Z",
+    "last_hygiene_run": "2026-02-08T00:34:22Z",
     "deleted_terms": [],
     "integrity_fixes": []
   },
@@ -78,7 +78,7 @@
     "decisions_md_lines": 75,
     "decisions_md_limit": 200,
     "decisions_md_within_limit": true,
-    "claims_ndjson_lines": 264,
+    "claims_ndjson_lines": 274,
     "claims_ndjson_limit": 3000,
     "claims_ndjson_within_limit": true,
     "tombstones_count": 4,
@@ -86,10 +86,10 @@
     "unmapped_ratio": 0.0,
     "unmapped_ratio_limit": 0.2,
     "all_within_limits": true,
-    "last_hygiene_check": "2026-02-07T15:45:14.813218Z",
+    "last_hygiene_check": "2026-02-08T00:34:22Z",
     "integrity_fixes": [],
     "tombstones_within_limit": true,
     "unmapped_ratio_within_limit": true
   },
-  "last_hygiene_check": "2026-02-07T15:45:14.813218Z"
+  "last_hygiene_check": "2026-02-08T00:34:22Z"
 }

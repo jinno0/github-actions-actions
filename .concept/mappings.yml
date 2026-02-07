@@ -1,4 +1,4 @@
-updated_at: "2026-02-07T13:12:26Z"
+updated_at: "2026-02-08T00:34:22Z"
 mappings:
   AIPoweredAction:
     code_symbols:
@@ -27,6 +27,8 @@ mappings:
     docs:
       - "ACTIONS.md"
       - "PURPOSE.md"
+      - "docs/cli-version-testing.md"
+      - "README.md"
 
   SelfHostedRunner:
     code_symbols: []
@@ -216,10 +218,12 @@ mappings:
     code_symbols:
       - "tests/test_*"
       - "conftest.py"
+      - ".github/workflows/lint.yml"
     db: []
     api: []
     docs:
       - "TESTING.md"
+      - ".yamllint"
 
   AcceptanceRate:
     code_symbols:
