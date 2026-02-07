@@ -168,9 +168,6 @@ ENV/
 .venv
 .task-prompt.md
 
-# Audit execution history (keep state files, ignore run data)
-.audit/
-
 # System analytics data
 .analytics/
 

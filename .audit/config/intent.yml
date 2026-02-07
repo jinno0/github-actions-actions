@@ -1,0 +1,165 @@
+version: "2.0"
+updated_at: "2026-02-08T00:00:00Z"
+updated_by: "audit-run-2026-02-08"
+
+# === Mission ===
+mission:
+  target_user: "組織内の開発チームおよびGitHub利用者"
+  provided_value: "AIネイティブなGitHub Actionsを提供し、開発効率と品質を向上させる"
+  desired_state: "組織全体でAI Actionsが採用され、人間が本質的な設計や意思決定に集中できる時間が増加している状態"
+
+# === Core Functions（このリポジトリができること） ===
+core_functions:
+  - id: "CF-001"
+    claim: "AIレビューと自動マージ（review-and-merge）"
+    source: "README.md:14"
+    testable: true
+
+  - id: "CF-002"
+    claim: "仕様書からのコード自動生成（spec-to-code）"
+    source: "README.md:15"
+    testable: true
+
+  - id: "CF-003"
+    claim: "WorkflowエラーのAI自動修正（action-fixer）"
+    source: "README.md:16"
+    testable: true
+
+  - id: "CF-004"
+    claim: "自然言語指示に基づくリファクタリング（auto-refactor）"
+    source: "README.md:17"
+    testable: true
+
+  - id: "CF-005"
+    claim: "ドキュメント自動更新（auto-document）"
+    source: "README.md:23"
+    testable: true
+
+  - id: "CF-006"
+    claim: "AIリリースノート生成（release-notes-ai）"
+    source: "README.md:24"
+    testable: true
+
+  - id: "CF-007"
+    claim: "PRの自動マージ（auto-merge, review-auto-merge）"
+    source: "README.md:30-32"
+    testable: true
+
+  - id: "CF-008"
+    claim: "一括PR操作（bulk-merge-prs, bulk-rebase-prs）"
+    source: "README.md:39-40"
+    testable: true
+
+  - id: "CF-009"
+    claim: "カスタムレビュールール注入"
+    source: "README.md:66-76"
+    testable: true
+
+  - id: "CF-010"
+    claim: "Dry Run検証（構造チェック・YAML構文・モック実行）"
+    source: "README.md:94"
+    testable: true
+
+# === Assumptions（仮定した前提） ===
+assumptions:
+  - id: "ASM-001"
+    field: "mission.target_user"
+    value: "組織内の開発チームおよびGitHub利用者"
+    reason: "README.mdの記述「GitHub組織全体の開発効率と品質を向上させる」から推測"
+    confidence: "high"
+
+  - id: "ASM-002"
+    field: "quality_attributes.coverage"
+    value: ">= 80%"
+    reason: "pyproject.toml:38 で fail_under = 80 と設定されている"
+    confidence: "high"
+
+  - id: "ASM-003"
+    field: "runtime_environment"
+    value: "Self-hosted GitHub Actions runners"
+    reason: "README.md:83 で明示されている"
+    confidence: "high"
+
+  - id: "ASM-004"
+    field: "ai_engine"
+    value: "Claude Code CLI"
+    reason: "README.md:4, AGENTS.md で言及されている"
+    confidence: "high"
+
+  - id: "ASM-005"
+    field: "testing_approach"
+    value: "Dry Run検証 + pytestカバレッジ"
+    reason: "README.md:94-96, TESTING.md に記述がある"
+    confidence: "high"
+
+  - id: "ASM-006"
+    field: "adoption_phase"
+    value: "Phase 3: Stabilization & Adoption"
+    reason: "PURPOSE.md:22-26 で明示されている"
+    confidence: "high"
+
+# === Quality Attributes（検証方法とセット） ===
+quality_attributes:
+  - id: "QA-001"
+    name: "テストカバレッジ"
+    target: ">= 80%"
+    verification:
+      type: "measurement"
+      command: "pytest --cov=. --cov-report=term-missing"
+      criteria:
+        operator: ">="
+        value: 80
+        unit: "%"
+      interpretation:
+        success_means: "コードの80%以上がテストで実行されている"
+        failure_means: "テストされていないコードパスが20%以上ある"
+        warning: "カバレッジが高くてもアサーションが弱ければ意味がない"
+
+  - id: "QA-002"
+    name: "AI Actions Dry Run検証"
+    target: "全Actionsがdry-runでエラーなし"
+    verification:
+      type: "structural_test"
+      command: "pytest tests/ -v -k dry_run"
+      criteria:
+        operator: "=="
+        value: 0
+        unit: "errors"
+      interpretation:
+        success_means: "全てのActionが構造的に正しく、モック実行が可能"
+        failure_means: "Action定義に構造エラーまたは依存関係の問題がある"
+
+  - id: "QA-003"
+    name: "YAML構文チェック"
+    target: "全YAMLファイルがパース可能"
+    verification:
+      type: "syntax_check"
+      command: "yamllint actions/*/action.yml examples/*.yml instructions/*.yml"
+      criteria:
+        operator: "=="
+        value: 0
+        unit: "errors"
+      interpretation:
+        success_means: "全てのYAMLファイルに構文エラーがない"
+        failure_means: "YAMLファイルにインデントや構文の問題がある"
+
+  - id: "QA-004"
+    name: "AIレビュー受入率"
+    target: ">= 70%"
+    verification:
+      type: "measurement"
+      command: "python scripts/calculate_acceptance_rate.py --time-period 30d"
+      criteria:
+        operator: ">="
+        value: 70
+        unit: "%"
+      interpretation:
+        success_means: "AIレビューの70%以上が人間に受け入れられている"
+        failure_means: "AIレビューの品質が低く、修正が必要"
+        warning: "現在データ収集中（README.md:149-151）"
+
+# === Non-Goals（明確な非目標） ===
+non_goals:
+  - "単なるシェルスクリプトのラッパー（既存のActionsで十分なもの）"
+  - "完全に無人での運用（AIのハルシネーションリスクを考慮）"
+  - "特定プロダクトに強く結合しすぎたロジック（再利用性を重視）"
