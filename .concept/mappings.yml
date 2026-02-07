@@ -1,4 +1,4 @@
-updated_at: "2026-02-06T17:33:27Z"
+updated_at: "2026-02-07T13:12:26Z"
 mappings:
   AIPoweredAction:
     code_symbols:
@@ -278,3 +278,13 @@ mappings:
       - ".claude/agents/oracle.md"
       - "examples/release-notes-ai-example.yml"
       - "ACTIONS.md"
+  PRReviewEnqueuerAction:
+    code_symbols:
+      - "actions/pr-review-enqueuer/action.yml"
+      - "actions/pr-review-enqueuer/*"
+    db: []
+    api: []
+    docs:
+      - "README.md"
+      - "actions/pr-review-enqueuer/README.md"
+      - "instructions/pr-review-enqueuer.md"

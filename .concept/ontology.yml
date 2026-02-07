@@ -1,5 +1,5 @@
 version: '0.3'
-updated_at: '2026-02-07T10:17:11Z'
+updated_at: '2026-02-07T13:12:26Z'
 canonical_terms:
   AIPoweredAction:
     id: TERM-AI-ACTION
@@ -1361,3 +1361,46 @@ canonical_terms:
       quote: 'Token permissions minimization (contents: read vs write)'
     - source: examples/release-notes-ai-example.yml#L8-L10
       quote: 'permissions: contents: write'
+  PRReviewEnqueuerAction:
+    id: TERM-PR-REVIEW-ENQUEUER
+    layer: domain
+    status: stable
+    definition: AI-powered action that automatically scans pull requests and adds /review
+      comments to trigger AI review workflows with smart filtering, batch processing, and
+      flexible exclusion options
+    synonyms:
+    - PR Review Enqueuer
+    - pr-review-enqueuer
+    - PR review queue automation
+    - Automated PR review scheduling
+    boundaries:
+      includes:
+      - Smart PR filtering (draft/ready/wip/no-label)
+      - Batch processing
+      - Age thresholds
+      - Exclusion labels
+      - Dry run mode
+      - /review comment posting
+      excludes:
+      - Direct PR review (only enqueues)
+      - Non-automated review triggering
+    lifecycle:
+    - Scan PRs
+    - Check Eligibility
+    - Add /review Comment
+    - Report Results
+    related_terms:
+    - AIPoweredAction
+    - ReviewAndMergeAction
+    - GitHubToken
+    assumptions: []
+    evidence:
+    - source: README.md#L46
+      quote: '`pr-review-enqueuer` | PRをスキャンし、AIレビューキューに自動登録'
+    - source: actions/pr-review-enqueuer/README.md#L1-L3
+      quote: 'Automatically scans open pull requests and adds `/review` comments to trigger
+        AI review workflows'
+    - source: actions/pr-review-enqueuer/README.md#L6-L10
+      quote: 'Smart PR Filtering: Filter PRs by draft status, labels, age, and more...
+        Batch Processing: Process PRs in batches to avoid API rate limits... Dry Run
+        Mode'
