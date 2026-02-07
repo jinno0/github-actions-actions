@@ -2,7 +2,7 @@
 
 PR（Pull Request）を自動的にリベースし、マージコンフリクトが発生した場合に Claude Code CLI を使って解決する GitHub Action です。
 
-## Prerequisites（前提条件）
+## 前提条件
 
 ### Self-hosted Runner
 この Action は **self-hosted runner** での動作を前提としています。
@@ -23,7 +23,7 @@ npm install -g @anthropic-ai/claude-code
 - `pull-requests: write` - PR の操作とコメントの投稿
 - `contents: write` - ブランチの force push
 
-## Setup Instructions（セットアップ手順）
+## セットアップ手順
 
 ### 1. Self-hosted Runner のセットアップ
 
@@ -54,7 +54,7 @@ claude auth login
 cp examples/auto-rebase-example.yml .github/workflows/auto-rebase.yml
 ```
 
-## Usage（使い方）
+## 使い方
 
 ### 基本的な使い方
 
@@ -92,7 +92,7 @@ PR が作成・更新されると、自動的に以下が行われます：
 | `conflicts-resolved` | コンフリクトが AI で解決されたか（`true` / `false`） |
 | `conflict-count` | 発生したコンフリクトの数 |
 
-## How It Works（仕組み）
+## 仕組み
 
 ### リベースの流れ
 
@@ -142,7 +142,7 @@ Claude Code CLI は以下の原則に従ってコンフリクトを解決しま�
 3. **最小限の変更**: 必要最小限の変更で解決
 4. **安全性**: 不確実な場合はシステム安定性を優先
 
-## Customization（カスタマイズ）
+## カスタマイズ
 
 ### カスタムプロンプトテンプレート
 
@@ -176,7 +176,7 @@ You are resolving merge conflicts for our Node.js project.
 ...
 ```
 
-## Troubleshooting（トラブルシューティング）
+## トラブルシューティング
 
 ### ワークフローが queued のまま
 
@@ -206,7 +206,7 @@ claude auth status
 - `contents: write` 権限が付与されているか確認
 - ブランチ保護ルールで force push が制限されていないか確認
 
-## Example Workflow（完全なワークフロー例）
+## 完全なワークフロー例
 
 ```yaml
 name: Auto Rebase PR
@@ -236,8 +236,3 @@ jobs:
           claude-model: 'sonnet'
 ```
 
-## 関連 Actions
-
-- **actions/review-and-merge**: PR のレビューとマージ
-- **actions/auto-merge**: 自動マージの実行
-- **actions/bulk-rebase-prs**: 複数 PR の一括リベース（AI なし）
