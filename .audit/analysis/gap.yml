@@ -1,0 +1,71 @@
+# Gap Analysis
+# 現状と目標のギャップ分析
+
+analysis_date: "2026-02-07"
+
+gaps:
+  - id: "GAP-001"
+    category: "testing"
+    current_state: "テストカバレッジ未測定"
+    target_state: "テストカバレッジ >= 80%"
+    severity: "high"
+    estimated_effort: "medium"
+    dependencies: []
+    proposed_solution: "pytest-cov の導入とカバレッジ計測の自動化"
+
+  - id: "GAP-002"
+    category: "quality"
+    current_state: "Lintチェック未実施"
+    target_state: "Lintエラー 0件"
+    severity: "medium"
+    estimated_effort: "low"
+    dependencies: []
+    proposed_solution: "ruff の導入と pre-commit hook の設定"
+
+  - id: "GAP-003"
+    category: "verification"
+    current_state: "Action動作検証が手動"
+    target_state: "全Actionの自動検証"
+    severity: "high"
+    estimated_effort: "high"
+    dependencies: ["GAP-001"]
+    proposed_solution: "verify_core_functions.py の作成と CI 統合"
+
+  - id: "GAP-004"
+    category: "documentation"
+    current_state: "ドキュメントは整備されているが、自動更新なし"
+    target_state: "コード変更に合わせて自動更新"
+    severity: "low"
+    estimated_effort: "low"
+    dependencies: []
+    proposed_solution: "auto-document Action の活用"
+
+prioritized_improvements:
+  - priority: 1
+    gap_id: "GAP-001"
+    rationale: "品質の可視化が最優先。他の改善の効果測定にも必要"
+
+  - priority: 2
+    gap_id: "GAP-002"
+    rationale: "低コストで即座に効果が出る。コード品質の底上げ"
+
+  - priority: 3
+    gap_id: "GAP-003"
+    rationale: "回帰テストにより、変更の安全性を担保"
+
+  - priority: 4
+    gap_id: "GAP-004"
+    rationale: "ドキュメント負荷を削減し、開発効率向上"
+
+assumptions_to_verify:
+  - assumption: "ASM-001: Python 3.11+ で動作する"
+    verification_method: "Pythonバージョンチェック"
+    priority: "high"
+
+  - assumption: "ASM-002: GitHub Self-hosted runner 上で Claude Code CLI が利用可能"
+    verification_method: "実行環境の確認"
+    priority: "high"
+
+  - assumption: "ASM-003: 各Actionは独立して動作し、組み合わせ可能"
+    verification_method: "Action単体テストと結合テスト"
+    priority: "medium"

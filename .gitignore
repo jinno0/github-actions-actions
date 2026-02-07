@@ -184,5 +184,4 @@ CLEANUP_VERIFICATION_REPORT.md
 CLEANUP_ANALYSIS.md
 cleanup-analysis.md
 
-# Audit and analysis system files (temporary logs, reports, and execution state)
-.audit/
+

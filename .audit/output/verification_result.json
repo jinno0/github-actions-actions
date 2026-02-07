@@ -1,0 +1,53 @@
+{
+  "total": 5,
+  "passed": 0,
+  "failed": 5,
+  "pass_rate": 0.0,
+  "results": [
+    {
+      "id": "CF-001",
+      "name": "review-and-merge",
+      "passed": false,
+      "workflow_ok": false,
+      "guide_ok": true,
+      "example_ok": false,
+      "workflow_path": ".github/workflows/review-and-merge.yml"
+    },
+    {
+      "id": "CF-002",
+      "name": "spec-to-code",
+      "passed": false,
+      "workflow_ok": false,
+      "guide_ok": true,
+      "example_ok": false,
+      "workflow_path": ".github/workflows/spec-to-code.yml"
+    },
+    {
+      "id": "CF-003",
+      "name": "auto-refactor",
+      "passed": false,
+      "workflow_ok": false,
+      "guide_ok": true,
+      "example_ok": false,
+      "workflow_path": ".github/workflows/auto-refactor.yml"
+    },
+    {
+      "id": "CF-004",
+      "name": "action-fixer",
+      "passed": false,
+      "workflow_ok": false,
+      "guide_ok": true,
+      "example_ok": false,
+      "workflow_path": ".github/workflows/action-fixer.yml"
+    },
+    {
+      "id": "CF-005",
+      "name": "auto-document",
+      "passed": false,
+      "workflow_ok": false,
+      "guide_ok": true,
+      "example_ok": false,
+      "workflow_path": ".github/workflows/auto-document.yml"
+    }
+  ]
+}
