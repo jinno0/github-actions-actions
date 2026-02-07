@@ -1,0 +1,87 @@
+version: '2.0'
+generated_at: '2026-02-07T13:25:43'
+summary:
+  total_gaps: 5
+  critical_gaps: 0
+  high_gaps: 2
+  medium_gaps: 2
+  low_gaps: 1
+gaps:
+- id: GAP-001
+  title: AIレビュー受入率のベースライン未策定
+  severity: high
+  category: quality_metrics
+  current_state: README.md:147-149で「計測中 (データ収集段階)」と記載
+  desired_state: 受入率>=70%の目標に対し、現状のベースライン値が確定している
+  gap_description: 目標値(70%)は設定されているが、現在の実績値が不明。品質改善サイクルを回すためのスタートラインが引かれていない。
+  impact: AIレビューの品質改善効果を測定できない
+  based_on_assumption: ASM-004（受入率目標>=70%）
+  related_claims:
+  - C-008
+  - C-102
+  - C-201
+- id: GAP-002
+  title: パイロットプロジェクトからのフィードバック収集が不十分
+  severity: high
+  category: adoption
+  current_state: PURPOSE.md:25でPhase 3の「組織内プロジェクトへの導入とフィードバック収集」が未完了
+  desired_state: 2件のパイロットプロジェクトから具体的なフィードバック、改善要望、課題が収集され公開されている
+  gap_description: 導入実績(2件)はあるが、フィードバックの内容や改善点がREADMEやADOPTION.mdで公開されていない。
+  impact: 他の組織プロジェクトでの導入検討時の参考情報が不足。Phase 3完了の障害になっている。
+  based_on_assumption: ASM-006（2 pilot projects）
+  related_claims:
+  - C-006
+  - C-203
+- id: GAP-003
+  title: テレメトリー収集状況の可視化が不足
+  severity: medium
+  category: observability
+  current_state: README.md:120-137にテレメトリー機能の説明はあるが、収集データの集計結果が公開されていない
+  desired_state: どのActionがどの程度使われているか、オプトアウト率などの傾向が把握できている
+  gap_description: テレメトリー機能は実装済みだが、そのデータ活用事例や統計情報がドキュメントされていない。
+  impact: Actionsの人気度や使用傾向を把握できず、開発優先順位の判断材料が不足
+  related_claims:
+  - C-007
+  - C-202
+  - C-204
+- id: GAP-004
+  title: AIレビューの誤検知(false positive)の追跡が不十分
+  severity: medium
+  category: quality_metrics
+  current_state: README.md:152-155にレビューアウトカムの種類は記載されているが、詳細な分布データがない
+  desired_state: 誤検知率の傾向と主な原因が分析でき、改善につなげられている
+  gap_description: 受入率だけでは不十分。AIレビューがなぜ拒否/修正されるのか、誤検知の傾向分析が必要。
+  impact: AIレビュー品質の向上に必要な詳細データが不足
+  related_claims:
+  - C-207
+- id: GAP-005
+  title: カスタムレビュールールの利用実績が不明
+  severity: low
+  category: features
+  current_state: README.md:66-76にカスタムルール機能の充実したドキュメントがあるが、利用事例が公開されていない
+  desired_state: パイロットプロジェクトでのカスタムルール導入事例やベストプラクティスが共有されている
+  gap_description: 機能は充実しているが、実際の現場での活用方法や効果が不明
+  impact: 他のチームがカスタムルール導入を検討する際の参考情報が不足
+  related_claims:
+  - C-104
+strengths:
+- id: STR-001
+  description: テストカバレッジ92.99%が目標70%を大幅に上回っている
+  evidence: C-002, C-003
+  quality_level: excellent
+- id: STR-002
+  description: 13件のActionsが提供され、カテゴリ別に整理されている
+  evidence: C-001
+  quality_level: good
+- id: STR-003
+  description: セキュリティとプライバシーへの配慮が行き届いている
+  evidence: C-108
+  quality_level: excellent
+- id: STR-004
+  description: 開発プロセスが高度に自動化されている（Dry Run検証、YAML構文チェックなど）
+  evidence: C-105
+  quality_level: excellent
+- id: STR-005
+  description: SYSTEM_CONSTITUTION.mdで明確な設計原則が定義されている
+  evidence: C-004
+  quality_level: excellent

@@ -1,0 +1,50 @@
+version: "2.0"
+updated_at: "2026-02-07T13:21:00Z"
+updated_by: "audit-run-001"
+
+# === スキャン予算 ===
+scan_budget:
+  max_files_per_run: 500
+  max_total_tokens: 100000
+  timeout_seconds: 300
+
+# === ログ予算 ===
+log_budget:
+  max_log_entries: 500
+  keep_last_n_entries: 300
+
+# === 提案予算 ===
+proposal_budget:
+  max_prs_per_run: 10
+  max_proposals_per_phase: 5
+
+# === 検証予算 ===
+verification_budget:
+  max_test_execution_time: 60
+  max_verification_scenarios: 20
+
+# === 保持ポリシー ===
+retention_policy:
+  # execution/runs/ 配下の古い実行記録
+  execution_runs:
+    max_folders: 3
+    strategy: "keep_latest"
+    enforcement: "strict"
+
+  # 以下は常に最新のみ（履歴は保持しない）
+  always_overwrite:
+    - "analysis/as_is.yml"
+    - "analysis/gap.yml"
+    - "analysis/verification_scenarios.yml"
+    - "proposal/roadmap.md"
+    - "proposal/changes/*.md"
+    - "output/summary.md"
+    - "output/next_questions.md"
+    - "output/self_score.yml"
+    - "output/verification_result.json"
+
+  # Source of Truth（削除禁止・上書き更新のみ）
+  never_delete:
+    - "config/intent.yml"
+    - "config/constraints.yml"
+    - "config/budget.yml"

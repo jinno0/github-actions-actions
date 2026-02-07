@@ -1,0 +1,55 @@
+version: '1.0'
+run_id: '2026-02-07T13:27:54'
+generated_at: '2026-02-07T13:27:54'
+scores:
+  purpose_alignment: 5
+  evidence_soundness: 5
+  implementability: 5
+  risk_management: 5
+  verifiability: 4
+  cost_optimization: 5
+  collective_intelligence: 4
+total: 33
+max: 35
+percentage: 94.3
+improvement_actions:
+- priority: 1
+  target: verifiability
+  current_score: 4
+  action: 次回監査時に受け入れて改善指標の実際の値を検証するため、acceptance rate計算スクリプトの実行結果を.audit/output/に含める
+- priority: 2
+  target: collective_intelligence
+  current_score: 4
+  action: チームレビュー用に監査レポートのサマリーテンプレートを追加し、フィードバック収集プロセスを文書化する
+scoring_rationale:
+  purpose_alignment:
+    score: 5
+    rationale: 監査がPURPOSE.mdとSYSTEM_CONSTITUTION.mdに完全に準拠している。全てのギャップ分析がリポジトリの目的に直結している。
+  evidence_soundness:
+    score: 5
+    rationale: 事実(C-001~C-012)、推論(C-101~C-108)、不明(C-201~C-207)が明確に分離されている。全ての主張が出典元を持っている。
+  implementability:
+    score: 5
+    rationale: 各改善提案に具体的なコマンド、成功基準、所要時間が含まれている。Phaseごとの実行計画が明確。
+  risk_management:
+    score: 5
+    rationale: 各改善提案の影響が明確に説明されている。ロールバック手順やリスク軽減策が含まれている。
+  verifiability:
+    score: 4
+    rationale: 品質指標ごとの検証方法が明確だが、実際の計測結果（acceptance rate等）が不足しているため-1点。
+  cost_optimization:
+    score: 5
+    rationale: 改善提案が優先順位付けされており、必要最小限の範囲で実行可能。所要時間の見積もりも適切。
+  collective_intelligence:
+    score: 4
+    rationale: 監査レポートは詳細だが、チームレビュー向けの簡易サマリーやフィードバック収集メカニズムが不足しているため-1点。
+self_checklist:
+  completeness: ✅ 質問待ちで止まっている項目はない。全ての不明点を「unknown」として記録。
+  traceability: ✅ 全ての仮定が next_questions.md に明記されている。
+  executability: ✅ 提案コマンドは仮定環境下で実行可能。
+  interpretation: ✅ 検証結果に「意味」と「次のアクション」がある。
+  safety: ✅ 破壊的変更を提案していない。
+  reproducibility: ✅ claims.ndjson に全判断の根拠が記録されている。
+  self_improvement: ✅ self_score.yml に改善アクションが記録されている。
+trend:
+- note: Initial audit run - no previous data

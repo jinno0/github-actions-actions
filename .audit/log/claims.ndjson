@@ -1,0 +1,12 @@
+{"type": "fact", "id": "C-001", "claim": "13件のAI Actionsが提供されている", "source": "README.md:8", "confidence": 1.0}
+{"type": "fact", "id": "C-002", "claim": "テストカバレッジが92.99%達成されている（目標70%に対し）", "source": "pytest coverage", "confidence": 1.0}
+{"type": "fact", "id": "C-003", "claim": "455個のテストが存在し、全てパスしている", "source": "pytest results", "confidence": 1.0}
+{"type": "fact", "id": "C-004", "claim": "Composite Actionsのみで構成されている", "source": "SYSTEM_CONSTITUTION.md", "confidence": 1.0}
+{"type": "fact", "id": "C-005", "claim": "Phase 3: Stabilization & Adoptionが進行中", "source": "PURPOSE.md", "confidence": 1.0}
+{"type": "fact", "id": "C-006", "claim": "現在2件のパイロットプロジェクトで導入済み", "source": "README.md", "confidence": 1.0}
+{"type": "inference", "id": "C-101", "claim": "Phase 3の「組織内プロジェクトへの導入とフィードバック収集」が未完了", "source": "PURPOSE.md:25", "confidence": 0.9}
+{"type": "inference", "id": "C-102", "claim": "AIレビュー受入率のベースライン策定中", "source": "README.md:147-149", "confidence": 1.0}
+{"type": "inference", "id": "C-103", "claim": "プロジェクトは安定した成熟期に入りつつある", "source": "README.md, PURPOSE.md", "confidence": 0.8}
+{"type": "unknown", "id": "C-201", "claim": "AIレビュー受入率の実際の数値", "needed_info": "acceptance rate report", "confidence": 0.0}
+{"type": "unknown", "id": "C-202", "claim": "テレメトリー収集状況", "needed_info": "telemetry data", "confidence": 0.0}
+{"type": "unknown", "id": "C-203", "claim": "2件のパイロットプロジェクトからの具体的なフィードバック内容", "needed_info": "ADOPTION.md", "confidence": 0.0}
