@@ -1,1 +1,0 @@
-{"run_id":"run-20260207-103743","timestamp":"2026-02-07T10:40:00Z","prs_applied":["PR-001","PR-002","PR-003"],"prs_rolled_back":[],"overall_status":"improved","test_coverage_before":"not_measured","test_coverage_after":"framework_ready","core_function_pass_rate":0.0}

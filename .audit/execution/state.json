@@ -1,9 +1,0 @@
-{
-  "last_run_id": "run-20260207-103743",
-  "total_runs": 1,
-  "total_prs_applied": 3,
-  "total_prs_rolled_back": 0,
-  "last_execution": "2026-02-07T10:40:00Z",
-  "current_phase": "1_quality_foundation",
-  "next_phase": "2_quality_enhancement"
-}
