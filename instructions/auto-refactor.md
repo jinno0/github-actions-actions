@@ -26,3 +26,7 @@ This action automatically refactors code based on natural language instructions 
 ## Usage
 
 This action is best used with `workflow_dispatch` inputs, allowing you to specify the target path and instructions dynamically for each run. It creates a Pull Request with the changes.
+
+## See Also
+
+For comprehensive documentation including features, inputs, examples, and best practices, see the [Auto Refactor README](../actions/auto-refactor/README.md).

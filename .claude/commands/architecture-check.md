@@ -72,9 +72,10 @@ Can be integrated into CI/CD pipelines:
 
 ## Framework
 
-Implements SDEC×2SCV×ACR methodology:
+Implements **SDEC×2SCV×ACR** methodology:
 - **Spec**: Define architecture rules and thresholds
-- **Data**: Collect evidence from codebase analysis  
+- **Data**: Collect evidence from codebase analysis
 - **Eval**: Validate evidence against architectural principles
 - **Change**: Provide actionable improvement recommendations
-- **ACR**: Autonomous context reconstruction for complex patterns
+- **2SCV**: Two-Stage Context Validation (ensures architectural compliance)
+- **ACR**: Autonomous Context Reconstruction for complex patterns

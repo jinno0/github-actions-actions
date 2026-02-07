@@ -324,6 +324,6 @@ jobs:
 
 ## See Also
 
+- [Setup guide](../../instructions/auto-refactor.md) - Quick setup instructions
 - [Review and Merge action](../review-and-merge/) - Pair with review for quality assurance
 - [Auto Document action](../auto-document/) - Update docs after refactoring
-- [Usage guide](../../instructions/auto-refactor.md)
