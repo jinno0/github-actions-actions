@@ -1,0 +1,50 @@
+run_id: "2026-02-07T08:14:37Z"
+execution_type: "improvement"
+started_at: "2026-02-07T08:14:37Z"
+audit_run_id: "2026-02-07T13:27:54"
+
+scope:
+  prs_to_apply:
+    - "PR-002"  # Document methodology (can execute - documentation only)
+    - "PR-004"  # Diagnose data collection (can execute - documentation only)
+  prs_deferred:
+    - "PR-001"  # Calculate baseline (blocked by ISS-NEW-001)
+    - "PR-003"  # Identify pilot projects (awaiting human input)
+
+success_criteria:
+  - id: "SC-001"
+    from: "intent.yml#quality_attributes[0]"
+    target: "テストカバレッジ >= 70%"
+    verification: "pytest --cov --cov-fail-under=70"
+    current_status: "achieved"
+    current_value: 92.99
+
+  - id: "SC-002"
+    from: "intent.yml#quality_attributes[1]"
+    target: "AIレビュー受入率 >= 70%"
+    verification: "python scripts/calculate_acceptance_rate.py"
+    current_status: "not_measurable"
+    blocker: "ISS-NEW-001"
+
+  - id: "SC-003"
+    from: "intent.yml#quality_attributes[2]"
+    target: "ドキュメントカバー率 100%"
+    verification: "pytest tests/test_documentation_coverage.py"
+    current_status: "achieved"
+    current_value: 100
+
+rollback_trigger:
+  - "検証失敗"
+  - "既存テスト失敗"
+  - "ビルドエラー"
+
+execution_notes: |
+  This run focuses on documentation improvements that can be executed without
+  human input or pilot project access:
+  - PR-002: Quality metrics methodology documentation
+  - PR-004: Data collection diagnosis documentation
+
+  PR-001 (baseline calculation) and PR-003 (pilot project identification)
+  are deferred as they require:
+  - PR-001: ISS-NEW-001 resolution (data collection working)
+  - PR-003: Human input (actual pilot project information)
