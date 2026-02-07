@@ -65,7 +65,7 @@ git-rebase-todo
 debug.log
 *.debug
 
-# track .concept Source-of-Truth, ignore archives and heavy files
+# track .concept Source-of-Truth, ignore archives only
 .concept/archived/
 .concept/archive/
 

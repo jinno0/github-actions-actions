@@ -74,7 +74,7 @@
     "deleted_terms": []
   },
   "hygiene": {
-    "decisions_md_lines": 66,
+    "decisions_md_lines": 75,
     "decisions_md_limit": 200,
     "decisions_md_within_limit": true,
     "claims_ndjson_lines": 254,
@@ -85,10 +85,10 @@
     "unmapped_ratio": 0.0,
     "unmapped_ratio_limit": 0.2,
     "all_within_limits": true,
-    "last_hygiene_check": "2026-02-07T20:26:04Z",
+    "last_hygiene_check": "2026-02-07T12:49:38Z",
     "integrity_fixes": [],
     "tombstones_within_limit": true,
     "unmapped_ratio_within_limit": true
   },
-  "last_hygiene_check": "2026-02-07T20:26:04Z"
+  "last_hygiene_check": "2026-02-07T12:49:38Z"
 }
