@@ -91,4 +91,4 @@ Default excludes: `auto-merged`, `merged`, `closed`
 ## See Also
 
 - [Setup guide](../../instructions/pr-review-enqueuer.md)
-- [Review workflow example](../../examples/review-workflow.yml)
+- [Review workflow example](../../examples/pr-review-enqueuer-example.yml)
