@@ -85,10 +85,10 @@
     "unmapped_ratio": 0.0,
     "unmapped_ratio_limit": 0.2,
     "all_within_limits": true,
-    "last_hygiene_check": "2026-02-07T13:12:26Z",
+    "last_hygiene_check": "2026-02-07T14:29:06Z",
     "integrity_fixes": [],
     "tombstones_within_limit": true,
     "unmapped_ratio_within_limit": true
   },
-  "last_hygiene_check": "2026-02-07T13:12:26Z"
+  "last_hygiene_check": "2026-02-07T14:29:06Z"
 }
