@@ -1,5 +1,28 @@
-updated_at: '2026-02-03T18:15:45Z'
+updated_at: '2026-02-07T06:44:47Z'
 queue:
+- id: TP-004
+  proposed_canonical: PRReviewEnqueuerAction
+  proposed_layer: domain
+  term_raw_examples:
+  - PR Review Enqueuer
+  - pr-review-enqueuer
+  - PR review queue automation
+  reason: New AI action that automatically scans PRs and adds /review comments with smart filtering (draft/ready/wip), batch processing, age thresholds, and exclusion labels
+  evidence:
+  - source: actions/pr-review-enqueuer/README.md#L1-L7
+    quote: PR Review Enqueuer automatically scans open pull requests and adds /review
+      comments to trigger AI review workflows
+  - source: actions/pr-review-enqueuer/README.md#L24-L34
+    quote: 'inputs: pr-filter (all|drafts|ready|wip|no-label), age-threshold, batch-size,
+      exclude-labels, dry-run'
+  auto_merge_candidates:
+  - term: ReviewAndMergeAction
+    similarity: 0.65
+    rationale: Both deal with PR review automation, but Enqueuer is for queue management
+      while ReviewAndMerge is for actual review
+  decision: pending
+  expires_after_runs: 10
+  created_run: '2026-02-07T06:44:47Z'
 - id: TP-001
   proposed_canonical: ExampleWorkflow
   proposed_layer: aux
