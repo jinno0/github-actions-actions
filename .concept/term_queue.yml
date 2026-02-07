@@ -1,4 +1,4 @@
-updated_at: '2026-02-07T06:44:47Z'
+updated_at: '2026-02-07T20:25:29Z'
 queue:
 - id: TP-004
   proposed_canonical: PRReviewEnqueuerAction
@@ -7,7 +7,9 @@ queue:
   - PR Review Enqueuer
   - pr-review-enqueuer
   - PR review queue automation
-  reason: New AI action that automatically scans PRs and adds /review comments with smart filtering (draft/ready/wip), batch processing, age thresholds, and exclusion labels
+  reason: New AI action that automatically scans PRs and adds /review comments with
+    smart filtering (draft/ready/wip), batch processing, age thresholds, and exclusion
+    labels
   evidence:
   - source: actions/pr-review-enqueuer/README.md#L1-L7
     quote: PR Review Enqueuer automatically scans open pull requests and adds /review
@@ -23,69 +25,3 @@ queue:
   decision: pending
   expires_after_runs: 10
   created_run: '2026-02-07T06:44:47Z'
-- id: TP-001
-  proposed_canonical: ExampleWorkflow
-  proposed_layer: aux
-  term_raw_examples:
-  - "\u5229\u7528\u4F8B"
-  - examples
-  - workflow examples
-  reason: "\u5404Action\u306Bexamples/*.yml\u3068\u3057\u3066\u63D0\u4F9B\u3055\u308C\
-    \u308B\u5229\u7528\u4F8B\u3002AdoptionGuide\u3084AIPoweredAction\u306E\u4E00\u90E8\
-    \u3068\u3057\u3066\u6271\u3048\u308B\u53EF\u80FD\u6027\u3042\u308A"
-  evidence:
-  - source: .audit/config/intent.yml#L127-L133
-    quote: "\u5404Action\u306B\u5229\u7528\u4F8B\uFF08Examples\uFF09\u3092\u63D0\u4F9B\
-      \u3057\u3066\u304A\u308A\u3001examples/*.yml\u30D5\u30A1\u30A4\u30EB\u304C\u5B58\
-      \u5728\u3059\u308B"
-  - source: as_is.yml#L11
-    quote: 'example_workflows: 18'
-  auto_merge_candidates:
-  - term: AdoptionGuide
-    similarity: 0.72
-    rationale: AdoptionGuide includes examples as part of onboarding materials
-  decision: rejected
-  expires_after_runs: 10
-  created_run: '2026-02-03T13:42:58Z'
-  rejection_reason: Evidence source removed in commit cc1e88e
-- id: TP-002
-  proposed_canonical: TechnicalDebt
-  proposed_layer: domain
-  term_raw_examples:
-  - Technical Debt
-  - "\u6280\u8853\u7684\u8CA0\u50B5"
-  reason: "audit cycle 4\u3067\u8B58\u5225\u3055\u308C\u305FMEDIUM severity\u306E\u6280\
-    \u8853\u7684\u8CA0\u50B5\uFF08TD-001, TD-002\uFF09\u3002\u54C1\u8CEA\u7BA1\u7406\
-    \u306E\u89B3\u70B9\u304B\u3089\u8FFD\u8DE1\u304C\u5FC5\u8981"
-  evidence:
-  - source: .audit/analysis/as_is.yml#L94-L108
-    quote: 'TD-001: No runtime testing (act tool not yet implemented)... TD-002: Field-Level
-      integration test coverage not tracked'
-  auto_merge_candidates: []
-  decision: rejected
-  expires_after_runs: 10
-  created_run: '2026-02-03T13:42:58Z'
-  rejection_reason: Evidence source removed in commit cc1e88e
-- id: TP-003
-  proposed_canonical: FieldLevelCoverage
-  proposed_layer: aux
-  term_raw_examples:
-  - Field-Level Coverage
-  - "\u30D5\u30A3\u30FC\u30EB\u30C9\u30EC\u30D9\u30EB\u30AB\u30D0\u30EC\u30C3\u30B8"
-  reason: "audit cycle 4\u3067\u8B58\u5225\u3055\u308C\u305FLOw priority\u306E\u30AE\
-    \u30E3\u30C3\u30D7\u3002\u7D71\u5408\u30C6\u30B9\u30C8\u306EYAML\u30D5\u30A3\u30FC\
-    \u30EB\u30C9\u691C\u8A3C\u306E\u6DF1\u3055\u3092\u6E2C\u308B\u6307\u6A19"
-  evidence:
-  - source: .audit/analysis/as_is.yml#L102-L108
-    quote: Field-Level integration test coverage not tracked (LOW severity, MEDIUM
-      priority)
-  - source: .audit/analysis/gap.yml
-    quote: 'PR-007: Field-Level Coverage Tracking (Priority 2)'
-  auto_merge_candidates:
-  - term: FunctionalTesting
-    similarity: 0.68
-    rationale: Subset of integration testing metrics
-  decision: rejected
-  expires_after_runs: 10
-  created_run: '2026-02-03T13:42:58Z'
-  rejection_reason: Evidence source removed in commit cc1e88e
