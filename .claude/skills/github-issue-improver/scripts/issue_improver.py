@@ -12,7 +12,6 @@ from pathlib import Path
 from typing import Any
 
 
-# Setup common library path (enhanced discovery)
 def find_claude_lib():
     current = Path(__file__).resolve()
     for _ in range(10):  # Search up to 10 levels
@@ -41,25 +40,11 @@ if claude_lib_path:
 
         COMMON_LIB_AVAILABLE = True
     except ImportError as e:
-        # Define fallback SkillBase class
         print(f"Warning: Common library import failed: {e}", file=sys.stderr)
+        COMMON_LIB_AVAILABLE = False
 
-        class SkillBase:
-            def __init__(self, skill_name: str, start_path: Path | None = None):
-                self.skill_name = skill_name
-                self.start_path = start_path or Path(__file__).resolve().parent
-
-            def ensure_env_var(self, var_name: str, required: bool = True) -> str | None:
-                value = os.environ.get(var_name)
-                if required and not value:
-                    msg = f"Required environment variable '{var_name}' is not set"
-                    raise ValueError(msg)
-                return value
-
-            def is_initialized(self) -> bool:
-                return True
-else:
-    # Define fallback SkillBase class when lib is not found
+# Define fallback SkillBase class (used when common lib is not available)
+if not COMMON_LIB_AVAILABLE:
     class SkillBase:
         def __init__(self, skill_name: str, start_path: Path | None = None):
             self.skill_name = skill_name
@@ -76,15 +61,13 @@ else:
             return True
 
 
-# Import local modules after path setup
-# These imports are after the dynamic path configuration above
-# ruff: noqa: E402
+# Import local modules after path setup (ruff: noqa: E402)
 from github_client import GitHubClient
 from issue_analyzer import IssueAnalysis, IssueAnalyzer
 
 
 class IssueImprover(SkillBase):
-    """Main issue improvement orchestrator with enhanced common library integration"""
+    """Main issue improvement orchestrator"""
 
     def __init__(self, token: str | None = None, allow_read_only: bool = True):
         # Initialize skill base first

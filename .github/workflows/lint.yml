@@ -47,7 +47,7 @@ jobs:
       - name: Run yamllint
         run: |
           yamllint actions/*/action.yml
-          yamllint examples/*.yml || true
+          yamllint examples/*.yml
           yamllint .github/workflows/*.yml
 
   verify-core-functions:
