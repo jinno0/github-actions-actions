@@ -1,15 +1,20 @@
 {
-  "last_run_id": "2026-02-07T04:39:28",
-  "last_run_date": "2026-02-07T04:39:28Z",
-  "total_runs": 2,
-  "total_prs_applied": 4,
+  "last_run_id": "2026-02-07T06:17:33Z",
+  "last_run_date": "2026-02-07T06:17:33Z",
+  "total_runs": 3,
+  "total_prs_applied": 5,
+  "total_prs_awaiting_human_input": 1,
   "total_prs_rolled_back": 0,
   "gaps_closed": 1,
   "gaps_remaining": 4,
-  "current_phase": "Phase 1 (Metrics Foundation) - COMPLETE",
-  "next_phase": "Phase 2 (User Feedback Collection)",
-  "status": "active",
-  "last_updated": "2026-02-07T04:39:28Z",
+  "current_phase": "Pre-Phase 2 (Blocker Resolution)",
+  "next_phase": "Phase 2 (User Feedback Collection) - BLOCKED",
+  "status": "awaiting_human_input",
+  "last_updated": "2026-02-07T06:20:00Z",
+  "critical_blockers": [
+    "ISS-NEW-002: Pilot projects are placeholders",
+    "ISS-NEW-001: Data collection not working"
+  ],
   "run_history": [
     {
       "run_id": "2026-02-07T13:27:54",
@@ -23,6 +28,14 @@
       "status": "completed",
       "prs_applied": 2,
       "gaps_closed": 1
+    },
+    {
+      "run_id": "2026-02-07T06:17:33Z",
+      "type": "execution",
+      "status": "partial_success",
+      "prs_executed": 1,
+      "prs_awaiting_human": 1,
+      "blockers_identified": 2
     }
   ]
 }

@@ -1,0 +1,49 @@
+run_id: "2026-02-07T06:17:33Z"
+timestamp: "2026-02-07T06:17:33Z"
+executor: "15_repo_improvement_executor"
+scope:
+  # NOTE: PR-001 and PR-002 were already executed in run 2026-02-07T04:39:28
+  prs_already_applied: ["PR-001", "PR-002"]
+
+  # PRs to execute in this run
+  prs_to_apply:
+    - "PR-003"  # Document information request for pilot projects
+    - "PR-004"  # Diagnose and document data collection issue
+
+  # PRs deferred (require human input)
+  prs_deferred: []
+
+  # PRs skipped (already applied)
+  prs_skipped: []
+
+execution_constraints:
+  # CRITICAL: ISS-NEW-002 requires human input
+  # - Cannot identify real pilot projects without org access
+  # - Requires contacting team leads for actual repo information
+  human_input_required:
+    - issue: "ISS-NEW-002: Identify real pilot projects"
+      action: "Update ADOPTION.md with actual repository URLs and contacts"
+      reason: "Executor lacks access to organization's private repository information"
+      estimated_effort: "2-4 hours (human time)"
+
+success_criteria:
+  - id: "SC-003"
+    description: "Information request documented for pilot project identification"
+    verification: "PR-003 created with clear instructions and template"
+
+  - id: "SC-004"
+    description: "Root cause of missing review data documented"
+    verification: "PR-004 diagnosis complete with actionable recommendations"
+
+rollback_triggers:
+  - "Test failures"
+  - "Breaking changes to existing functionality"
+  - "Documentation that contradicts established facts"
+
+# Execution strategy adjusted for human-input requirements
+strategy: "document_and_request"  # Instead of "apply", we document what needs human action
+notes:
+  - "This run focuses on DOCUMENTING blockers rather than resolving them"
+  - "PR-003 creates a template for humans to fill in missing information"
+  - "PR-004 provides diagnostic information to enable data collection fixes"
+  - "Next cycle can proceed once humans provide real pilot project information"
