@@ -1,18 +1,20 @@
 {
-  "last_run_id": "2026-02-07T11:06:34Z",
-  "last_run_date": "2026-02-07T11:06:34Z",
-  "total_runs": 6,
-  "total_prs_applied": 6,
+  "last_run_id": "2026-02-07T12:38:53Z",
+  "last_run_date": "2026-02-07T12:38:53Z",
+  "total_runs": 7,
+  "total_prs_applied": 7,
   "total_prs_deferred": 3,
   "total_prs_awaiting_human_input": 3,
   "total_prs_rolled_back": 0,
   "gaps_closed": 1,
+  "gaps_partially_mitigated": 1,
   "gaps_remaining": 5,
-  "assumptions_updated": 1,
+  "assumptions_updated": 2,
+  "assumptions_partially_updated": 1,
   "current_phase": "Pre-Phase 2 (Blocker Resolution - AUTONOMOUS LIMIT REACHED)",
   "next_phase": "Phase 2 (User Feedback Collection) - BLOCKED",
   "status": "awaiting_human_input",
-  "last_updated": "2026-02-07T11:06:34Z",
+  "last_updated": "2026-02-07T12:38:53Z",
   "autonomous_limit_reached": true,
   "critical_blockers": [
     "ISS-NEW-002: Pilot projects are placeholders (BLOCKS ALL PROGRESS) - CRITICAL",
@@ -21,7 +23,20 @@
   "resolved_issues": [
     "ISS-NEW-004: Test coverage measurement inconsistency - RESOLVED"
   ],
+  "partially_mitigated_issues": [
+    "ASM-006: User adoption claim - partially mitigated by PR-007 (README.md updated)"
+  ],
   "run_history": [
+    {
+      "run_id": "2026-02-07T12:38:53Z",
+      "type": "execution",
+      "status": "improved_documentation",
+      "prs_executed": 1,
+      "prs_deferred": 3,
+      "documentation_accuracy": "improved",
+      "gaps_partially_mitigated": 1,
+      "autonomous_limit_reached": true
+    },
     {
       "run_id": "2026-02-07T11:06:34Z",
       "type": "execution",

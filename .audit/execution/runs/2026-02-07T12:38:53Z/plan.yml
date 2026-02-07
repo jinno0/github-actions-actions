@@ -1,0 +1,34 @@
+run_id: "2026-02-07T12:38:53Z"
+execution_date: "2026-02-07"
+scope:
+  prs_to_apply:
+    - "PR-007"
+  prs_deferred:
+    - "PR-001"  # Blocked by ISS-NEW-001, ISS-NEW-002
+    - "PR-003"  # Blocked by ISS-NEW-002 (requires human input)
+    - "PR-005"  # Blocked by ISS-NEW-002 (requires human input)
+  prs_already_applied:
+    - "PR-002"  # Document Acceptance Criteria Methodology
+    - "PR-004"  # Diagnose Review Data Collection Issue
+    - "PR-006"  # Update intent.yml - Resolve ISS-NEW-004
+
+success_criteria:
+  - id: "SC-001"
+    from: "intent.yml#quality_attributes[0]"
+    target: "テストカバレッジ >= 70%"
+    current_value: 92.99
+    status: "achieved"
+  - id: "SC-002"
+    from: "PR-007"
+    target: "README.md accurately reflects adoption status"
+    verification: "README.md no longer claims '2 pilot projects'"
+
+rollback_trigger:
+  - "検証失敗"
+  - "既存テスト失敗"
+  - "ビルドエラー"
+
+estimated_effort_minutes: 15
+priority: "HIGH"
+blockers: []
+autonomous_execution: true

@@ -1,0 +1,26 @@
+pr_id: "PR-007"
+title: "Update README.md Adoption Claim to Reflect Reality"
+status: "applied"
+applied_at: "2026-02-07T12:38:53Z"
+
+changes:
+  - file: "README.md"
+    action: "modified"
+    lines_added: 1
+    lines_removed: 1
+    specific_change: "Line 195: Changed 'Current adopters: [See ADOPTION.md](ADOPTION.md) (2 pilot projects)' to 'Current adopters: Seeking pilot projects'"
+
+intermediate_verification:
+  test_result: "passed"
+  test_summary: "455 passed, 2 skipped"
+  build_result: "stable"
+  lint_result: "not_run"
+
+diff_file: "PR-007_applied.diff"
+rollback_command: "git apply -R .audit/execution/runs/2026-02-07T12:38:53Z/changes/PR-007_applied.diff"
+
+notes:
+  - "Change is low-risk and easily reversible"
+  - "Improves documentation accuracy and transparency"
+  - "Does not block ISS-NEW-002 resolution (can be reverted if real pilots are added)"
+  - "Aligns with transparency principle in open source development"

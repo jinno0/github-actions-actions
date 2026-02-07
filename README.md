@@ -192,7 +192,7 @@ Are you using these AI Actions in your repository? We'd love to hear from you!
 - **Add your repository:** Edit [ADOPTION.md](ADOPTION.md) and submit a PR
 - **Share feedback:** Open an [Adoption Report](https://github.com/your-org/github-actions-actions/issues/new?template=adoption_report.yml)
 
-Current adopters: [See ADOPTION.md](ADOPTION.md) (2 pilot projects)
+Current adopters: Seeking pilot projects
 
 ## 🎯 プロジェクトの目的
 
