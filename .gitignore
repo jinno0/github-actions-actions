@@ -35,6 +35,9 @@ yarn.lock
 *.temp
 *.log
 *.cache
+*.bak
+*.old
+*.backup
 
 # Test coverage
 coverage/
