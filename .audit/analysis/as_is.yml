@@ -1,44 +1,317 @@
-version: '2.0'
-generated_at: '2026-02-07T13:25:43'
-repository_health:
-  overall_score: 85
-  grade: A
-  assessment: プロジェクトは安定した成熟期に入っており、技術的品質は非常に高い。品質メトリクスの可視化とフィードバックループの強化が次のステップ。
-current_metrics:
-  test_coverage:
-    value: 92.99
-    target: 70
-    status: exceeding
-    delta: +22.99pp
-  test_count:
-    value: 455
-    status: healthy
-  actions_count:
-    value: 13
-    categories:
-    - Core Development
-    - Documentation
-    - Automation
-    - Bulk Operations
-    - Workflow Helpers
-  adoption:
-    pilot_projects: 2
-    phase: 'Phase 3: Stabilization & Adoption (In Progress)'
-technical_strengths:
-- Composite Actionsのみで構成され、アーキテクチャが明確
-- テストカバレッジ93%は業界トップクラス
-- セキュリティ・プライバシー考慮が十分
-- 開発プロセスが高度に自動化
-- ドキュメント構造が整備されている
-areas_for_improvement:
-- 品質メトリクスの可視化（受入率ベースライン策定）
-- ユーザーフィードバックの収集と公開
-- テレメトリーデータの活用
-- 誤検知分析の詳細化
-maturity_indicators:
-  code_quality: mature
-  documentation: mature
-  testing: mature
-  automation: mature
-  metrics: developing
-  user_feedback: early
+version: "2.0"
+run_id: "2026-02-07T07:48:00Z"
+generated_at: "2026-02-07T07:48:00Z"
+generated_by: "audit-run-002"
+
+# === 現状分析（As-Is Analysis）===
+
+repository_structure:
+  total_actions: 13
+  core_development: 4
+    - review-and-merge
+    - spec-to-code
+    - action-fixer
+    - auto-refactor
+  documentation: 2
+    - auto-document
+    - release-notes-ai
+  automation: 4
+    - auto-merge
+    - auto-rebase
+    - review-auto-merge
+    - publish-pr
+  bulk_operations: 2
+    - bulk-merge-prs
+    - bulk-rebase-prs
+  workflow_helpers: 1
+    - pr-review-enqueuer
+
+  action_completeness:
+    total_actions_with_readme: 13
+    total_actions_with_action_yml: 13
+    total_actions_with_examples: 13  # examples/*.yml 形式
+    total_actions_with_instructions: 15  # instructions/*.md 形式
+
+    missing_components:
+      - description: "actions/ ディレクトリ内に examples/ ディレクトリなし"
+        impact: "low"
+        evidence: "SYSTEM_CONSTITUTION.md:81-86 では各Actionにexamples/を求めているが、実際はトップレベルのexamples/に集約"
+        work_around: "トップレベルexamples/に {action-name}-example.yml として提供"
+      - description: "actions/ ディレクトリ内に instructions/ ディレクトリなし"
+        impact: "low"
+        evidence: "SYSTEM_CONSTITUTION.md:87-92 では各Actionにinstructions/を求めているが、実際はトップレベルのinstructions/に集約"
+        work_around: "トップレベルinstructions/に {action-name}.md として提供"
+
+documentation_coverage:
+  policy_compliance: "high"
+  evidence:
+    - claim: "全てのActionにREADME.mdが存在"
+      source: "actions/*/README.md の確認"
+      count: 13
+      verified: true
+    - claim: "全てのActionに使用例が存在"
+      source: "examples/*-example.yml の確認"
+      count: 13
+      verified: true
+    - claim: "全てのActionに導入手順が存在"
+      source: "instructions/*.md の確認"
+      count: 15  # カスタムルール等の追加ドキュメントを含む
+      verified: true
+    - claim: "カスタムレビュールールのチュートリアルが存在"
+      source: "examples/custom-rules-tutorial.md"
+      verified: true
+
+test_coverage:
+  current_status:
+    coverage_report_file: "coverage.json"
+    reported_coverage: "92.99%"
+    reported_lines: 862 / 927
+
+    pytest_status:
+      total_tests: 457
+      pytest_coverage: "11.11%"  # 不一致の原因調査中
+
+    discrepancy_analysis:
+      issue: "coverage.json (92.99%) と pytest report (11.11%) の不一致"
+      severity: "medium"
+      suspected_cause: "coverage.py の設定か、テスト対象ディレクトリの指定ミス"
+      investigation_needed: true
+
+    target_vs_actual:
+      target: ">= 70%"
+      status: "target_met_by_reported"
+      caveat: "pytest report との不一致があるため、実態は不明"
+
+quality_attributes_status:
+  - id: "QA-001"
+    name: "テストカバレッジ"
+    target: ">= 70%"
+    current_value: "92.99% (reported), 11.11% (pytest)"
+    status: "inconsistent"
+    confidence: "low"
+    blocker: "ISS-NEW-004: coverage.py 設定の不整合を特定"
+
+  - id: "QA-002"
+    name: "AIレビュー受入率"
+    target: ">= 70%"
+    current_value: "未測定"
+    status: "not_measurable"
+    confidence: "low"
+    blocker: "ISS-NEW-001: review_metrics.json が存在しない"
+
+  - id: "QA-003"
+    name: "ドキュメントカバー率"
+    target: "100%"
+    current_value: "100%"
+    status: "target_met"
+    confidence: "high"
+    evidence: "全13 Actionsに README + Example + Instruction が存在"
+
+adoption_status:
+  pilot_projects:
+    claimed_count: 2
+    source: "README.md:114, ADOPTION.md"
+    actual_count: 0  # プレースホルダーのみ
+    placeholder_status: "すべてのパイロットプロジェクトがプレースホルダー"
+
+  adoption_documentation:
+    file_exists: true
+    path: "ADOPTION.md"
+    placeholder_projects:
+      - "example/repo-1"
+      - "example/repo-2"
+    actual_contacts: "なし"
+    blocker: "ISS-NEW-002: 実際のパイロットプロジェクトの特定"
+
+  adoption_guide_exists: true
+  adoption_guide_quality: "comprehensive"
+  adoption_guide_path: "ADOPTION_GUIDE.md"
+
+telemetry_status:
+  data_collection:
+    metrics_directory_exists: true
+    telemetry_directory_exists: true
+
+    expected_files:
+      - path: "metrics/review_metrics.json"
+        exists: false
+        severity: "high"
+        blocker: "ISS-NEW-001"
+
+      - path: "metrics/telemetry/acceptance_rate.json"
+        exists: false  # ディレクトリは空
+        severity: "medium"
+
+    baseline_document:
+      path: "metrics/acceptance-rate-baseline-2026-02-07.md"
+      exists: true
+      content_type: "人間が読める形式のベースライン報告"
+      machine_readable: false
+
+    scripts:
+      calculate_acceptance_rate_exists: true
+      path: "scripts/calculate_acceptance_rate.py"
+      executable: true
+      input_source: "GitHub API (未接続)"
+
+operational_status:
+  version_control:
+    versioning_scheme: "タグベース (v1, v2)"
+    main_branch_usage: "禁止 (SYSTEM_CONSTITUTION.md:52-58)"
+    current_compliance: "未検証"
+
+  human_in_the_loop:
+    policy_defined: true
+    source: "PURPOSE.md:36-37, OC-001"
+    implementation_status: "全Actionに適用されている前提"
+
+technical_constraints_compliance:
+  - constraint: "TC-001: Composite Actionsのみ"
+    compliance: "compliant"
+    evidence: "全ての action.yml が 'runs.using: composite' を使用"
+
+  - constraint: "TC-002: Self-hosted runner必須"
+    compliance: "compliant"
+    evidence: "README.md:83 に明記"
+
+  - constraint: "TC-003: 単一責任の原則"
+    compliance: "compliant"
+    evidence: "各Actionが1つの明確な目的を持つ"
+
+  - constraint: "TC-004: 組織横断的再利用性"
+    compliance: "compliant"
+    evidence: "特定プロダクトに依存しない汎用的な設計"
+
+  - constraint: "TC-005: バージョン固定"
+    compliance: "not_verified"
+    evidence: "タグの運用状況を確認する必要がある"
+
+security_constraints_compliance:
+  - constraint: "SC-001: 秘匿情報の扱い"
+    compliance: "not_verified"
+    recommendation: "secrets 扱いの監査が必要"
+
+  - constraint: "SC-002: 入力値のバリデーション"
+    compliance: "partial"
+    evidence: "一部のActionで実装されているが、全体的な監査が必要"
+
+  - constraint: "SC-003: 第三者スクリプトの実行検証"
+    compliance: "not_verified"
+    risk_level: "medium"
+
+  - constraint: "SC-004: プライバシー保護（テレメトリー）"
+    compliance: "not_applicable"
+    reason: "テレメトリー収集が未実装"
+
+known_blockers:
+  - id: "ISS-NEW-001"
+    description: "review_metrics.json が存在せず、AIレビュー受入率が測定できない"
+    severity: "high"
+    impact: "QA-002 の評価が不可能"
+    discovered_in: "audit-run-001"
+    status: "open"
+
+  - id: "ISS-NEW-002"
+    description: "パイロットプロジェクトがプレースホルダーのまま"
+    severity: "high"
+    impact: "採用状況の検証が不可能"
+    discovered_in: "audit-run-001"
+    status: "awaiting_human_input"
+
+  - id: "ISS-NEW-003"
+    description: "テストカバレッジの測定値に不一致がある"
+    severity: "medium"
+    impact: "QA-001 の評価の信頼性が低下"
+    discovered_in: "audit-run-002"
+    status: "investigation_needed"
+
+data_sources:
+  - source: "README.md"
+    sections_reviewed: "all"
+    completeness: "high"
+  - source: "SYSTEM_CONSTITUTION.md"
+    sections_reviewed: "all"
+    completeness: "high"
+  - source: "ADOPTION.md"
+    sections_reviewed: "all"
+    completeness: "high (but placeholders)"
+  - source: "actions/*/action.yml"
+    count: 13
+    completeness: "100%"
+  - source: "actions/*/README.md"
+    count: 13
+    completeness: "100%"
+  - source: "examples/*-example.yml"
+    count: 13
+    completeness: "100%"
+  - source: "instructions/*.md"
+    count: 15
+    completeness: "100%"
+  - source: "tests/"
+    test_count: 457
+    completeness: "high"
+  - source: "coverage.json"
+    completeness: "high (but inconsistent)"
+  - source: "metrics/"
+    completeness: "partial (missing review_metrics.json)"
+
+assumptions_applied:
+  - id: "ASM-001"
+    field: "mission.target_user"
+    value: "GitHub Organizationを使用する企業や組織"
+    status: "maintained"
+    reason: "SYSTEM_CONSTITUTION.md で明記されているため、依然として有効"
+
+  - id: "ASM-002"
+    field: "mission.target_user"
+    value: "Self-hosted runnerを運用している環境"
+    status: "maintained"
+    reason: "README.md で明記されているため、依然として有効"
+
+  - id: "ASM-003"
+    field: "quality_attributes.test_coverage"
+    value: ">= 70%"
+    status: "needs_revision"
+    reason: "coverage.json (92.99%) と pytest (11.11%) の不一致により、実態が不明"
+    recommended_action: "ISS-NEW-003 の解決後に再評価"
+
+  - id: "ASM-004"
+    field: "quality_attributes.acceptance_rate"
+    value: ">= 70%"
+    status: "not_measurable"
+    reason: "review_metrics.json が存在しない"
+    recommended_action: "ISS-NEW-001 の解決を優先"
+
+  - id: "ASM-005"
+    field: "deployment"
+    value: "Composite Actionsのみ"
+    status: "confirmed"
+    reason: "全ての action.yml が 'runs.using: composite' を使用することを確認"
+
+  - id: "ASM-006"
+    field: "user_adoption"
+    value: "2 pilot projects"
+    status: "rejected"
+    reason: "Executor feedback により、プレースホルダーであることが判明"
+    new_status: "needs_revision"
+    recommended_action: "実際のパイロットプロジェクトを特定するか、採用クレームを撤回する"
+
+previous_execution_feedback_applied:
+  - feedback_id: "ASM-006_update"
+    action: "user_adoption フィールドの status を 'rejected' に変更"
+    applied: true
+  - feedback_id: "ASM-007_update"
+    action: "telemetry.data_collection のステータスを 'not_working' に変更"
+    applied: true
+  - feedback_id: "PR-004_effective"
+    lesson: "ドキュメントによる診断は有効"
+    applied: true  # 今回の監査で同様のアプローチを採用
+
+metadata:
+  analysis_version: "2.0"
+  analysis_depth: "comprehensive"
+  confidence_level: "medium-high"
+  limitations:
+    - "実際のパイロットプロジェクトへのアクセスなし"
+    - "本番環境での動作検証なし"
+    - "テストカバレッジの測定値に不一致あり"
