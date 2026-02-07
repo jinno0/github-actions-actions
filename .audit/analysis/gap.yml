@@ -1,178 +1,256 @@
-# Gap Analysis - Intent vs Current State
-version: "1.0"
-generated_at: "2026-02-08T00:00:00Z"
-run_id: "2026-02-08"
+version: "2.0"
+run_id: "run-2026-02-08T01:27:00Z"
+audit_run_id: "2026-02-08"
+generated_at: "2026-02-08T01:27:00Z"
 
-# === Critical Gaps (Must Fix) ===
-critical_gaps:
+# === Gap Analysis (intent vs current state) ===
+gaps:
+  # === Critical Gaps (from feedback) ===
+  - id: "ISS-NEW-001"
+    title: "YAML構文エラーがCIをブロックしている"
+    category: "quality"
+    priority: "high"
+    type: "technical"
+    status: "open"
+    source: "yamllint execution + feedback_to_auditor.yml"
+    intent_impact:
+      affected_attribute: "QA-003 (YAML構文チェック)"
+      target: "0 errors"
+      actual: "3 errors"
+      gap_severity: "critical"
+    evidence:
+      - "actions/review-and-merge/action.yml:83 - missing new line at end of file"
+      - "actions/auto-document/action.yml:58 - too many blank lines (1 > 0)"
+      - "actions/auto-refactor/action.yml:64 - too many blank lines (1 > 0)"
+    impact: "yamllint CI jobがエラーになり、PRがマージできなくなる"
+    recommended_action: "3つのエラーを修正（推定15分）"
+    effort_estimate: "15 minutes"
+    blocked_by: none
+
+  - id: "ISS-NEW-002"
+    title: "YAMLスタイルの一貫性が不足している"
+    category: "quality"
+    priority: "low"
+    type: "technical"
+    status: "open"
+    source: "yamllint execution + feedback_to_auditor.yml"
+    intent_impact:
+      affected_attribute: "QA-003 (YAML構文チェック)"
+      target: "clean YAML"
+      actual: "18 warnings"
+      gap_severity: "minor"
+    evidence:
+      - "18行のline-length > 120 warnings"
+      - "actions/action-fixer/action.yml:65 (133 chars)"
+      - "actions/action-fixer/action.yml:110 (186 chars)"
+    impact: "CIは通るが、コードの一貫性が低下"
+    recommended_action: "段階的に修正または.yamllintルール調整"
+    effort_estimate: "1-2 hours (incremental)"
+    blocked_by: none
+
+  - id: "ISS-NEW-003"
+    title: "具体的な最小CLIバージョンが未確定"
+    category: "documentation"
+    priority: "medium"
+    type: "technical"
+    status: "open"
+    source: "feedback_to_auditor.yml"
+    intent_impact:
+      affected_attribute: "ASM-004 (ai_engine)"
+      target: "specific minimum version"
+      actual: "'latest stable' (vague)"
+      gap_severity: "medium"
+    evidence:
+      - "README.mdに「最新の安定版」と記載されているが、具体的バージョン番号がない"
+      - "Executorがテストしても最小バージョンを特定できなかった"
+    impact: "ユーザーが非互換なCLIバージョンをインストールするリスク"
+    recommended_action: "1) 特定バージョンでテスト実行, 2) Claude Code CLIリリースノート確認, 3) README.md更新"
+    effort_estimate: "2-3 hours (testing + documentation)"
+    blocked_by: "Requires access to Claude CLI for testing"
+
+  # === Persistent Gaps (from previous cycle) ===
   - id: "ISS-001"
-    title: "No production adoption data"
-    intent_source: "ASM-006 (Phase 3: Stabilization & Adoption)"
-    current_state: "Zero repositories using actions, seeking pilot projects"
-    gap_description: |
-      Phase 3 goal is organizational adoption, but currently zero adopters.
-      README.md:193 states "Current adopters: Seeking pilot projects".
-      Quality metrics infrastructure exists but has zero data points.
-    impact: "HIGH - Cannot measure success or validate value proposition"
-    priority: 1
-    recommended_actions:
-      - "Identify 2-3 pilot projects for initial adoption"
-      - "Create onboarding checklist for pilot projects"
-      - "Document success metrics for pilot phase"
-      - "Set up regular feedback collection from pilot users"
-
-  - id: "ISS-002"
-    title: "Claude Code CLI version not specified"
-    intent_source: "ASM-004 (AI Engine: Claude Code CLI)"
-    current_state: "No version requirements documented"
-    gap_description: |
-      All actions depend on Claude Code CLI but compatible versions are not specified.
-      This creates compatibility risk and troubleshooting difficulty.
-    impact: "HIGH - Actions may break with CLI updates, no reproducibility guarantee"
-    priority: 1
-    recommended_actions:
-      - "Document minimum Claude CLI version in README"
-      - "Add CLI version to test requirements"
-      - "Pin CLI version in example workflows"
-      - "Document CLI upgrade testing process"
+    title: "パイロット導入プロジェクトが未実施"
+    category: "adoption"
+    priority: "medium"
+    type: "organizational"
+    status: "deferred"
+    source: "previous audit + feedback_to_auditor.yml"
+    intent_impact:
+      affected_attribute: "mission.desired_state"
+      target: "組織全体でAI Actionsが採用されている"
+      actual: "パイロットフェーズ未着手"
+      gap_severity: "medium"
+    evidence:
+      - "README.md: 'Current adopters: Seeking pilot projects'"
+      - "ADOPTION.mdにパイロット手順はあるが実施記録がない"
+    impact: "品質メトリクス（AIレビュー受入率など）を収集できない"
+    recommended_action: "組織リーダーシップと調整してパイロットプロジェクトを開始"
+    effort_estimate: "4-8 hours (coordination) + ongoing pilot"
+    blocked_by: "org leadership approval + pilot project team coordination"
+    note: "Executorは技術改善に集中すべき。組織変更はリーダーシップが担当"
 
   - id: "ISS-003"
-    title: "Self-hosted runner availability unknown"
-    intent_source: "TC-001 (Self-hosted Runner必須)"
-    current_state: "Infrastructure requirement assumed but not verified"
-    gap_description: |
-      All actions require self-hosted runners with Claude CLI, but it's unclear
-      how many runners exist or if they meet requirements.
-    impact: "HIGH - Actions cannot be used without proper infrastructure"
-    priority: 1
-    recommended_actions:
-      - "Inventory self-hosted runners in organization"
-      - "Document runner setup requirements"
-      - "Create runner verification checklist"
-      - "Document runner scaling strategy"
-
-# === Medium Gaps (Should Fix) ===
-medium_gaps:
-  - id: "ISS-004"
-    title: "Quality metrics system has no data"
-    intent_source: "QA-004 (Acceptance Rate >= 70%)"
-    current_state: "Infrastructure complete but zero reviews recorded"
-    gap_description: |
-      README.md:149-151 shows metrics structure but states "N/A (データなし)".
-      Cannot measure if 70% acceptance rate target is met.
-    impact: "MEDIUM - Cannot validate AI review quality, Phase 3 success unclear"
-    priority: 2
-    recommended_actions:
-      - "Ensure metrics collection is enabled in pilot projects"
-      - "Document metrics collection troubleshooting"
-      - "Create weekly metrics report during pilot phase"
-      - "Define actions to take if acceptance rate < 70%"
+    title: "Self-hosted runnerのインベントリが不明"
+    category: "infrastructure"
+    priority: "medium"
+    type: "infrastructure"
+    status: "deferred"
+    source: "previous audit"
+    intent_impact:
+      affected_attribute: "ASM-003 (runtime_environment)"
+      target: "利用可能なrunner数とCLIインストール状況が明確"
+      actual: "インベントリ不明"
+      gap_severity: "medium"
+    evidence:
+      - "README.md:83-85でself-hosted runnerが必須と記載されているが"
+      - "実際に何個のrunnerが存在し、Claude CLIがインストールされているか不明"
+    impact: "導入計画が立てられない"
+    recommended_action: "DevOpsチームと連携してrunnerインベントリを作成"
+    effort_estimate: "2-4 hours (infrastructure team)"
+    blocked_by: "requires DevOps team coordination"
 
   - id: "ISS-005"
-    title: "Dry-run verification not executed in audit"
-    intent_source: "QA-002 (All actions must pass dry-run)"
-    current_state: "Workflow exists but not verified during audit"
-    gap_description: |
-      test-with-dry-run.yml exists but audit didn't execute it.
-      Cannot confirm all actions actually pass dry-run validation.
-    impact: "MEDIUM - Potential structural issues may exist undetected"
-    priority: 2
-    recommended_actions:
-      - "Execute dry-run workflow and verify all actions pass"
-      - "Add dry-run results to audit checklist"
-      - "Document any failures and remediation steps"
-      - "Consider making dry-run a blocking check in CI"
+    title: "Dry Run検証が手動実行されていない"
+    category: "testing"
+    priority: "low"
+    type: "operational"
+    status: "deferred"
+    source: "previous audit"
+    intent_impact:
+      affected_attribute: "QA-002 (AI Actions Dry Run検証)"
+      target: "全Actionsがdry-runで検証されている"
+      actual: "ワークフローは存在するが実行記録がない"
+      gap_severity: "low"
+    evidence:
+      - ".github/workflows/test-with-dry-run.ymlは存在する"
+      - "手動実行が必要だが、実行記録がない"
+    impact: "Actionの構造問題が本番で発見されるリスク"
+    recommended_action: "メンテナー向けのdry-run実行手順を文書化"
+    effort_estimate: "1 hour (documentation)"
+    blocked_by: "manual execution required"
+
+  - id: "ISS-007"
+    title: "テストカバレッジの未カバー部分が残存"
+    category: "quality"
+    priority: "low"
+    type: "technical"
+    status: "deferred"
+    source: "previous audit + feedback_to_auditor.yml"
+    intent_impact:
+      affected_attribute: "QA-001 (テストカバレッジ)"
+      target: "100% coverage"
+      actual: "92.99% (65 lines missing)"
+      gap_severity: "minor"
+    evidence:
+      - "generate_telemetry_report.py: 28 uncovered lines"
+      - "calculate_acceptance_rate.py: 15 uncovered lines"
+      - "acceptance_tracker.py: 10 uncovered lines"
+    impact: "現状92.99%で目標80%は超えているため、優先度は低い"
+    recommended_action: "PR-003をファイルごとに分割して実行（例: PR-003a, PR-003b）"
+    effort_estimate: "4-5 hours (analysis + test writing)"
+    blocked_by: "deferred to dedicated testing-focused cycle"
+
+  # === New Gaps Identified This Cycle ===
+  - id: "ISS-008"
+    title: "AGENTS.mdコンプライアンスレビューが未実施"
+    category: "documentation"
+    priority: "low"
+    type: "technical"
+    status: "deferred"
+    source: "feedback_to_auditor.yml"
+    intent_impact:
+      affected_attribute: "code_style_and_conventions"
+      target: "AGENTS.mdのベストプラクティスに準拠"
+      actual: "準拠状況未確認"
+      gap_severity: "low"
+    evidence:
+      - "AGENTS.mdで規定されている構成要件がある"
+      - "全13 Actionsが準拠しているか系統的に確認されていない"
+    impact: "品質基準の一貫性が保証されない"
+    recommended_action: "メンテナンスサイクルで実施"
+    effort_estimate: "2-3 hours"
+    blocked_by: "lower priority than functional improvements"
+
+  # === Closed/Resolved Gaps ===
+  - id: "ISS-002"
+    title: "CLIバージョン要件が未ドキュメント化"
+    category: "documentation"
+    priority: "high"
+    type: "technical"
+    status: "resolved"
+    source: "previous audit"
+    intent_impact:
+      affected_attribute: "ASM-004 (ai_engine)"
+      target: "CLIバージョン要件が文書化されている"
+      actual: "README.md + testing guideが作成された"
+      gap_severity: "resolved"
+    evidence:
+      - "README.md:89-98にCLIバージョンセクションが追加された"
+      - "docs/cli-version-testing.mdが作成された"
+      - "feedback_to_auditor.ymlでPR-002が成功と報告されている"
+    resolution_method: "PR-002でドキュメント追加"
+    resolved_at: "2026-02-08T00:34:22Z"
 
   - id: "ISS-006"
-    title: "YAML syntax not validated"
-    intent_source: "QA-003 (0 YAML errors)"
-    current_state: "No YAML linting performed in audit"
-    gap_description: |
-      Multiple YAML files (actions, examples, workflows) exist
-      but syntax validation wasn't performed.
-    impact: "MEDIUM - YAML syntax errors could cause runtime failures"
-    priority: 2
-    recommended_actions:
-      - "Run yamllint on all YAML files"
-      - "Add yamllint to CI workflow"
-      - "Document YAML coding standards"
-      - "Fix any syntax errors found"
+    title: "YAML lintingがCIに統合されていない"
+    category: "quality"
+    priority: "high"
+    type: "technical"
+    status: "resolved"
+    source: "previous audit"
+    intent_impact:
+      affected_attribute: "QA-003 (YAML構文チェック)"
+      target: "全YAMLファイルがCIで自動検証されている"
+      actual: "yamllint jobが追加された"
+      gap_severity: "resolved"
+    evidence:
+      - ".github/workflows/lint.ymlにyamllint jobが追加された"
+      - "全63 YAMLファイルがpush/PR時に検証される"
+      - "feedback_to_auditor.ymlでPR-001が成功と報告されている"
+    resolution_method: "PR-001でyamllint統合"
+    resolved_at: "2026-02-08T00:34:22Z"
+    note: "統合は成功したが、3つのエラーと18の警告が発見された"
 
-# === Minor Gaps (Nice to Fix) ===
-minor_gaps:
-  - id: "ISS-007"
-    title: "Test coverage has untested lines"
-    intent_source: "QA-001 (Coverage >= 80%)"
-    current_state: "92.99% coverage with 65 uncovered lines"
-    gap_description: |
-      While meeting 80% target, 65 lines remain untested.
-      coverage.json shows specific missing lines in several files.
-    impact: "LOW - Target met but room for improvement"
-    priority: 3
-    recommended_actions:
-      - "Review uncovered lines in coverage report"
-      - "Add tests for error handling paths"
-      - "Consider if uncovered lines are defensive code"
-      - "Target 95%+ coverage in future"
+# === Gap Statistics ===
+statistics:
+  total_gaps: 9
+  by_status:
+    open: 3
+    deferred: 5
+    resolved: 2
+  by_priority:
+    high: 1
+    medium: 3
+    low: 5
+  by_type:
+    technical: 5
+    organizational: 1
+    infrastructure: 1
+    operational: 1
+    deferred: 1
 
-  - id: "ISS-008"
-    title: "AGENTS.md not read during audit"
-    intent_source: "README.md:89-90 (references AGENTS.md)"
-    current_state: "AGENTS.md mentioned but not reviewed"
-    gap_description: |
-      README references AGENTS.md for development guidelines
-      but audit didn't verify compliance with those guidelines.
-    impact: "LOW - Documentation exists but compliance not verified"
-    priority: 3
-    recommended_actions:
-      - "Read AGENTS.md and verify action structure compliance"
-      - "Check if all required components are present"
-      - "Document any structural inconsistencies"
-      - "Consider adding automated compliance check"
+# === Progress Tracking ===
+progress:
+  resolved_this_cycle: 2
+  newly_identified: 3
+  deferred_from_previous: 5
+  overall_trend: "improving"  # high-priority gaps decreasing
 
-# === Positive Findings (Exceeds Intent) ===
-positive_findings:
-  - id: "POS-001"
-    title: "Test coverage exceeds target by 12.99%"
-    intent_source: "QA-001 (>= 80%)"
-    current_state: "92.99% coverage achieved"
-    impact: "POSITIVE - High confidence in code quality"
-
-  - id: "POS-002"
-    title: "Complete documentation ecosystem"
-    intent_source: "OC-002 (Documentation required)"
-    current_state: "All 13 actions have examples + instructions"
-    impact: "POSITIVE - Low adoption barrier, clear usage guidance"
-
-  - id: "POS-003"
-    title: "Quality infrastructure ready before data"
-    intent_source: "ASM-006 (Phase 3 adoption)"
-    current_state: "Telemetry, metrics, adoption tracking all implemented"
-    impact: "POSITIVE - No technical debt, ready for scale"
-
-  - id: "POS-004"
-    title: "Human-in-the-loop principle maintained"
-    intent_source: "non-goals (not fully unmanned)"
-    current_state: "All actions require human oversight"
-    impact: "POSITIVE - Responsible AI deployment, hallucination risk managed"
-
-# === Summary ===
-summary:
-  total_gaps: 8
-  critical: 3
-  medium: 3
-  minor: 2
-  positive_findings: 4
-
-  overall_assessment: |
-    Repository is technically excellent with 92.99% coverage and complete documentation.
-    All 13 core functions are implemented with examples and instructions.
-    
-    PRIMARY CONCERN: Phase 3 (Adoption) has stalled - zero production users despite
-    complete technical readiness. This is a business/process gap, not technical.
-    
-    KEY BLOCKER: Without pilot projects, cannot measure acceptance rate (QA-004) or
-    validate value proposition (MET-001, MET-002, MET-003).
-    
-    IMMEDIATE ACTION NEEDED: Focus on adoption pilot onboarding rather than
-    additional feature development.
+# === Next Priority Order ===
+priority_order:
+  - gap_id: "ISS-NEW-001"
+    reason: "CI blocker, quick win (15 min)"
+    type: "technical"
+  - gap_id: "ISS-NEW-003"
+    reason: "Documentation improvement, medium effort"
+    type: "technical"
+  - gap_id: "ISS-NEW-002"
+    reason: "Style improvement, low priority"
+    type: "technical"
+  - gap_id: "ISS-007"
+    reason: "Split into file-specific PRs as suggested by executor"
+    type: "technical"
+  - gap_id: "ISS-005"
+    reason: "Document as manual step"
+    type: "operational"
