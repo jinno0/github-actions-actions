@@ -61,4 +61,3 @@ runs:
 
         # Run Claude in safe mode (no --dangerously-skip-permissions)
         claude --model "$MODEL" < /tmp/refactor_prompt.txt
-

@@ -55,4 +55,3 @@ runs:
 
         # Run Claude Code CLI in safe mode (no --dangerously-skip-permissions)
         claude --model "$MODEL" <<< "$DOC_PROMPT"
-
