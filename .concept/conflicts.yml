@@ -1,17 +1,2 @@
-updated_at: '2026-02-07T10:17:11Z'
-conflicts:
-- id: CFLT-CLI-001
-  term: TERM-CLI-CHECK
-  about: data_constraint
-  severity: medium
-  nli: contradiction
-  items:
-  - claim: 100% of actions using Claude have CLI availability checks (7/7 compliant)
-    source: ontology.yml#TERM-CLI-CHECK evidence
-  - claim: 7.7% (1/13 actions) have CLI checks implemented
-    source: .audit/analysis/gap.yml#GAP-004
-  status: resolved
-  active_workaround:
-    decision_key: AUTO:CLIAvailabilityCheck.rate:post_audit_cleanup
-    summary: 'AUTO: Audit reports removed - historical contradiction no longer relevant.
-      Rate unknown post-cleanup, but target remains 100% per security requirements.'
+updated_at: '2026-02-07T19:51:00Z'
+conflicts: []
