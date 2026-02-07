@@ -169,9 +169,6 @@ ENV/
 .task-prompt.md
 
 # Audit execution history (keep state files, ignore run data)
-.audit/execution/runs/
-.audit/output/
-.audit/verification/
 
 # System analytics data
 .analytics/

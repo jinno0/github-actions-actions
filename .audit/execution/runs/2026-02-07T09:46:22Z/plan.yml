@@ -1,0 +1,62 @@
+run_id: "2026-02-07T09:46:22Z"
+execution_type: "improvement_executor"
+generated_at: "2026-02-07T09:46:22Z"
+generated_by: "15_repo_improvement_executor v1.0"
+
+scope:
+  prs_to_apply:
+    - id: "PR-006"
+      title: "Update intent.yml - Resolve ISS-NEW-004"
+      priority: "LOW"
+      effort: "5 minutes"
+      risk: "NONE (documentation only)"
+      reason: "ISS-NEW-004 resolved - coverage measurements now agree"
+
+  prs_deferred:
+    - id: "PR-005"
+      title: "Escalation Request - Pilot Project Identification"
+      reason: "BLOCKED - Requires human input to identify actual pilot projects"
+      blocks: "GAP-001, GAP-002, GAP-003, GAP-004, GAP-005"
+      next_action: "Wait for human stakeholder to provide pilot project information"
+
+  prs_skipped: []
+
+success_criteria:
+  - id: "SC-001"
+    source: "PR-006"
+    target: "ASM-003 status updated to 'confirmed'"
+    verification: "grep 'status: confirmed' .audit/config/intent.yml"
+
+  - id: "SC-002"
+    source: "PR-006"
+    target: "ASM-003 confidence updated to 'high'"
+    verification: "grep 'confidence: high' .audit/config/intent.yml"
+
+rollback_trigger:
+  - "YAML syntax error in intent.yml"
+  - " intent.yml becomes invalid"
+
+verification_approach:
+  before_snapshot:
+    - "Record current ASM-003 state"
+    - "Record current intent.yml checksum"
+
+  after_verification:
+    - "Verify YAML syntax is valid"
+    - "Verify ASM-003 updates match PR-006 spec"
+    - "Verify no unintended changes to intent.yml"
+
+expected_outcomes:
+  overall_status: "partial_improvement"
+  gaps_closed: 0
+  blockers_resolved: 0
+  assumptions_updated: 1
+  human_input_required: true
+
+  rationale: |
+    PR-006 is a documentation-only update that reflects an already-resolved issue.
+    This does not close any gaps or resolve blockers, but it maintains audit
+    accuracy by updating intent.yml to match the verified state.
+
+    PR-005 requires human input and cannot be executed autonomously.
+    The improvement cycle will remain blocked until pilot projects are identified.

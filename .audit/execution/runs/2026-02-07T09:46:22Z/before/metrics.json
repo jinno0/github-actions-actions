@@ -1,0 +1,33 @@
+{
+  "run_id": "2026-02-07T09:46:22Z",
+  "timestamp": "2026-02-07T09:46:22Z",
+  "snapshot_type": "before",
+
+  "files_checksums": {
+    ".audit/config/intent.yml": "597b35d59d160147734c28e59437f67f"
+  },
+
+  "asm_003_state": {
+    "id": "ASM-003",
+    "field": "quality_attributes.test_coverage",
+    "value": ">= 70% (ただし測定値の不整合あり: reported 92.99% vs pytest 11.11%)",
+    "reason": "README.mdに「このプロジェクトでは、テストカバレッジ >= 70% を目標としています」と明記。ただしcoverage.jsonとpytest reportの値が大きく異なり、実態が不明。",
+    "confidence": "low",
+    "status": "needs_revision",
+    "recommended_action": "ISS-NEW-004の解決を優先（coverage.py設定の調査）"
+  },
+
+  "test_coverage": {
+    "coverage_json": 92.99,
+    "pytest_cov": 92.99,
+    "discrepancy": false,
+    "verified_at": "2026-02-07T09:21:04Z"
+  },
+
+  "execution_state": {
+    "total_runs": 4,
+    "last_run_id": "2026-02-07T08:14:37Z",
+    "status": "awaiting_human_input",
+    "critical_blockers": 3
+  }
+}

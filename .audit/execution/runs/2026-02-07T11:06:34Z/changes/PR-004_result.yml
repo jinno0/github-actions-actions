@@ -1,0 +1,25 @@
+pr_id: "PR-004"
+title: "Diagnose and Document Review Data Collection Issue"
+status: "already_applied"
+applied_in_run: "2026-02-07T06:17:33Z"
+applied_in_commit: "bbb8643"
+
+files:
+  - file: "docs/data_collection_diagnosis.md"
+    action: "created"
+    status: "exists"
+    lines_added: 225
+    lines_removed: 0
+
+  - file: "README.md"
+    action: "modified"
+    status: "link_exists"
+    change: "Added link to data_collection_diagnosis.md"
+
+verification:
+  test_result: "passed (455 tests)"
+  documentation_complete: true
+  link_valid: true
+  diagnostic_steps_documented: true
+
+note: "PR-004 was applied in a previous execution run. No changes needed in this run."

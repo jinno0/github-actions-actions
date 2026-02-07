@@ -1,0 +1,103 @@
+run_id: "2026-02-07T11:06:34Z"
+execution_type: "Improvement Executor (15_repo_improvement_executor)"
+generated_at: "2026-02-07T11:06:34Z"
+audit_run_id: "2026-02-07T09:21:04Z"
+
+# Execution Scope
+scope:
+  # PRs to apply in this run
+  prs_to_apply:
+    - id: "PR-002"
+      title: "Document Acceptance Criteria Methodology"
+      priority: "HIGH"
+      estimated_effort: "2-3 hours"
+      type: "documentation"
+      risk_level: "VERY LOW"
+      reason: "Documentation-only change. Establishes metrics foundation."
+
+    - id: "PR-004"
+      title: "Diagnose and Document Review Data Collection Issue"
+      priority: "HIGH"
+      estimated_effort: "2-4 hours"
+      type: "documentation"
+      risk_level: "VERY LOW"
+      reason: "Documentation-only change. Provides diagnostic steps for ISS-NEW-001."
+
+  # PRs deferred (require human input)
+  prs_deferred:
+    - id: "PR-001"
+      title: "Calculate and Publish Baseline Acceptance Rate"
+      reason: "Blocked by ISS-NEW-001 (review_metrics.json does not exist)"
+      blocker: "ISS-NEW-001, ISS-NEW-002"
+      depends_on: "20+ reviews collected"
+
+    - id: "PR-003"
+      title: "Information Request - Real Pilot Project Identification"
+      reason: "BLOCKED - Requires human input"
+      blocker: "ISS-NEW-002"
+      human_action_required: true
+
+    - id: "PR-005"
+      title: "Escalation Request - Pilot Project Identification Required"
+      reason: "BLOCKED - Requires human input"
+      blocker: "ISS-NEW-002"
+      human_action_required: true
+
+    - id: "PR-006"
+      title: "Update intent.yml - Resolve ISS-NEW-004"
+      reason: "Already applied in previous run (2026-02-07T09:46:22Z)"
+      status: "completed"
+
+# Success Criteria
+success_criteria:
+  - id: "SC-001"
+    description: "PR-002 documentation files created successfully"
+    verification: "File existence check"
+
+  - id: "SC-002"
+    description: "PR-004 diagnostic document created"
+    verification: "File existence check"
+
+  - id: "SC-003"
+    description: "README.md updated with methodology link"
+    verification: "grep -q 'quality_metrics_methodology' README.md"
+
+  - id: "SC-004"
+    description: "README.md updated with data collection status"
+    verification: "grep -q 'Data Collection Diagnosis' README.md"
+
+  - id: "SC-005"
+    description: "All tests still passing"
+    verification: "pytest tests/ -q"
+
+# Rollback Triggers
+rollback_triggers:
+  - "Test failures"
+  - "Build errors"
+  - "YAML syntax errors in created documents"
+
+# Budget Status
+budget:
+  max_prs_per_run: 5
+  prs_planned: 2
+  prs_deferred: 4
+
+  estimated_duration_minutes: 15
+
+# Execution Order
+execution_order:
+  1. "Capture before snapshot"
+  2. "Apply PR-002 (Documentation - Methodology)"
+  3. "Verify PR-002 changes"
+  4. "Apply PR-004 (Documentation - Data Collection Diagnosis)"
+  5. "Verify PR-004 changes"
+  6. "Capture after snapshot"
+  7. "Run verification tests"
+  8. "Generate execution summary"
+
+metadata:
+  previous_run: "2026-02-07T09:46:22Z"
+  total_runs: 2
+  autonomous_limit_reached: true
+  human_intervention_required: true
+  blockers: ["ISS-NEW-001", "ISS-NEW-002"]

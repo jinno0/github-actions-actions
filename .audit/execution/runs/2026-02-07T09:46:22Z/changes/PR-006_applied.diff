@@ -1,0 +1,22 @@
+diff --git a/.audit/config/intent.yml b/.audit/config/intent.yml
+index b1c5472..d080cdb 100644
+--- a/.audit/config/intent.yml
++++ b/.audit/config/intent.yml
+@@ -22,11 +22,12 @@ assumptions:
+     status: "maintained"
+   - id: "ASM-003"
+     field: "quality_attributes.test_coverage"
+-    value: ">= 70% (ただし測定値の不整合あり: reported 92.99% vs pytest 11.11%)"
+-    reason: "README.mdに「このプロジェクトでは、テストカバレッジ >= 70% を目標としています」と明記。ただしcoverage.jsonとpytest reportの値が大きく異なり、実態が不明。"
+-    confidence: "low"
+-    status: "needs_revision"
+-    recommended_action: "ISS-NEW-004の解決を優先（coverage.py設定の調査）"
++    value: "92.99% (目標70%を達成)"
++    reason: "README.mdに「このプロジェクトでは、テストカバレッジ >= 70% を目標としています」と明記。coverage.jsonとpytest --covの両方が92.99%を報告。ISS-NEW-004解決済み。"
++    confidence: "high"
++    status: "confirmed"
++    verification_date: "2026-02-07"
++    verification_method: "coverage.jsonとpytest --covの値を照合"
+   - id: "ASM-004"
+     field: "quality_attributes.acceptance_rate"
+     value: ">= 70% (ただしレビューデータが0件のため未測定)"

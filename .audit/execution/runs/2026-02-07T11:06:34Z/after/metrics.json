@@ -1,0 +1,65 @@
+{
+  "run_id": "2026-02-07T11:06:34Z",
+  "timestamp": "2026-02-07T11:06:34Z",
+  "execution_phase": "after",
+
+  "metrics": {
+    "test_coverage": {
+      "value": 92.99,
+      "target": 70.0,
+      "status": "exceeds_target",
+      "delta": 22.99,
+      "total_statements": 927,
+      "covered_statements": 862,
+      "missed_statements": 65
+    },
+    "test_stats": {
+      "total_tests": 455,
+      "passed": 455,
+      "failed": 0,
+      "skipped": 2,
+      "build_duration_sec": 0.76,
+      "build_status": "stable"
+    },
+    "documentation_coverage": {
+      "actions_with_readme": 13,
+      "actions_with_instructions": 13,
+      "actions_with_examples": 13,
+      "coverage": "100%",
+      "status": "excellent"
+    },
+    "acceptance_rate": {
+      "current": "未測定",
+      "target": ">= 70%",
+      "status": "NOT_MEASURABLE",
+      "blocker": "ISS-NEW-001 (review_metrics.json が存在しない)"
+    }
+  },
+
+  "documentation_files": {
+    "docs/quality_metrics_methodology.md": "exists",
+    "examples/quality-metrics/outcome-examples.md": "exists",
+    "docs/data_collection_diagnosis.md": "exists"
+  },
+
+  "blockers": {
+    "active_blockers": 2,
+    "blockers_list": [
+      {
+        "id": "ISS-NEW-001",
+        "description": "レビューデータ収集が機能していない",
+        "severity": "high",
+        "blocks": ["GAP-001", "GAP-003", "GAP-004"]
+      },
+      {
+        "id": "ISS-NEW-002",
+        "description": "パイロットプロジェクトの特定",
+        "severity": "critical",
+        "blocks": ["全ての自律的改善"]
+      }
+    ]
+  },
+
+  "applied_prs_this_run": [],
+  "already_applied_prs": ["PR-002", "PR-004", "PR-006"]
+}
