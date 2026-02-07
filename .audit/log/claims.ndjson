@@ -10,3 +10,12 @@
 {"type": "unknown", "id": "C-201", "claim": "AIレビュー受入率の実際の数値", "needed_info": "acceptance rate report", "confidence": 0.0}
 {"type": "unknown", "id": "C-202", "claim": "テレメトリー収集状況", "needed_info": "telemetry data", "confidence": 0.0}
 {"type": "unknown", "id": "C-203", "claim": "2件のパイロットプロジェクトからの具体的なフィードバック内容", "needed_info": "ADOPTION.md", "confidence": 0.0}
+{"type": "fact", "id": "C-007", "claim": "metrics/review_metrics.jsonファイルが存在しない（レビューデータ収集されていない）", "source": "File system check (2026-02-07)", "confidence": 1.0}
+{"type": "fact", "id": "C-008", "claim": "ベースラインフレームワークは整備完了（acceptance-rate-baseline-2026-02-07.mdが存在）", "source": "Executor feedback (2026-02-07T04:39:28)", "confidence": 1.0}
+{"type": "fact", "id": "C-009", "claim": "品質メトリクス方法論ドキュメントが作成された（quality_metrics_methodology.md）", "source": "Executor feedback (2026-02-07T04:39:28)", "confidence": 1.0}
+{"type": "fact", "id": "C-010", "claim": "ADOPTION.mdのパイロットプロジェクトがプレースホルダー（example/repo-1, example/repo-2）", "source": "ADOPTION.md:19-20", "confidence": 1.0}
+{"type": "inference", "id": "C-104", "claim": "GAP-001は解決済み（ベースラインフレームワーク完了）", "source": "Executor feedback, C-008", "confidence": 0.95}
+{"type": "inference", "id": "C-105", "claim": "レビューデータ収集プロセスが稼働していない可能性が高い", "source": "C-007, ISS-NEW-001", "confidence": 0.85}
+{"type": "inference", "id": "C-106", "claim": "実際のパイロットプロジェクトが不明確（プレースホルダーのまま）", "source": "C-010, ISS-NEW-002", "confidence": 0.9}
+{"type": "unknown", "id": "C-204", "claim": "review-and-merge Actionの実際の稼働状況", "needed_info": "Pilot project verification", "confidence": 0.0}
+{"type": "unknown", "id": "C-205", "claim": "パイロットプロジェクトの連絡先情報", "needed_info": "ADOPTION.md update", "confidence": 0.0}

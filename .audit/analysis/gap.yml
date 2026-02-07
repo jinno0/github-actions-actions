@@ -1,16 +1,22 @@
 version: '2.0'
-generated_at: '2026-02-07T13:25:43'
+generated_at: '2026-02-07T05:40:11'
+audit_run_id: '2026-02-07T05:40:11'
+previous_audit_run_id: '2026-02-07T13:26:48'
+execution_feedback_processed: true
 summary:
   total_gaps: 5
   critical_gaps: 0
   high_gaps: 2
   medium_gaps: 2
   low_gaps: 1
+  gaps_closed_since_last_audit: 1
+  new_gaps_identified: 0
 gaps:
 - id: GAP-001
   title: AIレビュー受入率のベースライン未策定
   severity: high
   category: quality_metrics
+  status: closed
   current_state: README.md:147-149で「計測中 (データ収集段階)」と記載
   desired_state: 受入率>=70%の目標に対し、現状のベースライン値が確定している
   gap_description: 目標値(70%)は設定されているが、現在の実績値が不明。品質改善サイクルを回すためのスタートラインが引かれていない。
@@ -18,12 +24,17 @@ gaps:
   based_on_assumption: ASM-004（受入率目標>=70%）
   related_claims:
   - C-008
-  - C-102
-  - C-201
+  - C-009
+  - C-104
+  resolution_date: '2026-02-07'
+  resolution_summary: 'Phase 1実行によりベースラインフレームワーク完了。baseline report,
+    methodology doc, examplesが作成された。'
+  remaining_actions: '20件以上のレビューデータ収集後に実際のベースライン値を算出する必要がある。'
 - id: GAP-002
   title: パイロットプロジェクトからのフィードバック収集が不十分
   severity: high
   category: adoption
+  status: open
   current_state: PURPOSE.md:25でPhase 3の「組織内プロジェクトへの導入とフィードバック収集」が未完了
   desired_state: 2件のパイロットプロジェクトから具体的なフィードバック、改善要望、課題が収集され公開されている
   gap_description: 導入実績(2件)はあるが、フィードバックの内容や改善点がREADMEやADOPTION.mdで公開されていない。
@@ -31,11 +42,22 @@ gaps:
   based_on_assumption: ASM-006（2 pilot projects）
   related_claims:
   - C-006
-  - C-203
+  - C-010
+  - C-106
+  - C-205
+  new_findings:
+  - issue: 'ISS-NEW-002: ADOPTION.mdのパイロットプロジェクトがプレースホルダー（example/repo-1,
+      example/repo-2）のまま'
+    severity: high
+    evidence: C-010
+    recommendation: '実際のリポジトリ名と連絡先情報に更新する必要がある。'
+  priority_for_next_cycle: highest
+  recommended_phase: Phase 2
 - id: GAP-003
   title: テレメトリー収集状況の可視化が不足
   severity: medium
   category: observability
+  status: open
   current_state: README.md:120-137にテレメトリー機能の説明はあるが、収集データの集計結果が公開されていない
   desired_state: どのActionがどの程度使われているか、オプトアウト率などの傾向が把握できている
   gap_description: テレメトリー機能は実装済みだが、そのデータ活用事例や統計情報がドキュメントされていない。
@@ -43,27 +65,74 @@ gaps:
   related_claims:
   - C-007
   - C-202
-  - C-204
 - id: GAP-004
   title: AIレビューの誤検知(false positive)の追跡が不十分
   severity: medium
   category: quality_metrics
+  status: pending
   current_state: README.md:152-155にレビューアウトカムの種類は記載されているが、詳細な分布データがない
   desired_state: 誤検知率の傾向と主な原因が分析でき、改善につなげられている
   gap_description: 受入率だけでは不十分。AIレビューがなぜ拒否/修正されるのか、誤検知の傾向分析が必要。
   impact: AIレビュー品質の向上に必要な詳細データが不足
   related_claims:
   - C-207
+  dependency: GAP-001の解決（データ収集完了）後に実施可能
 - id: GAP-005
   title: カスタムレビュールールの利用実績が不明
   severity: low
   category: features
+  status: pending
   current_state: README.md:66-76にカスタムルール機能の充実したドキュメントがあるが、利用事例が公開されていない
   desired_state: パイロットプロジェクトでのカスタムルール導入事例やベストプラクティスが共有されている
   gap_description: 機能は充実しているが、実際の現場での活用方法や効果が不明
   impact: 他のチームがカスタムルール導入を検討する際の参考情報が不足
   related_claims:
   - C-104
+new_issues:
+- id: ISS-NEW-001
+  title: レビューデータ収集プロセスが稼働していない
+  severity: high
+  category: infrastructure
+  description: 'metrics/review_metrics.json が存在しない。これは review-and-merge
+    Action がレビュー結果を保存する機能が有効化されていないか、パイロットプロジェクトで実際に使用されていないことを示唆している。'
+  source: 'Executor feedback (2026-02-07T04:39:28)'
+  evidence:
+  - claim_id: C-007
+    description: 'ファイルシステム確認で review_metrics.json が存在しない'
+  - claim_id: C-105
+    description: 'レビューデータ収集プロセスが稼働していない可能性が高い'
+  recommended_actions:
+  - action: パイロットプロジェクトで review-and-merge Action が実際に稼働しているか確認
+    effort: 2-4 hours
+  - action: metrics/review_metrics.json への出力プロセスを確認
+    effort: 1-2 hours
+  - action: 必要に応じてデータ収集ワークフローを整備
+    effort: 4-8 hours
+  related_gaps:
+  - GAP-001（ベースライン策定には実際のデータが必要）
+- id: ISS-NEW-002
+  title: パイロットプロジェクトの特定と連絡先が不明
+  severity: high
+  category: adoption
+  description: 'roadmap.md の Phase 2（User Feedback Collection）では「2つのパイロットプロジェクト」と言及しているが、具体的にどのリポジトリか、誰に連絡すべきかが明記されていない。ADOPTION.md もプレースホルダーのまま。'
+  source: 'Executor feedback (2026-02-07T04:39:28), ADOPTION.md:19-20'
+  evidence:
+  - claim_id: C-010
+    description: 'ADOPTION.md のパイロットプロジェクトが example/repo-1, example/repo-2
+      （プレースホルダー）'
+  - claim_id: C-106
+    description: '実際のパイロットプロジェクトが不明確'
+  - claim_id: C-205
+    description: 'パイロットプロジェクトの連絡先情報が不明'
+  recommended_actions:
+  - action: ADOPTION.md を更新し、実際のリポジトリ名と連絡先を記載
+    effort: 1-2 hours
+  - action: 各パイロットプロジェクトの担当者とインタビューのスケジュール調整
+    effort: 2-4 hours
+  - action: roadmap.md に具体的なプロジェクト名と担当者を追記
+    effort: 0.5 hours
+  related_gaps:
+  - GAP-002（フィードバック収集の前提条件）
 strengths:
 - id: STR-001
   description: テストカバレッジ92.99%が目標70%を大幅に上回っている
@@ -85,3 +154,35 @@ strengths:
   description: SYSTEM_CONSTITUTION.mdで明確な設計原則が定義されている
   evidence: C-004
   quality_level: excellent
+- id: STR-006
+  description: Phase 1実行により、品質メトリクス測定フレームワークが完了した
+  evidence: C-008, C-009, C-104
+  quality_level: excellent
+  added_date: '2026-02-07'
+assumption_updates:
+- id: ASM-004
+  field: quality_attributes.acceptance_rate
+  previous_value: '>= 70%'
+  new_value: '>= 70% (ただし20件以上のレビューデータ収集後に評価)'
+  previous_status: unverified
+  new_status: needs_revision
+  reason: 'ベースライン値を計測しようとしたが、レビューデータが0件だったため現時点では数値を算出できない。フレームワークは整備完了。'
+  confidence: high
+  source: 'Executor feedback (2026-02-07T04:39:28)'
+lessons_learned:
+- lesson: 測定ツールは整備されているが、データ収集プロセスを別途確認が必要
+  related_issue: ISS-NEW-001
+  context: 'scripts/calculate_acceptance_rate.py は正常に動作するが、入力データ（metrics/review_metrics.json）が空'
+- lesson: パイロットプロジェクトの特定は早めに行うべき
+  related_issue: ISS-NEW-002
+  context: 'Phase 2の実行には具体的な連絡先情報が必要'
+next_cycle_priority:
+  priority_1:
+    gap: GAP-002
+    reason: 'Phase 2実行の前提条件（ISS-NEW-002）を解決する必要がある'
+  priority_2:
+    gap: ISS-NEW-001
+    reason: 'GAP-001の完了（実際のベースライン算出）にはレビューデータが必要'
+  priority_3:
+    gap: GAP-003
+    reason: 'データ収集完了後にテレメトリー可視化を実施'
