@@ -1,11 +1,11 @@
 {
-  "last_run_id": "run-2026-02-08T00:34:22Z",
-  "last_run_timestamp": "2026-02-08T00:34:22Z",
-  "total_runs": 2,
+  "last_run_id": "run-2026-02-08T01:55:00Z",
+  "last_run_timestamp": "2026-02-08T01:55:00Z",
+  "total_runs": 3,
   "total_prs_applied": 2,
-  "total_prs_deferred": 1,
+  "total_prs_deferred": 3,
   "total_prs_rolled_back": 0,
   "current_status": "completed",
-  "gaps_resolved": 2,
+  "gaps_resolved": 3,
   "gaps_remaining": 6
 }

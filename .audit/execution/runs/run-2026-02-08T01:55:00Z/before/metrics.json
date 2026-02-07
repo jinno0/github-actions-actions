@@ -1,0 +1,45 @@
+{
+  "run_id": "run-2026-02-08T01:55:00Z",
+  "timestamp": "2026-02-08T01:55:00Z",
+  "metrics": {
+    "test_coverage": {
+      "percentage": 92.99,
+      "total_lines": 927,
+      "covered_lines": 862,
+      "missed_lines": 65,
+      "lowest_file": "scripts/generate_telemetry_report.py",
+      "lowest_coverage": 78.29
+    },
+    "test_execution": {
+      "total_tests": 457,
+      "passed": 455,
+      "skipped": 2,
+      "failed": 0,
+      "duration_seconds": 0.72
+    },
+    "yaml_validation": {
+      "total_files": 13,
+      "syntax_errors": 0,
+      "line_length_warnings": 9,
+      "document_start_warnings": 13
+    },
+    "quality_attributes": {
+      "QA-001_coverage": "92.99% (target: >= 80%)",
+      "QA-003_yaml_syntax": "0 errors (target: 0 errors)",
+      "QA-003_yaml_warnings": "9 line-length warnings"
+    }
+  },
+  "gaps_identified": {
+    "ISS-NEW-001": {
+      "title": "YAML syntax errors",
+      "status": "RESOLVED (errors already fixed)",
+      "evidence": "yamllint reports 0 syntax errors"
+    },
+    "ISS-NEW-002": {
+      "title": "YAML line length warnings",
+      "status": "PARTIALLY_RESOLVED",
+      "evidence": "Reduced from 18 to 9 warnings",
+      "remaining": 9
+    }
+  }
+}

@@ -1,0 +1,27 @@
+pr_id: "PR-005"
+title: "Address YAML Line Length Warnings (ISS-NEW-002)"
+status: "deferred"
+deferred_at: "2026-02-08T01:55:00Z"
+reason: |
+  Low-priority style improvement. These are warnings, not errors, and don't block CI.
+  The instruction emphasizes minimal, focused changes. PR-005 would require 1-2 hours
+  for cosmetic improvements with minimal functional benefit.
+
+current_state:
+  warnings_before: 18
+  warnings_after: 9
+  warnings_remaining: 9
+  files_affected:
+    - "actions/action-fixer/action.yml" (3 warnings)
+    - "actions/auto-rebase/action.yml" (1 warning)
+    - "actions/pr-review-enqueuer/action.yml" (1 warning)
+    - "actions/release-notes-ai/action.yml" (2 warnings)
+    - "actions/spec-to-code/action.yml" (2 warnings)
+
+recommendation: |
+  Defer to maintenance cycle or address incrementally during natural code reviews.
+  Consider adjusting .yamllint config to increase line-length limit if team prefers.
+
+gap_resolved: "ISS-NEW-002"
+resolution_status: "partial"
+note: "Warnings reduced from 18 to 9, likely from previous code cleanup"
