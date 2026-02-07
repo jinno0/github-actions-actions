@@ -142,11 +142,17 @@ env:
 
 **review-and-merge** Action では、AIレビューの品質を測定するための**受入率（Acceptance Rate）**を追跡しています。
 
-### 現在のベースライン
+### 現在のベースライン (2026-02-07)
 
-- **受入率:** 計測中 (データ収集段階)
-- **目標:** >= 70%
-- **ステータス:** 📊 ベースライン策定中
+| 指標 | 値 | 目標 | 状態 |
+|------|------|------|------|
+| AIレビュー受入率 | N/A (データなし) | >= 70% | ⚠️ データ収集中 |
+| 総レビュー数 | 0件 | >= 20件 | ⚠️ 要データ収集 |
+| 測定期間 | 30日 (2026-01-08 ~ 2026-02-07) | - | - |
+
+📊 **詳細なベースラインレポート:** [acceptance-rate-baseline-2026-02-07.md](metrics/acceptance-rate-baseline-2026-02-07.md)
+
+**現状:** パイロットフェーズのため、レビューデータの収集を開始しています。20件以上のレビューが集まり次第、統計的に有意なベースライン値を算出します。
 
 ### 品質メトリクスの概要
 
@@ -164,10 +170,12 @@ python scripts/calculate_acceptance_rate.py --output report --time-period 7d
 
 ### 定期レポート
 
-毎週日曜日に自動的に受入率レポートが生成され、Issueとして投稿されます。
+毎週月曜日9時に自動的に受入率レポートが生成されます。
 過去のレポートは [`metrics/`](metrics/) ディレクトリを参照してください。
 
-詳細な品質メトリクスのドキュメントについては、[docs/quality_metrics.md](./docs/quality_metrics.md) を参照してください。
+📚 **詳細なドキュメント:**
+- 品質メトリクスの測定方法: [quality_metrics_methodology.md](docs/quality_metrics_methodology.md)
+- アウトカム判定の具体例: [outcome-examples.md](examples/quality-metrics/outcome-examples.md)
 
 ## 🚀 Adoption
 

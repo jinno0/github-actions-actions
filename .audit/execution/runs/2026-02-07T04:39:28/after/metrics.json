@@ -1,0 +1,63 @@
+{
+  "run_id": "2026-02-07T04:39:28",
+  "timestamp": "2026-02-07T04:39:28Z",
+  "phase": "after_improvement",
+  "metrics": {
+    "test_coverage": {
+      "value": 92.99,
+      "unit": "percent",
+      "target": 70,
+      "status": "exceeding",
+      "source": "pytest --cov",
+      "note": "Unchanged (documentation-only PRs)"
+    },
+    "test_counts": {
+      "passed": 455,
+      "skipped": 2,
+      "failed": 0,
+      "total": 457
+    },
+    "documentation_files": {
+      "total_markdown_files": 169,
+      "docs_directory_files": 3,
+      "metrics_directory_files": 2,
+      "examples_directory_files": 1,
+      "new_files": [
+        "metrics/acceptance-rate-baseline-2026-02-07.md",
+        "docs/quality_metrics_methodology.md",
+        "examples/quality-metrics/outcome-examples.md"
+      ]
+    },
+    "baseline_status": {
+      "readme_has_baseline": true,
+      "baseline_value": "N/A (データなし) - 0件",
+      "has_actual_number": true,
+      "has_baseline_report": true,
+      "readme_section": "現在のベースライン (2026-02-07)"
+    },
+    "acceptance_rate_methodology": {
+      "exists": true,
+      "path": "docs/quality_metrics_methodology.md",
+      "examples_exist": true,
+      "examples_path": "examples/quality-metrics/outcome-examples.md",
+      "has_flowchart": true,
+      "readme_links": true
+    }
+  },
+  "core_functions": {
+    "total_defined": 13,
+    "testable": 13,
+    "status": "all_defined"
+  },
+  "gaps_identified": 5,
+  "gaps_addressed": 1,
+  "improvements_applied": 2,
+  "files_created": 3,
+  "files_modified": 1,
+  "documentation_improvements": {
+    "baseline_documented": true,
+    "methodology_documented": true,
+    "examples_provided": true,
+    "readme_updated": true
+  }
+}

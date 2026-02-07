@@ -1,0 +1,45 @@
+{
+  "run_id": "2026-02-07T04:39:28",
+  "timestamp": "2026-02-07T04:39:28Z",
+  "phase": "before_improvement",
+  "metrics": {
+    "test_coverage": {
+      "value": 92.99,
+      "unit": "percent",
+      "target": 70,
+      "status": "exceeding",
+      "source": "pytest --cov"
+    },
+    "test_counts": {
+      "passed": 455,
+      "skipped": 2,
+      "failed": 0,
+      "total": 457
+    },
+    "documentation_files": {
+      "total_markdown_files": 166,
+      "docs_directory_files": 2,
+      "metrics_directory_files": 0
+    },
+    "baseline_status": {
+      "readme_has_baseline": true,
+      "baseline_value": "計測中 (データ収集段階)",
+      "has_actual_number": false,
+      "readme_section": "現在のベースライン"
+    },
+    "acceptance_rate_methodology": {
+      "exists": false,
+      "path": "docs/quality_metrics_methodology.md",
+      "examples_exist": false,
+      "examples_path": "examples/quality-metrics/outcome-examples.md"
+    }
+  },
+  "core_functions": {
+    "total_defined": 13,
+    "testable": 13,
+    "status": "all_defined"
+  },
+  "gaps_identified": 5,
+  "gaps_addressed": 0,
+  "improvements_to_apply": 2
+}

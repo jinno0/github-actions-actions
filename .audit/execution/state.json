@@ -1,37 +1,28 @@
 {
-  "run_id": "2026-02-07T13:27:54",
-  "started_at": "2026-02-07T13:27:54",
-  "completed_at": "2026-02-07T13:27:54",
-  "status": "completed",
-  "phases_completed": [
-    "Phase 0: Load previous execution feedback",
-    "Phase 1: Context & Bootstrap",
-    "Phase 2: Evidence Gathering",
-    "Phase 3: Gap Analysis",
-    "Phase 4: Proposal Generation",
-    "Phase 5: Core Function Verification",
-    "Phase 6: Self-Evaluation",
-    "Phase 7: Output Generation"
-  ],
-  "artifacts_generated": [
-    ".audit/config/intent.yml",
-    ".audit/config/constraints.yml",
-    ".audit/config/budget.yml",
-    ".audit/log/claims.ndjson",
-    ".audit/analysis/as_is.yml",
-    ".audit/analysis/gap.yml",
-    ".audit/proposal/roadmap.md",
-    ".audit/output/summary.md",
-    ".audit/output/next_questions.md",
-    ".audit/output/self_score.yml"
-  ],
-  "metrics": {
-    "facts_collected": 12,
-    "inferences_made": 8,
-    "unknowns_identified": 7,
-    "gaps_detected": 5,
-    "strengths_identified": 5,
-    "core_functions_verified": 13,
-    "proposals_generated": 5
-  }
+  "last_run_id": "2026-02-07T04:39:28",
+  "last_run_date": "2026-02-07T04:39:28Z",
+  "total_runs": 2,
+  "total_prs_applied": 4,
+  "total_prs_rolled_back": 0,
+  "gaps_closed": 1,
+  "gaps_remaining": 4,
+  "current_phase": "Phase 1 (Metrics Foundation) - COMPLETE",
+  "next_phase": "Phase 2 (User Feedback Collection)",
+  "status": "active",
+  "last_updated": "2026-02-07T04:39:28Z",
+  "run_history": [
+    {
+      "run_id": "2026-02-07T13:27:54",
+      "type": "audit",
+      "status": "completed",
+      "gaps_identified": 5
+    },
+    {
+      "run_id": "2026-02-07T04:39:28",
+      "type": "execution",
+      "status": "completed",
+      "prs_applied": 2,
+      "gaps_closed": 1
+    }
+  ]
 }

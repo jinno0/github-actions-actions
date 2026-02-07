@@ -1,0 +1,120 @@
+run_id: "2026-02-07T04:39:28"
+started_at: "2026-02-07T04:39:28Z"
+audit_run_id: "2026-02-07T13:26:48"
+
+scope:
+  prs_to_apply:
+    - "PR-001"  # Calculate and Publish Baseline Acceptance Rate
+    - "PR-002"  # Document Acceptance Criteria Methodology
+  prs_deferred: []  # All within budget
+  reason_for_scope: "Focus on Phase 1 (Metrics Foundation) - highest priority gaps"
+
+success_criteria:
+  - id: "SC-001"
+    source: "intent.yml#quality_attributes[1]"  # QA-002
+    target: "AIレビュー受入率のベースライン確立"
+    verification: "metrics/acceptance-rate-baseline-2026-02-07.md が存在する"
+    status: "pending"
+
+  - id: "SC-002"
+    source: "intent.yml#quality_attributes[1]"  # QA-002
+    target: "README.md が実際のベースライン数値を表示している"
+    verification: "README.md に '現在のベースライン' セクションが更新されている"
+    status: "pending"
+
+  - id: "SC-003"
+    source: "roadmap.md#Phase1"
+    target: "品質メトリクスの方法論が文書化されている"
+    verification: "docs/quality_metrics_methodology.md が存在する"
+    status: "pending"
+
+rollback_trigger:
+  - "既存テスト失敗"
+  - "README.md のリンク切れ"
+  - "ドキュメントのフォーマットエラー"
+
+execution_phases:
+  - phase: "Phase 1: Before Snapshot"
+    status: "pending"
+    steps:
+      - "Calculate current test coverage"
+      - "Count existing documentation files"
+      - "Record current baseline status from README"
+
+  - phase: "Phase 2: Execute PR-001"
+    status: "pending"
+    steps:
+      - "Run acceptance rate calculation script"
+      - "Create metrics/acceptance-rate-baseline-2026-02-07.md"
+      - "Update README.md with baseline numbers"
+      - "Verify weekly report workflow"
+
+  - phase: "Phase 3: Execute PR-002"
+    status: "pending"
+    steps:
+      - "Create docs/quality_metrics_methodology.md"
+      - "Create examples/quality-metrics/outcome-examples.md"
+      - "Update README.md with methodology link"
+
+  - phase: "Phase 4: After Snapshot"
+    status: "pending"
+    steps:
+      - "Calculate test coverage again"
+      - "Count documentation files"
+      - "Verify README.md updates"
+
+  - phase: "Phase 5: Verification"
+    status: "pending"
+    steps:
+      - "Run all tests: pytest tests/"
+      - "Verify documentation links work"
+      - "Check baseline report exists and is valid"
+
+  - phase: "Phase 6: Effect Measurement"
+    status: "pending"
+    steps:
+      - "Compare before/after metrics"
+      - "Calculate improvement delta"
+      - "Evaluate against success criteria"
+
+budget:
+  max_prs_per_run: 5
+  prs_to_apply_count: 2
+  within_budget: true
+  estimated_effort_hours: 6-11
+
+assumptions:
+  - id: "EXE-ASM-001"
+    assumption: "scripts/calculate_acceptance_rate.py が存在し動作する"
+    confidence: "medium"
+    validation: "実行時に確認"
+
+  - id: "EXE-ASM-002"
+    assumption: "README.md が '現在のベースライン' セクションを持つ"
+    confidence: "high"
+    validation: "README.md:148 で確認済み"
+
+  - id: "EXE-ASM-003"
+    assumption: "ドキュメント変更は既存テストに影響しない"
+    confidence: "high"
+    validation: "pytest で検証"
+
+risks:
+  - id: "RISK-001"
+    description: "scripts/calculate_acceptance_rate.py が存在しない可能性"
+    probability: "medium"
+    impact: "high"
+    mitigation: "スクリプトを新規作成するか、ダミーデータで代行"
+
+  - id: "RISK-002"
+    description: "README.md のフォーマットが予想と異なる可能性"
+    probability: "low"
+    impact: "medium"
+    mitigation: "正規表現で柔軟にマッチング"
+
+next_steps:
+  - "Take before snapshot"
+  - "Execute PR-001"
+  - "Execute PR-002"
+  - "Verify and measure"
+  - "Generate feedback"
