@@ -1,4 +1,4 @@
-updated_at: "2026-02-02T21:56:00Z"
+updated_at: "2026-02-07T03:54:57Z"
 invariants:
   - id: "INV-001"
     related_terms: ["AIPoweredAction", "ClaudeCodeCLI"]
