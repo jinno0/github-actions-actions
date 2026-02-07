@@ -33,12 +33,7 @@ README.mdから仕様書と実装タスクを自動生成してください
 
 ### 1. 🧠 AI強化PRDからSPEC自動生成
 
-**トリガー例：**
-- 「README.mdから仕様書と実装タスクを自動生成してください」
-- 「このPRDを解析してSPECを生成、AI品質チェックも実行してください」
-- 「既存コードから仕様を逆生成、Miyabi連携準備までお願いします」
-
-**AI連携自動実行内容：**
+**機能：**
 1. **SpecWorkflowMcpガイドライン読み込み** - 標準SDDプロセスの適用
 2. **AI駆動PRD解析** - Claude Sonnet 4による高度なドキュメント理解
 3. **高品質SPEC生成** - requirements.md, design.md, tasks.mdの知的生成
@@ -53,12 +48,7 @@ README.mdから仕様書と実装タスクを自動生成してください
 
 ### 2. SPECから実行タスクへの分解
 
-**トリガー例：**
-- 「SPECを実装タスクに分解してください」
-- 「このdesign.mdから具体的な実装計画を作成してください」
-- 「tasks.mdのタスクをさらに詳細化してください」
-
-**自動実行内容：**
+**機能：**
 1. design.mdの技術的詳細を分析
 2. 実装優先順位の決定
 3. タスク間の依存関係の特定
@@ -71,12 +61,7 @@ README.mdから仕様書と実装タスクを自動生成してください
 
 ### 3. 整合性チェックと検証
 
-**トリガー例：**
-- 「PRDとSPECの整合性をチェックしてください」
-- 「仕様と実装コードの乖離を検証してください」
-- 「生成されたタスク網羅性を確認してください」
-
-**自動実行内容：**
+**機能：**
 1. PRD↔requirements.mdの整合性検証
 2. design.md↔tasks.mdの技術的一貫性チェック
 3. 実装コードとの乖離検出
@@ -88,11 +73,6 @@ README.mdから仕様書と実装タスクを自動生成してください
 
 ### 4. 🚀 完全自動化SDDパイプライン
 
-**トリガー例：**
-- 「README.mdからSDD完全自動実行、Miyabi自律開発準備までお願いします」
-- 「このプロジェクトにAI強化SDDを適用してください」
-- 「仕様駆動開発の全工程を自動実行、品質担保までお願いします」
-
 **AI連携完全自動実行内容：**
 1. **Phase 0: SpecWorkflowMcpガイドライン読み込み** - SDD標準プロセス適用
 2. **Phase 1: 環境準備** - ワークスペース、依存関係の自動セットアップ
@@ -101,7 +81,7 @@ README.mdから仕様書と実装タスクを自動生成してください
 5. **Phase 4: AIタスク分解** - 実行可能レベルでの詳細タスク生成
 6. **Phase 5: AI品質検証** - 網羅性・一貫性・実行可能性のAIチェック
 7. **Phase 6: Miyabi連携準備** - 7エージェントとの連携データ生成
-7. **Phase 7: 完了レポート** - AI分析結果と次のアクション提示
+8. **Phase 7: 完了レポート** - AI分析結果と次のアクション提示
 
 **使用リソース：**
 - `scripts/enhanced_sdd_pipeline.py` - AI強化完全自動パイプライン（推奨）
@@ -213,41 +193,6 @@ SDDプロセスで使用されるテンプレートやチェックリスト。
 「マイクロサービス構成の技術検証PRDから実装計画まで自動生成してください」
 ↓
 ✅ 技術的実現可能性の評価と実装パス生成
-```
-
-### 📊 成功指標
-
-- **時間短縮**: 手動プロセス比90%時間削減（8時間→45分）
-- **品質向上**: AI品質チェックで85%以上の評価スコア
-- **網羅性**: 標準SDDプロセスの100%カバレッジ
-- **再利用性**: Miyabi連携で即実行可能なタスク生成
-
-### 🔧 詳細実行方法
-
-#### AI強化完全自動パイプライン（推奨）
-```bash
-# Claude Codeでの実行（最も簡単）
-「README.mdからSDD完全自動実行、Miyabi自律開発準備までお願いします」
-
-# 直接スクリプト実行
-python .claude/skills/spec-flow-auto/scripts/enhanced_sdd_pipeline.py \
-  --prd README.md \
-  --spec-name user-auth-system \
-  --output .spec-workflow
-```
-
-#### 個別プロセス実行
-```bash
-# PRDからSPEC生成のみ
-python scripts/generate_spec_from_prd.py \
-  --input README.md \
-  --output .spec-workflow/specs \
-  --spec-name feature-x
-
-# SPECからタスク分解
-python scripts/create_tasks_from_spec.py \
-  --spec-path .spec-workflow/specs/feature-x \
-  --output .spec-workflow/tasks
 ```
 
 ### 🎮 次のステップ（Miyabi自律開発）
