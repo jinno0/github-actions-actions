@@ -1,90 +1,172 @@
-version: "1.0"
-run_id: "2026-02-08T04:40:00Z"
-generated_at: "2026-02-08T04:40:00Z"
+version: "2.0"
+run_id: "2026-02-08T10:30:00Z"
+generated_at: "2026-02-08T10:30:00Z"
+previous_run_id: "2026-02-08T04:40:00Z"
 
 # === ギャップ分析（Gap Analysis）===
 
 ## 概要
 summary:
-  total_gaps_identified: 8
-  critical_gaps: 2
-  high_gaps: 3
-  medium_gaps: 2
-  low_gaps: 1
+  total_gaps_identified: 10
+  critical_gaps: 1
+  high_gaps: 4
+  medium_gaps: 3
+  low_gaps: 2
+  resolved_gaps_from_previous_cycle: 1
+
+## 前回サイクルからの改善点
+improvements_from_previous_cycle:
+  - gap_id: "GAP-001 (前回)"
+    description: "AIレビュー品質データの欠如"
+    status: "✅ RESOLVED"
+    evidence: |
+      PR-002の実行により、AIレビュー受入率が測定可能になった。
+      - scripts/test_data_collection.py: テストデータ生成機能実装
+      - scripts/calculate_acceptance_rate.py: 正常動作確認済み
+      - .github/workflows/check-data-collection.yml: 週次モニタリング実装
+      - テストデータでの受入率: 90.0% (目標70%達成)
+    notes: |
+      テストデータベースラインは確立されたが、本番データでの確定が必要。
+      ASM-003の仮定は「confirmed」に更新された。
 
 ## ギャップ一覧
 gaps:
-  ### Gap 1: AIレビュー品質データの欠如
+  ### Gap 1: 本番データでのAIレビュー受入率未測定
   - id: "GAP-001"
-    severity: "critical"
+    severity: "high"
     category: "Metrics & Measurement"
     source_intent: "ASM-003 (AIレビュー受入率 >= 70%)"
-    current_reality: "C-006, C-103 (データが収集されていない)"
+    current_reality: "テストデータでのベースライン確立済み (90.0%)"
     description: |
-      README.mdで「AIレビュー受入率 >= 70%」を目標として定義しているが、
-      実際のレビューデータが収集されていないため、目標達成度を測定できない。
+      前回サイクルでPR-002が成功し、テストデータでの受入率測定が可能になった。
+      しかし、依然として本番環境でのレビューデータが収集されていない。
 
-      metrics/review_metrics.json が存在せず、README.md:185-191 で
-      「データ収集状態」として言及されている。
+      README.md:176-191 で目標値>= 70%を設定しているが、実際のパイロット
+      プロジェクトでのデータがないため、本番でのパフォーマンスが不明。
 
-      仮定ASM-003に基づくと、このギャップはプロジェクトの核心的品質指標の
-      測定不能を意味する。
+      ASM-003は「confirmed」に更新されたが、これは「測定方法が正しいこと」の
+      検証であり、「本番で目標を達成している」ことを意味しない。
     impact:
-      - "AIの品質を評価できない"
-      - "改善サイクルを回せない"
-      - "成功条件を検証できない"
+      - "本番環境でのAI品質が不明"
+      - "実ユーザーへの提供価値が検証されていない"
+      - "改善サイクルが本番データに基づいていない"
     root_cause: |
-      Phase 3の「組織内プロジェクトへの導入」が進んでいないため、
-      実際のレビューデータが生成されていない。
+      前回フィードバックでも指摘された通り、実際のパイロットプロジェクトが
+      特定されていない。
 
-      また、docs/data_collection_diagnosis.md で診断されている通り、
-      データ収集プロセス自体の問題も存在する可能性がある。
+      ASM-001の状態が「needs_revision」に更新されており、ターゲットユーザーの
+      定義が曖昧になっている。
     proposed_actions:
-      - "パイロットプロジェクトでのデータ収集を即時開始"
-      - "データ収集プロセスの診断と修正"
-      - "暫定的なベースライン値の策定（モックデータでのシミュレーション）"
+      - "実際のパイロットプロジェクトを特定し導入実行"
+      - "本番データ収集を開始し、30日間のベースラインを確定"
+      - "本番受入率が70%未満の場合の改善プランを事前策定"
+    dependencies:
+      - "GAP-003 (Phase 3の導入進捗)"
 
-  ### Gap 2: 機能検証の欠如
+  ### Gap 2: Integration Testの不足
   - id: "GAP-002"
-    severity: "critical"
+    severity: "medium"
     category: "Testing & Validation"
-    source_intent: "CF-001~CF-010 (Actionsが実際に動作するという主張)"
-    current_reality: "C-009 (テストは構造検証のみ)"
+    source_intent: "QA-003 (Integration Test 100%)"
+    current_reality: "12/13 integration test files"
     description: |
-      各Actionは「AIがPRをレビューし自動マージできる」等の主張をしているが、
-      現状のテストはYAML構文とファイル構造の検証に留まっている。
+      前回実行で検出されたISS-NEW-002: Integration testが13個中12個しか
+      存在しない。
 
-      TESTING.md:9-50 に明示されている通り、「実際にGitHub Actions環境で
-      動作させた検証が行われていない」。
+      verification_result.json:CF-003 で「Integration Test Coverage 100%」の
+      検証が失敗している。
 
-      これは「Core Function Verification」の観点から、リポジトリの
-      存在意義そのものが検証されていないことを意味する。
+      どのActionのintegration testが不足しているかを特定し、作成する必要がある。
     impact:
-      - "Actionsが実際に動作する保証がない"
-      - "Runtimeバグが本番で発見されるリスク"
-      - "Claude CLIとの連携が検証されていない"
+      - "一部Actionの動作保証が不完全"
+      - "回帰テストの網羅性が不足"
     root_cause: |
-      GitHub Actions runtime環境をローカルで再現することが困難であるため、
-      構造テスト（高速・低コスト）を採用している。
-
-      TESTING.md:239-275 に「Known Limitations」として認識されている。
+      Action追加時にintegration test作成が漏れた、またはテストファイルの
+      命名規則が不統一。
     proposed_actions:
-      - "actツール導入によるローカル実行検証"
-      - "ステージング環境でのインテグレーションテスト"
-      - "Dry Runモードでの実行検証"
+      - "不足しているintegration testファイルを特定"
+      - "テストファイルを作成"
+      - "全Actionが統合テスト覆盖されていることを検証"
+    dependencies:
+      - "なし（単独で実施可能）"
 
-  ### Gap 3: テレメトリー収集が有効化されていない
+  ### Gap 3: Action構造テストの目標値不一致
   - id: "GAP-003"
+    severity: "medium"
+    category: "Testing & Validation"
+    source_intent: "QA-003 (Action構造の検証 100%)"
+    current_reality: "139 passed, 目標値455"
+    description: |
+      前回実行で検出されたISS-NEW-001: action structure testの目標値（455）が
+      実際のパス数（139）と大きく異なる。
+
+      verification_result.json:CF-STRUCT-001 で「139 passed vs expected 455」
+      という不一致がある。
+
+      これは以下のいずれかの問題を示唆している：
+      1. テストフィルタリングのロジックが誤っている
+      2. 目標値455が誤って設定された
+      3. テスト自体の構造が変化した
+    impact:
+      - "構造テストの信頼性が低下"
+      - "CIでの品質チェックが正しく機能しない可能性"
+    root_cause: |
+      verify_core_functions.pyのテストフィルタリングロジック、または
+      pytestのテスト発見ロジックに問題がある。
+
+      目標値455がどのように算出されたかのドキュメントが不足している。
+    proposed_actions:
+      - "pytest --collect-only で実際のテスト数を確認"
+      - "455という値の算出根拠を調査"
+      - "正しい目標値に修正、またはテストフィルタリングを修正"
+    dependencies:
+      - "なし（単独で実施可能）"
+
+  ### Gap 4: Phase 3の導入が進んでいない
+  - id: "GAP-004"
     severity: "high"
+    category: "Adoption"
+    source_intent: "PURPOSE.md:22-27 (Phase 3: Stabilization & Adoption)"
+    current_reality: "組織内導入未完了"
+    description: |
+      前回サイクルから継続中の課題。ASM-001の状態が「needs_revision」に
+      更新された。
+
+      PR-001の実行において、実際のパイロットプロジェクトが特定できていない。
+      ADOPTION_GUIDE.mdの手順は明確だが、実際の導入事例がない。
+
+      前回フィードバック: 「組織的なプロセス改善提案は、技術的な実装だけで
+      は完結しない。実際のパイロットプロジェクトが特定された段階で実行するべき」
+    impact:
+      - "実運用でのフィードバックが得られない"
+      - "本番データが収集できない（GAP-001の原因）"
+      - "プロジェクトの成功判定ができない"
+    root_cause: |
+      導入プロセスが技術的な導入手順（ADOPTION_GUIDE.md）は完備しているが、
+      組織的なアプローチ（ステークホルダー説得、ワークショップ等）が実行されていない。
+
+      ASM-001の推測値が不適切だった可能性がある。
+    proposed_actions:
+      - "ASM-001の値を「パイロット導入済みのGitHub組織の開発チーム」に修正"
+      - "実際のパイロットプロジェクトを特定し、導入交渉を開始"
+      - "ワークショップ資料を作成し、ステークホルダーへプレゼンテーション"
+    dependencies:
+      - "なし（組織的なアクション）"
+
+  ### Gap 5: テレメトリー収集が有効化されていない
+  - id: "GAP-005"
+    severity: "medium"
     category: "Observability"
     source_intent: "README.md:146-167 (テレメトリー機能の説明)"
-    current_reality: "C-103 (metrics/telemetry/ が空)"
+    current_reality: "metrics/telemetry/ が空"
     description: |
-      テレメトリー収集機能は実装されている（scripts/generate_telemetry_report.py）、
-      しかし実際の収集が開始されていない。
+      前回サイクルから継続中。テレメトリー収集機能は実装されているが、
+      実際の収集が開始されていない。
 
       README.md:146-167 で「匿名テレメトリーを収集している」と記述しているが、
-      現実は「収集準備完了」状態に留まっている。
+      現実は「収集準備完了」状態。
+
+      GAP-004が解決しない限り、テレメトリーを収集する対象が存在しない。
     impact:
       - "Actionsの使用状況を把握できない"
       - "エラー発生時のデバッグが困難"
@@ -92,46 +174,23 @@ gaps:
     root_cause: |
       パイロット導入が進んでいないため、テレメトリーを収集する対象が存在しない。
     proposed_actions:
-      - "パイロットプロジェクトでのテレメトリー有効化"
+      - "GAP-004解決後、パイロットプロジェクトでテレメトリー有効化"
       - "収集データのプライバシー影響評価"
       - "テレメトリー収集ワークフローのテスト"
+    dependencies:
+      - "GAP-004 (Phase 3の導入)"
 
-  ### Gap 4: Phase 3の導入が進んでいない
-  - id: "GAP-004"
-    severity: "high"
-    category: "Adoption"
-    source_intent: "PURPOSE.md:22-27 (Phase 3: Stabilization & Adoption)"
-    current_reality: "C-005, C-101 (組織内導入が未完了)"
-    description: |
-      PURPOSE.md:22-27 で「Phase 3: Stabilization & Adoption (In Progress)」と
-      なっているが、「組織内プロジェクトへの導入とフィードバック収集」が
-      未完了（⬜ マーク）。
-
-      ADOPTION.md には "Seeking pilot projects" とあるが、実際の採用事例が
-      登録されていない。
-    impact:
-      - "実運用でのフィードバックが得られない"
-      - "品質改善のサイクルが回せない"
-      - "プロジェクトの成功判定ができない"
-    root_cause: |
-      採用プロセスが不明確、またはプロジェクトの認知度が不足している可能性。
-    proposed_actions:
-      - "ADOPTION_GUIDE.md に基づくパイロット導入計画の実行"
-      - "社内ワークショップでの啓蒙"
-      - "成功事例の文書化"
-
-  ### Gap 5: Claude CLIバージョン互換性の検証不足
-  - id: "GAP-005"
+  ### Gap 6: Claude CLIバージョン互換性の検証不足
+  - id: "GAP-006"
     severity: "high"
     category: "Compatibility"
     source_intent: "README.md:87-113 (Claude CLIバージョン要件)"
-    current_reality: "C-203 (互換性検証が行われていない)"
+    current_reality: "互換性検証が行われていない"
     description: |
-      README.md:87-113 で「対応バージョン: 最新の安定版」と記述しているが、
-      複数のClaude CLIバージョンでの検証が行われていない。
+      前回サイクルから継続中。README.md:87-113 で「対応バージョン: 最新の安定版」と
+      記述しているが、複数のClaude CLIバージョンでの検証が行われていない。
 
-      また、「バージョン固定推奨」と言いつえ゙、具体的な互換性マトリクスが
-      提供されていない。
+      「バージョン固定推奨」と言いつつ、具体的な互換性マトリクスが提供されていない。
     impact:
       - "CLIバージョンアップでActionsが動作しなくなるリスク"
       - "ユーザーがどのバージョンを使えばよいか不明"
@@ -142,62 +201,96 @@ gaps:
       - "主要バージョンでの互換性テスト実施"
       - "互換性マトリクスの作成と公開"
       - "CLIバージョン自動検出・警告機能の追加"
+    dependencies:
+      - "なし（単独で実施可能）"
 
-  ### Gap 6: generate_telemetry_report.pyのカバレッジ不足
-  - id: "GAP-006"
-    severity: "medium"
+  ### Gap 7: テストカバレッジの算出範囲が明記されていない
+  - id: "GAP-007"
+    severity: "low"
+    category: "Documentation"
+    source_intent: "ISS-NEW-003 (coverage測定範囲の明確化)"
+    current_reality: "pytest --cov=actions --cov=scripts のみを対象"
+    description: |
+      前回実行で検出されたISS-NEW-003: coverage測定時にactions/とscripts/ディレクトリ
+      のみを対象としている。
+
+      現在のカバレッジ92.99%はactions/とscripts/のみの値であり、リポジトリ全体の
+      カバレッジではない。
+
+      README.mdやTESTING.mdでこの算出範囲が明記されていないと、ユーザーが誤解する
+      可能性がある。
+    impact:
+      - "カバレッジ値の透明性が低下"
+      - "ユーザーの誤解を招く可能性"
+    root_cause: |
+      README.md:128-138 で「テストカバレッジ >= 70%」と記載しているが、算出範囲の
+      明記が不足している。
+    proposed_actions:
+      - "README.mdにカバレッジ算出範囲を明記"
+      - "TESTING.mdに測定方法の詳細を追記"
+      - "必要に応じて、他ディレクトリのテスト追加を検討"
+    dependencies:
+      - "なし（ドキュメント修正のみ）"
+
+  ### Gap 8: generate_telemetry_report.pyのカバレッジ不足
+  - id: "GAP-008"
+    severity: "low"
     category: "Code Quality"
     source_intent: "QA-001 (テストカバレッジ >= 70%)"
-    current_reality: "as_is.yml (generate_telemetry_report.py: 78.29%)"
+    current_reality: "generate_telemetry_report.py: 78.29%"
     description: |
-      全体のカバレッジは92.99%で目標を達成しているが、
-      scripts/generate_telemetry_report.py のカバレッジが78.29%と
-      他のスクリプト（90%超え）に比べて低い。
+      前回サイクルから継続中。全体のカバレッジは92.99%で目標を達成しているが、
+      scripts/generate_telemetry_report.py のカバレッジが78.29%と他のスクリプト
+      （90%超え）に比べて低い。
 
       Missing lines: [55, 66-70, 172-173, 175-176, 211, 286-331, 335]
     impact:
       - "テレメトリー機能のバグリスク"
       - "エッジケースで動作しない可能性"
     root_cause: |
-      テレメトリー機能が実際に使用されていないため、テストの優先度が
-      低くなっていたと推測。
+      テレメトリー機能が実際に使用されていないため、テストの優先度が低くなっていた。
+      GAP-005解決後に改善可能。
     proposed_actions:
       - "エッジケースのテスト追加"
       - "カバレッジ90%超えを目指す"
+    dependencies:
+      - "GAP-005 (テレメトリー有効化後）"
 
-  ### Gap 7: acceptance_tracker.pyの未使用行
-  - id: "GAP-007"
-    severity: "medium"
+  ### Gap 9: acceptance_tracker.pyの未使用行
+  - id: "GAP-009"
+    severity: "low"
     category: "Code Quality"
     source_intent: "QA-001 (テストカバレッジ >= 70%)"
-    current_reality: "as_is.yml (acceptance_tracker.py: 88.89%)"
+    current_reality: "acceptance_tracker.py: 88.89%"
     description: |
-      actions/lib/acceptance_tracker.py のカバレッジが88.89%で、
-      次の行が未実行：
+      前回サイクルから継続中。actions/lib/acceptance_tracker.py のカバレッジが
+      88.89%で、次の行が未実行：
 
-      - Line 95, 108, 155-157, 196-197, 251-253
+      Line 95, 108, 155-157, 196-197, 251-253
 
-      これはAIレビュー受入率追跡の中核モジュールであるため、
-      カバレッジ向上が望ましい。
+      これはAIレビュー受入率追跡の中核モジュールであるため、カバレッジ向上が
+      望ましい。GAP-001解決後に実際のデータを使用したテストが可能になる。
     impact:
       - "受入率計算のエッジケースでバグの可能性"
       - "メトリクス収集が不完全"
     root_cause: |
-      C-006 の通り、レビューデータが存在しないため、実際の使用例に基づく
-      テストが不可能。
+      本番データが存在しないため、実際の使用例に基づくテストが不可能。
+      GAP-001解決後に改善可能。
     proposed_actions:
       - "モックデータを使用したテスト追加"
       - "カバレッジ90%超えを目指す"
+    dependencies:
+      - "GAP-001 (本番データ収集後）"
 
-  ### Gap 8: 実運用ドキュメントの不足
-  - id: "GAP-008"
+  ### Gap 10: 実運用ドキュメントの不足
+  - id: "GAP-010"
     severity: "low"
     category: "Documentation"
     source_intent: "SYSTEM_CONSTITUTION.md (ドキュメント駆動)"
     current_reality: "adopter_count: 0"
     description: |
-      ADOPTION.md, ADOPTION_GUIDE.md は存在するが、実際の導入事例や
-      運用上のノウハウ（トラブルシューティング等）が不足している。
+      前回サイクルから継続中。ADOPTION.md, ADOPTION_GUIDE.md は存在するが、
+      実際の導入事例や運用上のノウハウ（トラブルシューティング等）が不足している。
 
       「Seeking pilot projects」の状態で、初期導入者の経験が蓄積されていない。
     impact:
@@ -205,32 +298,63 @@ gaps:
       - "ベストプラクティスが共有されていない"
     root_cause: |
       導入事例がまだないため、実運用に基づくドキュメントを作成できない。
+      GAP-004解決後に改善可能。
     proposed_actions:
       - "パイロット導入プロジェクトでのノウハウ収集"
       - "トラブルシューティングガイドの作成"
       - "FAQの拡充"
+    dependencies:
+      - "GAP-004 (パイロット導入後）"
 
 ## 優先順位付け
 prioritization:
-  critical:
-    - "GAP-001: AIレビュー品質データの欠如"
-    - "GAP-002: 機能検証の欠如"
+  critical: []
 
   high:
-    - "GAP-003: テレメトリー収集が有効化されていない"
+    - "GAP-001: 本番データでのAIレビュー受入率未測定"
     - "GAP-004: Phase 3の導入が進んでいない"
-    - "GAP-005: Claude CLIバージョン互換性の検証不足"
+    - "GAP-006: Claude CLIバージョン互換性の検証不足"
 
   medium:
-    - "GAP-006: generate_telemetry_report.pyのカバレッジ不足"
-    - "GAP-007: acceptance_tracker.pyの未使用行"
+    - "GAP-002: Integration Testの不足"
+    - "GAP-003: Action構造テストの目標値不一致"
+    - "GAP-005: テレメトリー収集が有効化されていない"
 
   low:
-    - "GAP-008: 実運用ドキュメントの不足"
+    - "GAP-007: テストカバレッジの算出範囲が明記されていない"
+    - "GAP-008: generate_telemetry_report.pyのカバレッジ不足"
+    - "GAP-009: acceptance_tracker.pyの未使用行"
+    - "GAP-010: 実運用ドキュメントの不足"
 
-## 依存関係
-dependencies:
-  - "GAP-001 は GAP-004, GAP-003 に依存（導入が進まないとデータが集まらない）"
-  - "GAP-003 は GAP-004 に依存（導入が進まないとテレメトリーを収集できない）"
-  - "GAP-002 は GAP-005 に依存（機能検証にはCLIバージョン検証が含まれる）"
-  - "GAP-006, GAP-007 は GAP-001 に依存（実際のデータがあればテストを書ける）"
+## 依存関係マップ
+dependency_graph:
+  critical_path:
+    - "GAP-004 (Phase 3導入)"
+    - "↓ 解決により"
+    - "GAP-001 (本番データ収集)"
+    - "↓ 解決により"
+    - "GAP-005 (テレメトリー有効化)"
+    - "↓ 解決により"
+    - "GAP-008, GAP-009, GAP-010 (コード品質・ドキュメント改善)"
+
+  independent_tasks:
+    - "GAP-002: Integration Test追加（即時実施可能）"
+    - "GAP-003: 構造テスト目標値修正（即時実施可能）"
+    - "GAP-006: CLIバージョン互換性検証（即時実施可能）"
+    - "GAP-007: ドキュメント修正（即時実施可能）"
+
+## 前回サイクルの教訓
+lessons_learned:
+  successful_patterns:
+    - "データ収集プロセスの確立は最優先事項として正しかった（PR-002の成功）"
+    - "テストデータベースラインの確立により、測定不能状態を脱却できた"
+
+  improved_understanding:
+    - "技術的な実装だけで完結する改善と、組織的な調整が必要な改善を区別すべき"
+    - "ASM-001の仮定が不適切だったことが明らかになった"
+    - "機能検証（構造テスト）と本番検証（実際の使用）は異なる次元"
+
+  next_cycle_focus:
+    - "独立タスク（GAP-002, 003, 006, 007）を優先実施"
+    - "GAP-004（組織的導入）は並行して進める"
+    - "GAP-001以降は、GAP-004の進捗に依存"

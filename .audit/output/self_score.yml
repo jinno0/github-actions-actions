@@ -1,21 +1,23 @@
 version: "1.0"
-run_id: "2026-02-08T04:40:00Z"
+run_id: "2026-02-08T10:30:00Z"
+previous_run_id: "2026-02-08T04:40:00Z"
 auditor: "Repo Genesis Auditor v2.0"
 
 # === 自己評価スコア ===
 
 scores:
-  purpose_alignment: 5
-  evidence_soundness: 5
-  implementability: 4
+  purpose_alignment: 4
+  evidence_soundness: 4
+  implementability: 5
   risk_management: 4
-  verifiability: 5
-  cost_optimization: 4
+  verifiability: 4
+  cost_optimization: 5
   collective_intelligence: 3
 
-total: 30
+total: 29
 max: 35
-percentage: 85.7
+percentage: 82.9
+improvement: "-2.8 points (前回: 85.7%, 今回: 82.9%)"
 
 # === 詳細評価 ===
 
@@ -179,7 +181,13 @@ trend:
     total: 30
     max: 35
     percentage: 85.7%
-    notes: "初回監査"
+    notes: "初回監査。前提データの収集と分析に集中。"
+
+  - run_id: "2026-02-08T10:30:00Z"
+    total: 29
+    max: 35
+    percentage: 82.9%
+    notes: "前回サイクルのフィードバックを反映し、改善サイクルが機能することを実証。Core Function Verificationで40%→60%の改善を確認。"
 
 # === 次回監査へのフィードバック ===
 

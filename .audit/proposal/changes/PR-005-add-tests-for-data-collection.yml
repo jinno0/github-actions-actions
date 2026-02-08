@@ -1,0 +1,217 @@
+# PR-005: test_data_collection.pyの単体テスト追加
+
+**Status:** Ready for Implementation
+**Priority:** Low
+**Estimated Effort:** 1-2 hours
+**Gap Addressed:** GAP-008 (部分的に)
+
+## 概要
+
+scripts/test_data_collection.pyのカバレッジが0%であるため、
+単体テストを追加してカバレッジを向上させる。このファイルはPR-002で
+追加されたばかりのテストデータ生成機能であり、品質保証が重要である。
+
+## 現状
+
+- **Coverage**: 0.00% (38 statements, all missing)
+- **Impact**: 全体カバレッジが89.33%に低下（前回92.99%から）
+- **機能**: テストデータ生成・検証機能（PR-002で追加）
+
+## 問題分析
+
+test_data_collection.pyは以下の機能を提供している：
+
+1. `generate_test_review_data()`: テストレビューデータ生成
+2. `validate_test_data()`: データ検証
+3. `main()`: CLIエントリーポイント
+
+これらの機能が適切に動作することを保証するためのテストが不足している。
+
+## 提案する変更
+
+### 1. テストファイルの作成
+
+**ファイル**: `tests/test_test_data_collection.py`
+
+```python
+"""Tests for scripts/test_data_collection.py"""
+
+import json
+import pytest
+from pathlib import Path
+from scripts.test_data_collection import (
+    generate_test_review_data,
+    validate_test_data,
+)
+
+class TestGenerateReviewData:
+    """Test review data generation."""
+
+    def test_generates_correct_number_of_reviews(self, tmp_path):
+        """Test that correct number of reviews is generated."""
+        output_file = tmp_path / "test_metrics.json"
+        generate_test_review_data(count=10, output_file=str(output_file))
+
+        assert output_file.exists()
+
+        with open(output_file) as f:
+            data = json.load(f)
+
+        assert len(data) == 10
+
+    def test_generates_valid_outcomes(self, tmp_path):
+        """Test that only valid outcomes are generated."""
+        output_file = tmp_path / "test_metrics.json"
+        generate_test_review_data(count=50, output_file=str(output_file))
+
+        with open(output_file) as f:
+            data = json.load(f)
+
+        valid_outcomes = {"approved", "modified", "rejected", "needs_work"}
+        for review in data:
+            assert review["outcome"] in valid_outcomes
+
+    def test_generates_valid_quality_scores(self, tmp_path):
+        """Test that quality scores are in valid range."""
+        output_file = tmp_path / "test_metrics.json"
+        generate_test_review_data(count=50, output_file=str(output_file))
+
+        with open(output_file) as f:
+            data = json.load(f)
+
+        for review in data:
+            assert 0 <= review["quality_score"] <= 5
+            assert isinstance(review["quality_score"], int)
+
+    def test_includes_required_fields(self, tmp_path):
+        """Test that required fields are present."""
+        output_file = tmp_path / "test_metrics.json"
+        generate_test_review_data(count=10, output_file=str(output_file))
+
+        with open(output_file) as f:
+            data = json.load(f)
+
+        required_fields = {
+            "timestamp",
+            "action_name",
+            "outcome",
+            "quality_score",
+            "suggestions_count"
+        }
+
+        for review in data:
+            assert required_fields.issubset(review.keys())
+
+    def test_generates_realistic_timestamps(self, tmp_path):
+        """Test that timestamps are ISO format strings."""
+        from datetime import datetime
+
+        output_file = tmp_path / "test_metrics.json"
+        generate_test_review_data(count=10, output_file=str(output_file))
+
+        with open(output_file) as f:
+            data = json.load(f)
+
+        for review in data:
+            # ISO 8601 format check
+            datetime.fromisoformat(review["timestamp"])
+
+    def test_output_file_format(self, tmp_path):
+        """Test that output file is valid JSON."""
+        output_file = tmp_path / "test_metrics.json"
+        generate_test_review_data(count=10, output_file=str(output_file))
+
+        # Should not raise JSONDecodeError
+        with open(output_file) as f:
+            json.load(f)
+
+class TestValidateTestData:
+    """Test data validation."""
+
+    def test_validate_valid_data(self, tmp_path):
+        """Test that valid data passes validation."""
+        output_file = tmp_path / "test_metrics.json"
+        generate_test_review_data(count=10, output_file=str(output_file))
+
+        assert validate_test_data(str(output_file)) == True
+
+    def test_validate_missing_file(self):
+        """Test that missing file fails validation."""
+        assert validate_test_data("/nonexistent/file.json") == False
+
+    def test_validate_invalid_json(self, tmp_path):
+        """Test that invalid JSON fails validation."""
+        invalid_file = tmp_path / "invalid.json"
+        invalid_file.write_text("not valid json")
+
+        assert validate_test_data(str(invalid_file)) == False
+
+    def test_validate_empty_data(self, tmp_path):
+        """Test that empty data fails validation."""
+        empty_file = tmp_path / "empty.json"
+        empty_file.write_text("[]")
+
+        assert validate_test_data(str(empty_file)) == False
+```
+
+### 2. テスト実行による検証
+
+```bash
+# 新しいテストを実行
+pytest tests/test_test_data_collection.py -v
+
+# カバレッジを確認
+pytest --cov=scripts/test_data_collection --cov-report=term-missing \
+       tests/test_test_data_collection.py
+```
+
+### 3. 期待されるカバレッジ向上
+
+- **Before**: 0.00% (38 statements missing)
+- **Target**: >= 80.00%
+- **Expected**: 全体カバレッジが89.33%から90%台へ回復
+
+## 成功基準
+
+1. [ ] test_test_data_collection.pyが作成されている
+2. [ ] 全テストがパスする
+3. [ ] test_data_collection.pyのカバレッジが >= 80%
+4. [ ] 全体カバレッジが90%台に回復している
+
+## ロールバック手順
+
+テスト追加のため、ロールバックの必要はない。
+
+## 副作用とリスク
+
+**副作用**:
+- テスト実行時間が若干増加（+0.5-1秒）
+
+**リスク**: 低
+- テストの品質次第では、実装のバグを発見する可能性がある
+- ただし、これはメリットでもある
+
+## 依存関係
+
+- なし（単独で実施可能）
+
+## 実装上の注意点
+
+1. **テストデータの分離**: テスト用データは `tmp_path` fixtureを使用して一時ディレクトリに作成
+2. **副作用の回避**: `generate_test_review_data()` が既存の metrics/review_metrics.json を上書きしないように注意
+3. **実行速度**: テストは高速に実行されるように、データ件数を最小限（10-50件）に抑える
+
+## 次のアクション
+
+1. このPR案を承認するか、修正フィードバックを提供
+2. test_test_data_collection.pyを作成
+3. テストを実行し、全件パスを確認
+4. カバレッジ >= 80% を確認
+5. PRを作成し、レビューを依頼
+6. マージ後、全体カバレッジの回復を確認
+
+## 参考資料
+
+- Gap Analysis: `.audit/analysis/gap.yml` (GAP-008)
+- Coverage Report: `coverage.json` (test_data_collection.py: 0.00%)
+- Original Implementation: PR-002
