@@ -99,13 +99,6 @@ def verify_cf004_dry_run_implementation() -> VerificationResult:
             "DRY_RUN" in content
         )
 
-        # 条件分岐の存在確認（簡単なチェック）
-        # Note: This check is informational but not currently used for validation
-        _ = (
-            "if:" in content and
-            ("inputs" in content or "input" in content)
-        )
-
         if has_dry_run_input:
             actions_with_dryrun.append(action_dir.name)
         else:
