@@ -1,0 +1,183 @@
+version: "1.0"
+generated_at: "2026-02-08T18:53:06Z"
+
+# === ギャップサマリ ===
+summary:
+  total_gaps: 8
+  critical: 2
+  high: 3
+  medium: 2
+  low: 1
+
+# === 検出されたギャップ ===
+gaps:
+
+  # === Critical ===
+  - id: "GAP-001"
+    severity: "critical"
+    category: "adoption"
+    title: "外部採用数が0件"
+    current_state: "ADOPTION.mdに採用リストが空"
+    desired_state: "複数の外部組織で採用されている"
+    impact: "プロジェクトの存在意義（組織全体での採用）が達成されていない"
+    evidence: ["C-012: ADOPTION.mdが空欄", "PURPOSE.md:70: 組織内の複数のリポジトリで採用されることが成功条件"]
+    assumption_based: false
+    proposed_actions:
+      - "パイロットプロジェクトを募る"
+      - "採用事例を作成する"
+      - "導入の障壁を特定・除去する"
+
+  - id: "GAP-002"
+    severity: "critical"
+    category: "quality_metrics"
+    title: "AIレビューのサンプル数が統計的に有意ではない"
+    current_state: "サンプル数4件（目標20件）"
+    desired_state: "20件以上のレビューデータ"
+    impact: "AIレビューの品質ベースラインが信頼できない"
+    evidence: ["C-006: レビューデータ4件", "README.md:182: 目標20件"]
+    assumption_based: false
+    proposed_actions:
+      - "より多くのプロジェクトでreview-and-mergeを導入"
+      - "レビューデータの収集期間を延長"
+      - "テストデータでも統計的有意性を確保する"
+
+  # === High ===
+  - id: "GAP-003"
+    severity: "high"
+    category: "quality_metrics"
+    title: "組織内での導入数が不明"
+    current_state: "どのリポジトリで導入されているか不明"
+    desired_state: "組織内の全導入リポジトリを把握"
+    impact: "効果測定と改善サイクルが回せない"
+    evidence: ["C-015: 組織内導入数が不明"]
+    assumption_based: true
+    assumption_id: "ASM-004"
+    proposed_actions:
+      - "組織内の全リポジトリをスキャンし、導入状況を調査"
+      - "導入リストをADOPTION.mdに記載"
+
+  - id: "GAP-004"
+    severity: "high"
+    category: "performance"
+    title: "実際の実行時間データが不足"
+    current_state: "Claude Code CLIの実行時間データがない"
+    desired_state: "各Actionの実行時間ベースラインがある"
+    impact: "パフォーマンスボトルネックの特定と改善が困難"
+    evidence: ["C-016: 実行時間データが不明"]
+    assumption_based: false
+    proposed_actions:
+      - "GitHub Actions実行ログからdurationを収集"
+      - "テレメトリーに実行時間を含める"
+      - "パフォーマンスベースラインを策定"
+
+  - id: "GAP-005"
+    severity: "high"
+    category: "testing"
+    title: "scripts/test_data_collection.pyのカバレッジが0%"
+    current_state: "カバレッジ0%（38行未カバー）"
+    desired_state: "80%以上のカバレッジ"
+    impact: "データ収集ロジックのバグリスクが高い"
+    evidence: ["C-002: test_data_collection.py coverage 0%"]
+    assumption_based: false
+    proposed_actions:
+      - "test_data_collection.pyのテストを追加"
+      - "または、未使用なら削除"
+
+  # === Medium ===
+  - id: "GAP-006"
+    severity: "medium"
+    category: "testing"
+    title: "scripts/env_config.pyのカバレッジが47.83%"
+    current_state: "カバレッジ47.83%（12/23行未カバー）"
+    desired_state: "80%以上のカバレッジ"
+    impact: "環境設定ロジックの一部がテストされていない"
+    evidence: ["C-002: env_config.py coverage 47.83%"]
+    assumption_based: false
+    proposed_actions:
+      - "env_config.pyのテストを追加"
+
+  - id: "GAP-007"
+    severity: "medium"
+    category: "quality_metrics"
+    title: "コスト便益分析が未実施"
+    current_state: "Self-hosted vs GitHub-hostedのコスト比較がない"
+    desired_state: "コスト便益分析があり、投資対効果が証明されている"
+    impact: "経営層への説得材料が不足"
+    evidence: ["C-017: コスト便益分析が未実施"]
+    assumption_based: false
+    proposed_actions:
+      - "実際の使用時間とコストデータを収集"
+      - "GitHub-hosted runnerとのコスト比較を実施"
+
+  # === Low ===
+  - id: "GAP-008"
+    severity: "low"
+    category: "documentation"
+    title: "一部のモジュールでカバレッジが100%未達"
+    current_state: "複数のモジュールで100%未達"
+    desired_state: "全モジュールで理想的には100%"
+    impact: "既に目標の80%は達成しており、優先度は低い"
+    evidence: ["C-002: 複数モジュールで100%未満"]
+    assumption_based: false
+    proposed_actions:
+      - "長期的な改善目標として追跡"
+      - "重要なバグ修正時にテストを追加"
+
+# === 達成されている項目 ===
+achievements:
+  - id: "ACH-001"
+    category: "testing"
+    title: "テストカバレッジ目標達成"
+    description: "88.31% >= 80%"
+    evidence: ["C-002"]
+
+  - id: "ACH-002"
+    category: "quality_metrics"
+    title: "AIレビュー受入率目標達成"
+    description: "75.0% >= 70%"
+    evidence: ["C-007"]
+
+  - id: "ACH-003"
+    category: "documentation"
+    title: "全アクションにインストラクション完備"
+    description: "13個全てのアクションにinstructions/*.mdが存在"
+    evidence: ["C-004"]
+
+  - id: "ACH-004"
+    category: "documentation"
+    title: "全アクションにワークフロー例完備"
+    description: "15個のワークフロー例が存在"
+    evidence: ["C-005"]
+
+  - id: "ACH-005"
+    category: "testing"
+    title: "全テストがパス"
+    description: "460 passed, 0 failed"
+    evidence: ["C-003"]
+
+# === 優先順位付け ===
+priority_ranking:
+  - rank: 1
+    gap_id: "GAP-001"
+    reason: "プロジェクトの存在意義に関わるため"
+  - rank: 2
+    gap_id: "GAP-002"
+    reason: "品質メトリクスの信頼性確保のため"
+  - rank: 3
+    gap_id: "GAP-003"
+    reason: "現状把握と改善サイクルのため"
+  - rank: 4
+    gap_id: "GAP-005"
+    reason: "品質リスク回避のため"
+  - rank: 5
+    gap_id: "GAP-004"
+    reason: "パフォーマンス最適化のため"
+  - rank: 6
+    gap_id: "GAP-006"
+    reason: "テスト品質向上のため"
+  - rank: 7
+    gap_id: "GAP-007"
+    reason: "経営層説得のため"
+  - rank: 8
+    gap_id: "GAP-008"
+    reason: "既に目標達成済みのため"

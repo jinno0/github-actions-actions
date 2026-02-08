@@ -1,0 +1,180 @@
+version: "2.0"
+updated_at: "2026-02-08T18:53:06Z"
+updated_by: "audit-run-2026-02-08"
+
+# === Mission ===
+mission:
+  target_user: "GitHub組織の開発チーム（Self-hosted runner環境を運用し、AI CLIを活用したいチーム）"
+  provided_value: "AIネイティブなGitHub Actionsを提供し、文脈を理解した高度な自動化（レビュー、修正、ドキュメント生成）を実現"
+  desired_state: "組織内の複数リポジトリで採用され、AIに任せられる雑務が増え、人間が本質的な設計・意思決定に集中できる時間が増加する"
+
+# === Core Functions (13 Actions) ===
+core_functions:
+  - id: "CF-001"
+    claim: "review-and-merge: PRの内容をAIがレビューし、LGTMなら自動マージ"
+    source: "README.md:16, PURPOSE.md:43"
+    testable: true
+    requires: "Claude Code CLI, Self-hosted runner"
+
+  - id: "CF-002"
+    claim: "spec-to-code: Markdown仕様書からコードを自動生成"
+    source: "README.md:17, PURPOSE.md:46"
+    testable: true
+    requires: "Claude Code CLI, 仕様書ファイル"
+
+  - id: "CF-003"
+    claim: "action-fixer: Workflowのエラーを検知し、AIが自動修正"
+    source: "README.md:18, PURPOSE.md:50"
+    testable: true
+    requires: "Claude Code CLI"
+
+  - id: "CF-004"
+    claim: "auto-refactor: 自然言語の指示に基づき、既存コードをリファクタリング"
+    source: "README.md:19, PURPOSE.md:53"
+    testable: true
+    requires: "Claude Code CLI"
+
+  - id: "CF-005"
+    claim: "auto-document: コードの変更を検知し、README等のドキュメントを自動更新"
+    source: "README.md:25, PURPOSE.md:57"
+    testable: true
+    requires: "Claude Code CLI"
+
+  - id: "CF-006"
+    claim: "release-notes-ai: コミット履歴から人間が読みやすいリリースノートを生成"
+    source: "README.md:26, PURPOSE.md:59"
+    testable: true
+    requires: "Claude Code CLI"
+
+  - id: "CF-007"
+    claim: "auto-merge: PRが条件を満たす場合に自動マージ（squash/merge/rebase対応）"
+    source: "README.md:32"
+    testable: true
+    requires: "GitHub API"
+
+  - id: "CF-008"
+    claim: "auto-rebase: PRの競合をAIが自動解決しながらリベース"
+    source: "README.md:33"
+    testable: true
+    requires: "Claude Code CLI, GitHub API"
+
+  - id: "CF-009"
+    claim: "review-auto-merge: AIレビュー後、CIパス時に自動マージ（リトライ機能付き）"
+    source: "README.md:34"
+    testable: true
+    requires: "Claude Code CLI, GitHub API"
+
+  - id: "CF-010"
+    claim: "publish-pr: ドラフトPRを自動的にレビュー準備完了に変更"
+    source: "README.md:35"
+    testable: true
+    requires: "GitHub API"
+
+  - id: "CF-011"
+    claim: "bulk-merge-prs: 複数のPRを一括マージ"
+    source: "README.md:41"
+    testable: true
+    requires: "GitHub API"
+
+  - id: "CF-012"
+    claim: "bulk-rebase-prs: 複数のPRを一括リベース"
+    source: "README.md:42"
+    testable: true
+    requires: "GitHub API"
+
+  - id: "CF-013"
+    claim: "pr-review-enqueuer: PRをスキャンし、AIレビューキューに自動登録"
+    source: "README.md:48"
+    testable: true
+    requires: "GitHub API"
+
+# === Quality Attributes ===
+quality_attributes:
+  - id: "QA-001"
+    name: "テストカバレッジ"
+    target: ">= 80%"
+    verification:
+      type: "measurement"
+      command: "pytest --cov=actions --cov=scripts --cov-fail-under=80"
+      criteria:
+        operator: ">="
+        value: 80
+        unit: "%"
+      interpretation:
+        success_means: "actions/ と scripts/ ディレクトリのコードの80%以上がテストで実行された"
+        failure_means: "テストされていないコードパスが20%以上ある"
+        warning: "カバレッジが高くてもアサーションが弱ければ意味がない"
+
+  - id: "QA-002"
+    name: "YAML構文検証"
+    target: "全てのaction.ymlが有効なYAMLである"
+    verification:
+      type: "validation"
+      command: "find actions/ -name 'action.yml' -exec yamllint {} \;"
+      criteria:
+        operator: "="
+        value: 0
+        unit: "errors"
+      interpretation:
+        success_means: "全てのAction定義ファイルがYAMLとしてパース可能"
+        failure_means: "action.ymlに構文エラーがあり、GitHub Actionsで実行できない"
+
+  - id: "QA-003"
+    name: "AIレビュー受入率"
+    target: ">= 70%"
+    verification:
+      type: "measurement"
+      command: "python scripts/calculate_acceptance_rate.py --output json"
+      criteria:
+        operator: ">="
+        value: 70
+        unit: "%"
+      interpretation:
+        success_means: "AIレビューの70%以上が人間に受け入れられている"
+        failure_means: "AIレビューの品質が低く、人間が修正・拒否することが多い"
+
+  - id: "QA-004"
+    name: "ドキュメントカバレッジ"
+    target: "全Actionがセットアップガイドを持つ"
+    verification:
+      type: "validation"
+      command: "python scripts/test_documentation_coverage.py"
+      criteria:
+        operator: "="
+        value: 13
+        unit: "actions"
+      interpretation:
+        success_means: "13個全てのActionにinstructions/*.mdが存在"
+        failure_means: "一部のActionに導入ガイドが欠けている"
+
+# === Assumptions ===
+assumptions:
+  - id: "ASM-001"
+    field: "mission.target_user"
+    value: "Self-hosted runnerを運用するGitHub組織"
+    reason: "README.mdでSelf-hosted runnerとClaude Code CLIを前提としているため"
+    confidence: "high"
+
+  - id: "ASM-002"
+    field: "quality_attributes.QA-001.target"
+    value: "80%カバレッジ"
+    reason: "README.md:130とpyproject.toml:38で80%が目標として明記されている"
+    confidence: "high"
+
+  - id: "ASM-003"
+    field: "core_functions"
+    value: "13個のActions"
+    reason: "README.md:10で「全13件」と明記されており、actions/ディレクトリに15個のサブディレクトリが存在（libと_sharedを除くと13個）"
+    confidence: "high"
+
+  - id: "ASM-004"
+    field: "mission.desired_state"
+    value: "AIレビュー受入率が継続的に向上"
+    reason: "PURPOSE.md:72で「AIの提案に対する修正率（Acceptance Rate）が向上し続ける」ことが成功条件"
+    confidence: "medium"
+
+# === Non-Goals ===
+non_goals:
+  - "単なるシェルスクリプトのラッパー（既存のActionsで十分なもの）"
+  - "完全に無人での運用（AIのハルシネーションリスクを考慮）"
+  - "特定プロダクトに強く結合しすぎたロジック（再利用性を重視）"

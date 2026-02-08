@@ -1,0 +1,166 @@
+version: "1.0"
+generated_at: "2026-02-08T18:53:06Z"
+
+# === プロジェクト概要 ===
+project_overview:
+  name: "github-actions-actions"
+  description: "AI Hub - GitHub Actions for AI-Native Development"
+  version: "1.0.0"
+  python_version: ">=3.11"
+  phase: "Phase 3: Stabilization & Adoption"
+
+# === アクション構成 ===
+actions:
+  total_count: 13
+  categories:
+    core_development: 4  # review-and-merge, spec-to-code, action-fixer, auto-refactor
+    documentation: 2     # auto-document, release-notes-ai
+    automation: 4        # auto-merge, auto-rebase, review-auto-merge, publish-pr
+    bulk_operations: 2   # bulk-merge-prs, bulk-rebase-prs
+    workflow_helpers: 1  # pr-review-enqueuer
+
+# === テスト状況 ===
+testing_status:
+  total_tests: 460
+  passed: 460
+  skipped: 2
+  failed: 0
+  coverage_percentage: 88.31
+  coverage_target: 80
+  coverage_met: true
+  covered_statements: 869
+  uncovered_statements: 115
+  total_statements: 984
+
+  # カバレッジ詳細
+  coverage_by_module:
+    - module: "actions/lib/__init__.py"
+      coverage: 100.00
+      statements: 2
+      missed: 0
+    - module: "actions/lib/acceptance_tracker.py"
+      coverage: 88.89
+      statements: 90
+      missed: 10
+    - module: "scripts/aggregate_metrics.py"
+      coverage: 99.19
+      statements: 124
+      missed: 1
+    - module: "scripts/calculate_acceptance_rate.py"
+      coverage: 90.26
+      statements: 154
+      missed: 15
+    - module: "scripts/collect_metrics.py"
+      coverage: 94.74
+      statements: 57
+      missed: 3
+    - module: "scripts/env_config.py"
+      coverage: 47.83
+      statements: 23
+      missed: 12
+    - module: "scripts/generate_adoption_report.py"
+      coverage: 99.17
+      statements: 121
+      missed: 1
+    - module: "scripts/generate_metrics_report.py"
+      coverage: 99.30
+      statements: 143
+      missed: 1
+    - module: "scripts/generate_telemetry_report.py"
+      coverage: 78.12
+      statements: 128
+      missed: 28
+    - module: "scripts/scan_adoption.py"
+      coverage: 94.23
+      statements: 104
+      missed: 6
+    - module: "scripts/test_data_collection.py"
+      coverage: 0.00
+      statements: 38
+      missed: 38
+
+# === ドキュメント状況 ===
+documentation_status:
+  instruction_files: 19
+  example_workflows: 15
+  documented_actions: 13  # 全アクションに対応
+
+  # 主要ドキュメント
+  key_documents:
+    - file: "README.md"
+      exists: true
+      sections: 13
+    - file: "PURPOSE.md"
+      exists: true
+      phase: "Phase 3"
+    - file: "AGENTS.md"
+      exists: true
+    - file: "SYSTEM_CONSTITUTION.md"
+      exists: true
+    - file: "ADOPTION_GUIDE.md"
+      exists: true
+
+# === 品質メトリクス ===
+quality_metrics:
+  ai_review_acceptance_rate:
+    current: 75.0
+    target: 70
+    target_met: true
+    sample_size: 4
+    target_sample_size: 20
+    data_collection_status: "in_progress"
+    baseline_date: "2026-02-07"
+
+  metrics_collection:
+    review_metrics_file: "metrics/review_metrics.json"
+    total_reviews: 5
+    outcomes:
+      approved: 3
+      modified: 1
+      rejected: 1
+    avg_suggestions_count: 4.0
+    avg_confidence_score: 0.78
+
+# === 採用状況 ===
+adoption_status:
+  external_adopters: 0
+  internal_adopters: "unknown"  # 組織内での導入数は不明
+  adoption_phase: "Seeking pilot projects"
+  adoption_list_file: "ADOPTION.md"
+
+# === テレメトリー ===
+telemetry:
+  implemented: true
+  opt_out_available: true
+  anonymization: "SHA-256 hash (first 16 chars)"
+  data_collected:
+    - "action name"
+    - "execution status"
+    - "execution time"
+    - "runner OS"
+    - "Claude CLI version"
+    - "error messages (max 200 chars)"
+  privacy_features:
+    - "opt-out via DISABLE_TELEMETRY"
+    - "repo name anonymization"
+    - "minimal data collection"
+
+# === 技術スタック ===
+tech_stack:
+  language: "Python"
+  version: ">=3.11"
+  package_manager: "pip/setuptools"
+  dependencies:
+    - "PyYAML>=6.0"
+  dev_dependencies:
+    - "pytest>=7.0.0"
+    - "pytest-cov>=4.1.0"
+    - "ruff>=0.1.0"
+
+# === CI/CD ===
+ci_cd:
+  github_actions: true
+  dry_run_validation: true
+  automated_tests: true
+  coverage_reporting: true
+  coverage_comment_on_pr: true

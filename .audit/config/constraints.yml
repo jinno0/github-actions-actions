@@ -1,0 +1,33 @@
+version: "1.0"
+updated_at: "2026-02-08T18:53:06Z"
+
+# === 技術的制約 ===
+technical:
+  python_version: ">=3.11"
+  requires_self_hosted_runner: true
+  requires_claude_cli: true
+  github_actions_version: ">=2.0"
+
+# === セキュリティ制約 ===
+security:
+  - "PII（個人識別情報）を含むデータはテレメトリー収集しない"
+  - "リポジトリ名はSHA-256ハッシュ（先頭16文字）で匿名化"
+  - "機密情報（トークン、鍵）をログに出力しない"
+  - "AIによるコード変更は常にDry Runモードで検証する"
+
+# === 運用制約 ===
+operational:
+  - "AIのハルシネーションリスクがあるため、完全無人運用は目指さない"
+  - "重要な変更（マージ、デプロイ）の最終決定権は人間が持つ"
+  - "AIレビューはあくまで補助であり、人間のレビューを代替しない"
+
+# === コスト制約 ===
+cost:
+  - "GitHub-hosted runnerの使用時間を最小化するため、処理はself-hosted runnerで実行"
+  - "Claude API呼び出しは必要最小限とし、キャッシュを活用"
+
+# === 互換性制約 ===
+compatibility:
+  - "既存のGitHub Actionsワークフローと互換性を持つ"
+  - "他のActionsと組み合わせて使用可能なモジュラー設計"
+  - "カスタムテンプレートとプロンプトの注入をサポート"

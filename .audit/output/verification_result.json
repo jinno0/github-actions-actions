@@ -1,0 +1,74 @@
+[
+  {
+    "function_id": "CF-001-013",
+    "scenario_name": "アクションディレクトリ構造の検証",
+    "passed": true,
+    "actual_output": {
+      "total_actions": 13,
+      "missing_actions": [],
+      "without_action_yml": []
+    },
+    "expected_output": {
+      "total_actions": 13,
+      "missing_actions": [],
+      "without_action_yml": []
+    },
+    "error_message": null,
+    "interpretation": "13個全てのアクションが存在し、action.ymlを持っている"
+  },
+  {
+    "function_id": "QA-001",
+    "scenario_name": "テストカバレッジ検証",
+    "passed": true,
+    "actual_output": "88.31%",
+    "expected_output": ">= 80.0%",
+    "error_message": null,
+    "interpretation": "テストカバレッジ88.31%は目標値80%を達成している"
+  },
+  {
+    "function_id": "QA-002",
+    "scenario_name": "YAML構文検証",
+    "passed": true,
+    "actual_output": {
+      "valid_count": 13,
+      "invalid_files": []
+    },
+    "expected_output": {
+      "valid_count": 13,
+      "invalid_files": []
+    },
+    "error_message": null,
+    "interpretation": "全13個のaction.ymlが有効なYAML"
+  },
+  {
+    "function_id": "QA-004",
+    "scenario_name": "ドキュメントカバレッジ検証",
+    "passed": true,
+    "actual_output": {
+      "existing_count": 13,
+      "missing_files": []
+    },
+    "expected_output": {
+      "existing_count": 13,
+      "missing_files": []
+    },
+    "error_message": null,
+    "interpretation": "全13個のアクションにインストラクションが存在"
+  },
+  {
+    "function_id": "QA-003",
+    "scenario_name": "AIレビュー受入率検証",
+    "passed": false,
+    "actual_output": {
+      "acceptance_rate": "60.0%",
+      "sample_size": 10,
+      "approved_count": 6
+    },
+    "expected_output": {
+      "acceptance_rate": ">= 70.0%",
+      "sample_size": ">= 20"
+    },
+    "error_message": null,
+    "interpretation": "受入率60.0%は目標値70%未達（サンプル数: 10件）。データ収集継続が必要"
+  }
+]

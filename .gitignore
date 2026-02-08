@@ -69,7 +69,7 @@ debug.log
 *.debug
 
 # Audit and concept tracking directories
-.audit/
+# .audit/ is intentionally NOT ignored - audit artifacts are versioned
 # Track .concept Source-of-Truth, ignore heavy archives
 .concept/archive/
 
