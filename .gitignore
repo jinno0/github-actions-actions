@@ -69,7 +69,7 @@ debug.log
 *.debug
 
 # Audit and concept tracking directories
-# .audit/ REMOVED: Per Repo Genesis Auditor policy, .audit/ must be committed
+.audit/
 # Track .concept Source-of-Truth, ignore heavy archives
 .concept/archive/
 
