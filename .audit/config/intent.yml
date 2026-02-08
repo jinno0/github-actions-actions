@@ -1,0 +1,124 @@
+version: "2.0"
+updated_at: "2026-02-08T15:11:00Z"
+updated_by: "audit-run-20260208-151100"
+
+# === Mission ===
+mission:
+  target_user: "組織のGitHubリポジトリを運営する開発チーム（Self-hosted runner環境）"
+  provided_value: "Claude Code CLIを活用したAIネイティブなGitHub Actionsによる、開発効率とコード品質の向上"
+  desired_state: "組織内の複数リポジトリでAI Actionsが採用され、AIに任せられる雑務が自動化され、人間が本質的な設計・意思決定に集中できる状態"
+
+# === Assumptions（仮定前提） ===
+assumptions:
+  - id: "ASM-001"
+    field: "mission.target_user"
+    value: "Self-hosted runner環境でGitHub Actionsを使用する開発チーム"
+    reason: "PURPOSE.mdでSelf-hosted runnerおよびClaude Code CLIへの言及が複数ある"
+    confidence: "high"
+
+  - id: "ASM-002"
+    field: "quality_attributes.target_test_coverage"
+    value: "80%以上"
+    reason: "pytest.iniで--cov-fail-under=70と設定されているが、pyproject.tomlではfail_under=80となっており、80%が目標値と推測"
+    confidence: "medium"
+
+  - id: "ASM-003"
+    field: "deployment_target"
+    value: "組織内の複数リポジトリ（同一GitHub Organization/GitHub Enterprise内）"
+    reason: "PURPOSE.mdの成功条件に「組織内の複数のリポジトリで採用」とある"
+    confidence: "high"
+
+  - id: "ASM-004"
+    field: "primary_language"
+    value: "Python 3.11+"
+    reason: "pyproject.tomlでrequires-python = \">=3.11\"と明記されている"
+    confidence: "high"
+
+  - id: "ASM-005"
+    field: "execution_environment"
+    value: "Ubuntu 20.04+のSelf-hosted runner（推定2GB RAM, 2 CPU cores以上）"
+    reason: "ACTIONS.mdのPrerequisitesセクションに記載がある"
+    confidence: "medium"
+
+# === Quality Attributes ===
+quality_attributes:
+  - id: "QA-001"
+    name: "テストカバレッジ"
+    target: ">= 80%"
+    verification:
+      type: "measurement"
+      command: "pytest --cov=. --cov-fail-under=80"
+      criteria:
+        operator: ">="
+        value: 80
+        unit: "%"
+      interpretation:
+        success_means: "コードの80%以上がテストで実行され、主要な機能パスが保護されている"
+        failure_means: "テストされていないコードパスが20%以上あり、リグレッション风险がある"
+        warning: "カバレッジが高くてもアサーションが弱ければ意味がない"
+
+  - id: "QA-002"
+    name: "コード品質（Ruff Lint）"
+    target: "0 errors"
+    verification:
+      type: "measurement"
+      command: "ruff check ."
+      criteria:
+        operator: "=="
+        value: 0
+        unit: "errors"
+      interpretation:
+        success_means: "PythonコードがPEP8およびflake8-bugbear等のルールに準拠している"
+        failure_means: "コード品質ルール違反がある"
+
+  - id: "QA-003"
+    name: "YAML構文チェック"
+    target: "全てのaction.ymlが有効"
+    verification:
+      type: "validation"
+      command: "find actions/ -name 'action.yml' -exec yamllint {} \\;"
+      criteria:
+        operator: "=="
+        value: 0
+        unit: "errors"
+      interpretation:
+        success_means: "全てのGitHub Actionsメタデータファイルが有効"
+        failure_means: "アクション定義に構文エラーがある"
+
+# === Core Functions（本質的機能） ===
+core_functions:
+  - id: "CF-001"
+    claim: "review-and-merge: PRのAIレビューと自動修正"
+    source: "PURPOSE.md:11-17, ACTIONS.md:13-34"
+    testable: true
+
+  - id: "CF-002"
+    claim: "spec-to-code: Markdown仕様書からコード生成"
+    source: "PURPOSE.md:16, ACTIONS.md:48-58"
+    testable: true
+
+  - id: "CF-003"
+    claim: "auto-refactor: 指示ベースのコードリファクタリング"
+    source: "PURPOSE.md:18, ACTIONS.md:72-82"
+    testable: true
+
+  - id: "CF-004"
+    claim: "auto-document: ドキュメントの自動更新"
+    source: "PURPOSE.md:19, ACTIONS.md:97-107"
+    testable: true
+
+  - id: "CF-005"
+    claim: "release-notes-ai: AIによるリリースノート生成"
+    source: "PURPOSE.md:20, ACTIONS.md:120-131"
+    testable: true
+
+  - id: "CF-006"
+    claim: "action-fixer: ワークフロー構文エラーの自動修正"
+    source: "PURPOSE.md:12, ACTIONS.md:144-153"
+    testable: true
+
+# === Non-Goals ===
+non_goals:
+  - "単なるシェルスクリプトのラッパー（既存のActionsで十分なもの）"
+  - "完全に無人での運用（AIのハルシネーションリスクを考慮）"
+  - "特定プロダクトに強く結合しすぎたロジック（再利用性を重視）"

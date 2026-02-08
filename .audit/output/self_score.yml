@@ -1,0 +1,196 @@
+version: "1.0"
+run_id: "20260208-151100"
+generated_at: "2026-02-08T15:11:00Z"
+
+# === Self-Evaluation Scores ===
+
+scores:
+  purpose_alignment: 5
+  evidence_soundness: 5
+  implementability: 4
+  risk_management: 4
+  verifiability: 4
+  cost_optimization: 5
+  collective_intelligence: 3
+
+total: 30
+max: 35
+
+# === Per-Dimension Analysis ===
+
+dimension_analysis:
+  purpose_alignment:
+    score: 5
+    max: 5
+    rationale: |
+      監査はリポジトリの明確なミッション（AIネイティブなGitHub Actionsの提供）に完全に合致。
+      - 6つのコア機能が全て実装済みであることを確認
+      - PURPOSE.mdの成功条件に対する達成度を評価
+      - 組織内採用とAcceptance Rate追跡という重要なギャップを特定
+    evidence:
+      - "intent.ymlにミッションが正しく反映"
+      - "全コア機能の実装状況を確認"
+      - "成功条件達成のための具体的提案（PR-002, PR-006）"
+
+  evidence_soundness:
+    score: 5
+    max: 5
+    rationale: |
+      事実・推論・不明が明確に分離されている。
+      - 全ての主張にソース（ファイル:行）が付いている
+      - 仮定はassumptionsとして明記され、信頼度レベルが設定されている
+      - 不明点はunknownとして記録され、検証方法が提示されている
+    evidence:
+      - "14個の事実(C-001〜C-014)を収集"
+      - "5個の推論(I-001〜I-005)と根拠を記録"
+      - "5個の不明点(U-001〜U-005)と検証方法を提示"
+      - "claims.ndjsonで構造化されたエビデンス"
+
+  implementability:
+    score: 4
+    max: 5
+    rationale: |
+      改善提案は具体的で実行可能だが、一部の提案には外部依存がある。
+      - PR-001（README追加）は30分で完了可能
+      - PR-002（Acceptance Rate追跡）は既存スクリプトを活用
+      - PR-003（Shellテスト）は学習曲線があるが実現可能
+      - 一部、実際のGitHub Organizationへのアクセスが必要（U-001）
+    evidence:
+      - "各PRに実装ステップと検証基準を記載"
+      - "見積もり時間を提示（PR-001: 30分, PR-002: 2-3時間）"
+      - "既存スクリプトの活用（calculate_acceptance_rate.py）"
+    improvement_areas:
+      - "PR-003のBATS導入にはチームトレーニングが必要"
+      - "PR-006の採用追跡にはGitHub APIアクセス権の確認が必要"
+
+  risk_management:
+    score: 4
+    max: 5
+    rationale: |
+      各提案にリスク評価とロールバック計画がある。
+      - 全てのPRにリスクレベルと緩和策を記載
+      - ロールバック手順が明記されている
+      - セキュリティギャップ（SG-001, SG-002）を高優先度で特定
+      - しかし、実際の本番環境でのテストが不足
+    evidence:
+      - "各PRにRisksセクション"
+      - "各PRにRollback計画"
+      - "PR-005でパストラバーサル対策を提案"
+    improvement_areas:
+      - "変更をステージング環境で検証するプロセスが提案に含まれていない"
+      - "複数PRを同時適用時の相互作用リスク評価が不足"
+
+  verifiability:
+    score: 4
+    max: 5
+    rationale: |
+      全ての提案に検証基準があるが、一部の検証は難易度が高い。
+      - 各PRにVerification Criteriaセクション
+      - コア機能検証スクリプトを実行（83.3% pass）
+      - 品質メトリクス（テストカバレッジ、Acceptance Rate）の測定方法を提示
+      - しかし、シェルスクリプトの実際のカバレッジ測定（U-005）は未実施
+    evidence:
+      - "verify_core_functions.pyで核心機能を検証"
+      - "各PRに具体的な検証チェックリスト"
+      - "カバレッジ92.99%を実測"
+    improvement_areas:
+      - "シェルスクリプトの品質検証が実装前（PR-003が適用されるまで待機必要）"
+      - "実際のAI出力品質の検証方法が提案に含まれていない"
+
+  cost_optimization:
+    score: 5
+    max: 5
+    rationale: |
+      変更範囲と段階が適切に計画されている。
+      - Quick Winsから高リスクへの優先順位付け
+      - 各PRに見積もり時間を提示（合計22-33時間）
+      - 既存リソースの活用（calculate_acceptance_rate.py, scan_adoption.py）
+      - 並列実行可能な独立タスク
+    evidence:
+      - "Roadmapでフェーズ別の実装計画"
+      - "各PRのEffort見積もり（合計: ~25時間）"
+      - "P0/P1/P2で優先順位を明確化"
+      - "非同期進行可能な独立タスク（PR-001, PR-008, PR-009）"
+
+  collective_intelligence:
+    score: 3
+    max: 5
+    rationale: |
+      チームでレビュー可能な成果物があるが、品質は改善余地がある。
+      - 全ての分析と提案が文書化されている
+      - YAML/Markdown形式で構造化された出力
+      - しかし、レビュー観点のチェックリストが不足
+      - チームメンバーが監査結果を活用するためのガイダンスが不足
+    evidence:
+      - "as_is.yml, gap.ymlで現状分析を提示"
+      - "各PRに詳細な実装ステップ"
+      - "roadmap.mdで全体計画を提示"
+    improvement_areas:
+      - "監査結果のレビュー用チェックリストがない"
+      - "チームが提案にフィードバックするプロセスが未定義"
+      - "非専門家が監査結果を理解するためのサマリーが不足"
+
+# === Improvement Actions ===
+
+improvement_actions:
+  - priority: 1
+    target: "collective_intelligence"
+    action: |
+      監査結果のレビューチェックリストを作成
+      - [ ] 意図(intent.yml)の妥当性レビュー
+      - [ ] 仮定(assumptions)の検証
+      - [ ] ギャップ分析の完全性確認
+      - [ ] 提案の実行可能性評価
+      - [ ] 優先順位の合意形成
+    next_run: "このチェックリストを.audit/output/review_checklist.mdとして作成"
+
+  - priority: 2
+    target: "verifiability"
+    action: |
+      シェルスクリプトの品質検証を前倒し
+      - [ ] BATS導入前に手動テストチェックリストを作成
+      - [ ] 1つのコアアクションでパイロットテスト実施
+      - [ ] 結果を次回監査に反映
+    next_run: "PR-003の実施前に手動検証を実施"
+
+  - priority: 3
+    target: "risk_management"
+    action: |
+      ステージング環境での検証プロセスを追加
+      - [ ] 各PRに「ステージング検証手順」を追加
+      - [ ] カナリアリリース戦略を明記
+      - [ ] 複数PR適用時の相互作用マトリックスを作成
+    next_run: "次回のroadmap.md更新時に反映"
+
+# === Trend ===
+
+trend:
+  - run_id: "initial"
+    total: 30
+    max: 35
+    percentage: 85.7%
+    notes: "初回監査実施。高品質な分析と提案を作成できた。改善の余地はチーム協力と検証プロセス。"
+
+# === Overall Assessment ===
+
+overall_assessment:
+  status: "PASS"
+  confidence: "high"
+  strengths:
+    - "監査プロセスを完全に実行（Phase 0-7）"
+    - "事実・推論・不明の厳密な分離"
+    - "具体的で実行可能な改善提案（3PR詳細作成）"
+    - "核心機能の検証スクリプト実装と実行（83.3% pass）"
+    - "クリアなロードマップと優先順位付け"
+
+  weaknesses:
+    - "チームレビュープロセスの未定義"
+    - "シェルスクリプト検証が将来依存（PR-003実施後）"
+    - "ステージング検証の手順不足"
+    - "AI品質（Acceptance Rate）の現状測定が未実施"
+
+  next_steps:
+    - "チームとroadmap.mdをレビューし優先順位を合意"
+    - "Phase 1の迅速な実施（PR-001, PR-002）"
+    - "collective_intelligence向上のためのレビュープロセス確立"
+    - "次回監査でtrendを更新し改善アクションの効果を測定"

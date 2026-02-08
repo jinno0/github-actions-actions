@@ -1,0 +1,82 @@
+{
+  "run_id": "20260208-151100",
+  "timestamp": "2026-02-08T15:11:00Z",
+  "total_tests": 6,
+  "passed": 5,
+  "failed": 1,
+  "pass_rate": "83.3%",
+  "results": [
+    {
+      "function_id": "CF-006",
+      "scenario_name": "Detect YAML indentation error",
+      "passed": false,
+      "actual_output": "valid_yaml",
+      "expected_output": "yaml_error",
+      "error_message": null,
+      "interpretation": "YAML was loaded without error (unexpected)",
+      "execution_time_ms": 8.610725402832031
+    },
+    {
+      "function_id": "CF-006",
+      "scenario_name": "Validate action.yml files exist",
+      "passed": true,
+      "actual_output": 13,
+      "expected_output": ">= 6",
+      "error_message": null,
+      "interpretation": "Found 13 action.yml files (expected >= 6)",
+      "execution_time_ms": 0.5328655242919922
+    },
+    {
+      "function_id": "CF-002",
+      "scenario_name": "Has example workflows",
+      "passed": true,
+      "actual_output": 1,
+      "expected_output": ">= 1",
+      "error_message": null,
+      "interpretation": "Found 1 spec-to-code examples",
+      "execution_time_ms": 0.18835067749023438
+    },
+    {
+      "function_id": "CF-002",
+      "scenario_name": "Action configuration",
+      "passed": true,
+      "actual_output": [
+        "spec-path",
+        "output-dir",
+        "language",
+        "claude-model",
+        "gen-prompt-template",
+        "github-token"
+      ],
+      "expected_output": [
+        "spec-path",
+        "output-dir",
+        "language"
+      ],
+      "error_message": null,
+      "interpretation": "Action has 6 inputs: spec-path, output-dir, language, claude-model, gen-prompt-template",
+      "execution_time_ms": 2.9671192169189453
+    },
+    {
+      "function_id": "CF-004",
+      "scenario_name": "Has example workflows",
+      "passed": true,
+      "actual_output": 1,
+      "expected_output": ">= 1",
+      "error_message": null,
+      "interpretation": "Found 1 auto-document examples",
+      "execution_time_ms": 0.1513957977294922
+    },
+    {
+      "function_id": "CF-003",
+      "scenario_name": "Has example workflows",
+      "passed": true,
+      "actual_output": 1,
+      "expected_output": ">= 1",
+      "error_message": null,
+      "interpretation": "Found 1 auto-refactor examples",
+      "execution_time_ms": 0.1327991485595703
+    }
+  ],
+  "overall_status": "PARTIAL"
+}

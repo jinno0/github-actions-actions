@@ -1,0 +1,113 @@
+version: "2.0"
+updated_at: "2026-02-08T15:11:00Z"
+updated_by: "audit-run-20260208-151100"
+
+# === 制約条件 ===
+
+## 技術的制約
+technical:
+  - id: "TC-001"
+    name: "Pythonバージョン"
+    constraint: "Python 3.11以上必須"
+    rationale: "pyproject.tomlでrequires-python = '>=3.11'と指定されている"
+    source: "pyproject.toml:9"
+
+  - id: "TC-002"
+    name: "Self-hosted runner必須"
+    constraint: "Claude Code CLIがインストールされたSelf-hosted runner環境が必要"
+    rationale: "Claude Code CLIへのアクセスとコンテナ外リソースへのアクセスが必要"
+    source: "PURPOSE.md:5-6, ACTIONS.md:236-240"
+
+  - id: "TC-003"
+    name: "GitHub Tokenの権限"
+    constraint: "contents:write, pull-requests:write, issues:write が必要"
+    rationale: "PR操作、コメント、コミットに必要な権限"
+    source: "ACTIONS.md:247-249"
+
+## セキュリティ制約
+security:
+  - id: "SC-001"
+    name: "Human-in-the-Loop"
+    constraint: "AIは提案・準備のみを行い、最終決定権は人間が持つ"
+    rationale: "AIのハルシネーションリスクを軽減するため"
+    source: "PURPOSE.md:36-38, PURPOSE.md:66"
+
+  - id: "SC-002"
+    name: "パス検証"
+    constraint: "全てのファイル操作でパストラバーサル対策が必要"
+    rationale: "action-fixer, spec-to-code等でユーザー入力のパスを扱うため"
+    source: "推論: セキュリティベストプラクティス"
+
+  - id: "SC-003"
+    name: "シークレット管理"
+    constraint: "GitHub Secrets経由で機密情報を扱う"
+    rationale: "Claude API Key等の機密情報保護"
+    source: "推論: GitHub Actionsのセキュリティベストプラクティス"
+
+## 運用制約
+operational:
+  - id: "OC-001"
+    name: "再利用性"
+    constraint: "特定プロダクトに強く結合しない汎用的な設計"
+    rationale: "組織内の複数リポジトリで再利用可能にするため"
+    source: "PURPOSE.md:67"
+
+  - id: "OC-002"
+    name: "ドキュメント必須"
+    constraint: "全てのActionにREADMEと使用ガイドが必要"
+    rationale: "他の開発者が導入・理解できるようにするため"
+    source: "ACTIONS.md:432-439"
+
+  - id: "OC-003"
+    name: "例示の提供"
+    constraint: "各Actionに動作確認済みのexample workflowが必要"
+    rationale: "ユーザーが理解・導入しやすくするため"
+    source: "examples/ディレクトリの存在"
+
+## 品質制約
+quality:
+  - id: "QC-001"
+    name: "テストカバレッジ"
+    constraint: "80%以上のカバレッジを維持"
+    rationale: "コード品質とリグレッション防止"
+    source: "pyproject.toml:38, pytest.ini:22"
+
+  - id: "QC-002"
+    name: "Lintチェック"
+    constraint: "Ruffによるコード品質チェックに合格すること"
+    rationale: "一貫したコードスタイルとバグ防止"
+    source: "pyproject.toml:41-57"
+
+  - id: "QC-003"
+    name: "型ヒント"
+    constraint: "Pythonコードには型ヒントを付与すること"
+    rationale: "可読性向上とIDEサポート改善"
+    source: "推論: Python 3.11+のベストプラクティス"
+
+## パフォーマンス制約
+performance:
+  - id: "PC-001"
+    name: "実行時間"
+    constraint: "各Actionは5分以内に完了すること（目安）"
+    rationale: "CI/CDパイプラインの迅速性を確保するため"
+    source: "推論: GitHub Actionsの一般的なベストプラクティス"
+
+  - id: "PC-002"
+    name: "リソース使用"
+    constraint: "メモリ使用量は2GB以内に抑えること"
+    rationale: "Self-hosted runnerの推奨スペックに合わせるため"
+    source: "ACTIONS.md:239"
+
+## 依存関係制約
+dependencies:
+  - id: "DC-001"
+    name: "PyYAML"
+    constraint: ">= 6.0"
+    rationale: "YAMLファイルのパースと生成に必要"
+    source: "pyproject.toml:11"
+
+  - id: "DC-002"
+    name: "Claude Code CLI"
+    constraint: "グローバルインストール済みであること"
+    rationale: "AI機能の中核"
+    source: "ACTIONS.md:242-244"
