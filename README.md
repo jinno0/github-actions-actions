@@ -127,10 +127,12 @@ pip install claude-code-cli
 
 このプロジェクトでは、テストカバレッジ >= 70% を目標としています。
 
+**測定範囲**: `actions/` ディレクトリ（Action実装）と `scripts/` ディレクトリ（ユーティリティスクリプト）のみを対象としています。
+
 #### カバレッジレポートの確認方法
 
 ```bash
-# ローカルでカバレッジを計測
+# ローカルでカバレッジを計測（actions/ と scripts/ のみ）
 pytest --cov=actions --cov=scripts --cov-report=html
 
 # HTMLレポートを開く

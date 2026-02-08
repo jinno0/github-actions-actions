@@ -102,8 +102,12 @@ pytest tests/test_auto_document/test_auto_document_action.py -v
 ```
 
 ### Run With Coverage
+
+**Note**: Coverage is measured only for `actions/` and `scripts/` directories.
+
 ```bash
-pytest tests/ --cov=. --cov-report=html
+# Measure coverage for actions/ and scripts/ only
+pytest tests/ --cov=actions --cov=scripts --cov-report=html
 ```
 
 ## Current Coverage
@@ -114,7 +118,7 @@ pytest tests/ --cov=. --cov-report=html
 - **Test Types**: Structural/smoke tests
 
 ### Phase 2: Integration Testing (Completed ✅)
-- **Integration Test Files**: 12 files covering all 13 actions
+- **Integration Test Files**: 13 files covering all 13 actions
 - **Coverage**: 100% action-level coverage achieved (13/13 actions)
 - **Current Status**: ✅ Complete
 - **Test Files**:

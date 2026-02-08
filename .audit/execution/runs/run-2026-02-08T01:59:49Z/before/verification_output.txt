@@ -1,0 +1,237 @@
+======================================================================
+CORE FUNCTION VERIFICATION REPORT
+======================================================================
+Repo Genesis Auditor v2.0
+Repository: github-actions-actions
+Run ID: 2026-02-08T04:40:00Z
+======================================================================
+
+🔍 Verifying: Action Structure (CF-STRUCT-001)
+
+🔍 Verifying: Test Coverage (QA-001)
+
+🔍 Verifying: Integration Test Coverage (QA-003)
+
+🔍 Verifying: Documentation Coverage (DOC-001)
+
+🔍 Verifying: AI Review Acceptance Rate (QA-002)
+
+======================================================================
+VERIFICATION RESULTS
+======================================================================
+
+❌ FAIL [CF-STRUCT-001] 全Actionsの構造的完全性
+  結果: ============================= test session starts ==============================
+platform linux -- Python 3.14.2, pytest-9.0.2, pluggy-1.6.0 -- /home/jinno/.local/share/mise/installs/python/3.14.2/bin/python3.14
+cachedir: .pytest_cache
+rootdir: /home/jinno/github-actions-actions
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: black-0.6.0, anyio-4.12.0, cov-7.0.0, xdist-3.5.0, asyncio-1.3.0, ruff-0.5
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 457 items / 316 deselected / 141 selected
+
+tests/integration/test_action_fixer_integration.py::test_action_fixer_action_structure PASSED [  0%]
+tests/integration/test_action_fixer_integration.py::test_action_fixer_inputs PASSED [  1%]
+tests/integration/test_action_fixer_integration.py::test_action_fixer_steps_exist PASSED [  2%]
+tests/integration/test_action_structure.py::TestActionStructure::test_all_actions_have_action_yml PASSED [  2%]
+tests/integration/test_action_structure.py::TestActionStructure::test_review_and_merge_action_structure SKIPPED [  3%]
+tests/integration/test_action_structure.py::TestActionStructure::test_actions_have_required_metadata PASSED [  4%]
+tests/integration/test_action_structure.py::TestActionStructure::test_action_composite_steps_exist SKIPPED [  4%]
+tests/test_action_fixer/test_action_fixer.py::TestActionFixer::test_action_yaml_exists PASSED [  5%]
+tests/test_action_fixer/test_action_fixer.py::TestActionFixer::test_action_required_inputs PASSED [  6%]
+tests/test_action_fixer/test_action_fixer.py::TestActionFixer::test_action_optional_inputs_have_defaults PASSED [  7%]
+tests/test_action_fixer/test_action_fixer.py::TestActionFixer::test_action_yaml_syntax_valid PASSED [  7%]
+tests/test_action_fixer/test_action_fixer.py::TestActionFixer::test_fix_prompt_template_exists PASSED [  8%]
+tests/test_action_fixer/test_action_fixer.py::TestActionFixer::test_fix_prompt_template_content PASSED [  9%]
+tests/test_action_fixer/test_action_fixer.py::TestActionFixer::test_action_directory_structure PASSED [  9%]
+tests/test_action_fixer/test_action_fixer.py::TestActionFixer::test_action_has_composite_run_type PASSED [ 10%]
+tests/test_action_fixer/test_action_fixer.py::TestActionFixer::test_action_has_validation_steps PASSED [ 11%]
+tests/test_action_fixer/test_action_fixer.py::TestActionFixer::test_action_has_ai_fix_capability PASSED [ 12%]
+tests/test_action_fixer/test_action_fixer.py::TestActionFixer::test_template_files_readable PASSED [ 12%]
+tests/test_action_fixer/test_action_fixer.py::TestActionFixer::test_action_description_meaningful PASSED [ 13%]
+tests/test_action_fixer/test_action_fixer.py::TestActionFixerIntegration::test_action_yaml_complete_structure PASSED [ 14%]
+tests/test_action_fixer/test_action_fixer.py::TestActionFixerIntegration::test_all_templates_defined PASSED [ 14%]
+tests/test_action_fixer/test_action_fixer.py::TestActionFixerIntegration::test_no_broken_references PASSED [ 15%]
+tests/test_auto_document/test_auto_document_action.py::TestAutoDocumentAction::test_action_yaml_exists PASSED [ 16%]
+tests/test_auto_document/test_auto_document_action.py::TestAutoDocumentAction::test_action_name_and_description PASSED [ 17%]
+tests/test_auto_document/test_auto_document_action.py::TestAutoDocumentAction::test_action_required_inputs PASSED [ 17%]
+tests/test_auto_document/test_auto_document_action.py::TestAutoDocumentAction::test_action_default_values PASSED [ 18%]
+tests/test_auto_document/test_auto_document_action.py::TestAutoDocumentAction::test_action_uses_composite_run_type PASSED [ 19%]
+tests/test_auto_document/test_auto_document_action.py::TestAutoDocumentAction::test_action_has_shell_bash PASSED [ 19%]
+tests/test_auto_document/test_auto_document_action.py::TestAutoDocumentAction::test_action_validates_template_path PASSED [ 20%]
+tests/test_auto_document/test_auto_document_action.py::TestAutoDocumentAction::test_action_checks_claude_cli PASSED [ 21%]
+tests/test_auto_document/test_auto_document_action.py::TestAutoDocumentAction::test_action_invokes_claude_cli PASSED [ 21%]
+tests/test_auto_document/test_auto_document_action.py::TestAutoDocumentAction::test_action_uses_shared_scripts PASSED [ 22%]
+tests/test_auto_document/test_auto_document_action.py::TestAutoDocumentAction::test_action_uses_safe_variable_substitution PASSED [ 23%]
+tests/test_auto_document/test_auto_document_action.py::TestAutoDocumentIntegration::test_action_yaml_syntax PASSED [ 24%]
+tests/test_auto_document/test_auto_document_action.py::TestAutoDocumentIntegration::test_action_directory_structure PASSED [ 24%]
+tests/test_auto_merge/test_auto_merge_action.py::TestAutoMergeAction::test_action_yaml_exists PASSED [ 25%]
+tests/test_auto_merge/test_auto_merge_action.py::TestAutoMergeAction::test_action_name_and_description PASSED [ 26%]
+tests/test_auto_merge/test_auto_merge_action.py::TestAutoMergeAction::test_action_required_inputs PASSED [ 26%]
+tests/test_auto_merge/test_auto_merge_action.py::TestAutoMergeAction::test_action_optional_inputs PASSED [ 27%]
+tests/test_auto_merge/test_auto_merge_action.py::TestAutoMergeAction::test_action_uses_composite_run_type PASSED [ 28%]
+tests/test_auto_merge/test_auto_merge_action.py::TestAutoMergeAction::test_action_has_shell_bash PASSED [ 29%]
+tests/test_auto_merge/test_auto_merge_action.py::TestAutoMergeAction::test_action_invokes_gh_cli PASSED [ 29%]
+tests/test_auto_merge/test_auto_merge_action.py::TestAutoMergeAction::test_action_supports_merge_methods PASSED [ 30%]
+tests/test_auto_merge/test_auto_merge_action.py::TestAutoMergeAction::test_action_handles_auto_merge_flag PASSED [ 31%]
+tests/test_auto_merge/test_auto_merge_action.py::TestAutoMergeAction::test_action_deletes_branch_after_merge PASSED [ 31%]
+tests/test_auto_merge/test_auto_merge_action.py::TestAutoMergeIntegration::test_action_yaml_syntax PASSED [ 32%]
+tests/test_auto_merge/test_auto_merge_action.py::TestAutoMergeIntegration::test_action_directory_structure PASSED [ 33%]
+tests/test_auto_rebase/test_auto_rebase_action.py::TestAutoRebaseAction::test_action_yaml_exists PASSED [ 34%]
+tests/test_auto_rebase/test_auto_rebase_action.py::TestAutoRebaseAction::test_action_name_and_description PASSED [ 34%]
+tests/test_auto_rebase/test_auto_rebase_action.py::TestAutoRebaseAction::test_action_required_inputs PASSED [ 35%]
+tests/test_auto_rebase/test_auto_rebase_action.py::TestAutoRebaseAction::test_action_optional_inputs PASSED [ 36%]
+tests/test_auto_rebase/test_auto_rebase_action.py::TestAutoRebaseAction::test_action_has_outputs PASSED [ 36%]
+tests/test_auto_rebase/test_auto_rebase_action.py::TestAutoRebaseAction::test_action_uses_composite_run_type PASSED [ 37%]
+tests/test_auto_rebase/test_auto_rebase_action.py::TestAutoRebaseAction::test_action_checks_claude_cli PASSED [ 38%]
+tests/test_auto_rebase/test_auto_rebase_action.py::TestAutoRebaseAction::test_action_has_error_handling PASSED [ 39%]
+tests/test_auto_rebase/test_auto_rebase_action.py::TestAutoRebaseIntegration::test_action_yaml_syntax PASSED [ 39%]
+tests/test_auto_rebase/test_auto_rebase_action.py::TestAutoRebaseIntegration::test_action_directory_structure PASSED [ 40%]
+tests/test_auto_refactor/test_auto_refactor_action.py::TestAutoRefactorAction::test_action_yaml_exists PASSED [ 41%]
+tests/test_auto_refactor/test_auto_refactor_action.py::TestAutoRefactorAction::test_action_name_and_description PASSED [ 41%]
+tests/test_auto_refactor/test_auto_refactor_action.py::TestAutoRefactorAction::test_action_required_inputs PASSED [ 42%]
+tests/test_auto_refactor/test_auto_refactor_action.py::TestAutoRefactorAction::test_action_optional_inputs PASSED [ 43%]
+tests/test_auto_refactor/test_auto_refactor_action.py::TestAutoRefactorAction::test_action_uses_composite_run_type PASSED [ 43%]
+tests/test_auto_refactor/test_auto_refactor_action.py::TestAutoRefactorAction::test_action_has_shell_bash PASSED [ 44%]
+tests/test_auto_refactor/test_auto_refactor_action.py::TestAutoRefactorAction::test_action_validates_path_exists PASSED [ 45%]
+tests/test_auto_refactor/test_auto_refactor_action.py::TestAutoRefactorAction::test_action_validates_template_path PASSED [ 46%]
+tests/test_auto_refactor/test_auto_refactor_action.py::TestAutoRefactorAction::test_action_uses_safe_variable_substitution PASSED [ 46%]
+tests/test_auto_refactor/test_auto_refactor_action.py::TestAutoRefactorAction::test_action_invokes_claude_cli PASSED [ 47%]
+tests/test_auto_refactor/test_auto_refactor_action.py::TestAutoRefactorAction::test_action_uses_shared_scripts PASSED [ 48%]
+tests/test_auto_refactor/test_auto_refactor_action.py::TestAutoRefactorIntegration::test_action_yaml_syntax PASSED [ 48%]
+tests/test_auto_refactor/test_auto_refactor_action.py::TestAutoRefactorIntegration::test_action_directory_structure PASSED [ 49%]
+tests/test_bulk_merge_prs/test_bulk_merge_prs_action.py::TestBulkMergePrsAction::test_action_yaml_exists PASSED [ 50%]
+tests/test_bulk_merge_prs/test_bulk_merge_prs_action.py::TestBulkMergePrsAction::test_action_name_and_description PASSED [ 51%]
+tests/test_bulk_merge_prs/test_bulk_merge_prs_action.py::TestBulkMergePrsAction::test_action_required_inputs PASSED [ 51%]
+tests/test_bulk_merge_prs/test_bulk_merge_prs_action.py::TestBulkMergePrsAction::test_action_uses_composite_run_type PASSED [ 52%]
+tests/test_bulk_merge_prs/test_bulk_merge_prs_action.py::TestBulkMergePrsAction::test_action_has_shell_bash PASSED [ 53%]
+tests/test_bulk_merge_prs/test_bulk_merge_prs_action.py::TestBulkMergePrsAction::test_action_invokes_gh_cli PASSED [ 53%]
+tests/test_bulk_merge_prs/test_bulk_merge_prs_action.py::TestBulkMergePrsIntegration::test_action_yaml_syntax PASSED [ 54%]
+tests/test_bulk_merge_prs/test_bulk_merge_prs_action.py::TestBulkMergePrsIntegration::test_action_directory_structure PASSED [ 55%]
+tests/test_bulk_rebase_prs/test_bulk_rebase_prs_action.py::TestBulkRebasePrsAction::test_action_yaml_exists PASSED [ 56%]
+tests/test_bulk_rebase_prs/test_bulk_rebase_prs_action.py::TestBulkRebasePrsAction::test_action_name_and_description PASSED [ 56%]
+tests/test_bulk_rebase_prs/test_bulk_rebase_prs_action.py::TestBulkRebasePrsAction::test_action_required_inputs PASSED [ 57%]
+tests/test_bulk_rebase_prs/test_bulk_rebase_prs_action.py::TestBulkRebasePrsAction::test_action_uses_composite_run_type PASSED [ 58%]
+tests/test_bulk_rebase_prs/test_bulk_rebase_prs_action.py::TestBulkRebasePrsAction::test_action_has_shell_bash PASSED [ 58%]
+tests/test_bulk_rebase_prs/test_bulk_rebase_prs_action.py::TestBulkRebasePrsAction::test_action_invokes_gh_cli PASSED [ 59%]
+tests/test_bulk_rebase_prs/test_bulk_rebase_prs_action.py::TestBulkRebasePrsIntegration::test_action_yaml_syntax PASSED [ 60%]
+tests/test_bulk_rebase_prs/test_bulk_rebase_prs_action.py::TestBulkRebasePrsIntegration::test_action_directory_structure PASSED [ 60%]
+tests/test_pr_review_enqueuer/test_pr_review_enqueuer_action.py::TestPrReviewEnqueuerAction::test_action_yaml_exists PASSED [ 61%]
+tests/test_pr_review_enqueuer/test_pr_review_enqueuer_action.py::TestPrReviewEnqueuerAction::test_action_name_and_description PASSED [ 62%]
+tests/test_pr_review_enqueuer/test_pr_review_enqueuer_action.py::TestPrReviewEnqueuerAction::test_action_required_inputs PASSED [ 63%]
+tests/test_pr_review_enqueuer/test_pr_review_enqueuer_action.py::TestPrReviewEnqueuerAction::test_action_uses_composite_run_type PASSED [ 63%]
+tests/test_pr_review_enqueuer/test_pr_review_enqueuer_action.py::TestPrReviewEnqueuerAction::test_action_has_shell_bash PASSED [ 64%]
+tests/test_pr_review_enqueuer/test_pr_review_enqueuer_action.py::TestPrReviewEnqueuerAction::test_action_has_queue_logic PASSED [ 65%]
+tests/test_pr_review_enqueuer/test_pr_review_enqueuer_action.py::TestPrReviewEnqueuerIntegration::test_action_yaml_syntax PASSED [ 65%]
+tests/test_pr_review_enqueuer/test_pr_review_enqueuer_action.py::TestPrReviewEnqueuerIntegration::test_action_directory_structure PASSED [ 66%]
+tests/test_publish_pr/test_publish_pr_action.py::TestPublishPrAction::test_action_yaml_exists PASSED [ 67%]
+tests/test_publish_pr/test_publish_pr_action.py::TestPublishPrAction::test_action_name_and_description PASSED [ 68%]
+tests/test_publish_pr/test_publish_pr_action.py::TestPublishPrAction::test_action_required_inputs PASSED [ 68%]
+tests/test_publish_pr/test_publish_pr_action.py::TestPublishPrAction::test_action_uses_composite_run_type PASSED [ 69%]
+tests/test_publish_pr/test_publish_pr_action.py::TestPublishPrAction::test_action_has_shell_bash PASSED [ 70%]
+tests/test_publish_pr/test_publish_pr_action.py::TestPublishPrAction::test_action_invokes_gh_cli PASSED [ 70%]
+tests/test_publish_pr/test_publish_pr_action.py::TestPublishPrAction::test_action_has_simple_workflow PASSED [ 71%]
+tests/test_publish_pr/test_publish_pr_action.py::TestPublishPrIntegration::test_action_yaml_syntax PASSED [ 72%]
+tests/test_publish_pr/test_publish_pr_action.py::TestPublishPrIntegration::test_action_directory_structure PASSED [ 73%]
+tests/test_release_notes_ai/test_release_notes_ai_action.py::TestReleaseNotesAiAction::test_action_yaml_exists PASSED [ 73%]
+tests/test_release_notes_ai/test_release_notes_ai_action.py::TestReleaseNotesAiAction::test_action_name_and_description PASSED [ 74%]
+tests/test_release_notes_ai/test_release_notes_ai_action.py::TestReleaseNotesAiAction::test_action_required_inputs PASSED [ 75%]
+tests/test_release_notes_ai/test_release_notes_ai_action.py::TestReleaseNotesAiAction::test_action_uses_composite_run_type PASSED [ 75%]
+tests/test_release_notes_ai/test_release_notes_ai_action.py::TestReleaseNotesAiAction::test_action_has_shell_bash PASSED [ 76%]
+tests/test_release_notes_ai/test_release_notes_ai_action.py::TestReleaseNotesAiAction::test_action_invokes_claude_cli PASSED [ 77%]
+tests/test_release_notes_ai/test_release_notes_ai_action.py::TestReleaseNotesAiAction::test_action_generates_notes PASSED [ 78%]
+tests/test_release_notes_ai/test_release_notes_ai_action.py::TestReleaseNotesAiIntegration::test_action_yaml_syntax PASSED [ 78%]
+tests/test_release_notes_ai/test_release_notes_ai_action.py::TestReleaseNotesAiIntegration::test_action_directory_structure PASSED [ 79%]
+tests/test_review_and_merge/test_review_action.py::TestReviewAction::test_action_yaml_exists PASSED [ 80%]
+tests/test_review_and_merge/test_review_action.py::TestReviewAction::test_action_required_inputs PASSED [ 80%]
+tests/test_review_and_merge/test_review_action.py::TestReviewAction::test_action_optional_inputs PASSED [ 81%]
+tests/test_review_and_merge/test_review_action.py::TestReviewAction::test_action_outputs PASSED [ 82%]
+tests/test_review_and_merge/test_review_action.py::TestReviewActionIntegration::test_action_yaml_syntax PASSED [ 82%]
+tests/test_review_and_merge/test_review_action.py::TestReviewActionIntegration::test_action_directory_structure PASSED [ 83%]
+tests/test_review_auto_merge/test_review_auto_merge_action.py::TestReviewAutoMergeAction::test_action_yaml_exists PASSED [ 84%]
+tests/test_review_auto_merge/test_review_auto_merge_action.py::TestReviewAutoMergeAction::test_action_name_and_description PASSED [ 85%]
+tests/test_review_auto_merge/test_review_auto_merge_action.py::TestReviewAutoMergeAction::test_action_required_inputs PASSED [ 85%]
+tests/test_review_auto_merge/test_review_auto_merge_action.py::TestReviewAutoMergeAction::test_action_uses_composite_run_type PASSED [ 86%]
+tests/test_review_auto_merge/test_review_auto_merge_action.py::TestReviewAutoMergeAction::test_action_has_shell_bash PASSED [ 87%]
+tests/test_review_auto_merge/test_review_auto_merge_action.py::TestReviewAutoMergeAction::test_action_has_merge_logic PASSED [ 87%]
+tests/test_review_auto_merge/test_review_auto_merge_action.py::TestReviewAutoMergeIntegration::test_action_yaml_syntax PASSED [ 88%]
+tests/test_review_auto_merge/test_review_auto_merge_action.py::TestReviewAutoMergeIntegration::test_action_directory_structure PASSED [ 89%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeAction::test_action_yaml_exists PASSED [ 90%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeAction::test_action_required_inputs PASSED [ 90%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeAction::test_action_optional_inputs_with_defaults PASSED [ 91%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeAction::test_action_has_path_validation PASSED [ 92%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeAction::test_action_has_security_checks PASSED [ 92%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeAction::test_action_validates_spec_file PASSED [ 93%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeAction::test_action_uses_base64_encoding PASSED [ 94%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeAction::test_action_uses_envsubst PASSED [ 95%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeAction::test_action_supports_custom_template PASSED [ 95%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeAction::test_action_invokes_claude_cli PASSED [ 96%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeAction::test_action_sets_environment_variables PASSED [ 97%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeAction::test_action_has_error_handling PASSED [ 97%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeIntegration::test_action_yaml_syntax PASSED [ 98%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeIntegration::test_action_directory_structure PASSED [ 99%]
+tests/test_spec_to_code/test_spec_to_code_action.py::TestSpecToCodeIntegration::test_action_handles_special_characters PASSED [100%]
+ERROR: Coverage failure: total of 11.11 is less than fail-under=70.00
+
+
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.14.2-final-0 ________________
+
+Name                                   Stmts   Miss   Cover   Missing
+---------------------------------------------------------------------
+actions/lib/__init__.py                    2      0 100.00%
+actions/lib/acceptance_tracker.py         90     72  20.00%   45-46, 63-70, 80-83, 93-96, 106-109, 118, 127, 146-164, 168-169, 183-199, 215-255
+scripts/aggregate_metrics.py             125    114   8.80%   32-54, 67-82, 98-151, 164-191, 195-299, 303
+scripts/calculate_acceptance_rate.py     154    140   9.09%   27-75, 88-94, 102-112, 117-122, 130-166, 171-219, 224-287, 291
+scripts/collect_metrics.py                59     47  20.34%   32, 45-49, 71-97, 117-135, 140-171, 175
+scripts/generate_adoption_report.py      121    107  11.57%   35-51, 65-82, 95-101, 114-123, 136-147, 169-343, 348-382, 386
+scripts/generate_metrics_report.py       143    137   4.20%   27-185, 189-244, 248
+scripts/generate_telemetry_report.py     129    115  10.85%   43-72, 86-104, 117-135, 149-280, 286-331, 335
+scripts/scan_adoption.py                 104     92  11.54%   25-76, 85-139, 152-192, 195
+---------------------------------------------------------------------
+TOTAL                                    927    824  11.11%
+Coverage HTML written to dir htmlcov
+Coverage JSON written to file coverage.json
+FAIL Required test coverage of 70% not reached. Total coverage: 11.11%
+================ 139 passed, 2 skipped, 316 deselected in 0.53s ================
+
+  期待: 455 passed
+  解釈: テスト結果のパースに失敗
+  エラー: Could not extract pass count
+
+✅ PASS [QA-001] テストカバレッジ >= 70%
+  結果: 89.33%
+  期待: >= 70%
+  解釈: テストカバレッジ89.33%は目標の70%を上回っている
+
+❌ FAIL [QA-003] Integration Test Coverage 100%
+  結果: 12 integration test files
+  期待: 13 integration test files
+  解釈: Integration Testが不足している（12/13）
+
+✅ PASS [DOC-001] 全Actionsにドキュメントが存在
+  結果: Examples: 13, Instructions: 15
+  期待: Examples: >= 13, Instructions: >= 13
+  解釈: 全Actionにexampleファイルとinstructionドキュメントが存在する
+
+❌ FAIL [QA-002] AIレビュー受入率 >= 70%
+  結果: Acceptance Rate: 90.0%
+Total Reviews: 10
+Target: 70.0%
+Status: ✅ PASS
+
+Outcome Breakdown:
+  approved: 6
+  modified: 3
+  rejected: 1
+
+  期待: Acceptance rate >= 70%
+  解釈: 受入率のパースに失敗、または目標未達
+  エラー: Could not determine acceptance rate
+
+======================================================================
+SUMMARY: 2/5 passed (40.0%)
+======================================================================
+❌ 判定: FAIL - 多くの検証が不合格
+
+深刻な問題が存在する
