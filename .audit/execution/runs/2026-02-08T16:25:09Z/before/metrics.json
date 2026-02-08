@@ -1,0 +1,94 @@
+{
+  "run_id": "2026-02-08T16:25:09Z",
+  "timestamp": "2026-02-08T16:25:09Z",
+  "execution_type": "planning_and_verification",
+  "metrics": {
+    "test_coverage": {
+      "value": 88.31,
+      "unit": "percent",
+      "target": 80,
+      "status": "achieved",
+      "measurement_command": "pytest --cov=actions --cov=scripts --cov-report=json",
+      "source": "coverage.json"
+    },
+    "test_results": {
+      "total": 460,
+      "passed": 460,
+      "failed": 0,
+      "skipped": 2,
+      "duration_seconds": 1.52,
+      "status": "all_passed"
+    },
+    "ai_review_acceptance_rate": {
+      "value": 90.0,
+      "unit": "percent",
+      "data_points": 10,
+      "target": 70,
+      "status": "achieved",
+      "note": "9/10 reviews accepted",
+      "source": "metrics/review_metrics.json"
+    },
+    "core_functions": {
+      "total": 6,
+      "verified": 5,
+      "failed": 1,
+      "details": {
+        "CF-001": { "status": "passed", "description": "13 Actions provided" },
+        "CF-002": { "status": "passed", "description": "7/13 Actions with Claude CLI integration" },
+        "CF-003": { "status": "passed", "description": "Custom review rules structure & integration verified" },
+        "CF-004": { "status": "failed", "description": "Dry Run: 3/13 Actions only" },
+        "CF-005": { "status": "passed", "description": "Telemetry implemented" },
+        "CF-006": { "status": "passed", "description": "Metrics tracking implemented" }
+      }
+    },
+    "gaps": {
+      "total": 7,
+      "resolved": 4,
+      "open": 3,
+      "high_priority": 1,
+      "medium_priority": 1,
+      "low_priority": 1,
+      "open_high": ["GAP-003: Dry Run implementation (10/13 Actions missing)"],
+      "open_medium": ["GAP-005: AI review acceptance rate data collection"],
+      "open_low": ["GAP-007: Adoption count unknown"]
+    },
+    "execution_history": {
+      "total_runs": 5,
+      "last_run": "2026-02-08T14:31:28Z",
+      "total_prs_applied": 6,
+      "total_prs_rolled_back": 0,
+      "run_directories": 3
+    }
+  },
+  "quality_attributes": {
+    "QA-001_test_coverage": {
+      "current": 88.31,
+      "target": 80,
+      "status": "achieved"
+    },
+    "QA-002_acceptance_rate": {
+      "current": 90.0,
+      "target": 70,
+      "status": "achieved"
+    },
+    "QA-003_yaml_syntax": {
+      "status": "not_checked_in_this_run"
+    },
+    "QA-004_dry_run": {
+      "current": "3/13 (23%)",
+      "target": "13/13 (100%)",
+      "status": "failed"
+    }
+  },
+  "environment": {
+    "python_version": "3.11",
+    "platform": "Linux",
+    "repository": "/home/jinno/github-actions-actions"
+  },
+  "notes": [
+    "Test coverage decreased from 92.97% to 88.31% - need to investigate",
+    "All 460 tests passing - no regressions",
+    "Main gap: GAP-003 (Dry Run) requires 2-3 hour implementation effort",
+    "At retention policy limit - this is a planning/verification run"
+  ]
+}
