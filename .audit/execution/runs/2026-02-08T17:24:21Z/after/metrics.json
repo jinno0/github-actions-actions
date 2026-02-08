@@ -1,0 +1,37 @@
+{
+  "timestamp": "2026-02-08T17:24:21Z",
+  "audit_summary": {
+    "run_id": "2026-02-08T17:24:21Z",
+    "overall_assessment": "CONDITIONAL PASS",
+    "intent_achievement_score": 85,
+    "self_score": 33,
+    "max_score": 35
+  },
+  "test_coverage": {
+    "value": 88.31,
+    "target": 80,
+    "status": "achieved",
+    "delta_from_previous": -4.66
+  },
+  "test_results": {
+    "total": 460,
+    "passed": 460,
+    "failed": 0,
+    "skipped": 2,
+    "status": "all_passed"
+  },
+  "ai_review_acceptance_rate": {
+    "current": 75.0,
+    "data_points": 4,
+    "target": 70,
+    "status": "achieved"
+  },
+  "core_functions_verified": {
+    "total": 6,
+    "passed": 5,
+    "failed": 1,
+    "pass_rate": 83.33
+  },
+  "gaps_detected": 5,
+  "proposals_generated": 2
+}

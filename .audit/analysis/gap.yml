@@ -1,249 +1,127 @@
-version: '2.0'
-updated_at: '2026-02-08T13:55:13Z'
-audit_run_id: '2026-02-08T13:55:13Z'
-summary:
-  total_gaps: 7
-  resolved: 4
-  high_priority: 1
-  medium_priority: 3
-  low_priority: 2
+version: "2.0"
+generated_at: "2026-02-08T17:24:21Z"
+run_id: "2026-02-08T17:24:21Z"
+
+# === Gap Analysis: Intent vs Current State ===
+
 gaps:
-- id: GAP-001
-  severity: resolved
-  category: documentation
-  title: テストカバレッジ目標値の不一致
-  intent:
-    from: quality_attributes.test_coverage.target
-    expected: '>= 80%'
-  current_state:
-    actual: 92.97%
-    status: achieved
-  evidence:
-  - 'C-007: README.md:128-130 で >= 80% と記載（PR-001で修正済み）'
-  - 'C-005: 実測値 92.97%'
-  resolution:
-    status: resolved
-    pr_id: PR-001
-    action: README.mdの目標値を70% → 80%に修正
-  impact: low
-  user_value: 開発者が正しい目標値を理解できるようになった
-- id: GAP-002
-  severity: resolved
-  category: documentation
-  title: AIレビュー受入率の実測値データがない
-  intent:
-    from: quality_attributes.acceptance_rate.target
-    expected: '>= 70%'
-  current_state:
-    actual: 75.0% (3/4件)
-    status: achieved
-  evidence:
-  - 'C-009: 実測値 75.0% (3/4件)'
-  - 'feedback_to_auditor.yml: metrics_improvement_proof'
-  resolution:
-    status: resolved
-    pr_id: PR-001
-    action: README.mdに実際のデータ（75.0%, 3/4件）を反映
-  impact: low
-  user_value: AIレビューの品質ベースラインが可視化された
-- id: GAP-003
-  severity: high
-  category: implementation
-  title: Dry Run検証の実装不足 (10/13 Actions)
-  intent:
-    from: core_functions.CF-004
-    expected: 全てのAI ActionsはDry Runモードで自動検証される
-  current_state:
-    actual: 3/13 Actions (23%) のみ実装済み
-    status: failed
-    implemented_actions:
-    - pr-review-enqueuer
-    - bulk-rebase-prs
-    - bulk-merge-prs
-    not_implemented_actions:
-    - action-fixer
-    - review-and-merge
-    - spec-to-code
-    - auto-document
-    - release-notes-ai
-    - auto-rebase
-    - review-auto-merge
-    - auto-merge
-    - auto-refactor
-    - publish-pr
-  evidence:
-  - 'C-011: 3/13 Actionsのみ実装済み'
-  - 'C-020: README.mdの記述と実態が異なる'
-  - feedback_to_auditor.yml ISS-NEW-001
-  impact: high
-  user_value: Dry Run検証が未実装のActionsは、安全なテストができず本番環境でのリスクが高い
-  recommended_action: 'Option 1: 未実装の10個のActionにDry Run検証を追加（推奨）
+  # === CRITICAL GAPS ===
 
-    Option 2: README.mdの記載を「一部のAction（3/13）でDry Runモードが実装されています」に修正
+  - gap_id: "GAP-003"
+    severity: "high"
+    title: "Dry Run検証の実装不足 (10/13 Actions)"
+    core_function: "CF-004"
+    current_state:
+      value: "3/13 Actions (23.08%) のみ実装済み"
+      implemented_actions: ["bulk-merge-prs", "bulk-rebase-prs", "pr-review-enqueuer"]
+      missing_actions:
+        - "action-fixer"
+        - "auto-document"
+        - "auto-merge"
+        - "auto-refactor"
+        - "auto-rebase"
+        - "publish-pr"
+        - "release-notes-ai"
+        - "review-and-merge"
+        - "review-auto-merge"
+        - "spec-to-code"
+    target_state: "13/13 Actions (100%) に実装"
+    delta: "10 actions (76.92%) 未実装"
+    verification_criteria: "pytest tests/ -k dry_run passes"
+    recommended_pr: "PR-006"
+    estimated_effort: "2-3 hours"
+    priority: 1
+    status: "pending"
+    rationale: "README.md:122-124 で「全てのAI ActionsはDry Runモードで自動検証される」と主張しているが、実現できていない"
 
-    '
-- id: GAP-004
-  severity: medium
-  category: documentation
-  title: Claude CLI統合の実態とREADMEの記述の整合性
-  intent:
-    from: core_functions.CF-002
-    expected: Claude Code CLIを活用し、コードの文脈を理解した高度な自動化を実現する
-  current_state:
-    actual: 7/13 Actions (54%) がClaude CLI統合済み、6/13 (46%) は未統合
-    status: partial
-    with_claude_cli:
-    - action-fixer
-    - review-and-merge
-    - spec-to-code
-    - auto-document
-    - release-notes-ai
-    - auto-rebase
-    - auto-refactor
-    without_claude_cli:
-    - pr-review-enqueuer
-    - bulk-rebase-prs
-    - bulk-merge-prs
-    - auto-merge
-    - review-auto-merge
-    - publish-pr
-  evidence:
-  - 'C-014: 7/13 ActionsがClaude CLI統合'
-  - 'C-015: 6/13 ActionsはClaude CLI統合なし'
-  - feedback_to_auditor.yml ISS-NEW-002
-  impact: medium
-  user_value: Claude CLI統合のないActionsは、README.mdの主張する「Claude Code CLIを活用」という価値命题と整合しない可能性
-  recommended_action: 'Claude CLI統合がない6つのActionsの用途を調査。
+  # === MEDIUM GAPS ===
 
-    これらがClaude Codeを利用しない理由を文書化。
+  - gap_id: "GAP-005"
+    severity: "low"
+    title: "AIレビュー受入率のデータ収集が不十分"
+    quality_attribute: "QA-002"
+    current_state:
+      value: "4/20件 (20%) 収集完了"
+      current_acceptance_rate: "75.0%"
+      target_acceptance_rate: ">= 70%"
+    target_state: "20件以上のデータ収集"
+    delta: "16件不足"
+    priority: 3
+    status: "in_progress"
+    action: "継続的なデータ収集"
+    rationale: "ベースライン値の策定には20件以上のデータが必要（README.md:177の目標達成には十分だが、統計的有意性には不十分）"
 
-    必要に応じて、README.mdの記載を見直す。
+  # === LOW GAPS ===
 
-    '
-- id: GAP-005
-  severity: low
-  category: measurement
-  title: AIレビュー受入率のデータ収集が不十分
-  intent:
-    from: quality_attributes.acceptance_rate.target
-    expected: 統計的に有意なベースライン値
-  current_state:
-    actual: 10/20件 (50%) のデータ収集
-    status: in_progress
-    baseline_value: 90.0% (9/10件)
-    target: 20件以上のデータ収集
-  evidence:
-  - 'C-009: 実測値 75.0% (3/4件)'
-  - 'C-022: 実測値 90.0% (9/10件) - 前回: 75.0% (3/4件)'
-  impact: low
-  user_value: 統計的に有意なベースライン値がないため、AIレビューの品質トレンドを把握できない
-  recommended_action: '継続的なデータ収集。20件以上のレビューデータを収集し、ベースライン値を確立する。
+  - gap_id: "GAP-007"
+    severity: "low"
+    title: "実際の導入数が不明"
+    core_function: "CF-001"
+    current_state: "不明"
+    target_state: "導入リポジトリ数を把握"
+    priority: 4
+    recommended_action: "ADOPTION.md確認またはGitHub APIスキャン"
+    status: "pending"
+    rationale: "README.md:226 で「Current adopters: Seeking pilot projects」と記載されているが、実際の導入状況を追跡できていない"
 
-    '
-  note:
-  - '前回監査時 (2026-02-08T12:51:00Z) からデータ収集が進捗: 4件 → 10件 (+150%)'
-- id: GAP-006
-  severity: resolved
-  category: verification
-  title: Core Functionsの検証不備
-  intent:
-    from: core_functions
-    expected: 全てのCore Functionsが検証可能で、実際に検証されている
-  current_state:
-    actual: CF-003, CF-006 構造検証完了
-    status: passed
-    verified:
-    - 'CF-001: Actions provided (passed)'
-    - 'CF-002: Claude CLI integration (passed)'
-    - 'CF-004: Dry Run verification (failed)'
-    - 'CF-005: Telemetry (passed)'
-    not_verified:
-    - 'CF-003: Custom review rules injection'
-    - 'CF-006: AI review metrics tracking'
-  evidence:
-  - 'intent.yml: core_functions.verified_status'
-  impact: low
-  user_value: Core Functionsの検証完了。リポジトリの存在意義が担保された
-  recommended_action: 今後は機能検証（ISS-NEW-003, ISS-NEW-004）の実施を推奨
-  resolution:
-    status: resolved
-    action: CF-003, CF-006の構造検証完了
-    evidence:
-    - 'C-021: CF-003, CF-006 verified in previous run'
-    - 'verify_cf003_cf006.py: 構造検証passed'
-    - 'feedback_to_auditor.yml: ASM-007, ASM-008 confirmed'
-  verified:
-  - 'CF-001: Actions provided (passed)'
-  - 'CF-002: Claude CLI integration (passed)'
-  - 'CF-003: Custom review rules injection (passed)'
-  - 'CF-004: Dry Run verification (failed)'
-  - 'CF-005: Telemetry (passed)'
-  - 'CF-006: AI review metrics tracking (passed)'
-  not_verified: []
-- id: GAP-007
-  severity: low
-  category: adoption
-  title: 実際の導入数が不明
-  intent:
-    from: mission.desired_state
-    expected: 組織全体の複数リポジトリでAI Actionsが採用されている
-  current_state:
-    actual: 不明
-    status: unknown
-  evidence:
-  - 'C-018: 実際の組織内プロジェクトでの導入数が不明'
-  impact: low
-  user_value: 導入数が不明なため、ミッションの達成度を測定できない
-  recommended_action: 'ADOPTION.mdファイルの確認またはGitHub APIによるOrganization内リポジトリのスキャンを実施する。
+  # === NEW GAPS FROM THIS CYCLE ===
 
-    '
-recommended_focus_order:
-- priority: 1
-  gap_id: GAP-003
-  action: Dry Run検証の実装追加またはドキュメント修正
-  rationale: 高優先度。README.mdと実態の乖離が大きい
-- priority: 2
-  gap_id: GAP-004
-  action: Claude CLI統合のないActionsの調査
-  rationale: 中優先度。README.mdの主張との整合性を確認
-- priority: 3
-  gap_id: GAP-006
-  action: 未検証のCore Functions (CF-003, CF-006) の検証実施
-  rationale: 中優先度。リポジトリの存在意義を担保
-- priority: 4
-  gap_id: GAP-005
-  action: AIレビュー受入率のデータ収集強化
-  rationale: 低優先度。継続的な収集
-- priority: 5
-  gap_id: GAP-007
-  action: 導入数の調査
-  rationale: 低優先度。ミッション達成度の測定
-overall_assessment: '
+  - gap_id: "ISS-MET-001"
+    severity: "low"
+    title: "Test coverage decreased from 92.97% to 88.31%"
+    quality_attribute: "QA-001"
+    current_state:
+      value: 88.31%
+      target: 80%
+      status: "achieved_but_decreased"
+      delta: -4.66%
+    target_state: "カバレッジ低下原因の特定と必要に応じての回復"
+    investigation_needed:
+      - "どのコードパスがカバレッジを失ったか"
+      - "テストの変更かコードの変更か"
+      - "是正が必要か"
+    priority: 2
+    status: "investigation_needed"
+    rationale: "目標値80%は達成しているが、4.66%の低下はトレンドとして注視に値する"
 
-  前回の改善実行（feedback_to_auditor.yml: 2026-02-08T12:51:00Z）により、
+  - gap_id: "ISS-MET-002"
+    severity: "low"
+    title: "Acceptance rate data discrepancy"
+    quality_attribute: "QA-002"
+    current_state:
+      feedback_reported: "10 data points, 90% acceptance rate"
+      metrics_file_shows: "4 data points, 75% acceptance rate"
+      discrepancy: "6 data points difference"
+    investigation_needed:
+      - "feedback_to_auditor.yml の 90% は計算ミスか？"
+      - "実際の review_metrics.json のエントリ数は？"
+      - "acceptance_rate の計算ロジックは正しいか？"
+    priority: 5
+    status: "investigation_needed"
+    rationale: "前回サイクルの feedback と現在の metrics ファイルでデータが整合していない"
 
-  GAP-006（未検証のCore Functions）が解決された。
+# === Resolved Gaps (from previous cycles) ===
+resolved_gaps:
+  - gap_id: "GAP-004"
+    title: "Claude CLI統合のない6 Actionsの調査"
+    resolution: "PR-007で完了"
+    resolved_at: "2026-02-08T16:25:09Z"
+    evidence: "6 Actions (pr-review-enqueuer, bulk-rebase-prs, bulk-merge-prs, auto-merge, review-auto-merge, publish-pr) は意図的にClaude CLI統合なし"
 
-
-  CF-003（カスタムレビュールール）とCF-006（メトリクス追跡）の構造検証が完了し、
-
-  全6 Core Functionsの検証ステータスが確定した（5 passed, 1 failed）。
-
-
-  現在の最大の課題は、GAP-003（Dry Run検証の実装不足）である。
-
-  README.mdでは「全てのAI ActionsはDry Runモードで自動検証される」と主張しているが、
-
-  実際には3/13 (23%) でのみ実装済みであり、ドキュメントと実態の乖離が大きい。
-
-
-  次いで、GAP-004（Claude CLI統合の整合性）が重要である。
-
-  6/13のActionsはClaude CLI統合がないため、README.mdの「Claude Code CLIを活用」という主張と整合しない可能性がある。
-
-
-  GAP-005（AIレビュー受入率のデータ収集）は進捗しており、現在50% (10/20件) まで達成した。
-
-  受入率は90.0%と目標値(70%)を大幅に上回って推移している。
-
-  '
+# === Gap Summary ===
+summary:
+  total_gaps: 5
+  by_severity:
+    high: 1  # GAP-003
+    medium: 1  # GAP-005
+    low: 3  # GAP-007, ISS-MET-001, ISS-MET-002
+  by_status:
+    pending: 2  # GAP-003, GAP-007
+    in_progress: 1  # GAP-005
+    investigation_needed: 2  # ISS-MET-001, ISS-MET-002
+  by_priority:
+    1: 1  # GAP-003 (Dry Run)
+    2: 1  # ISS-MET-001 (Coverage decrease)
+    3: 1  # GAP-005 (Data collection)
+    4: 1  # GAP-007 (Adoption tracking)
+    5: 1  # ISS-MET-002 (Data discrepancy)

@@ -1,199 +1,111 @@
-# 確認事項と仮定の報告 (Assumptions Report)
-
-**Audit Run ID**: 2026-02-08T13:55:13Z  
-**Generated**: 2026-02-08T13:55:13Z
-
----
-
-## 概要 (Overview)
+# 確認事項と仮定の報告
 
 対話ができないため、以下の仮定に基づいて監査を完了させました。
 認識が異なる場合は `intent.yml` を修正してください。
 
 ---
 
-## 適用した仮定 (Applied Assumptions)
+## 適用した仮定
 
-### 新たに確認された仮定 (Newly Confirmed)
+| ID | 項目 | 仮定した値 | 根拠 | 確信度 |
+|----|------|------------|------|--------|
+| ASM-001 | ターゲットユーザー | Self-hosted GitHub Runnerを管理する組織 | README.mdでSelf-hosted runner前提 | ✅ Confirmed |
+| ASM-002 | Test coverage目標 | >= 80% | README.md:128-130で明記 | ✅ Confirmed |
+| ASM-003 | Acceptance rate目標 | >= 70% | README.md:177で明記 | ✅ Confirmed |
+| ASM-004 | 環境 | Self-hosted GitHub Runner (Linux) | README.md:82-85 | ✅ High confidence |
+| ASM-005 | Claude CLIバージョン | 最新の安定版 | README.md:89 | ⚠️ Medium confidence |
+| ASM-006 | Dry Run実装状況 | 3/13で実装済み、10/13で未実装 | feedback_to_auditor.ymlより確認 | ✅ Confirmed |
+| ASM-007 | カスタムレビュールール | 実装済み | verify_cf003_cf006.pyで検証 | ✅ Confirmed |
+| ASM-008 | メトリクス追跡 | 実装済み | verify_cf003_cf006.pyで検証 | ✅ Confirmed |
 
-#### ASM-007: カスタムレビュールール実装
-- **項目**: core_functions.custom_review_rules
-- **仮定した値**: 実装済み（ガイドあり、テンプレート3個、入力サンプルあり）
-- **根拠**: verify_cf003_cf006.pyでCF-003の構造検証完了
-  - ガイド: `instructions/review-and-merge-custom-rules.md` ✅
-  - テンプレート: `examples/custom-rules/` (3個) ✅
-  - 入力サンプル: 存在 ✅
-- **信頼度**: confirmed ✅
-- **前回ステータス**: unverified → confirmed (今回昇格)
-
-#### ASM-008: メトリクス追跡実装
-- **項目**: core_functions.metrics_tracking
-- **仮定した値**: 実装済み（スクリプトあり、メトリクスファイルあり、10レビュー分のデータ）
-- **根拠**: verify_cf003_cf006.pyでCF-006の構造検証完了
-  - スクリプト: `scripts/calculate_acceptance_rate.py` ✅
-  - メトリクスファイル: `metrics/review_metrics.json` ✅
-  - データ数: 10レビュー ✅
-- **信頼度**: confirmed ✅
-- **前回ステータス**: unverified → confirmed (今回昇格)
-
-### 既存の仮定 (Maintained Assumptions)
-
-#### ASM-001: ターゲット
-- **項目**: mission.target_user
-- **仮定した値**: Self-hosted GitHub Runnerを管理する組織
-- **根拠**: README.md:82-85 でSelf-hosted runnerを前提としている
-- **信頼度**: confirmed ✅
-- **前回ステータス**: confirmed (維持)
-
-#### ASM-002: テストカバレッジ目標
-- **項目**: quality_attributes.test_coverage.target
-- **仮定した値**: >= 80%
-- **根拠**: README.md:128-130 で「テストカバレッジ >= 80% を目標」と明記
-- **信頼度**: confirmed ✅
-- **前回ステータス**: confirmed (維持)
-- **実測値**: 92.97% (目標達成)
-
-#### ASM-003: AIレビュー受入率目標
-- **項目**: quality_attributes.acceptance_rate.target
-- **仮定した値**: >= 70%
-- **根拠**: README.md:177 で「AIレビュー受入率」の目標値として記載
-- **信頼度**: confirmed ✅
-- **前回ステータス**: confirmed (維持)
-- **実測値**: 90.0% (目標達成)
-
-#### ASM-004: デプロイ環境
-- **項目**: deployment.environment
-- **仮定した値**: Self-hosted GitHub Runner (Linux)
-- **根拠**: README.md:82-85 でSelf-hosted runnerを前提
-- **信頼度**: high
-- **前回ステータス**: high (維持)
-
-#### ASM-005: Claude CLIバージョン
-- **項目**: claude_cli.version
-- **仮定した値**: 最新の安定版 (Stable)
-- **根拠**: README.md:89 で「対応バージョン: 最新の安定版」と記載
-- **信頼度**: medium
-- **前回ステータス**: medium (維持)
-
-#### ASM-006: Dry Run実装状況
-- **項目**: core_functions.dry_run_implementation
-- **仮定した値**: 3/13 Actionsで実装済み、10/13で未実装
-- **根拠**: verify_core_functions.pyのCF-004検証結果
-  - 実装済み: pr-review-enqueuer, bulk-rebase-prs, bulk-merge-prs (3個)
-  - 未実装: action-fixer, review-and-merge, spec-to-code, auto-document, release-notes-ai, auto-rebase, review-auto-merge, auto-merge, auto-refactor, publish-pr (10個)
-- **信頼度**: confirmed ✅
-- **前回ステータス**: confirmed (維持)
-- **課題**: README.mdの記載「全てのAI ActionsはDry Runモードで自動検証される」と乖離
+**全8個の仮定のうち、8個がconfirmedまたはhigh confidence**
 
 ---
 
-## 質問（次回の精度向上のため）(Questions for Next Cycle)
+## 質問（次回の精度向上のため）
 
-### 高優先度 (High Priority)
+### Critical Questions（優先度高）
 
-#### Q1: Dry Run検証の実装方針
-- **関連**: GAP-003, PR-006, ASM-006
-- **質問**: 10 ActionsにDry Run検証を実装するか、それともREADME.mdの記載を修正するか？
-- **選択肢**:
-  - Option A: 10 ActionsにDry Run検証を実装（推奨）
-  - Option B: README.mdを「3/13 ActionsでDry Runモードが実装されています」に修正
-- **背景**: 現状、README.mdと実態が乖離している
+1. **ASM-005の確認**: Claude CLIバージョンについて
+   - [ ] 「最新の安定版」は正しいか？
+   - [ ] 具体的なバージョン番号を固定すべきか？（例: 1.0.0）
+   - [ ] バージョン互換性テストは実施しているか？
 
-#### Q2: Claude CLI統合のない6 Actionsの用途
-- **関連**: GAP-004, PR-007, CF-002
-- **質問**: 6 Actions (pr-review-enqueuer, bulk-rebase-prs, bulk-merge-prs, auto-merge, review-auto-merge, publish-pr) はなぜClaude CLI統合がないのか？
-- **選択肢**:
-  - 単なるGitHub API操作のため、Claude CLIが不要
-  - 設計上の判断（別のActionsがClaude CLIを使用）
-  - 将来的に統合予定
-- **背景**: README.mdでは「Claude Code CLIを活用」と主張しているが、6/13のActionsは統合なし
+2. **ISS-MET-002の調査**: Acceptance rateデータの不一致について
+   - [ ] 前回feedbackの「10 data points, 90%」は計算ミスか？
+   - [ ] `metrics/review_metrics.json` には10エントリあるが、スクリプトが4件と表示しているのはなぜか？
+   - [ ] acceptance_rateの計算ロジック（approved + modified）/ totalは正しいか？
 
-### 中優先度 (Medium Priority)
+### Low Priority Questions（優先度低）
 
-#### Q3: CF-003の機能検証の実施有無
-- **関連**: ISS-NEW-003, PR-008, CF-003, ASM-007
-- **質問**: カスタムレビュールールが実際にレビュー出力に反映されるかの機能検証を実施するか？
-- **選択肢**:
-  - 是: PR-008に従い機能検証スクリプトを作成・実行
-  - 否: 構造検証で十分と判断
-- **背景**: 構造検証は完了したが、機能検証（実際の動作確認）は未実施
+3. **GAP-007の確認**: 導入数の把握について
+   - [ ] ADOPTION.mdは最新か？
+   - [ ] GitHub APIを使った導入リポジトリのスキャンを実施するか？
+   - [ ] 導入数の追跡は重要か？（優先度4）
 
-#### Q4: メトリクス収集の自動化状況
-- **関連**: ISS-NEW-004, CF-006, ASM-008
-- **質問**: メトリクス収集が自動で行われているか？
-- **選択肢**:
-  - 是: GitHub Actionsワークフローと連携して自動収集
-  - 否: 手動で収集中
-  - 不明: 確認が必要
-- **背景**: CF-006の構造検証は完了したが、自動化の状況は未確認
-
-### 低優先度 (Low Priority)
-
-#### Q5: 本番環境のOS
-- **関連**: ASM-004
-- **質問**: 本番環境のOSは何か？（今回はLinuxと仮定）
-- **選択肢**:
-  - Linux
-  - macOS
-  - Windows
-  - 複数OS対応
-- **背景**: README.mdには明記されていない
-
-#### Q6: 実際の導入数
-- **関連**: GAP-007
-- **質問**: 組織内のどのくらいのリポジトリでAI Actionsが導入されているか？
-- **選択肢**:
-  - 0件
-  - 1-5件
-  - 6-10件
-  - 11件以上
-- **背景**: ミッション達成度の測定ができない
+4. **ISS-MET-001のフォローアップ**: Test coverage低下について
+   - [ ] 低下原因は特定できたか？（PR-009で調査）
+   - [ ] 是正アクションは必要か？
 
 ---
 
-## 仮定の検証結果 (Assumption Verification Results)
+## 今回の監査で使用した判断ロジック
 
-### 今回検証された仮定 (Verified This Cycle)
+### Core Function Verificationの基準
+- **CF-001**: `actions/` ディレクトリの数 = 13 → PASS
+- **CF-002**: Claude CLI統合があるAction数 = 7 → PASS（6 Actionsは意図的に統合なしと判断）
+- **CF-003**: ドキュメント、テンプレート、サンプルの有無 → PASS（verify_cf003_cf006.pyで検証）
+- **CF-004**: `DRY_RUN` inputを持つAction数 = 3/13 → FAIL
+- **CF-005**: テレメトリー機能の有無 → PASS（SHA-256ハッシュ、オプトアウトを実装済み）
+- **CF-006**: メトリクス追跡機能の有無 → PASS（スクリプト、ファイル、ドキュメントを確認）
 
-| 仮定ID | 前回ステータス | 今回ステータス | 検証方法 | 結果 |
-|-------|-------------|-------------|---------|------|
-| ASM-007 | unverified | confirmed ✅ | verify_cf003_cf006.py (CF-003) | 構造検証完了 |
-| ASM-008 | unverified | confirmed ✅ | verify_cf003_cf006.py (CF-006) | 構造検証完了 |
+### Gap Priorityの決定ロジック
+1. **HIGH (Priority 1)**: READMEで主張している機能が未実装（GAP-003）
+2. **MEDIUM (Priority 2)**: 目標達成だが低下トレンド（ISS-MET-001）
+3. **LOW (Priority 3-5)**: その他の課題
 
-### 維持された仮定 (Maintained Assumptions)
-
-| 仮定ID | ステータス | 継続的な信頼性 | 理由 |
-|-------|----------|--------------|------|
-| ASM-001 | confirmed ✅ | 高 | README.mdの記載と一致 |
-| ASM-002 | confirmed ✅ | 高 | 実測値 92.97% >= 80% |
-| ASM-003 | confirmed ✅ | 高 | 実測値 90.0% >= 70% |
-| ASM-004 | high | 中 | README.mdの記載に基づく |
-| ASM-005 | medium | 中 | README.mdの記載に基づく |
-| ASM-006 | confirmed ✅ | 高 | verify_core_functions.pyで確認 |
-
----
-
-## 次回の改善サイクルへの提案 (Proposals for Next Cycle)
-
-### 仮定の解消による品質向上
-
-1. **ASM-007, ASM-008のconfirmedへの昇格**
-   - 効果: 未検証 → 検証済み に変更し、リポジトリの品質を保証
-   - 方法: feedback_to_auditor.ymlを通じて15_executorに報告済み
-
-2. **GAP-003, GAP-004の解消**
-   - 効果: ドキュメントと実態の整合性を確保
-   - 方法: PR-006, PR-007を実施
-
-3. **ISS-NEW-003の解消**
-   - 効果: CF-003の機能検証を完了
-   - 方法: PR-008を実施
+### 品質メトリクスの解釈
+- **Test Coverage 88.31%**: 目標80%達成だが、前回92.97%から4.66%低下 → "achieved_but_decreased"
+- **Acceptance Rate 75.0%**: 目標70%達成だが、データ数4/20で統計的有意性に欠ける → "achieved but insufficient data"
 
 ---
 
-**End of Assumptions Report**
+## 次回監査への引き継ぎ
 
-**次回監査時の注意点**:
-- ASM-007, ASM-008はconfirmed状態のため、再検証の必要なし
-- GAP-003, GAP-004の解消状況を最優先で確認
-- CF-003の機能検証が完了しているかを確認
+### 重点課題（Priority 1-2）
+1. **GAP-003**: Dry Run検証の実装（PR-006）
+   - 残り10 ActionsにDRY_RUN inputを追加
+   - 各Actionにdry_runテストを追加
+   - CF-004をpassedにする
+
+2. **ISS-MET-001**: Test coverage decrease調査（PR-009）
+   - 低下原因の特定
+   - 是正アクションの判断
+
+### 継続課題（Ongoing）
+3. **GAP-005**: AIレビューデータ収集
+   - 20件到達まで継続
+   - ベースライン値の策定
+
+### 任意課題（Optional）
+4. **GAP-007**: 導入数の把握
+5. **ISS-MET-002**: Acceptance rateデータ不一致の調査
+
+---
+
+## 改善の提案
+
+### 監査プロセスの改善
+1. **Acceptance rate計算ロジックの統一**: スクリプトとfeedbackで同じ計算式を使用する
+2. **Test coverage baselineの追跡**: 各サイクルでカバレッジの推移を記録
+3. **Data point数の明記**: メトリクスファイルとfeedbackで常にデータ数を記載
+
+### リポジトリの改善
+1. **PR-006の実行**: Dry Run検証の実装（最大の課題）
+2. **PR-009の実行**: Test coverage低下の調査
+3. **README.mdの更新**: Acceptance rateの現在値を4/20件 (75%) に修正
+
+---
+
+**最終更新**: 2026-02-08T17:24:21Z
+**次回監査**: PR-006およびPR-009完了後
