@@ -1,0 +1,64 @@
+{
+  "run_id": "2026-02-08T23:46:57Z",
+  "timestamp": "2026-02-08T23:46:57Z",
+  "metrics": {
+    "test_coverage_percent": 88.31,
+    "test_coverage_lines_covered": 869,
+    "test_coverage_lines_total": 984,
+    "test_results": "462 passed",
+    "lint_errors": 0,
+    "yaml_syntax_errors": 0,
+    "documentation_coverage": "100%",
+    "actions_documented": 13,
+    "actions_total": 13
+  },
+  "quality_attributes": {
+    "QA-001_test_coverage": {
+      "target": ">= 80%",
+      "actual": "88.31%",
+      "status": "achieved",
+      "gap": null
+    },
+    "QA-002_yaml_validity": {
+      "target": "0 errors",
+      "actual": "0 errors",
+      "status": "achieved",
+      "gap": null
+    },
+    "QA-003_ai_review_acceptance_rate": {
+      "target": ">= 70%",
+      "actual": "60% (from audit)",
+      "status": "not_achieved",
+      "gap": -10.0,
+      "note": "Based on 4 samples only"
+    },
+    "QA-004_documentation_coverage": {
+      "target": "13 actions",
+      "actual": "13 actions",
+      "status": "achieved",
+      "gap": null
+    }
+  },
+  "gaps_summary": {
+    "GAP-001": {
+      "description": "AI review metrics based on small sample size",
+      "severity": "high",
+      "target_improvement": "Increase samples from 4 to 20+"
+    },
+    "GAP-002": {
+      "description": "env_config.py coverage at 47.83%",
+      "severity": "medium",
+      "target_improvement": "Increase to 80%+"
+    },
+    "GAP-005": {
+      "description": "0 external adopters",
+      "severity": "high",
+      "target_improvement": "Achieve 5+ external adopters"
+    }
+  },
+  "core_function_status": "Not executed in this snapshot",
+  "execution_metadata": {
+    "phase": "before",
+    "next_phase": "Execute PR-001 and PR-002"
+  }
+}

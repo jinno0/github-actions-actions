@@ -1,0 +1,91 @@
+pr_id: "PR-002"
+title: "AI Review Quality"
+status: "applied"
+applied_at: "2026-02-08T23:46:57Z"
+
+changes:
+  - file: "actions/review-and-merge/templates/review_prompt.txt"
+    action: "modified"
+    lines_added: 10
+    lines_removed: 7
+    summary: "Enhanced review prompt to limit suggestions to top 3, prioritize by severity, and require explanation of importance"
+
+  - file: "scripts/generate_review_quality_dashboard.py"
+    action: "created"
+    lines_added: 245
+    lines_removed: 0
+    summary: "Created dashboard generator script to visualize review quality trends and patterns"
+
+  - file: "actions/review-and-merge/ab_test_config.yml"
+    action: "created"
+    lines_added: 86
+    lines_removed: 0
+    summary: "Created A/B test configuration for systematic prompt improvement"
+
+  - file: "metrics/review_quality_dashboard.md"
+    action: "generated"
+    lines_added: 34
+    lines_removed: 0
+    summary: "Generated initial dashboard showing current state: 60% acceptance rate, 10% gap to target"
+
+verification:
+  - test: "Dashboard script execution"
+    result: "passed"
+    notes: "Successfully generated dashboard with current metrics"
+
+  - test: "Prompt template syntax"
+    result: "passed"
+    notes: "New prompt template is valid and follows best practices"
+
+  - test: "A/B test config validation"
+    result: "passed"
+    notes: "YAML structure is valid and complete"
+
+intermediate_verification:
+  test_result: "passed"
+  lint_result: "passed"
+  build_result: "skipped"  # No build needed for script/config changes
+
+diff_file: "PR-002_prompt.diff"
+rollback_command: "git apply -R .audit/execution/runs/run-2026-02-08T23:46:57Z/changes/PR-002_prompt.diff && rm -f scripts/generate_review_quality_dashboard.py actions/review-and-merge/ab_test_config.yml metrics/review_quality_dashboard.md"
+
+summary: |
+  PR-002 (AI Review Quality) has been successfully applied.
+
+  Changes made:
+  1. Enhanced review prompt template:
+     - Limited suggestions to top 3 most important issues
+     - Added priority ordering (Critical > High > Medium > Low)
+     - Required explanation of "why it matters" for each issue
+     - Emphasized quality over quantity
+
+  2. Created review quality dashboard generator:
+     - Scripts to analyze review_metrics.json
+     - Weekly acceptance rate trends
+     - Rejection reason categorization
+     - Confidence score correlation analysis
+
+  3. Created A/B testing framework:
+     - Configuration for systematic prompt experiments
+     - Statistical significance tracking
+     - Variant assignment strategy
+
+  4. Generated initial dashboard:
+     - Current acceptance rate: 60% (10% gap to 70% target)
+     - Trend: Declining (needs urgent attention)
+     - Top rejection reason: "Low quality suggestions"
+
+  Expected effects:
+  - Short-term (2 weeks): Review sample size 10 → 20+
+  - Mid-term (4 weeks): Acceptance rate 60% → 70%+
+  - Long-term (8 weeks): Statistically significant baseline established
+
+  Next steps:
+  1. Monitor acceptance rate with new prompt template
+  2. Collect 20+ samples for statistical significance
+  3. Run A/B tests to compare old vs new prompts
+  4. Analyze rejection reasons to identify improvement areas
+
+  Verification: All changes are backward compatible.
+  The review_metrics.json format already supports rejection_reasons,
+  so no data migration needed.

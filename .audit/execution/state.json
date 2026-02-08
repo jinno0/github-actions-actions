@@ -1,8 +1,15 @@
 {
-  "last_run_id": "2026-02-08T20:22:29Z",
-  "last_run_date": "2026-02-09T00:22:29Z",
-  "total_runs": 1,
+  "last_run_id": "2026-02-08T23:46:57Z",
+  "last_run_date": "2026-02-09T00:46:57Z",
+  "total_runs": 2,
   "auditor_version": "2.0",
+  "executor_version": "1.0",
   "status": "completed",
-  "next_audit_scheduled": false
+  "next_audit_scheduled": false,
+  "last_execution_summary": {
+    "prs_applied": 2,
+    "verification_pass_rate": 0.8,
+    "rollback_performed": false,
+    "issues_discovered": 3
+  }
 }

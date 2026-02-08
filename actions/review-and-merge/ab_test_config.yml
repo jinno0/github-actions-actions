@@ -1,0 +1,90 @@
+# A/B Test Configuration for AI Review
+# This configuration enables A/B testing of different review prompt strategies
+
+version: "1.0"
+updated_at: "2026-02-08T23:46:57Z"
+
+# Experiments configuration
+experiments:
+  - name: "limited_suggestions_v1"
+    description: "Limit suggestions to top 3 most important issues (prioritized by severity)"
+    status: "active"  # active | completed | paused
+    started_at: "2026-02-08T00:00:00Z"
+
+    # Variants to test
+    variants:
+      - name: "baseline"
+        description: "Original prompt (list all issues)"
+        config:
+          suggestions_limit: null  # No limit
+          priority_ordering: false
+          require_why_it_matters: false
+        traffic_percentage: 50  # 50% of reviews
+
+      - name: "treatment"
+        description: "New prompt (max 3, priority-ordered)"
+        config:
+          suggestions_limit: 3
+          priority_ordering: true
+          require_why_it_matters: true
+        traffic_percentage: 50  # 50% of reviews
+
+    # Success metrics
+    metrics:
+      primary: "acceptance_rate"
+      secondary:
+        - "average_confidence"
+        - "suggestions_per_review"
+        - "review_duration_seconds"
+
+    # Minimum sample size for statistical significance
+    min_sample_size: 20  # reviews per variant
+
+    # Success criteria
+    success_criteria:
+      - metric: "acceptance_rate"
+        target: ">= 70%"
+        improvement_direction: "increase"
+
+    # Current results (to be populated)
+    current_results:
+      baseline:
+        sample_size: 0
+        acceptance_rate: 0.0
+        avg_confidence: 0.0
+      treatment:
+        sample_size: 0
+        acceptance_rate: 0.0
+        avg_confidence: 0.0
+
+  - name: "context_awareness"
+    description: "Test effect of providing more context to AI reviewer"
+    status: "planned"
+    variants:
+      - name: "minimal_context"
+        config:
+          include_file_history: false
+          include_related_files: false
+      - name: "full_context"
+        config:
+          include_file_history: true
+          include_related_files: true
+    metrics:
+      primary: "acceptance_rate"
+    min_sample_size: 30
+
+# Global settings
+settings:
+  # How to assign variants to reviews
+  assignment_strategy: "round_robin"  # round_robin | random | hash_based
+
+  # When to stop an experiment
+  stopping_criteria:
+    - "min_sample_size_reached"
+    - "statistical_significance_achieved"
+    - "time_elapsed_days: 30"
+
+  # Where to log experiment data
+  logging:
+    file: "metrics/ab_test_results.ndjson"
+    format: "json"

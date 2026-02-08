@@ -1,0 +1,86 @@
+run_id: "2026-02-08T23:46:57Z"
+audit_run_id: "2026-02-08T20:22:29Z"
+started_at: "2026-02-08T23:46:57Z"
+
+# Scope for this execution
+scope:
+  # PRs to apply in this run
+  prs_to_apply:
+    - id: "PR-001"
+      title: "Adoption Campaign"
+      priority: "P0"
+      gap: "GAP-005 (External adopters: 0)"
+      estimated_effort: "High"
+
+    - id: "PR-002"
+      title: "AI Review Quality"
+      priority: "P0"
+      gap: "GAP-001 (AI review acceptance rate: 60% < 70%)"
+      estimated_effort: "Medium"
+
+  # PRs deferred to next run
+  prs_deferred: []
+
+# Success criteria extracted from intent.yml
+success_criteria:
+  - id: "SC-001"
+    from: "intent.yml#quality_attributes[0]"
+    target: "テストカバレッジ >= 80%"
+    verification: "pytest --cov=actions --cov=scripts --cov-fail-under=80"
+    current_status: "achieved"  # 88.31% measured
+
+  - id: "SC-002"
+    from: "intent.yml#quality_attributes[2]"
+    target: "AIレビュー受入率 >= 70%"
+    verification: "python scripts/calculate_acceptance_rate.py --output json"
+    current_status: "not_achieved"  # 60% (needs improvement)
+
+  - id: "SC-003"
+    from: "intent.yml#quality_attributes[3]"
+    target: "ドキュメントカバレッジ 100%"
+    verification: "python scripts/test_documentation_coverage.py"
+    current_status: "achieved"  # 13/13 actions
+
+  - id: "SC-004"
+    from: "gap.yml#GAP-005"
+    target: "外部採用数 >= 5件"
+    verification: "ADOPTION.md contains 5+ adopter entries"
+    current_status: "not_achieved"  # 0 external adopters
+
+# Rollback triggers
+rollback_triggers:
+  - "検証失敗 (verify_core_functions.py 失敗)"
+  - "既存テスト失敗 (pytest 失敗)"
+  - "ビルドエラー (action.yml 構文エラー)"
+
+# Budget constraints
+budget:
+  max_prs_per_run: 5
+  max_file_changes_per_pr: 10
+  max_lines_per_file: 100
+
+# Execution phases
+phases:
+  - phase: 1
+    name: "Input Validation"
+    status: "in_progress"
+
+  - phase: 2
+    name: "Before Snapshot"
+    status: "pending"
+
+  - phase: 3
+    name: "Execute Improvements"
+    status: "pending"
+
+  - phase: 4
+    name: "After Snapshot"
+    status: "pending"
+
+  - phase: 5
+    name: "Verification"
+    status: "pending"
+
+  - phase: 6
+    name: "Feedback Generation"
+    status: "pending"

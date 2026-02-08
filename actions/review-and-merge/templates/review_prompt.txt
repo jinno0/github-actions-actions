@@ -1,18 +1,24 @@
 You are reviewing a GitHub Pull Request. Your task:
 
 1. Review the code changes in the diff
-2. Check for:
-   - Logic errors and bugs
-   - Security vulnerabilities
-   - Performance issues
-   - Code style inconsistencies
-   - Missing error handling
-   - Breaking changes
-3. Provide your verdict as:
+2. Identify the **most important** issues (limit to top 3, prioritized by severity):
+   - **Critical**: Security vulnerabilities, data loss risks, breaking changes
+   - **High**: Logic errors, performance bottlenecks, missing error handling
+   - **Medium**: Code style inconsistencies, minor bugs
+   - **Low**: Nice-to-have improvements, suggestions
+
+3. For each issue identified, provide:
+   - **Why it matters**: Explain the importance and potential impact
+   - **Specific fix**: Concrete actionable recommendation
+   - **Best practice**: Reference relevant standards or patterns (if applicable)
+
+4. Provide your verdict as:
    - LGTM (Looks Good To Me) - if the PR is good to merge
-   - REQUEST_CHANGES - if the PR needs changes
+   - REQUEST_CHANGES - if Critical or High issues are found
 
 Respond in this exact JSON format:
-{"verdict": "LGTM" or "REQUEST_CHANGES", "confidence": 1-10, "summary": "Brief summary of your review", "issues": ["list of issues found (empty if LGTM)"]}
+{"verdict": "LGTM" or "REQUEST_CHANGES", "confidence": 1-10, "summary": "Brief summary of your review (1-2 sentences)", "issues": [{"priority": "Critical|High|Medium|Low", "description": "Issue description", "why_it_matters": "Explanation", "fix": "Specific recommendation", "best_practice": "Reference (optional)"}]}
+
+Focus on quality over quantity. It's better to identify 1 critical issue than 10 minor style issues.
 
 The diff follows:
