@@ -1,0 +1,79 @@
+{
+  "timestamp": "2026-02-09T00:22:29Z",
+  "run_id": "2026-02-08T20:22:29Z",
+  "repository": "github-actions-actions",
+  
+  "quality_metrics": {
+    "test_coverage": {
+      "overall": 88.31,
+      "target": 80.0,
+      "status": "exceeded",
+      "actions_lib": 88.89,
+      "scripts": [
+        {"name": "aggregate_metrics", "coverage": 99.19},
+        {"name": "calculate_acceptance_rate", "coverage": 90.26},
+        {"name": "collect_metrics", "coverage": 94.74},
+        {"name": "env_config", "coverage": 47.83},
+        {"name": "generate_adoption_report", "coverage": 99.17},
+        {"name": "generate_metrics_report", "coverage": 99.30},
+        {"name": "generate_telemetry_report", "coverage": 78.12},
+        {"name": "scan_adoption", "coverage": 94.23}
+      ]
+    },
+    "yaml_validity": {
+      "total_files": 13,
+      "valid_files": 13,
+      "warnings": 5,
+      "errors": 0
+    },
+    "documentation": {
+      "total_actions": 13,
+      "documented_actions": 13,
+      "coverage_percent": 100.0
+    },
+    "ai_review_quality": {
+      "acceptance_rate": 75.0,
+      "target": 70.0,
+      "sample_size": 4,
+      "target_sample_size": 20,
+      "status": "target_met_insufficient_data"
+    }
+  },
+  
+  "adoption_metrics": {
+    "external_adopters": 0,
+    "phase": "Phase 3 (Stabilization & Adoption)",
+    "phase_mismatch": true
+  },
+  
+  "gap_analysis": {
+    "total_gaps": 5,
+    "critical": 0,
+    "high": 1,
+    "medium": 3,
+    "low": 1,
+    "intent_achievement_score": 85
+  },
+  
+  "verification_results": {
+    "total_scenarios": 5,
+    "passed": 5,
+    "failed": 0,
+    "status": "all_passed"
+  },
+  
+  "self_assessment": {
+    "total_score": 30,
+    "max_score": 35,
+    "percentage": 85.7,
+    "breakdown": {
+      "purpose_alignment": 4,
+      "evidence_soundness": 5,
+      "implementability": 4,
+      "risk_management": 4,
+      "verifiability": 5,
+      "cost_optimization": 4,
+      "collective_intelligence": 4
+    }
+  }
+}

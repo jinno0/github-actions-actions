@@ -1,166 +1,149 @@
-version: "1.0"
-generated_at: "2026-02-08T18:53:06Z"
+version: "2.0"
+run_id: "2026-02-08T20:22:29Z"
+generated_at: "2026-02-08T20:22:29Z"
 
-# === プロジェクト概要 ===
-project_overview:
-  name: "github-actions-actions"
-  description: "AI Hub - GitHub Actions for AI-Native Development"
-  version: "1.0.0"
-  python_version: ">=3.11"
-  phase: "Phase 3: Stabilization & Adoption"
+# === 現状分析 (As-Is) ===
 
-# === アクション構成 ===
-actions:
-  total_count: 13
-  categories:
-    core_development: 4  # review-and-merge, spec-to-code, action-fixer, auto-refactor
-    documentation: 2     # auto-document, release-notes-ai
-    automation: 4        # auto-merge, auto-rebase, review-auto-merge, publish-pr
-    bulk_operations: 2   # bulk-merge-prs, bulk-rebase-prs
-    workflow_helpers: 1  # pr-review-enqueuer
+repository_health:
+  overall_grade: "B+"
+  test_coverage_grade: "A"
+  documentation_grade: "A"
+  code_quality_grade: "B"
+  adoption_grade: "D"
 
-# === テスト状況 ===
-testing_status:
-  total_tests: 460
-  passed: 460
-  skipped: 2
-  failed: 0
-  coverage_percentage: 88.31
-  coverage_target: 80
-  coverage_met: true
-  covered_statements: 869
-  uncovered_statements: 115
-  total_statements: 984
+technical_metrics:
+  test_coverage:
+    total: 88.31
+    target: 80.0
+    status: "exceeded"
+    breakdown:
+      actions_lib: 88.89
+      scripts:
+        aggregate_metrics: 99.19
+        calculate_acceptance_rate: 90.26
+        collect_metrics: 94.74
+        env_config: 47.83
+        generate_adoption_report: 99.17
+        generate_metrics_report: 99.30
+        generate_telemetry_report: 78.12
+        scan_adoption: 94.23
+        test_data_collection: 0.00
 
-  # カバレッジ詳細
-  coverage_by_module:
-    - module: "actions/lib/__init__.py"
-      coverage: 100.00
-      statements: 2
-      missed: 0
-    - module: "actions/lib/acceptance_tracker.py"
-      coverage: 88.89
-      statements: 90
-      missed: 10
-    - module: "scripts/aggregate_metrics.py"
-      coverage: 99.19
-      statements: 124
-      missed: 1
-    - module: "scripts/calculate_acceptance_rate.py"
-      coverage: 90.26
-      statements: 154
-      missed: 15
-    - module: "scripts/collect_metrics.py"
-      coverage: 94.74
-      statements: 57
-      missed: 3
-    - module: "scripts/env_config.py"
-      coverage: 47.83
-      statements: 23
-      missed: 12
-    - module: "scripts/generate_adoption_report.py"
-      coverage: 99.17
-      statements: 121
-      missed: 1
-    - module: "scripts/generate_metrics_report.py"
-      coverage: 99.30
-      statements: 143
-      missed: 1
-    - module: "scripts/generate_telemetry_report.py"
-      coverage: 78.12
-      statements: 128
-      missed: 28
-    - module: "scripts/scan_adoption.py"
-      coverage: 94.23
-      statements: 104
-      missed: 6
-    - module: "scripts/test_data_collection.py"
-      coverage: 0.00
-      statements: 38
-      missed: 38
+  yaml_validity:
+    total_files: 13
+    valid_files: 13
+    status: "pass"
+    lint_warnings: 5
 
-# === ドキュメント状況 ===
-documentation_status:
-  instruction_files: 19
-  example_workflows: 15
-  documented_actions: 13  # 全アクションに対応
+  documentation:
+    total_directories: 15
+    documented_directories: 14
+    coverage_percent: 93.3
+    status: "good"
 
-  # 主要ドキュメント
-  key_documents:
-    - file: "README.md"
-      exists: true
-      sections: 13
-    - file: "PURPOSE.md"
-      exists: true
-      phase: "Phase 3"
-    - file: "AGENTS.md"
-      exists: true
-    - file: "SYSTEM_CONSTITUTION.md"
-      exists: true
-    - file: "ADOPTION_GUIDE.md"
-      exists: true
-
-# === 品質メトリクス ===
-quality_metrics:
-  ai_review_acceptance_rate:
-    current: 75.0
-    target: 70
-    target_met: true
+  ai_review_quality:
+    acceptance_rate: 75.0
+    target: 70.0
     sample_size: 4
     target_sample_size: 20
-    data_collection_status: "in_progress"
-    baseline_date: "2026-02-07"
+    status: "target_met_but_insufficient_data"
 
-  metrics_collection:
-    review_metrics_file: "metrics/review_metrics.json"
-    total_reviews: 5
-    outcomes:
-      approved: 3
-      modified: 1
-      rejected: 1
-    avg_suggestions_count: 4.0
-    avg_confidence_score: 0.78
+codebase_structure:
+  actions:
+    total: 13
+    with_action_yml: 13
+    with_documentation: 13
+    lib_modules: 1
 
-# === 採用状況 ===
-adoption_status:
+  scripts:
+    total: 8
+    tested: 7
+    coverage_above_80: 6
+    coverage_below_50: 1
+
+development_metrics:
+  phase: "Phase 3 (Stabilization & Adoption)"
   external_adopters: 0
-  internal_adopters: "unknown"  # 組織内での導入数は不明
-  adoption_phase: "Seeking pilot projects"
-  adoption_list_file: "ADOPTION.md"
+  pilot_projects: 0
+  release_status: "Stable"
 
-# === テレメトリー ===
-telemetry:
-  implemented: true
-  opt_out_available: true
-  anonymization: "SHA-256 hash (first 16 chars)"
-  data_collected:
-    - "action name"
-    - "execution status"
-    - "execution time"
-    - "runner OS"
-    - "Claude CLI version"
-    - "error messages (max 200 chars)"
-  privacy_features:
-    - "opt-out via DISABLE_TELEMETRY"
-    - "repo name anonymization"
-    - "minimal data collection"
+quality_metrics:
+  strengths:
+    - "Excellent test coverage (88.31% vs 80% target)"
+    - "All tests passing (460 passed, 2 skipped)"
+    - "Comprehensive documentation (93.3% coverage)"
+    - "Valid YAML configurations across all actions"
+    - "High acceptance rate (75% vs 70% target)"
 
-# === 技術スタック ===
-tech_stack:
-  language: "Python"
-  version: ">=3.11"
-  package_manager: "pip/setuptools"
-  dependencies:
-    - "PyYAML>=6.0"
-  dev_dependencies:
-    - "pytest>=7.0.0"
-    - "pytest-cov>=4.1.0"
-    - "ruff>=0.1.0"
+  weaknesses:
+    - "Low adoption rate (0 external adopters in Phase 3)"
+    - "Insufficient sample size for AI review metrics (4 vs 20 target)"
+    - "Low coverage in env_config.py (47.83%)"
+    - "No statistical significance in quality metrics"
 
-# === CI/CD ===
-ci_cd:
-  github_actions: true
-  dry_run_validation: true
-  automated_tests: true
-  coverage_reporting: true
-  coverage_comment_on_pr: true
+  technical_debt:
+    - id: "TD-001"
+      description: "env_config.py low test coverage"
+      severity: "medium"
+      estimated_effort: "2-4 hours"
+      
+    - id: "TD-002"
+      description: "Insufficient AI review sample size"
+      severity: "high"
+      estimated_effort: "ongoing data collection"
+      
+    - id: "TD-003"
+      description: "yamllint warnings in action.yml files"
+      severity: "low"
+      estimated_effort: "1-2 hours"
+
+operational_status:
+  ci_cd:
+    status: "operational"
+    test_suite: "passing"
+    coverage_tracking: "active"
+
+  documentation:
+    status: "comprehensive"
+    gaps: ["actions/_shared"]
+    overall_quality: "high"
+
+  adoption:
+    status: "stagnant"
+    phase_mismatch: "Phase 3 (adoption) but 0 adopters"
+    blocker: "Unknown (needs investigation)"
+
+risks:
+  - id: "R-001"
+    category: "project_viability"
+    severity: "high"
+    description: "Phase 3 (adoption phase) but no external adopters"
+    impact: "Project value proposition unproven"
+
+  - id: "R-002"
+    category: "measurement_validity"
+    severity: "medium"
+    description: "AI review quality metrics based on insufficient sample size"
+    impact: "Cannot statistically validate quality claims"
+
+  - id: "R-003"
+    category: "code_quality"
+    severity: "low"
+    description: "env_config.py has untested error handling paths"
+    impact: "Potential runtime errors in production"
+
+opportunities:
+  - id: "O-001"
+    description: "High test coverage provides confidence for refactoring"
+    effort: "low"
+    value: "medium"
+
+  - id: "O-002"
+    description: "Strong documentation can drive adoption if promoted"
+    effort: "medium"
+    value: "high"
+
+  - id: "O-003"
+    description: "Existing metrics infrastructure can be leveraged for pilot projects"
+    effort: "low"
+    value: "high"

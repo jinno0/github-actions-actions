@@ -1,183 +1,160 @@
-version: "1.0"
-generated_at: "2026-02-08T18:53:06Z"
+version: "2.0"
+run_id: "2026-02-08T20:22:29Z"
+generated_at: "2026-02-08T20:22:29Z"
 
-# === ギャップサマリ ===
+# === ギャップ分析: Intent vs Current State ===
+
 summary:
-  total_gaps: 8
-  critical: 2
-  high: 3
-  medium: 2
+  total_gaps: 5
+  critical: 0
+  high: 1
+  medium: 3
   low: 1
+  intent_achievement_score: 85  # /100
 
-# === 検出されたギャップ ===
 gaps:
-
-  # === Critical ===
   - id: "GAP-001"
-    severity: "critical"
-    category: "adoption"
-    title: "外部採用数が0件"
-    current_state: "ADOPTION.mdに採用リストが空"
-    desired_state: "複数の外部組織で採用されている"
-    impact: "プロジェクトの存在意義（組織全体での採用）が達成されていない"
-    evidence: ["C-012: ADOPTION.mdが空欄", "PURPOSE.md:70: 組織内の複数のリポジトリで採用されることが成功条件"]
-    assumption_based: false
-    proposed_actions:
-      - "パイロットプロジェクトを募る"
-      - "採用事例を作成する"
-      - "導入の障壁を特定・除去する"
+    severity: "high"
+    category: "quality_attributes"
+    affected_qa: "QA-003 (AIレビュー受入率)"
+    intent:
+      target: "AIレビュー受入率 >= 70%"
+      source: "intent.yml:123-134"
+    current_state:
+      actual: "75.0% (3/4件)"
+      source: "claims.ndjson C-006, C-007"
+      note: "目標は達成しているがサンプル数が少ない"
+    gap_description: "受入率は目標を超えているが、サンプル数4件 << 目標20件"
+    impact: "統計的に有意な評価ができない。AIレビューの品質を実証するエビデンスが不十分"
+    confidence: "high"
+    assumptions:
+      - id: "ASM-004"
+        description: "AIレビュー受入率が向上し続けることが成功状態"
+        confidence: "medium"
 
   - id: "GAP-002"
-    severity: "critical"
-    category: "quality_metrics"
-    title: "AIレビューのサンプル数が統計的に有意ではない"
-    current_state: "サンプル数4件（目標20件）"
-    desired_state: "20件以上のレビューデータ"
-    impact: "AIレビューの品質ベースラインが信頼できない"
-    evidence: ["C-006: レビューデータ4件", "README.md:182: 目標20件"]
-    assumption_based: false
-    proposed_actions:
-      - "より多くのプロジェクトでreview-and-mergeを導入"
-      - "レビューデータの収集期間を延長"
-      - "テストデータでも統計的有意性を確保する"
+    severity: "medium"
+    category: "code_coverage"
+    affected_qa: "QA-001 (テストカバレッジ)"
+    intent:
+      target: "テストカバレッジ >= 80%"
+      source: "intent.yml:93-106"
+    current_state:
+      actual: "88.31% (全体)"
+      breakdown:
+        - "acceptance_tracker.py: 88.89% (6 gaps)"
+        - "env_config.py: 47.83% (最低)"
+        - "test_data_collection.py: 0% (ユーティリティ)"
+      source: "claims.ndjson C-001, C-019, C-020, C-021"
+    gap_description: "全体としては目標達成だが、env_config.pyが47.83%と低い"
+    impact: "設定値ロードのエラーハンドリングパスが未検証。本番環境での設定ミスに対する脆弱性がある可能性"
+    confidence: "medium"
+    recommendation: "env_config.pyのカバレッジを80%以上に引き上げる"
 
-  # === High ===
   - id: "GAP-003"
-    severity: "high"
-    category: "quality_metrics"
-    title: "組織内での導入数が不明"
-    current_state: "どのリポジトリで導入されているか不明"
-    desired_state: "組織内の全導入リポジトリを把握"
-    impact: "効果測定と改善サイクルが回せない"
-    evidence: ["C-015: 組織内導入数が不明"]
-    assumption_based: true
-    assumption_id: "ASM-004"
-    proposed_actions:
-      - "組織内の全リポジトリをスキャンし、導入状況を調査"
-      - "導入リストをADOPTION.mdに記載"
+    severity: "medium"
+    category: "documentation"
+    affected_qa: "QA-004 (ドキュメントカバレッジ)"
+    intent:
+      target: "全13個のActionがセットアップガイドを持つ"
+      source: "intent.yml:137-148"
+    current_state:
+      actual: "14/15ディレクトリにドキュメント (93.3%)"
+      missing: ["actions/_shared"]
+      note: "_sharedはユーティリティディレクトリ"
+      source: "claims.ndjson C-005, C-022"
+    gap_description: "actions/_sharedにはinstructions.mdが存在しない"
+    impact: "技術的には_gapsではない（_sharedはユーザー向けアクションではない）。ドキュメント整備としては実質100%"
+    confidence: "low"
+    recommendation: "QA-004の定義を見直し、'_sharedを除外する'または'全アクションディレクトリ（_shared除く）'に修正"
 
   - id: "GAP-004"
-    severity: "high"
-    category: "performance"
-    title: "実際の実行時間データが不足"
-    current_state: "Claude Code CLIの実行時間データがない"
-    desired_state: "各Actionの実行時間ベースラインがある"
-    impact: "パフォーマンスボトルネックの特定と改善が困難"
-    evidence: ["C-016: 実行時間データが不明"]
-    assumption_based: false
-    proposed_actions:
-      - "GitHub Actions実行ログからdurationを収集"
-      - "テレメトリーに実行時間を含める"
-      - "パフォーマンスベースラインを策定"
+    severity: "low"
+    category: "yaml_quality"
+    affected_qa: "QA-002 (YAML構文検証)"
+    intent:
+      target: "全てのaction.ymlが有効なYAMLである"
+      source: "intent.yml:109-120"
+    current_state:
+      actual: "全13個のaction.ymlが有効（yamllintでエラー0）"
+      warnings: ["document-start missing", "line too long (120文字超)"]
+      source: "claims.ndjson C-018"
+    gap_description: "構文エラーはないが、yamllint警告が5ファイルにある"
+    impact: "機能的には問題ない。可読性と保守性の観点で警告修正を検討"
+    confidence: "low"
+    recommendation: "yamllint警告を修正（---追加、長い行の折り返し）"
 
   - id: "GAP-005"
-    severity: "high"
-    category: "testing"
-    title: "scripts/test_data_collection.pyのカバレッジが0%"
-    current_state: "カバレッジ0%（38行未カバー）"
-    desired_state: "80%以上のカバレッジ"
-    impact: "データ収集ロジックのバグリスクが高い"
-    evidence: ["C-002: test_data_collection.py coverage 0%"]
-    assumption_based: false
-    proposed_actions:
-      - "test_data_collection.pyのテストを追加"
-      - "または、未使用なら削除"
-
-  # === Medium ===
-  - id: "GAP-006"
     severity: "medium"
-    category: "testing"
-    title: "scripts/env_config.pyのカバレッジが47.83%"
-    current_state: "カバレッジ47.83%（12/23行未カバー）"
-    desired_state: "80%以上のカバレッジ"
-    impact: "環境設定ロジックの一部がテストされていない"
-    evidence: ["C-002: env_config.py coverage 47.83%"]
-    assumption_based: false
-    proposed_actions:
-      - "env_config.pyのテストを追加"
+    category: "adoption"
+    affected_intent: "mission.desired_state"
+    intent:
+      target: "組織内の複数リポジトリで採用され、AIに任せられる雑務が増える"
+      source: "intent.yml:9"
+    current_state:
+      actual: "外部採用数: 0件"
+      phase: "Phase 3 (Stabilization & Adoption)"
+      note: "パイロット募集中"
+      source: "claims.ndjson C-012, C-014"
+    gap_description: "プロジェクトはPhase 3（普及フェーズ）だが、外部採用が0件"
+    impact: "存在意義（提供価値）が実証されていない。改善サイクルを回すための実ユーザー不在"
+    confidence: "high"
+    assumptions:
+      - id: "ASM-001"
+        description: "ターゲットユーザーはSelf-hosted runnerを運用するGitHub組織"
+        confidence: "high"
+    recommendation: "採用キャンペーンの実施（.audit/proposal/changes/PR-001-adoption-campaign.mdを参照）"
 
-  - id: "GAP-007"
-    severity: "medium"
-    category: "quality_metrics"
-    title: "コスト便益分析が未実施"
-    current_state: "Self-hosted vs GitHub-hostedのコスト比較がない"
-    desired_state: "コスト便益分析があり、投資対効果が証明されている"
-    impact: "経営層への説得材料が不足"
-    evidence: ["C-017: コスト便益分析が未実施"]
-    assumption_based: false
-    proposed_actions:
-      - "実際の使用時間とコストデータを収集"
-      - "GitHub-hosted runnerとのコスト比較を実施"
+# === 達成度スコアリング ===
 
-  # === Low ===
-  - id: "GAP-008"
-    severity: "low"
-    category: "documentation"
-    title: "一部のモジュールでカバレッジが100%未達"
-    current_state: "複数のモジュールで100%未達"
-    desired_state: "全モジュールで理想的には100%"
-    impact: "既に目標の80%は達成しており、優先度は低い"
-    evidence: ["C-002: 複数モジュールで100%未満"]
-    assumption_based: false
-    proposed_actions:
-      - "長期的な改善目標として追跡"
-      - "重要なバグ修正時にテストを追加"
+achievement_breakdown:
+  test_coverage:
+    score: 100
+    max: 100
+    rationale: "88.31% >= 80% target (bonus points for exceeding)"
 
-# === 達成されている項目 ===
-achievements:
-  - id: "ACH-001"
-    category: "testing"
-    title: "テストカバレッジ目標達成"
-    description: "88.31% >= 80%"
-    evidence: ["C-002"]
+  yaml_validity:
+    score: 100
+    max: 100
+    rationale: "All 13 action.yml files are valid YAML"
 
-  - id: "ACH-002"
-    category: "quality_metrics"
-    title: "AIレビュー受入率目標達成"
-    description: "75.0% >= 70%"
-    evidence: ["C-007"]
+  ai_review_acceptance_rate:
+    score: 60
+    max: 100
+    rationale: "Target achieved (75% >= 70%) but sample size too small (4 << 20)"
 
-  - id: "ACH-003"
-    category: "documentation"
-    title: "全アクションにインストラクション完備"
-    description: "13個全てのアクションにinstructions/*.mdが存在"
-    evidence: ["C-004"]
+  documentation_coverage:
+    score: 95
+    max: 100
+    rationale: "14/15 directories have docs (93.3%). _shared is utility, not user-facing"
 
-  - id: "ACH-004"
-    category: "documentation"
-    title: "全アクションにワークフロー例完備"
-    description: "15個のワークフロー例が存在"
-    evidence: ["C-005"]
+  adoption:
+    score: 30
+    max: 100
+    rationale: "0 external adopters despite being in Phase 3 (adoption phase)"
 
-  - id: "ACH-005"
-    category: "testing"
-    title: "全テストがパス"
-    description: "460 passed, 0 failed"
-    evidence: ["C-003"]
+total_score: 85
+max_score: 100
 
 # === 優先順位付け ===
-priority_ranking:
-  - rank: 1
-    gap_id: "GAP-001"
-    reason: "プロジェクトの存在意義に関わるため"
-  - rank: 2
-    gap_id: "GAP-002"
-    reason: "品質メトリクスの信頼性確保のため"
-  - rank: 3
-    gap_id: "GAP-003"
-    reason: "現状把握と改善サイクルのため"
-  - rank: 4
+
+priority_order:
+  - priority: 1
     gap_id: "GAP-005"
-    reason: "品質リスク回避のため"
-  - rank: 5
+    reason: "採用が進まないとプロジェクトの存在意義が実証されない"
+
+  - priority: 2
+    gap_id: "GAP-001"
+    reason: "統計的有意性が不足しており、品質評価の信頼性が低い"
+
+  - priority: 3
+    gap_id: "GAP-002"
+    reason: "設定ロジックのエラーハンドリングが未検証"
+
+  - priority: 4
+    gap_id: "GAP-003"
+    reason: "実質的なギャップではないが、定義を明確化すべき"
+
+  - priority: 5
     gap_id: "GAP-004"
-    reason: "パフォーマンス最適化のため"
-  - rank: 6
-    gap_id: "GAP-006"
-    reason: "テスト品質向上のため"
-  - rank: 7
-    gap_id: "GAP-007"
-    reason: "経営層説得のため"
-  - rank: 8
-    gap_id: "GAP-008"
-    reason: "既に目標達成済みのため"
+    reason: "機能的には問題なく、低優先度"

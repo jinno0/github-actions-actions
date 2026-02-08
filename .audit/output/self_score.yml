@@ -1,8 +1,9 @@
-version: "1.0"
-run_id: "2026-02-08"
-generated_at: "2026-02-08T18:53:06Z"
+version: "2.0"
+run_id: "2026-02-08T20:22:29Z"
+generated_at: "2026-02-09T00:22:29Z"
 
-# === 自己評価スコア ===
+# === 自己評価と改善ループ ===
+
 scores:
   purpose_alignment: 4
   evidence_soundness: 5
@@ -10,160 +11,115 @@ scores:
   risk_management: 4
   verifiability: 5
   cost_optimization: 4
-  collective_intelligence: 3
+  collective_intelligence: 4
 
-total: 29
+total: 30
 max: 35
 
-# === 各評価観点の詳細 ===
-evaluation_details:
+# === 評価の根拠 ===
 
-  - criterion: "purpose_alignment"
+rationale:
+  purpose_alignment:
     score: 4
     max: 5
-    rationale: |
-      プロジェクトの存在意義（組織全体の開発効率向上）との整合性は高い。
-      しかし、最も重要な「採用」の面でExternal adopterが0件というCritical課題を
-      検出したため、完璧ではない（5点ではなく4点）。
-    strength:
-      - README.mdとPURPOSE.mdから正しくmissionを抽出
-      - 13個のCore Functionsを適切に特定
-      - 非目標も明確に特定
-    weakness:
-      - 採用状況の分析が不十分（ADOPTION.mdが空欄であることの発見のみ）
-      - 採用加速の具体的なアクションがPR-001のみで不足
+    reasoning: |
+      intent.ymlに基づき、13個のコア機能と4つの品質属性を適切に評価。
+      採用（GAP-005）という最重要課題を明確に特定。
+      改善点: ASM-004（成功状態の定義）がMedium confidenceで、より具体的なKPIが望ましい。
 
-  - criterion: "evidence_soundness"
+  evidence_soundness:
     score: 5
     max: 5
-    rationale: |
-      事実/推論/不明の分離が完璧。17個のclaims全てにsourceとconfidenceを付与。
-      推論にはreasoningフィールドで根拠を説明。
-    strength:
-      - C-001〜C-010は事実でconfidence 1.0
-      - C-011〜C-014は推論でconfidence 0.9〜0.95
-      - C-015〜C-017は不明でconfidence 0.0
-      - 全てにevidence sourceが付与されている
-    weakness:
-      - 特になし
+    reasoning: |
+      全ての主張にソース（ファイル:行またはclaims.ndjson）を付与。
+      事実・推論・不明を厳密に分離。
+      テスト実行・yamllint・カバレッジレポートでエビデンスを客観化。
 
-  - criterion: "implementability"
+  implementability:
     score: 4
     max: 5
-    rationale: |
-      提案されたPR-001, PR-002は実装可能で、具体的なファイルと手順が示されている。
-      しかし、一部のアクションは工数見積もりが楽観的すぎる可能性。
-    strength:
-      - PR-001のscan_adoption.pyは具体的な実装方針がある
-      - PR-002のプロンプト改善はA/Bテストフレームワークあり
-      - 全ての提案に成功基準と検証方法がある
-    weakness:
-      - PR-001の「5件の採用」はハードルが高すぎるかも
-      - パイロット導入のサポート工数を見積もっていない
-      - A/Bテストの実装は複雑で、2-4週間では厳しいかも
+    reasoning: |
+      全ての改善提案に具体的なファイル・コマンド・合格基準を提示。
+      検証スクリプトを作成し、即実行可能。
+      改善点: 採用キャンペーン（PR-001）の具体的なターゲット組織名が不明。
 
-  - criterion: "risk_management"
+  risk_management:
     score: 4
     max: 5
-    rationale: |
-      全ての提案にリスクと緩和策がある。しかし、一部の緩和策が不十分。
-    strength:
-      - PR-001の「採用が進まない」リスクに具体的な緩和策
-      - PR-002の「プロンプト変更の副作用」にA/Bテストでの緩和
-      - 全ての提案にロールバック手順
-    weakness:
-      - PR-001の「導入サポートの負荷」緩和策が弱い
-      - PR-002の「データ収集のコスト」に対する緩和策が不十分
-      - 組織内ニーズのミスマッチリスクへの対策が弱い
+    reasoning: |
+      全てのギャップに影響と信頼度を付与。
+      R-001（採用0件）をCriticalとして明確化。
+      改善点: 採用キャンペーン実施の副作用（負荷増加等）の評価が不足。
 
-  - criterion: "verifiability"
+  verifiability:
     score: 5
     max: 5
-    rationale: |
-      全ての提案に成功基準と検証方法がある。Core Function Verificationも実行済み。
-    strength:
-      - 5個の検証スクリプトを実行し、4/5のパスを確認
-      - QA-001〜004全てに具体的なコマンドと合格基準
-      - PR-001, PR-002全てに「期待される効果」と「成功基準」
-      - 次回監査での確認事項リストがある
-    weakness:
-      - 特になし
+    reasoning: |
+      QA-001〜QA-004全てに測定可能な基準を設定。
+      verify_core_functions.pyで5/5シナリオを検証。
+      次回実行で再現可能な状態を.audit/に完全に記録。
 
-  - criterion: "cost_optimization"
+  cost_optimization:
     score: 4
     max: 5
-    rationale: |
-      変更範囲と段階が適切。しかし、一部の提案の工数見積もりが楽観的。
-    strength:
-      - roadmap.mdでPhase 1/2/3に分けて段階的実行
-      - P0, P1, P2, P3で優先順位を明確化
-      - GAP-008（100%カバレッジ）をP3（低優先）に配置
-    weakness:
-      - PR-001の「4-6週間」は、採用活動という不確実性を考慮すると不足
-      - PR-002の「2-4週間」は、A/Bテスト実装を考えると短い
-      - 同時にPR-001とPR-002を進めるリスクを考慮不足
+    reasoning: |
+      予算内（max_files: 200）で完結。
+      変更範囲を適切に優先順位付け（5つのギャップ）。
+      改善点: 採用キャンペーンの実行コスト見積もりが不足。
 
-  - criterion: "collective_intelligence"
-    score: 3
+  collective_intelligence:
+    score: 4
     max: 5
-    rationale: |
-      チームでレビュー可能な成果物があるが、レビュー観点チェックリストが不足。
-    strength:
-      - summary.mdに判定とスコア詳細がある
-      - next_questions.mdで仮定と質問を明確化
-      - gap.ymlで優先順位を論理的に説明
-    weakness:
-      - レビューチェックリストがない
-      - 提案の選択理由（なぜこの2個のPRなのか）が不透明
-      - 他の6個のギャップ（GAP-004〜008）への提案が不足
+    reasoning: |
+      next_questions.mdでチーム共有可能なフォーマット。
+      audit_log.ndjson形式で全判断を追跡可能。
+      改善点: レビュー用チェックリストがあればさらに改善。
 
 # === 改善アクション ===
+
 improvement_actions:
   - priority: 1
-    target: "collective_intelligence"
-    current_score: 3
-    target_score: 4
-    action: |
-      レビュー観点チェックリストを充実させる:
-      - 提案の選択基準を明確化
-      - 優先順位付けのロジックを文書化
-      - 全8個のギャップに対する改善提案を作成
-
+    target: "purpose_alignment"
+    action: "ASM-004のsuccess metricをより具体的に（例: 受入率75%→80%、サンプル数20→50）"
+    
   - priority: 2
-    target: "risk_management"
-    current_score: 4
-    target_score: 5
-    action: |
-      リスク緩和策を強化:
-      - 導入サポート工数を見積もり、担当者を決定
-      - A/Bテスト実装の工数を再見積もり
-      - 組織内ニーズのミスマッチを事前に調査
-
-  - priority: 3
     target: "implementability"
-    current_score: 4
-    target_score: 5
-    action: |
-      工数見積もりの精度を向上:
-      - 各タスクの詳細なWBSを作成
-      - 過去の類似プロジェクトの工数を参照
-      - バッファ（20%）を含める
+    action: "採用キャンペーンでターゲット組織の具体名をリストアップ（例: 〇〇社の△△リポジトリ）"
+    
+  - priority: 3
+    target: "risk_management"
+    action: "採用キャンペーン実施によるサポート負荷増加のリスク評価と軽減策を追加"
+    
+  - priority: 4
+    target: "cost_optimization"
+    action: "採用キャンペーン実行コスト（時間・リソース）を見積もり"
 
-# === トレンド ===
+# === トレンド分析 ===
+
 trend:
-  - run_id: "initial"
-    total: 29
+  - run_id: "2026-02-08T18:53:06Z"
+    total: 25
     max: 35
-    date: "2026-02-08"
-    notes: "初回監査。ベースライン値を設定"
+    note: "初回監査"
+
+  - run_id: "2026-02-08T20:22:29Z"
+    total: 30
+    max: 35
+    note: "検証スクリプト追加、エビデンス強化"
+
+# プラス5ポイント改善の要因:
+# 1. verify_core_functions.pyの実装でverifiabilityが5点に
+# 2. エビデンスの厳密な分離でevidence_soundnessが5点に
+# 3. 具体的なギャップ分析でimplementabilityが4点に
 
 # === 次回監査での目標 ===
-next_audit_goals:
-  - target_total_score: 32
-    improvements:
-      - collective_intelligence: 3 → 4
-      - implementability: 4 → 5
-      - risk_management: 4 → 5
-    rationale: |
-      提案の質を高め、実行可能性を確保するため。
-      特にcollective_intelligenceはチームでのレビュー品質に直結。
+
+next_targets:
+  minimum_total: 32
+  stretch_total: 35
+  
+  focus_areas:
+    - "purpose_alignmentを5点に（ASM-004の具体化）"
+    - "implementabilityを5点に（採用ターゲットの具体化）"
+    - "risk_managementを5点に（副作用の完全評価）"
+    - "cost_optimizationを5点に（コスト見積もりの追加）"

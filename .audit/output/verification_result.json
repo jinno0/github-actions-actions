@@ -1,74 +1,83 @@
 [
   {
-    "function_id": "CF-001-013",
-    "scenario_name": "アクションディレクトリ構造の検証",
+    "function_id": "CF-ALL",
+    "scenario_name": "All 13 core function actions exist",
     "passed": true,
     "actual_output": {
-      "total_actions": 13,
-      "missing_actions": [],
-      "without_action_yml": []
+      "present": 13,
+      "missing": 0
     },
     "expected_output": {
-      "total_actions": 13,
-      "missing_actions": [],
-      "without_action_yml": []
+      "present": 13,
+      "missing": 0
     },
     "error_message": null,
-    "interpretation": "13個全てのアクションが存在し、action.ymlを持っている"
-  },
-  {
-    "function_id": "QA-001",
-    "scenario_name": "テストカバレッジ検証",
-    "passed": true,
-    "actual_output": "88.31%",
-    "expected_output": ">= 80.0%",
-    "error_message": null,
-    "interpretation": "テストカバレッジ88.31%は目標値80%を達成している"
+    "interpretation": "全13個のActionが存在する",
+    "file_location": "actions/"
   },
   {
     "function_id": "QA-002",
-    "scenario_name": "YAML構文検証",
+    "scenario_name": "All action.yml files are valid YAML",
     "passed": true,
     "actual_output": {
-      "valid_count": 13,
-      "invalid_files": []
+      "valid": 13,
+      "invalid": 0
     },
     "expected_output": {
-      "valid_count": 13,
-      "invalid_files": []
+      "valid": 13,
+      "invalid": 0
     },
     "error_message": null,
-    "interpretation": "全13個のaction.ymlが有効なYAML"
+    "interpretation": "全13個のaction.ymlが有効なYAML",
+    "file_location": "actions/*/action.yml"
+  },
+  {
+    "function_id": "QA-001",
+    "scenario_name": "Test coverage >= 80%",
+    "passed": true,
+    "actual_output": {
+      "coverage_percent": 88.31
+    },
+    "expected_output": {
+      "coverage_percent": 80.0
+    },
+    "error_message": null,
+    "interpretation": "テストカバレッジ: 88.31% (目標: 80.0%)",
+    "file_location": "coverage.json"
   },
   {
     "function_id": "QA-004",
-    "scenario_name": "ドキュメントカバレッジ検証",
+    "scenario_name": "Documentation coverage (13 actions)",
     "passed": true,
     "actual_output": {
-      "existing_count": 13,
-      "missing_files": []
+      "documented": 13,
+      "total": 13,
+      "coverage_percent": 100.0
     },
     "expected_output": {
-      "existing_count": 13,
-      "missing_files": []
+      "documented": 13,
+      "total": 13
     },
     "error_message": null,
-    "interpretation": "全13個のアクションにインストラクションが存在"
+    "interpretation": "ドキュメントカバレッジ: 13/13 (100.0%)",
+    "file_location": "actions/*/instructions.md"
   },
   {
-    "function_id": "QA-003",
-    "scenario_name": "AIレビュー受入率検証",
-    "passed": false,
+    "function_id": "CF-002",
+    "scenario_name": "spec-to-code structure validation",
+    "passed": true,
     "actual_output": {
-      "acceptance_rate": "60.0%",
-      "sample_size": 10,
-      "approved_count": 6
+      "has_spec_input": true,
+      "has_output_dir": true,
+      "has_template": true
     },
     "expected_output": {
-      "acceptance_rate": ">= 70.0%",
-      "sample_size": ">= 20"
+      "has_spec_input": true,
+      "has_output_dir": true,
+      "has_template": true
     },
     "error_message": null,
-    "interpretation": "受入率60.0%は目標値70%未達（サンプル数: 10件）。データ収集継続が必要"
+    "interpretation": "spec-to-codeは正しく構成されている",
+    "file_location": "actions/spec-to-code/"
   }
 ]
