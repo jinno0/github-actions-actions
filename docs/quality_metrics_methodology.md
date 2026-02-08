@@ -197,5 +197,4 @@ Initial baseline established at project start (or after 20+ reviews).
 ## Related Documents
 
 - [Baseline Report](../metrics/acceptance-rate-baseline-2026-02-07.md)
-- [Quality Metrics Overview](../metrics/QUALITY_METRICS.md)
 - [Outcome Examples](../examples/quality-metrics/outcome-examples.md)

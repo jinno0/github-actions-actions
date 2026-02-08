@@ -85,7 +85,6 @@ README.mdから仕様書と実装タスクを自動生成してください
 
 **使用リソース：**
 - `scripts/enhanced_sdd_pipeline.py` - AI強化完全自動パイプライン（推奨）
-- `scripts/run_sdd_pipeline.py` - 従来のパイプラインスクリプト
 - SpecWorkflowMcpツール連携 - ガイドラインと承認プロセス
 
 ## 実行ワークフロー
@@ -124,15 +123,15 @@ README.mdから仕様書と実装タスクを自動生成してください
 SDDパイプラインを構成する実行可能なPythonスクリプト群。
 
 **主要スクリプト:**
+- `enhanced_sdd_pipeline.py` - AI強化完全自動パイプライン（推奨）
 - `generate_spec_from_prd.py` - PRDからSPECを自動生成するメインスクリプト
 - `create_tasks_from_spec.py` - SPECから具体的な実装タスクを分解するスクリプト
 - `validate_prd_spec_sync.py` - PRDとSPECの整合性を検証するスクリプト
-- `run_sdd_pipeline.py` - 全SDDパイプラインを一括実行する統合スクリプト
 - `setup_spec_workspace.py` - SPECワークスペースを初期化するスクリプト
 
 **実行方法:**
 ```bash
-python scripts/run_sdd_pipeline.py --prd README.md --spec-name user-auth
+python scripts/enhanced_sdd_pipeline.py --prd README.md --spec-name user-auth
 python scripts/generate_spec_from_prd.py --input docs/PRD.md --output .spec-workflow/specs/new-feature
 ```
 

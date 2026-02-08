@@ -49,12 +49,6 @@ python .claude/skills/spec-flow-auto/scripts/enhanced_sdd_pipeline.py \
   --prd README.md \
   --spec-name your-project \
   --output .spec-workflow
-
-# 従来のパイプライン
-python .claude/skills/spec-flow-auto/scripts/run_sdd_pipeline.py \
-  --prd README.md \
-  --spec-name your-project \
-  --output .spec-workflow
 ```
 
 ## 📁 プロジェクト構成
@@ -66,7 +60,6 @@ python .claude/skills/spec-flow-auto/scripts/run_sdd_pipeline.py \
 ├── spec-flow-auto          # スキル実行ファイル
 ├── scripts/                # 実行スクリプト群
 │   ├── enhanced_sdd_pipeline.py     # AI強化完全自動パイプライン
-│   ├── run_sdd_pipeline.py          # 従来のパイプライン
 │   ├── generate_spec_from_prd.py    # SPEC生成スクリプト
 │   ├── create_tasks_from_spec.py    # タスク分解スクリプト
 │   ├── validate_prd_spec_sync.py    # 整合性検証スクリプト
