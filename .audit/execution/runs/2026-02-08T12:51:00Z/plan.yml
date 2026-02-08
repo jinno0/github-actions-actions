@@ -1,0 +1,89 @@
+run_id: "2026-02-08T12:51:00Z"
+audit_run_id: "2026-02-08T19:35:00Z"
+started_at: "2026-02-08T12:51:00Z"
+
+# Execution Scope
+scope:
+  # PRs to apply in this run
+  prs_to_apply:
+    - id: "PR-002"
+      title: "Core Function Verification Implementation"
+      priority: "High"
+      gap_id: "GAP-003"
+      estimated_effort: "1h 45m"
+
+    - id: "PR-003"
+      title: "Remaining Core Functions Verification"
+      priority: "Medium"
+      gap_id: "GAP-006"
+      estimated_effort: "2h"
+
+  # PRs deferred to next run
+  prs_deferred:
+    - id: "PR-004"
+      title: "Claude CLI Investigation"
+      reason: "Lower priority, GAP-004 is medium priority"
+    - id: "PR-005"
+      title: "Remaining Core Functions Verification (Duplicate)"
+      reason: "Similar to PR-003, will evaluate after PR-003"
+
+# Success Criteria (from intent.yml)
+success_criteria:
+  - id: "SC-001"
+    source: "quality_attributes.QA-001"
+    target: "テストカバレッジ >= 80%"
+    current_value: "92.97%"
+    status: "achieved"
+
+  - id: "SC-002"
+    source: "quality_attributes.QA-002"
+    target: "AIレビュー受入率 >= 70%"
+    current_value: "75.0% (3/4件)"
+    status: "achieved"
+
+  - id: "SC-003"
+    source: "core_functions.CF-002"
+    target: "Claude CLI統合の検証"
+    verification_method: "verify_core_functions.py"
+    status: "passed"
+
+  - id: "SC-004"
+    source: "core_functions.CF-004"
+    target: "Dry Run検証の実装状況確認"
+    verification_method: "verify_core_functions.py"
+    current_value: "3/13 Actions (23%)"
+    status: "failed"
+
+  - id: "SC-005"
+    source: "core_functions.CF-003"
+    target: "カスタムレビュールール注入機能の検証"
+    verification_method: "verify_cf003_cf006.py (to be created)"
+    status: "not_verified"
+
+  - id: "SC-006"
+    source: "core_functions.CF-006"
+    target: "AIレビュー品質メトリクス追跡の検証"
+    verification_method: "verify_cf003_cf006.py (to be created)"
+    status: "not_verified"
+
+# Rollback Triggers
+rollback_triggers:
+  - "検証スクリプトの実行失敗"
+  - "既存テストの失敗"
+  - "ビルドエラー"
+  - "Core Functionの検証結果が悪化"
+
+# Budget
+budget:
+  max_prs_per_run: 5
+  max_file_changes_per_pr: 10
+  max_lines_per_file: 100
+  execution_time_limit: "30m"
+
+# Expected Outcomes
+expected_outcomes:
+  - PR-002: Core Function verification script created and executed
+  - PR-003: CF-003 and CF-006 verification scripts created
+  - Complete before/after metrics comparison
+  - Feedback for auditor generated
+  - All changes committed to git

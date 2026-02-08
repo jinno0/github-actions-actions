@@ -1,0 +1,92 @@
+{
+  "run_id": "2026-02-08T12:51:00Z",
+  "timestamp": "2026-02-08T12:51:00Z",
+  "phase": "before",
+
+  "metrics": {
+    "test_coverage": {
+      "value": 89.30,
+      "unit": "%",
+      "target": ">= 80%",
+      "status": "achieved",
+      "details": "963 statements, 103 missed, 460 passed, 2 skipped"
+    },
+    "test_execution": {
+      "total_tests": 460,
+      "passed": 460,
+      "skipped": 2,
+      "failed": 0,
+      "duration_sec": 1.04
+    },
+    "core_function_verification": {
+      "total_functions": 6,
+      "verified": 4,
+      "passed": 3,
+      "failed": 1,
+      "not_verified": 2,
+      "details": {
+        "CF-001": {
+          "name": "13種類のAI Actionsを提供している",
+          "status": "passed",
+          "result": "13/13 Actions detected"
+        },
+        "CF-002": {
+          "name": "Claude Code CLIを活用した高度な自動化",
+          "status": "passed",
+          "result": "7/13 Actions with Claude CLI integration"
+        },
+        "CF-003": {
+          "name": "カスタムレビュールール注入機能",
+          "status": "not_verified",
+          "result": "Verification pending"
+        },
+        "CF-004": {
+          "name": "Dry Run検証の実装",
+          "status": "failed",
+          "result": "3/13 Actions (23%) have Dry Run implemented"
+        },
+        "CF-005": {
+          "name": "テレメトリー収集機能",
+          "status": "passed",
+          "result": "Anonymization and opt-out implemented"
+        },
+        "CF-006": {
+          "name": "AIレビュー品質メトリクス追跡",
+          "status": "not_verified",
+          "result": "Verification pending"
+        }
+      }
+    },
+    "quality_attributes": {
+      "test_coverage": {
+        "current": "92.97%",
+        "target": ">= 80%",
+        "status": "achieved"
+      },
+      "acceptance_rate": {
+        "current": "75.0% (3/4件)",
+        "target": ">= 70%",
+        "status": "achieved"
+      }
+    }
+  },
+
+  "baseline_summary": {
+    "overall_status": "partial",
+    "strengths": [
+      "Test coverage exceeds target (89.30% > 80%)",
+      "All tests passing (460 passed, 2 skipped)",
+      "Core Functions CF-001, CF-002, CF-005 verified and passing",
+      "AI review acceptance rate meets target (75% >= 70%)"
+    ],
+    "weaknesses": [
+      "CF-004 (Dry Run) failed: only 3/13 Actions (23%) implemented",
+      "CF-003 (Custom Review Rules) not verified",
+      "CF-006 (Metrics Tracking) not verified"
+    ],
+    "gaps_to_address": [
+      "GAP-003: Dry Run verification implementation (10/13 Actions missing)",
+      "GAP-006: CF-003 and CF-006 verification required"
+    ]
+  }
+}
