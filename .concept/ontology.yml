@@ -1,5 +1,5 @@
 version: "0.3"
-updated_at: "2026-02-08T08:40:31Z"
+updated_at: "2026-02-08T10:16:13Z"
 
 canonical_terms:
   GitHubAction:
@@ -283,3 +283,167 @@ canonical_terms:
     evidence:
       - source: "PURPOSE.md#L62-L66"
         quote: "非目標（What we are NOT）"
+
+  TestCoverageTarget:
+    id: "TERM-COVERAGETARGET"
+    layer: "domain"
+    status: "stable"
+    definition: "Quality gate requiring >= 80% test coverage for actions/ and scripts/ directories"
+    synonyms: ["Coverage target", "Test coverage goal"]
+    boundaries:
+      includes: ["actions/ directory", "scripts/ directory", "Measurement threshold"]
+      excludes: ["docs/", "examples/", "tests/"]
+    lifecycle: []
+    related_terms: ["GitHubAction", "TestingStrategy"]
+    assumptions: []
+    evidence:
+      - source: "README.md#L128"
+        quote: "テストカバレッジ >= 80% を目標としています"
+
+  AcceptanceRateBaseline:
+    id: "TERM-ACCEPTBASELINE"
+    layer: "domain"
+    status: "stable"
+    definition: "Quality metric tracking AI review acceptance rate, baseline 75% (3/4 reviews), target >= 70%"
+    synonyms: ["Acceptance rate", "Review acceptance baseline"]
+    boundaries:
+      includes: ["AI review quality", "Human approval rate", "Outcome tracking"]
+      excludes: ["Code coverage", "Test pass rate"]
+    lifecycle: ["Baseline", "Measuring", "Target Achieved"]
+    related_terms: ["ReviewAndMergeAction", "AcceptanceRateCalculation"]
+    assumptions: []
+    evidence:
+      - source: "README.md#L176-L186"
+        quote: "AIレビュー受入率 | 75.0% (3/4件) | >= 70% | ✅ 目標達成"
+
+  AcceptanceRateCalculation:
+    id: "TERM-ACCEPTCALC"
+    layer: "aux"
+    status: "stable"
+    definition: "Formula: (Accepted + Modified) / Total Reviews * 100, with outcomes: Accepted, Modified, Rejected, Needs Work"
+    synonyms: ["Acceptance rate formula"]
+    boundaries:
+      includes: ["Numerical calculation", "Outcome categorization"]
+      excludes: ["Review quality assessment"]
+    lifecycle: []
+    related_terms: ["AcceptanceRateBaseline"]
+    assumptions: []
+    evidence:
+      - source: "metrics/acceptance-rate-baseline-2026-02-07.md#L42-L44"
+        quote: "Acceptance Rate = (Accepted + Modified) / Total Reviews * 100"
+
+  TestingStrategy:
+    id: "TERM-TESTSTRAT"
+    layer: "core"
+    status: "stable"
+    definition: "Structural testing approach validating YAML syntax, structure, and configuration without runtime execution"
+    synonyms: ["Testing approach", "Test strategy"]
+    boundaries:
+      includes: ["YAML syntax validation", "Structure verification", "Configuration checks"]
+      excludes: ["Runtime execution", "GitHub API interaction", "Claude CLI invocation"]
+    lifecycle: []
+    related_terms: ["GitHubAction", "DryRun", "TestCoverageTarget"]
+    assumptions: []
+    evidence:
+      - source: "TESTING.md#L1-L11"
+        quote: "構造的テストスアプローチ (Structural testing approach)"
+
+  TestCoverageScope:
+    id: "TERM-COVERAGESCOPE"
+    layer: "aux"
+    status: "stable"
+    definition: "Scope of structural tests: YAML syntax, required inputs, optional inputs defaults, template files, script files, directory structure, security patterns, composite run type, bash shell"
+    synonyms: ["Test scope", "Validation scope"]
+    boundaries:
+      includes: ["YAML syntax", "Inputs validation", "File existence checks"]
+      excludes: ["Runtime behavior", "Output values"]
+    lifecycle: []
+    related_terms: ["TestingStrategy"]
+    assumptions: []
+    evidence:
+      - source: "TESTING.md#L33-L43"
+        quote: "Tested (Structural Validation): YAML syntax validity, Required inputs are defined"
+
+  RuntimeTestingLimit:
+    id: "TERM-RUNTIMELIMIT"
+    layer: "aux"
+    status: "stable"
+    definition: "Known limitation: tests do not validate actual execution, GitHub API, Claude CLI, file ops, error handling, outputs"
+    synonyms: ["Testing limitation", "Runtime gap"]
+    boundaries:
+      includes: ["Runtime behavior", "External interactions"]
+      excludes: ["Structure validation"]
+    lifecycle: []
+    related_terms: ["TestingStrategy", "DryRun"]
+    assumptions: []
+    evidence:
+      - source: "TESTING.md#L44-L51"
+        quote: "Not Tested (Runtime Behavior): Actual action execution, Real GitHub API interactions"
+
+  AdoptionTracking:
+    id: "TERM-ADOPTION"
+    layer: "domain"
+    status: "stable"
+    definition: "Metrics tracking usage across projects: 2 internal pilot projects, top actions review-and-merge and auto-merge"
+    synonyms: ["Adoption metrics", "Usage tracking"]
+    boundaries:
+      includes: ["Project count", "Action usage", "Adopter registration"]
+      excludes: ["Production deployment metrics"]
+    lifecycle: []
+    related_terms: ["AIActionsHub", "DevelopmentPhase"]
+    assumptions: []
+    evidence:
+      - source: "ADOPTION.md#L28-L33"
+        quote: "Total Adopters: 2 (Internal pilot projects), Most Used Actions: review-and-merge (2), auto-merge (2)"
+
+  CoreCompetency:
+    id: "TERM-CORECOMP"
+    layer: "core"
+    status: "stable"
+    definition: "Three core competencies: AI-Powered Automation, Self-hosted Advantage, Human-in-the-Loop"
+    synonyms: ["Core competencies", "Key capabilities"]
+    boundaries:
+      includes: ["AI automation", "Self-hosted infrastructure", "Human oversight"]
+      excludes: ["Specific feature implementations"]
+    lifecycle: []
+    related_terms: ["GitHubAction", "SelfHostedRunner", "HumanInTheLoop"]
+    assumptions: []
+    evidence:
+      - source: "PURPOSE.md#L29-L38"
+        quote: "3つのコアコンピタンス：AI-Powered Automation, Self-hosted Advantage, Human-in-the-Loop"
+
+  AIActionCatalog:
+    id: "TERM-AICATALOG"
+    layer: "domain"
+    status: "stable"
+    definition: "Inventory of 13 AI Actions across categories: Core Development, Documentation, PR Merge Automation, Bulk Operations, Workflow Helpers"
+    synonyms: ["Action catalog", "Action inventory"]
+    boundaries:
+      includes: ["13 actions", "Category classification", "Action listing"]
+      excludes: ["External actions", "Third-party integrations"]
+    lifecycle: []
+    related_terms: ["GitHubAction", "ActionCategory"]
+    assumptions: []
+    evidence:
+      - source: "README.md#L8-L47"
+        quote: "13 AI Actions provided across categories"
+
+  ActionCandidate:
+    id: "TERM-ACTIONCAND"
+    layer: "domain"
+    status: "draft"
+    definition: "Proposed future actions: spec-to-code, enhanced action-fixer, auto-refactor, auto-document, release-notes-ai beyond existing review-and-merge"
+    synonyms: ["Proposed actions", "Roadmap actions"]
+    boundaries:
+      includes: ["Proposed features", "Roadmap items"]
+      excludes: ["Implemented actions"]
+    lifecycle: ["Proposed", "Backlog"]
+    related_terms: ["GitHubAction", "DevelopmentPhase"]
+    assumptions:
+      - id: "ASM-ACTIONCAND-001"
+        text: "AUTO: Proposed actions represent future roadmap, not current implementation"
+        decision_key: "AUTO:ActionCandidate.roadmap:proposed_only"
+        expires_after_runs: 30
+    evidence:
+      - source: "PURPOSE.md#L43-L61"
+        quote: "Action Candidate: review-and-merge (existing), spec-to-code (proposed), action-fixer (enhanced)"
