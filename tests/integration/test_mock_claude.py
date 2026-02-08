@@ -4,8 +4,6 @@ Tests the mock Claude CLI behavior in different scenarios
 """
 
 import subprocess
-from pathlib import Path
-import pytest
 
 
 class TestMockClaudeCLI:

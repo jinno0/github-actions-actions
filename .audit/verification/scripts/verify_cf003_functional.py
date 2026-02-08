@@ -7,10 +7,9 @@ This script performs functional testing of the custom review rules injection fea
 """
 
 import json
-import subprocess
 import sys
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Any
 
 # Color codes for output
 GREEN = "\033[92m"
@@ -19,7 +18,7 @@ YELLOW = "\033[93m"
 RESET = "\033[0m"
 
 
-def load_custom_rules(rule_file: str) -> Dict[str, Any]:
+def load_custom_rules(rule_file: str) -> dict[str, Any]:
     """Load custom rules from JSON file."""
     rule_path = Path(__file__).parent.parent.parent / "test_data" / "custom_rules" / rule_file
     with open(rule_path) as f:
@@ -179,12 +178,6 @@ def verify_custom_rules_functional_mock():
     print("")
 
     print("  Step 2: Prepare test code snippet")
-    test_code = """
-    function test() {
-        var x = 10;  // Should trigger 'no-var' rule
-        return x;
-    }
-    """
     print("    Test code prepared (contains var declaration)")
     print("")
 
@@ -239,7 +232,7 @@ def main():
     print("Results:")
     print(f"  Structure Validation:   {'PASS ✓' if results['structure'] else 'FAIL ✗'}")
     print(f"  Integration Verification: {'PASS ✓' if results['integration'] else 'FAIL ✗'}")
-    print(f"  Functional Verification:  FRAMEWORK ⚠ (requires Claude CLI environment)")
+    print("  Functional Verification:  FRAMEWORK ⚠ (requires Claude CLI environment)")
     print("")
 
     # Overall assessment
