@@ -5,62 +5,9 @@
 ## プロジェクトタイプ検出アルゴリズム
 
 ### 検出優先順位
-1. `package.json` 存在 → Node.js/TypeScript
-2. `requirements.txt` または `pyproject.toml` 存在 → Python
-3. `Cargo.toml` 存在 → Rust
-4. `go.mod` 存在 → Go
-5. `pom.xml` または `build.gradle` 存在 → Java
-6. その他 → Unknown
-
-## Node.js/TypeScript プロジェクト
-
-### Lintツール
-```json
-{
-  "eslint": {
-    "command": "npx eslint",
-    "options": ["--format=json"],
-    "files": ".",
-    "priority": 1
-  },
-  "prettier": {
-    "command": "npx prettier",
-    "options": ["--check"],
-    "files": ".",
-    "priority": 2
-  }
-}
-```
-
-### テストフレームワーク
-```json
-{
-  "jest": {
-    "command": "npx jest",
-    "options": ["--coverage", "--passWithNoTests"],
-    "config_files": ["jest.config.js", "jest.config.json", "package.json"],
-    "priority": 1
-  },
-  "vitest": {
-    "command": "npx vitest run",
-    "options": ["--coverage"],
-    "config_files": ["vitest.config.js", "vitest.config.ts", "vite.config.js"],
-    "priority": 2
-  },
-  "mocha": {
-    "command": "npx mocha",
-    "options": ["--recursive"],
-    "config_files": ["mocha.opts"],
-    "priority": 3
-  }
-}
-```
-
-### ファイル拡張子
-- JavaScript: `.js`, `.jsx`
-- TypeScript: `.ts`, `.tsx`
-- 設定ファイル: `.json`, `.js`, `.ts`
-- ドキュメント: `.md`
+1. `requirements.txt` または `pyproject.toml` 存在 → Python
+2. `package.json` 存在 → Node.js/TypeScript
+3. その他 → Unknown
 
 ## Python プロジェクト
 
@@ -110,23 +57,3 @@
 - Python: `.py`
 - 設定ファイル: `.ini`, `.cfg`, `.toml`
 - ドキュメント: `.md`, `.rst`
-
-## 実行順序
-
-### 品質チェックの標準フロー
-1. **Lintチェック** (優先度: 高)
-   - コードスタイルと構文チェック
-   - フォーマット検証
-
-2. **テスト実行** (優先度: 高)
-   - ユニットテスト実行
-   - カバレッジ測定
-
-3. **コードレビュー** (優先度: 中)
-   - 静的解析
-   - セキュリティチェック
-
-### 各ツールのタイムアウト設定
-- Lintツール: 30秒
-- テストフレームワーク: 5分
-- コードレビュー: 1分

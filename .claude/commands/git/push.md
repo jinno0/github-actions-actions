@@ -39,15 +39,7 @@ Parse output to check:
    - Force push needed: Warn strongly, require confirmation
    - Protected branch: Remind about PR workflow
 
-## Communication Style
-
-**Avoid verbose chatter** - Don't say:
-- "Let me check if it's safe to push"
-- "I'll analyze your branch status"
-- "Ready to push X commits"
-- "Executing push..."
-
-**Just show the result directly** - Example output:
+## Example Output
 ```
 ✅ Pushed 3 commits to main (origin/main)
    a1b2c3d Fix authentication bug
