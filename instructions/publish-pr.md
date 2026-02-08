@@ -4,6 +4,10 @@
 
 `publish-pr` は、ドラフトプルリクエストをレビュー準備完了（Ready for review）に変換する GitHub Action です。
 
+## アーキテクチャ
+
+このActionはClaude Code CLIを使用しません。代わりにGitHub APIを活用し、PRの状態をドラフトからレビュー準備完了に変更します。これは単なる状態変更操作であり、コードの内容とは無関係です。
+
 ## 機能
 
 - ドラフト PR の自動公開

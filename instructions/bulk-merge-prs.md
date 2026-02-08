@@ -4,6 +4,10 @@
 
 CIが通っている複数のPull Requestを一括でマージします。
 
+## アーキテクチャ
+
+このActionはClaude Code CLIを使用しません。代わりにGitHub APIを活用し、マージ条件チェックとマージ実行を行います。マージはすでにCIがパスし、レビューが完了したPRに対する最終操作であるため、コードの品質判断は不要です。
+
 ## Prerequisites
 
 - GitHub Actionsの実行権限

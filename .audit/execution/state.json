@@ -1,11 +1,11 @@
 {
-  "last_run_id": "2026-02-08T12:51:00Z",
-  "total_runs": 4,
-  "last_execution": "2026-02-08T12:51:00Z",
+  "last_run_id": "2026-02-08T14:31:28Z",
+  "total_runs": 5,
+  "last_execution": "2026-02-08T14:31:28Z",
   "status": "completed",
-  "last_prs_applied": ["PR-002", "PR-003"],
+  "last_prs_applied": ["PR-007", "PR-008"],
   "last_proposals_generated": [],
-  "total_prs_applied": 4,
+  "total_prs_applied": 6,
   "total_prs_rolled_back": 0,
-  "cleanup_status": "2/3 run directories (within limit)"
+  "cleanup_status": "3/3 run directories (at limit)"
 }

@@ -1,0 +1,92 @@
+{
+  "verification_id": "CF-003-FUNCTIONAL-2026-02-08T14:31:28Z",
+  "timestamp": "2026-02-08T14:31:28Z",
+  "core_function_id": "CF-003",
+  "core_function_name": "Custom Review Rules Injection",
+  "verification_type": "functional_structure_and_integration",
+  "overall_status": "passed_framework",
+
+  "scenarios": [
+    {
+      "scenario_id": 1,
+      "name": "Custom Rules Structure Validation",
+      "status": "passed",
+      "details": {
+        "typescript-no-var.json": {
+          "status": "valid",
+          "rules_count": 1,
+          "language": "TypeScript"
+        },
+        "typescript-naming.json": {
+          "status": "valid",
+          "rules_count": 2,
+          "language": "TypeScript"
+        },
+        "javascript-jsdoc.json": {
+          "status": "valid",
+          "rules_count": 1,
+          "language": "JavaScript"
+        }
+      },
+      "summary": "All custom rule files have valid structure with required fields"
+    },
+    {
+      "scenario_id": 2,
+      "name": "Custom Rules Integration Verification",
+      "status": "passed",
+      "details": {
+        "custom_rules_guide": {
+          "status": "exists",
+          "path": "instructions/review-and-merge-custom-rules.md"
+        },
+        "custom_rules_examples": {
+          "status": "exists",
+          "example_count": 0
+        },
+        "action_integration": {
+          "status": "verified",
+          "action": "review-and-merge",
+          "supports_custom_rules": true
+        }
+      },
+      "summary": "Custom rules integration points are properly configured"
+    },
+    {
+      "scenario_id": 3,
+      "name": "Functional Verification Framework",
+      "status": "framework_ready",
+      "details": {
+        "requirements": [
+          "Claude CLI installed and configured",
+          "GitHub token with repo permissions",
+          "Test PR or mock code environment",
+          "review-and-merge action execution"
+        ],
+        "test_scenario": {
+          "rule": "no-var",
+          "test_code": "var x = 10;",
+          "expected_message": "varを使用しないでください。constまたはletを使用してください。"
+        },
+        "execution_command": "claude code review --custom-rules .audit/test_data/custom_rules/typescript-no-var.json --dry-run"
+      },
+      "summary": "Framework ready for functional verification when Claude CLI environment is available"
+    }
+  ],
+
+  "interpretation": {
+    "summary": "CF-003の構造検証と統合検証が完了",
+    "structure_verification": "PASS - カスタムルールファイルの構造が正しい",
+    "integration_verification": "PASS - review-and-merge Actionとの統合が確認された",
+    "functional_verification": "FRAMEWORK_READY - 機能検証のフレームワークを作成完了",
+    "note": "完全な機能検証（実際のレビュー出力への反映確認）にはClaude CLI環境が必要"
+  },
+
+  "next_steps": [
+    "Claude CLI環境のセットアップ",
+    "実際のPRまたはコードスニペットでの機能検証実行",
+    "カスタムルールメッセージがレビュー出力に含まれることを確認"
+  ],
+
+  "verified_by": ".audit/verification/scripts/verify_cf003_functional.py",
+  "verification_script_version": "1.0"
+}

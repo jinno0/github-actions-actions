@@ -4,6 +4,10 @@
 
 This action merges a pull request using the specified merge method (squash, merge, or rebase) and can optionally enable GitHub's built-in auto-merge feature.
 
+## Architecture
+
+This action does not use Claude Code CLI. Instead, it uses the GitHub API to execute merge operations with the configured merge method. This action performs the final merge operation on already-reviewed PRs and does not require code understanding.
+
 ## Prerequisites
 
 - **Runner**: A self-hosted runner with the `gh` (GitHub CLI) installed and configured.

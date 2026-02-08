@@ -1,0 +1,103 @@
+diff --git a/README.md b/README.md
+index 01215e4..f35591e 100644
+--- a/README.md
++++ b/README.md
+@@ -3,6 +3,8 @@
+ このリポジトリは、GitHub組織全体の開発効率と品質を向上させるための「AIネイティブなGitHub Actions」を提供するハブです。
+ Self-hosted runner上で動作する **Claude Code CLI** を活用し、文脈を理解した高度な自動化（レビュー、修正、ドキュメント生成など）を実現します。
+ 
++> **注**: 一部のActions（PR一括操作、自動マージ等）は、GitHub API等を活用し、Claude CLIを使用しない実装も採用しています。詳しくは[各Actionのセットアップガイド](./instructions/)をご確認ください。
++
+ ## 🚀 提供している AI Actions
+ 
+ 現在、以下の AI Actions を提供しています（全13件）。
+diff --git a/instructions/auto-merge.md b/instructions/auto-merge.md
+index da4d2ab..4d1f9ec 100644
+--- a/instructions/auto-merge.md
++++ b/instructions/auto-merge.md
+@@ -4,6 +4,10 @@
+ 
+ This action merges a pull request using the specified merge method (squash, merge, or rebase) and can optionally enable GitHub's built-in auto-merge feature.
+ 
++## Architecture
++
++This action does not use Claude Code CLI. Instead, it uses the GitHub API to execute merge operations with the configured merge method. This action performs the final merge operation on already-reviewed PRs and does not require code understanding.
++
+ ## Prerequisites
+ 
+ - **Runner**: A self-hosted runner with the `gh` (GitHub CLI) installed and configured.
+diff --git a/instructions/bulk-merge-prs.md b/instructions/bulk-merge-prs.md
+index 3b546f1..7411e1a 100644
+--- a/instructions/bulk-merge-prs.md
++++ b/instructions/bulk-merge-prs.md
+@@ -4,6 +4,10 @@
+ 
+ CIが通っている複数のPull Requestを一括でマージします。
+ 
++## アーキテクチャ
++
++このActionはClaude Code CLIを使用しません。代わりにGitHub APIを活用し、マージ条件チェックとマージ実行を行います。マージはすでにCIがパスし、レビューが完了したPRに対する最終操作であるため、コードの品質判断は不要です。
++
+ ## Prerequisites
+ 
+ - GitHub Actionsの実行権限
+diff --git a/instructions/bulk-rebase-prs.md b/instructions/bulk-rebase-prs.md
+index baa6f77..ff68b4e 100644
+--- a/instructions/bulk-rebase-prs.md
++++ b/instructions/bulk-rebase-prs.md
+@@ -4,6 +4,10 @@
+ 
+ 複数のPull Requestを一括で最新のブランチに対してリベースします。
+ 
++## アーキテクチャ
++
++このActionはClaude Code CLIを使用しません。代わりにGitHub APIを活用し、Gitリベース操作を一括実行します。リベースはGit操作であり、コードの意味的変更を伴わないため、コードの文脈理解は不要です。
++
+ ## Prerequisites
+ 
+ - GitHub Actionsの実行権限
+diff --git a/instructions/pr-review-enqueuer.md b/instructions/pr-review-enqueuer.md
+index e74f174..d58f495 100644
+--- a/instructions/pr-review-enqueuer.md
++++ b/instructions/pr-review-enqueuer.md
+@@ -2,6 +2,10 @@
+ 
+ Automatically scans open PRs and adds `/review` comment to trigger the review-and-merge workflow.
+ 
++## Architecture
++
++This action does not use Claude Code CLI. Instead, it leverages the GitHub API to filter PRs based on metadata and add review comments. The actual code review is performed by a separate action (`review-and-merge`) that does use Claude CLI.
++
+ ## Prerequisites
+ 
+ - GitHub repository with a review workflow that responds to `/review` comment
+diff --git a/instructions/publish-pr.md b/instructions/publish-pr.md
+index 7b46ab9..082a018 100644
+--- a/instructions/publish-pr.md
++++ b/instructions/publish-pr.md
+@@ -4,6 +4,10 @@
+ 
+ `publish-pr` は、ドラフトプルリクエストをレビュー準備完了（Ready for review）に変換する GitHub Action です。
+ 
++## アーキテクチャ
++
++このActionはClaude Code CLIを使用しません。代わりにGitHub APIを活用し、PRの状態をドラフトからレビュー準備完了に変更します。これは単なる状態変更操作であり、コードの内容とは無関係です。
++
+ ## 機能
+ 
+ - ドラフト PR の自動公開
+diff --git a/instructions/review-auto-merge.md b/instructions/review-auto-merge.md
+index f4159a8..962a73b 100644
+--- a/instructions/review-auto-merge.md
++++ b/instructions/review-auto-merge.md
+@@ -2,6 +2,10 @@
+ 
+ This action automatically merges pull requests after AI review and CI checks pass. It implements retry logic with multiple merge methods (squash, merge, rebase) to handle edge cases like race conditions.
+ 
++## Architecture
++
++This action does not use Claude Code CLI. The AI review is performed by a separate action (`review-and-merge`), and this action uses the GitHub API to execute the merge after CI passes. It handles post-review merge execution with retry logic and does not require code understanding.
++
+ ## Prerequisites
+ 
+ - **Runner**: A self-hosted runner with the `gh` (GitHub CLI) installed.

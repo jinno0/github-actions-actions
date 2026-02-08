@@ -4,6 +4,10 @@
 
 複数のPull Requestを一括で最新のブランチに対してリベースします。
 
+## アーキテクチャ
+
+このActionはClaude Code CLIを使用しません。代わりにGitHub APIを活用し、Gitリベース操作を一括実行します。リベースはGit操作であり、コードの意味的変更を伴わないため、コードの文脈理解は不要です。
+
 ## Prerequisites
 
 - GitHub Actionsの実行権限

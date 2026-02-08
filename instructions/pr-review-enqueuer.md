@@ -2,6 +2,10 @@
 
 Automatically scans open PRs and adds `/review` comment to trigger the review-and-merge workflow.
 
+## Architecture
+
+This action does not use Claude Code CLI. Instead, it leverages the GitHub API to filter PRs based on metadata and add review comments. The actual code review is performed by a separate action (`review-and-merge`) that does use Claude CLI.
+
 ## Prerequisites
 
 - GitHub repository with a review workflow that responds to `/review` comment

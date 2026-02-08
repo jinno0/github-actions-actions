@@ -3,6 +3,8 @@
 このリポジトリは、GitHub組織全体の開発効率と品質を向上させるための「AIネイティブなGitHub Actions」を提供するハブです。
 Self-hosted runner上で動作する **Claude Code CLI** を活用し、文脈を理解した高度な自動化（レビュー、修正、ドキュメント生成など）を実現します。
 
+> **注**: 一部のActions（PR一括操作、自動マージ等）は、GitHub API等を活用し、Claude CLIを使用しない実装も採用しています。詳しくは[各Actionのセットアップガイド](./instructions/)をご確認ください。
+
 ## 🚀 提供している AI Actions
 
 現在、以下の AI Actions を提供しています（全13件）。

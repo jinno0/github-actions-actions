@@ -1,0 +1,65 @@
+{
+  "run_id": "2026-02-08T14:31:28Z",
+  "timestamp": "2026-02-08T14:31:28Z",
+  "metrics": {
+    "test_coverage": {
+      "value": 89.30,
+      "unit": "%",
+      "command": "pytest --cov=actions --cov=scripts --cov-report=term-missing",
+      "status": "achieved",
+      "target": 80
+    },
+    "test_results": {
+      "total": 460,
+      "passed": 460,
+      "failed": 0,
+      "skipped": 2,
+      "duration_sec": 1.58
+    },
+    "core_functions": {
+      "total": 6,
+      "verified": 6,
+      "passed": 5,
+      "failed": 1,
+      "not_verified": 0
+    },
+    "cf003_status": {
+      "id": "CF-003",
+      "name": "Custom Review Rules Injection",
+      "verified_status": "passed",
+      "verification_type": "structural",
+      "note": "構造検証完了。機能検証は未実施。"
+    },
+    "cf006_status": {
+      "id": "CF-006",
+      "name": "AI Review Metrics Tracking",
+      "verified_status": "passed",
+      "verification_type": "structural"
+    },
+    "gap_004_status": {
+      "id": "GAP-004",
+      "description": "Claude CLI統合のない6 Actionsの用途を調査",
+      "status": "open",
+      "priority": "medium"
+    },
+    "iss_new_003_status": {
+      "id": "ISS-NEW-003",
+      "description": "CF-003の機能検証未実施",
+      "status": "open",
+      "priority": "medium"
+    }
+  },
+  "quality_attributes": {
+    "test_coverage": {
+      "current": 89.30,
+      "target": 80,
+      "status": "achieved"
+    },
+    "acceptance_rate": {
+      "current": 75.0,
+      "target": 70,
+      "status": "achieved"
+    }
+  },
+  "snapshot_type": "before"
+}

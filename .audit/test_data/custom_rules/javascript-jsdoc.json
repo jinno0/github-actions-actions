@@ -1,0 +1,12 @@
+{
+  "language": "JavaScript",
+  "rules": [
+    {
+      "name": "require-jsdoc",
+      "description": "全ての公開関数にはJSDocが必要",
+      "severity": "warning",
+      "pattern": "^export\\s+function\\s+\\w+",
+      "message": "公開関数にはJSDocコメントが必要です。"
+    }
+  ]
+}

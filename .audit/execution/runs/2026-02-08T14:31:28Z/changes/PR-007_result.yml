@@ -1,0 +1,92 @@
+pr_id: "PR-007"
+title: "Claude CLI統合のない6 Actionsの調査とドキュメント化"
+status: "applied"
+applied_at: "2026-02-08T14:31:28Z"
+
+changes:
+  - file: ".audit/analysis/claude_cli_integration_analysis.md"
+    action: "created"
+    lines_added: 320
+    lines_removed: 0
+    description: "6 Actionsの分析ドキュメントを作成"
+
+  - file: "README.md"
+    action: "modified"
+    lines_added: 2
+    lines_removed: 0
+    description: "Claude CLIを使用しない一部Actionsについての注記を追加"
+
+  - file: "instructions/pr-review-enqueuer.md"
+    action: "modified"
+    lines_added: 4
+    lines_removed: 0
+    description: "アーキテクチャセクションを追加"
+
+  - file: "instructions/bulk-rebase-prs.md"
+    action: "modified"
+    lines_added: 4
+    lines_removed: 0
+    description: "アーキテクチャセクションを追加"
+
+  - file: "instructions/bulk-merge-prs.md"
+    action: "modified"
+    lines_added: 4
+    lines_removed: 0
+    description: "アーキテクチャセクションを追加"
+
+  - file: "instructions/auto-merge.md"
+    action: "modified"
+    lines_added: 4
+    lines_removed: 0
+    description: "アーキテクチャセクションを追加"
+
+  - file: "instructions/review-auto-merge.md"
+    action: "modified"
+    lines_added: 4
+    lines_removed: 0
+    description: "アーキテクチャセクションを追加"
+
+  - file: "instructions/publish-pr.md"
+    action: "modified"
+    lines_added: 4
+    lines_removed: 0
+    description: "アーキテクチャセクションを追加"
+
+intermediate_verification:
+  documentation_check:
+    result: "passed"
+    checks:
+      - "分析ドキュメントが存在する: .audit/analysis/claude_cli_integration_analysis.md"
+      - "README.mdに補足説明が追加された"
+      - "6 Actionsの全てのドキュメントにアーキテクチャセクションが追加された"
+
+  git_status:
+    result: "passed"
+    files_changed: 7
+    lines_added: 26
+    files_modified:
+      - "README.md"
+      - "instructions/*.md (6 files)"
+
+  syntax_validation:
+    result: "passed"
+    note: "Markdown構文に問題なし"
+
+summary: |
+  PR-007は正常に適用されました。
+
+  実施内容:
+  1. 6 Actionsの技術的分析を実施
+  2. 各ActionがClaude CLIを使用しない理由を文書化
+  3. README.mdに補足説明を追加（Option Aを採用）
+  4. 6 Actionsの全てのセットアップガイドにアーキテクチャセクションを追加
+
+  分析結果:
+  - 6 Actionsは正当な理由でClaude CLIを使用していない（実行系処理、メタデータ操作のみ）
+  - 設計上の職責分離が適切である
+  - README.mdの記載は補足が必要だったため追加
+
+  GAP-004のステータス: resolved → 次サイクルでgap.yml更新
+
+diff_file: "PR-007_applied.diff"
+rollback_command: "git apply -R .audit/execution/runs/2026-02-08T14:31:28Z/changes/PR-007_applied.diff"

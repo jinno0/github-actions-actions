@@ -2,6 +2,10 @@
 
 This action automatically merges pull requests after AI review and CI checks pass. It implements retry logic with multiple merge methods (squash, merge, rebase) to handle edge cases like race conditions.
 
+## Architecture
+
+This action does not use Claude Code CLI. The AI review is performed by a separate action (`review-and-merge`), and this action uses the GitHub API to execute the merge after CI passes. It handles post-review merge execution with retry logic and does not require code understanding.
+
 ## Prerequisites
 
 - **Runner**: A self-hosted runner with the `gh` (GitHub CLI) installed.

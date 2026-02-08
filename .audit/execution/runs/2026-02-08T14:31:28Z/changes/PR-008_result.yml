@@ -1,0 +1,84 @@
+pr_id: "PR-008"
+title: "CF-003の機能検証（カスタムレビュールールの動作確認）"
+status: "applied"
+applied_at: "2026-02-08T14:31:28Z"
+
+changes:
+  - file: ".audit/test_data/custom_rules/typescript-no-var.json"
+    action: "created"
+    lines_added: 12
+    lines_removed: 0
+    description: "テスト用カスタムルール: var使用禁止"
+
+  - file: ".audit/test_data/custom_rules/typescript-naming.json"
+    action: "created"
+    lines_added: 20
+    lines_removed: 0
+    description: "テスト用カスタムルール: 命名規則"
+
+  - file: ".audit/test_data/custom_rules/javascript-jsdoc.json"
+    action: "created"
+    lines_added: 12
+    lines_removed: 0
+    description: "テスト用カスタムルール: JSDoc必須"
+
+  - file: ".audit/verification/scripts/verify_cf003_functional.py"
+    action: "created"
+    lines_added: 320
+    lines_removed: 0
+    description: "CF-003機能検証スクリプト（構造・統合・機能検証フレームワーク）"
+
+  - file: ".audit/output/verification_cf003_functional.json"
+    action: "created"
+    lines_added: 95
+    lines_removed: 0
+    description: "CF-003検証結果レポート"
+
+intermediate_verification:
+  structure_validation:
+    result: "passed"
+    details:
+      - "typescript-no-var.json: Valid (1 rule)"
+      - "typescript-naming.json: Valid (2 rules)"
+      - "javascript-jsdoc.json: Valid (1 rule)"
+
+  integration_verification:
+    result: "passed"
+    details:
+      - "Custom rules guide exists: instructions/review-and-merge-custom-rules.md"
+      - "review-and-merge action supports custom rules input"
+      - "Integration points verified"
+
+  functional_framework:
+    result: "framework_ready"
+    details:
+      - "Verification framework created"
+      - "Test scenarios defined"
+      - "Execution requires Claude CLI environment"
+    note: "完全な機能検証（実際のレビュー出力確認）にはClaude CLI環境が必要"
+
+  script_execution:
+    result: "passed"
+    exit_code: 0
+    output: "Structure: PASS, Integration: PASS, Functional: FRAMEWORK_READY"
+
+summary: |
+  PR-008は正常に適用されました。
+
+  実施内容:
+  1. テスト用カスタムルールファイルを3個作成
+  2. CF-003機能検証スクリプトを作成（構造・統合・機能検証の3段階）
+  3. 検証スクリプトを実行し、構造検証と統合検証を完了
+  4. 機能検証のフレームワークを準備完了
+
+  検証結果:
+  - 構造検証: PASS - 全てのカスタムルールファイルが正しい構造
+  - 統合検証: PASS - review-and-merge Actionとの統合を確認
+  - 機能検証: FRAMEWORK_READY - Claude CLI環境での実行準備完了
+
+  ISS-NEW-003のステータス:
+  - 構造検証と統合検証完了
+  - 完全な機能検証はClaude CLI環境セットアップ後に実行可能
+
+diff_file: "PR-008_applied.diff"
+rollback_command: "git apply -R .audit/execution/runs/2026-02-08T14:31:28Z/changes/PR-008_applied.diff && rm -rf .audit/test_data/custom_rules/ .audit/verification/scripts/verify_cf003_functional.py"
