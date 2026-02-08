@@ -283,10 +283,6 @@ def test_tracking():
 - Batch metric writes instead of writing continuously
 - Consider using GitHub Actions artifacts for large metrics files
 
-## Additional Utilities
-
-Future utilities will be added to this directory as the need arises.
-
 ## Contributing
 
 When adding new utilities:
