@@ -7,11 +7,12 @@ providing insights into AI review quality and effectiveness.
 """
 
 import json
-import os
 import sys
 from collections import defaultdict
 from datetime import UTC, datetime, timedelta
 from typing import Any
+
+from env_config import is_telemetry_disabled
 
 
 def calculate_acceptance_rate(metrics: list[dict[str, Any]]) -> dict[str, Any]:
@@ -252,7 +253,7 @@ def main():
     args = parser.parse_args()
 
     # Respect privacy settings - check if telemetry is disabled
-    if os.getenv("DISABLE_TELEMETRY", "").lower() == "true":
+    if is_telemetry_disabled():
         print("Quality metrics analysis is disabled via DISABLE_TELEMETRY environment variable.", file=sys.stderr)
         return 0
 

@@ -21,15 +21,16 @@ Environment Variables:
 
 import hashlib
 import json
-import os
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
 
-
-def is_telemetry_disabled() -> bool:
-    """Check if telemetry is disabled via environment variable."""
-    return os.getenv("DISABLE_TELEMETRY", "").lower() == "true"
+from env_config import (
+    get_claude_cli_version,
+    get_github_repository,
+    get_runner_os,
+    is_telemetry_disabled,
+)
 
 
 def anonymize_repository(repo: str) -> str:
@@ -72,14 +73,14 @@ def collect_metrics(
         return {"status": "skipped", "reason": "telemetry_disabled"}
 
     # Get repository context (anonymous)
-    repo = os.getenv("GITHUB_REPOSITORY", "unknown")
+    repo = get_github_repository()
     repo_id = anonymize_repository(repo)
 
     # Get runner OS
-    runner_os = os.getenv("RUNNER_OS", "unknown")
+    runner_os = get_runner_os()
 
     # Get Claude CLI version (if available)
-    claude_version = os.getenv("CLAUDE_CLI_VERSION", "unknown")
+    claude_version = get_claude_cli_version()
 
     metrics = {
         "action_name": action_name,

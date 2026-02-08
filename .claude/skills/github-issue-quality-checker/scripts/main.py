@@ -14,6 +14,26 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
+# Add scripts directory to path for env_config import
+scripts_dir = Path(__file__).resolve().parents[5] / "scripts"
+if str(scripts_dir) not in sys.path:
+    sys.path.insert(0, str(scripts_dir))
+
+try:
+    from env_config import get_repository_identifier
+except ImportError:
+    # Fallback if env_config is not available
+    def get_repository_identifier() -> str:
+        """Fallback implementation."""
+        repo = os.getenv("GITHUB_REPOSITORY", "")
+        if repo:
+            return repo
+        repo_owner = os.getenv("REPO_OWNER")
+        repo_name = os.getenv("REPO_NAME")
+        if repo_owner and repo_name:
+            return f"{repo_owner}/{repo_name}"
+        return ""
+
 
 # 共通ライブラリパスを追加（.claudeディレクトリを動的に探す）
 def find_claude_lib():
@@ -55,14 +75,7 @@ class GitHubIssueQualityChecker:
 
     def __init__(self, token: str | None = None, repository: str | None = None):
         self.token = token or os.getenv("GITHUB_TOKEN")
-        self.repository = repository or os.getenv("GITHUB_REPOSITORY")
-
-        # GITHUB_REPOSITORYがなければREPO_OWNERとREPO_NAMEから構築
-        if not self.repository:
-            repo_owner = os.getenv("REPO_OWNER")
-            repo_name = os.getenv("REPO_NAME")
-            if repo_owner and repo_name:
-                self.repository = f"{repo_owner}/{repo_name}"
+        self.repository = repository or get_repository_identifier()
 
         if not self.token:
             msg = "GitHub Tokenが必要です。GITHUB_TOKEN環境変数を設定してください。"
