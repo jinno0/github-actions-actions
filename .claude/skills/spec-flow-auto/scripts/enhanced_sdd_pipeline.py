@@ -4,6 +4,15 @@ Enhanced SDD Pipeline with AI Integration
 
 SpecWorkflowMcpとAI連携による高品質な仕様駆動開発パイプライン
 Claude Sonnet 4を活用した知的なPRD解析とタスク分解を実現
+
+TODO: Code cleanup opportunities identified:
+- _simulate_ai_analysis() and related simulation methods are temporary stubs (lines 204-263)
+- _add_ai_insights_to_*() methods are placeholder implementations (lines 362-407)
+- Multiple duplicate helper methods (_estimate_*, _extract_*) can be consolidated
+- Miyabi integration methods (624-718) should be extracted to separate module
+- Duplicate JSON file write patterns throughout the file
+
+Consider refactoring when AI API integration is implemented.
 """
 
 import argparse

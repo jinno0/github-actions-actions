@@ -17,7 +17,7 @@ jobs:
 
     steps:
       - name: Enqueue all open PRs for review
-        uses: ./actions/pr-review-enqueuer  # Replace with your-org/github-actions-actions/actions/pr-review-enqueuer@v1 after publishing
+        uses: ./actions/pr-review-enqueuer
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           # Process all open PRs (including drafts and WIP)
