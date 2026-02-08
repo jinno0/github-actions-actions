@@ -1,3 +1,285 @@
 version: "0.3"
-updated_at: null
-canonical_terms: {}
+updated_at: "2026-02-08T08:40:31Z"
+
+canonical_terms:
+  GitHubAction:
+    id: "TERM-GHACTION"
+    layer: "core"
+    status: "stable"
+    definition: "AI-native GitHub Action for automating development workflows using Claude Code CLI"
+    synonyms: ["GitHub Actions", "Action", "AI Action", "Workflow Action"]
+    boundaries:
+      includes: ["Claude Code CLI integration", "Self-hosted runner execution", "Context-aware automation"]
+      excludes: ["Simple shell script wrappers", "Fully unmanned operations", "Product-specific logic"]
+    lifecycle: ["Proposed", "Development", "Production Ready", "Deprecated"]
+    related_terms: ["ClaudeCodeCLI", "SelfHostedRunner", "AIActionsHub"]
+    assumptions: []
+    evidence:
+      - source: "PURPOSE.md#L1-L7"
+        quote: "AIネイティブなGitHub Actionsおよび標準化ツールを提供するハブ"
+      - source: "ACTIONS.md#L1-L3"
+        quote: "Complete catalog of AI-powered GitHub Actions"
+
+  ClaudeCodeCLI:
+    id: "TERM-CLAUDECLI"
+    layer: "core"
+    status: "stable"
+    definition: "Command-line interface for Claude AI that enables semantic code understanding and automation"
+    synonyms: ["Claude CLI", "claude command", "Claude Code"]
+    boundaries:
+      includes: ["Code review", "Code generation", "Refactoring", "Documentation generation"]
+      excludes: ["Static analysis tools", "Simple regex-based tools"]
+    lifecycle: []
+    related_terms: ["GitHubAction", "SelfHostedRunner"]
+    assumptions: []
+    evidence:
+      - source: "PURPOSE.md#L5-L6"
+        quote: "Self-hosted runner上で動作するClaude Code CLI"
+      - source: "AGENTS.md#L7-L9"
+        quote: "Claude Code CLI (`claude` コマンド) によって処理される"
+
+  SelfHostedRunner:
+    id: "TERM-SELFRUNNER"
+    layer: "core"
+    status: "stable"
+    definition: "GitHub Actions runner hosted on own infrastructure with access to Claude Code CLI and external tools"
+    synonyms: ["Self-hosted runner", "Custom runner", "On-premise runner"]
+    boundaries:
+      includes: ["Claude Code CLI access", "File system access", "External tool execution"]
+      excludes: ["GitHub-hosted runners", "Limited sandbox environments"]
+    lifecycle: []
+    related_terms: ["ClaudeCodeCLI", "GitHubAction"]
+    assumptions: []
+    evidence:
+      - source: "PURPOSE.md#L5-L6"
+        quote: "Self-hosted runner上で動作するClaude Code CLI"
+      - source: "AGENTS.md#L7"
+        quote: "self-hosted runner 上で動作する"
+
+  HumanInTheLoop:
+    id: "TERM-HUMANLOOP"
+    layer: "core"
+    status: "stable"
+    definition: "AI automation pattern where AI proposes/prepares and humans make final decisions"
+    synonyms: ["Human-in-the-loop", "Human oversight", "Human approval"]
+    boundaries:
+      includes: ["AI proposal", "Human decision", "Threshold-based automation"]
+      excludes: ["Fully autonomous operations", "Manual-only workflows"]
+    lifecycle: []
+    related_terms: ["GitHubAction", "LgtmThreshold"]
+    assumptions: []
+    evidence:
+      - source: "PURPOSE.md#L36-L37"
+        quote: "AIはあくまで提案・準備を行い、最終決定権（マージ、デプロイ）は人間が持つ"
+
+  AIActionsHub:
+    id: "TERM-AIHUB"
+    layer: "core"
+    status: "stable"
+    definition: "Central repository providing AI-powered GitHub Actions for organization-wide development efficiency"
+    synonyms: ["AI Hub", "Actions Hub", "GitHub Actions Hub"]
+    boundaries:
+      includes: ["Action catalog", "Reusable workflows", "Standardization"]
+      excludes: ["Single-use scripts", "Product-specific tools"]
+    lifecycle: []
+    related_terms: ["GitHubAction", "ActionCategory"]
+    assumptions: []
+    evidence:
+      - source: "PURPOSE.md#L1-L5"
+        quote: "「AIネイティブなGitHub Actions」および「標準化ツール」を提供するハブ"
+      - source: "ACTIONS.md#L1-L3"
+        quote: "Complete catalog of AI-powered GitHub Actions"
+
+  ActionCategory:
+    id: "TERM-ACTIONCAT"
+    layer: "domain"
+    status: "stable"
+    definition: "Classification of GitHub Actions by purpose: Development Support, Documentation, Maintenance, Automation, Workflow Helpers"
+    synonyms: ["Action type", "Workflow category"]
+    boundaries:
+      includes: ["Core Development", "Documentation", "PR Merge Automation", "Bulk Operations", "Workflow Helpers"]
+      excludes: ["Technical implementation details"]
+    lifecycle: []
+    related_terms: ["GitHubAction", "AIActionsHub"]
+    assumptions: []
+    evidence:
+      - source: "ACTIONS.md#L9-L18"
+        quote: "Actions categorized into: Development Support, Documentation, Maintenance, Automation"
+
+  ReviewAndMergeAction:
+    id: "TERM-REVIEWMERGE"
+    layer: "core"
+    status: "stable"
+    definition: "AI-powered action that reviews PRs and automatically merges or fixes issues using Claude Code CLI"
+    synonyms: ["review-and-merge", "AI review", "Auto review"]
+    boundaries:
+      includes: ["Code review", "Auto-fix", "Confidence scoring", "Custom rules"]
+      excludes: ["Manual review only", "Simple linting"]
+    lifecycle: ["Proposed", "Development", "Production Ready"]
+    related_terms: ["GitHubAction", "LgtmThreshold", "AutoFix", "CustomReviewRules"]
+    assumptions: []
+    evidence:
+      - source: "actions/review-and-merge/action.yml#L1-L2"
+        quote: "Review and automatically fix code issues using Claude Code CLI"
+      - source: "ACTIONS.md#L26-L28"
+        quote: "Automatically review pull requests using Claude Code CLI"
+
+  LgtmThreshold:
+    id: "TERM-LGTM"
+    layer: "domain"
+    status: "stable"
+    definition: "Minimum confidence score (1-10) required for automatic merge approval, default 7"
+    synonyms: ["LGTM threshold", "Confidence threshold", "Auto-merge threshold"]
+    boundaries:
+      includes: ["Quality gate", "Numerical threshold", "Auto-approval criteria"]
+      excludes: ["Binary approval only", "Manual review"]
+    lifecycle: []
+    related_terms: ["ReviewAndMergeAction", "HumanInTheLoop"]
+    assumptions: []
+    evidence:
+      - source: "actions/review-and-merge/action.yml#L12-L15"
+        quote: "Minimum confidence score for LGTM (1-10, default: 7)"
+
+  AutoFix:
+    id: "TERM-AUTOFIX"
+    layer: "domain"
+    status: "stable"
+    definition: "Automatic issue fixing by AI during code review, enabled by default"
+    synonyms: ["Auto-fix", "Automatic fix", "AI fix"]
+    boundaries:
+      includes: ["Issue detection", "Automatic patching", "Commit creation"]
+      excludes: ["Detection only", "Manual fixing"]
+    lifecycle: []
+    related_terms: ["ReviewAndMergeAction", "ClaudeCodeCLI"]
+    assumptions: []
+    evidence:
+      - source: "actions/review-and-merge/action.yml#L28-L31"
+        quote: "Whether to automatically fix issues found in review (default: true)"
+
+  ActionStructureStandard:
+    id: "TERM-ACTIONSTRUCT"
+    layer: "core"
+    status: "stable"
+    definition: "Required three-component structure for all actions: implementation (action.yml + templates/), usage example, usage guide"
+    synonyms: ["Action structure", "Standard action structure"]
+    boundaries:
+      includes: ["action.yml", "templates/", "examples/{name}-example.yml", "instructions/{name}.md"]
+      excludes: ["Partial implementations", "Documentation-only actions"]
+    lifecycle: []
+    related_terms: ["GitHubAction", "TemplateFile"]
+    assumptions: []
+    evidence:
+      - source: "AGENTS.md#L239-L275"
+        quote: "すべての Action は、必ず以下の3つの構成要素をセットで用意してください"
+
+  TemplateFile:
+    id: "TERM-TEMPLATE"
+    layer: "domain"
+    status: "stable"
+    definition: "Separated template files for prompts and messages to improve maintainability and enable customization"
+    synonyms: ["Prompt template", "Template file"]
+    boundaries:
+      includes: ["Placeholder variables", "{VARIABLE_NAME} format", "Custom template support"]
+      excludes: ["Hardcoded prompts in action.yml"]
+    lifecycle: []
+    related_terms: ["GitHubAction", "ActionStructureStandard", "Placeholder"]
+    assumptions: []
+    evidence:
+      - source: "AGENTS.md#L86-L108"
+        quote: "テンプレートファイルとして切り出します"
+
+  Placeholder:
+    id: "TERM-PLACEHOLDER"
+    layer: "aux"
+    status: "stable"
+    definition: "Variable placeholder in templates using {VARIABLE_NAME} format with uppercase snake_case"
+    synonyms: ["Template variable", "Placeholder variable"]
+    boundaries:
+      includes: ["{VARIABLE_NAME} format", "Uppercase snake_case", "sed substitution"]
+      excludes: ["Other formats", "CamelCase"]
+    lifecycle: []
+    related_terms: ["TemplateFile"]
+    assumptions: []
+    evidence:
+      - source: "AGENTS.md#L192-L196"
+        quote: "Placeholders use {VARIABLE_NAME} format with uppercase snake_case"
+
+  DryRun:
+    id: "TERM-DRYRUN"
+    layer: "domain"
+    status: "stable"
+    definition: "Testing mode where actions simulate execution without performing git operations, enabled via DRY_RUN=true"
+    synonyms: ["Dry run", "Test mode", "Validation mode"]
+    boundaries:
+      includes: ["Simulation", "No git operations", "DRY_RUN=true environment variable"]
+      excludes: ["Actual execution", "Production commits"]
+    lifecycle: []
+    related_terms: ["GitHubAction"]
+    assumptions: []
+    evidence:
+      - source: "AGENTS.md#L278-L335"
+        quote: "すべての Action は **Dry Run モード** で自動検証されます"
+
+  CustomReviewRules:
+    id: "TERM-CUSTOMRULES"
+    layer: "domain"
+    status: "stable"
+    definition: "Project-specific coding standards and security requirements injected into AI review process"
+    synonyms: ["Custom rules", "Review rules", "Coding standards"]
+    boundaries:
+      includes: ["Language-specific rules", "Security requirements", "Style guides"]
+      excludes: ["Generic reviews only"]
+    lifecycle: []
+    related_terms: ["ReviewAndMergeAction", "GitHubAction"]
+    assumptions: []
+    evidence:
+      - source: "README.md#L65-L77"
+        quote: "review-and-merge action supports custom rules for project-specific coding standards"
+
+  YamlHeredocPattern:
+    id: "TERM-YAMLHEREDOC"
+    layer: "aux"
+    status: "stable"
+    definition: "Anti-pattern: heredoc (<< EOF) should be avoided in GitHub Actions due to YAML parsing issues"
+    synonyms: ["Heredoc", "YAML heredoc"]
+    boundaries:
+      includes: ["<< EOF syntax", "YAML interference", "Parsing issues"]
+      excludes: ["Echo statements", "Template files"]
+    lifecycle: []
+    related_terms: ["GitHubAction"]
+    assumptions: []
+    evidence:
+      - source: "AGENTS.md#L158-L189"
+        quote: "heredoc (`<< EOF`) を使用していない"
+
+  DevelopmentPhase:
+    id: "TERM-PHASE"
+    layer: "domain"
+    status: "stable"
+    definition: "Project maturity levels: Phase 1 Foundation & POC, Phase 2 Implementation, Phase 3 Stabilization & Adoption"
+    synonyms: ["Phase", "Development stage", "Project phase"]
+    boundaries:
+      includes: ["Foundation", "Implementation", "Stabilization"]
+      excludes: ["Technical milestones"]
+    lifecycle: ["Phase 1", "Phase 2", "Phase 3"]
+    related_terms: ["AIActionsHub"]
+    assumptions: []
+    evidence:
+      - source: "PURPOSE.md#L8-L26"
+        quote: "Phase 1: Foundation & POC - COMPLETED, Phase 2: AI Action Hub Implementation - COMPLETED"
+
+  NonGoal:
+    id: "TERM-NONGOAL"
+    layer: "domain"
+    status: "stable"
+    definition: "Explicitly excluded scope: simple shell wrappers, fully unmanned operations, product-specific logic"
+    synonyms: ["Non-goals", "Out of scope", "Exclusions"]
+    boundaries:
+      includes: ["Shell script wrappers", "Fully autonomous operations", "Tight coupling"]
+      excludes: ["AI-powered automation", "Reusable patterns"]
+    lifecycle: []
+    related_terms: ["GitHubAction", "AIActionsHub"]
+    assumptions: []
+    evidence:
+      - source: "PURPOSE.md#L62-L66"
+        quote: "非目標（What we are NOT）"

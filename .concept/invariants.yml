@@ -1,2 +1,99 @@
-updated_at: null
-invariants: []
+updated_at: "2026-02-08T08:40:31Z"
+invariants:
+  - id: "INV-ACTION-001"
+    related_terms: ["GitHubAction", "ActionStructureStandard"]
+    status: "stable"
+    strength: "hard"
+    statement: "All actions must have three components: action.yml, examples/{name}-example.yml, and instructions/{name}.md"
+    rationale: "Ensures consistency, usability, and maintainability across all actions"
+    assumptions: []
+    evidence:
+      - source: "AGENTS.md#L239-L275"
+        quote: "すべての Action は、必ず以下の3つの構成要素をセットで用意してください"
+    checks:
+      - type: "test"
+        target: ".github/workflows/test-all-actions.yml"
+
+  - id: "INV-ACTION-002"
+    related_terms: ["TemplateFile", "Placeholder"]
+    status: "stable"
+    strength: "hard"
+    statement: "Template files must use {VARIABLE_NAME} format with uppercase snake_case placeholders"
+    rationale: "Maintains consistency and enables reliable sed-based substitution"
+    assumptions: []
+    evidence:
+      - source: "AGENTS.md#L192-L196"
+        quote: "Placeholders use {VARIABLE_NAME} format with uppercase snake_case"
+    checks:
+      - type: "validation"
+        target: "actions/*/templates/*.txt"
+
+  - id: "INV-ACTION-003"
+    related_terms: ["GitHubAction", "YamlHeredocPattern"]
+    status: "stable"
+    strength: "hard"
+    statement: "GitHub Actions must not use heredoc (<< EOF) syntax in action.yml files"
+    rationale: "Heredoc causes YAML parsing issues and interferes with literal style scalars"
+    assumptions: []
+    evidence:
+      - source: "AGENTS.md#L158-L189"
+        quote: "heredoc (`<< EOF`) を使用していない"
+    checks:
+      - type: "validation"
+        target: "actions/**/action.yml"
+
+  - id: "INV-ACTION-004"
+    related_terms: ["HumanInTheLoop", "LgtmThreshold"]
+    status: "stable"
+    strength: "soft"
+    statement: "Auto-merge actions must implement human-in-the-loop with configurable thresholds"
+    rationale: "Prevents unattended AI errors while enabling automation"
+    assumptions: []
+    evidence:
+      - source: "PURPOSE.md#L36-L37"
+        quote: "最終決定権（マージ、デプロイ）は人間が持つ、または人間が設定した閾値に基づく"
+    checks:
+      - type: "review"
+        target: "actions/review-and-merge/action.yml"
+
+  - id: "INV-ACTION-005"
+    related_terms: ["DryRun", "GitHubAction"]
+    status: "stable"
+    strength: "hard"
+    statement: "All actions must support dry-run mode for testing without git operations"
+    rationale: "Enables safe testing and validation without side effects"
+    assumptions: []
+    evidence:
+      - source: "AGENTS.md#L278-L335"
+        quote: "すべての Action は **Dry Run モード** で自動検証されます"
+    checks:
+      - type: "test"
+        target: ".github/workflows/test-all-actions.yml"
+
+  - id: "INV-SCOPE-001"
+    related_terms: ["GitHubAction", "NonGoal"]
+    status: "stable"
+    strength: "hard"
+    statement: "Actions must not be simple shell script wrappers or fully autonomous without human oversight"
+    rationale: "Maintains focus on AI-powered automation with human oversight"
+    assumptions: []
+    evidence:
+      - source: "PURPOSE.md#L62-L66"
+        quote: "非目標（What we are NOT）：単なるシェルスクリプトのラッパー、完全に無人での運用"
+    checks:
+      - type: "review"
+        target: "actions/**/action.yml"
+
+  - id: "INV-INFRA-001"
+    related_terms: ["ClaudeCodeCLI", "SelfHostedRunner"]
+    status: "stable"
+    strength: "hard"
+    statement: "All AI-powered actions require Claude Code CLI installed on self-hosted runners"
+    rationale: "Core dependency for semantic code understanding and automation"
+    assumptions: []
+    evidence:
+      - source: "PURPOSE.md#L5-L6"
+        quote: "Self-hosted runner上で動作するClaude Code CLI"
+    checks:
+      - type: "validation"
+        target: "README.md#Prerequisites"

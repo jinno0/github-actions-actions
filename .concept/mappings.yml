@@ -1,2 +1,158 @@
-updated_at: null
-mappings: {}
+updated_at: "2026-02-08T08:40:31Z"
+mappings:
+  GitHubAction:
+    code_symbols:
+      - "actions/*/action.yml"
+    db: []
+    api: []
+    docs:
+      - "ACTIONS.md"
+      - "README.md"
+      - "AGENTS.md"
+
+  ClaudeCodeCLI:
+    code_symbols:
+      - "actions/review-and-merge/scripts/review-and-fix.sh"
+      - "actions/spec-to-code/scripts/generate.sh"
+    db: []
+    api: []
+    docs:
+      - "PURPOSE.md"
+      - "AGENTS.md"
+      - "README.md"
+
+  SelfHostedRunner:
+    code_symbols:
+      - ".github/workflows/*.yml"
+    db: []
+    api:
+      - "GitHub Actions API"
+    docs:
+      - "PURPOSE.md"
+      - "AGENTS.md"
+
+  ReviewAndMergeAction:
+    code_symbols:
+      - "actions/review-and-merge/action.yml"
+      - "actions/review-and-merge/scripts/review-and-fix.sh"
+      - "actions/review-and-merge/scripts/post-comment.sh"
+      - "actions/review-and-merge/templates/*"
+    db: []
+    api:
+      - "GitHub Pull Requests API"
+    docs:
+      - "ACTIONS.md"
+      - "instructions/review-and-merge.md"
+      - "examples/review-and-merge-example.yml"
+
+  ActionStructureStandard:
+    code_symbols:
+      - "actions/*/action.yml"
+      - "actions/*/templates/*"
+      - "examples/*-example.yml"
+      - "instructions/*.md"
+    db: []
+    api: []
+    docs:
+      - "AGENTS.md"
+
+  LgtmThreshold:
+    code_symbols:
+      - "actions/review-and-merge/action.yml::inputs.lgtm-threshold"
+    db: []
+    api: []
+    docs:
+      - "ACTIONS.md"
+      - "instructions/review-and-merge.md"
+
+  AutoFix:
+    code_symbols:
+      - "actions/review-and-merge/action.yml::inputs.auto-fix"
+      - "actions/review-and-merge/scripts/review-and-fix.sh"
+    db: []
+    api: []
+    docs:
+      - "ACTIONS.md"
+      - "PURPOSE.md"
+
+  TemplateFile:
+    code_symbols:
+      - "actions/*/templates/*.txt"
+    db: []
+    api: []
+    docs:
+      - "AGENTS.md"
+
+  Placeholder:
+    code_symbols:
+      - "actions/*/templates/*.txt"
+    db: []
+    api: []
+    docs:
+      - "AGENTS.md"
+
+  DryRun:
+    code_symbols:
+      - ".github/workflows/test-all-actions.yml"
+    db: []
+    api: []
+    docs:
+      - "AGENTS.md"
+
+  CustomReviewRules:
+    code_symbols:
+      - "actions/review-and-merge/action.yml::inputs.custom-rules"
+      - "examples/custom-rules/*"
+    db: []
+    api: []
+    docs:
+      - "README.md"
+      - "instructions/review-and-merge-custom-rules.md"
+
+  HumanInTheLoop:
+    code_symbols:
+      - "actions/review-and-merge/action.yml::outputs.verdict"
+      - "actions/review-and-merge/action.yml::outputs.confidence"
+    db: []
+    api: []
+    docs:
+      - "PURPOSE.md"
+
+  AIActionsHub:
+    code_symbols: []
+    db: []
+    api: []
+    docs:
+      - "PURPOSE.md"
+      - "ACTIONS.md"
+      - "README.md"
+
+  ActionCategory:
+    code_symbols: []
+    db: []
+    api: []
+    docs:
+      - "ACTIONS.md"
+      - "README.md"
+
+  YamlHeredocPattern:
+    code_symbols:
+      - "actions/**/action.yml"
+    db: []
+    api: []
+    docs:
+      - "AGENTS.md"
+
+  DevelopmentPhase:
+    code_symbols: []
+    db: []
+    api: []
+    docs:
+      - "PURPOSE.md"
+
+  NonGoal:
+    code_symbols: []
+    db: []
+    api: []
+    docs:
+      - "PURPOSE.md"
