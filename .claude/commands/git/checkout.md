@@ -3,6 +3,9 @@ description: Smart branch creation and switching with conventional naming
 allowed-tools: Bash(git:*), Read
 category: workflow
 argument-hint: "<branch-type/branch-name | branch-name>"
+version: 1.0.0
+last-modified: 2026-02-08
+created: 2025-01-01
 ---
 
 # Git Checkout: Smart Branch Management

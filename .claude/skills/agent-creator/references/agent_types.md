@@ -1,5 +1,10 @@
 # Agent Types Reference
 
+**Version**: 1.0.0
+**Last Modified**: 2026-02-08
+**Created**: 2025-01-01
+**Status**: Active Reference
+
 This document describes the available agent types and their characteristics for the agent-creator skill.
 
 ## Available Agent Types
