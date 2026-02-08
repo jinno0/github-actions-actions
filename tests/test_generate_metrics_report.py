@@ -5,7 +5,6 @@ import json
 import sys
 from pathlib import Path
 from unittest.mock import patch
-import tempfile
 
 import pytest
 
@@ -1004,12 +1003,12 @@ class TestIntegration:
                 },
                 "code-review": {
                     "suggestions_made": 20,
-                    "suggestions_accepted": 25,
+                    "suggestions_accepted": 11,
                     "suggestions_rejected": 2,
-                    "suggestions_modified": -3,
+                    "suggestions_modified": 7,
                     "acceptance_rate": 55.0,
                     "rejection_rate": 10.0,
-                    "modification_rate": 15.0,
+                    "modification_rate": 35.0,
                     "entries": 3,
                     "first_seen": "2026-02-06T00:00:00Z",
                     "last_seen": "2026-02-07T07:00:00Z"
