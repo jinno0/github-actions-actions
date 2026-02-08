@@ -8,18 +8,6 @@ from pathlib import Path
 import pytest
 
 
-@pytest.fixture
-def repo_root():
-    """Get repository root path"""
-    return Path(__file__).parent.parent.parent
-
-
-@pytest.fixture
-def mock_path(repo_root):
-    """Get mock Claude CLI path"""
-    return repo_root / ".github" / "mocks" / "claude"
-
-
 class TestMockClaudeCLI:
     """Test the mock Claude CLI functionality"""
 

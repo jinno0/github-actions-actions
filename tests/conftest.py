@@ -2,6 +2,7 @@
 
 import shutil
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
 
@@ -100,3 +101,24 @@ def mock_repo(temp_dir):
 def action_path():
     """Get the path to the actions directory."""
     return Path(__file__).parent.parent / "actions"
+
+
+@pytest.fixture(scope="session")
+def repo_root():
+    """Get repository root path.
+
+    This fixture provides the root directory of the repository,
+    useful for accessing files relative to the project root.
+    Session-scoped for performance as paths are immutable.
+    """
+    return Path(__file__).parent.parent
+
+
+@pytest.fixture(scope="session")
+def mock_path(repo_root):
+    """Get mock Claude CLI path.
+
+    Returns the path to the mock Claude CLI executable used in testing.
+    Session-scoped for performance as the path is immutable.
+    """
+    return repo_root / ".github" / "mocks" / "claude"
