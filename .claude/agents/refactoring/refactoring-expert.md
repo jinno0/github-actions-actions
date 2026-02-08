@@ -68,13 +68,7 @@ Always follow this systematic approach:
 7. **Substitute Algorithm** - Replace with clearer algorithm
 
 **Detection:**
-```bash
-# Find long methods (>20 lines)
-grep -n "function\|async\|=>" --include="*.js" --include="*.ts" -A 20 | awk '/function|async|=>/{start=NR} NR-start>20{print FILENAME":"start" Long method"}'
-
-# Find duplicate code patterns
-grep -h "^\s*[a-zA-Z].*{$" --include="*.js" --include="*.ts" | sort | uniq -c | sort -rn | head -20
-```
+Analyze code for methods exceeding 10 lines with multiple responsibilities and duplicate code patterns across methods.
 
 ### Category 2: Moving Features Between Objects
 
@@ -93,14 +87,7 @@ grep -h "^\s*[a-zA-Z].*{$" --include="*.js" --include="*.ts" | sort | uniq -c | 
 6. **Remove Middle Man** - Direct communication
 
 **Detection:**
-```bash
-# Find feature envy (excessive external calls)
-grep -E "this\.[a-zA-Z]+\(\)\." --include="*.js" --include="*.ts" | wc -l
-grep -E "[^this]\.[a-zA-Z]+\(\)\." --include="*.js" --include="*.ts" | wc -l
-
-# Find message chains
-grep -E "\.[a-zA-Z]+\(\)\.[a-zA-Z]+\(\)\." --include="*.js" --include="*.ts"
-```
+Identify methods that make excessive calls to other classes, long message chains (a.getB().getC().doD()), and classes that only delegate without adding value.
 
 ### Category 3: Organizing Data
 
@@ -120,13 +107,7 @@ grep -E "\.[a-zA-Z]+\(\)\.[a-zA-Z]+\(\)\." --include="*.js" --include="*.ts"
 7. **Introduce Parameter Object** - Group parameters
 
 **Detection:**
-```bash
-# Find magic numbers
-grep -E "[^a-zA-Z_][0-9]{2,}[^0-9]" --include="*.js" --include="*.ts" | grep -v "test\|spec"
-
-# Find data clumps (4+ parameters)
-grep -E "function.*\([^)]*,[^)]*,[^)]*,[^)]*," --include="*.js" --include="*.ts"
-```
+Identify unnamed numeric constants, primitive types used for domain concepts, and groups of parameters that always appear together.
 
 ### Category 4: Simplifying Conditional Expressions
 
@@ -145,16 +126,7 @@ grep -E "function.*\([^)]*,[^)]*,[^)]*,[^)]*," --include="*.js" --include="*.ts"
 6. **Introduce Null Object** - Object for null case
 
 **Detection:**
-```bash
-# Find complex conditionals
-grep -E "if.*&&.*\|\|" --include="*.js" --include="*.ts"
-
-# Find deep nesting (3+ levels)
-grep -E "^\s{12,}if" --include="*.js" --include="*.ts"
-
-# Find switch statements
-grep -c "switch" --include="*.js" --include="*.ts" ./* 2>/dev/null | grep -v ":0"
-```
+Identify complex conditionals with multiple logical operators, deeply nested if statements (3+ levels), and switch statements that could use polymorphism.
 
 ### Category 5: Making Method Calls Simpler
 
@@ -174,13 +146,7 @@ grep -c "switch" --include="*.js" --include="*.ts" ./* 2>/dev/null | grep -v ":0
 7. **Replace Error Code with Exception** - Proper error handling
 
 **Detection:**
-```bash
-# Find long parameter lists
-grep -E "\([^)]{60,}\)" --include="*.js" --include="*.ts"
-
-# Find boolean parameters (likely flags)
-grep -E "function.*\(.*(true|false).*\)" --include="*.js" --include="*.ts"
-```
+Identify methods with more than 3 parameters, boolean flag parameters, and complex constructors with many parameters.
 
 ### Category 6: Dealing with Generalization
 
@@ -200,13 +166,7 @@ grep -E "function.*\(.*(true|false).*\)" --include="*.js" --include="*.ts"
 7. **Replace Inheritance with Delegation** - Favor composition
 
 **Detection:**
-```bash
-# Find inheritance usage
-grep -n "extends\|implements" --include="*.js" --include="*.ts"
-
-# Find potential duplicate methods in classes
-grep -h "^\s*[a-zA-Z]*\s*[a-zA-Z_][a-zA-Z0-9_]*\s*(" --include="*.js" --include="*.ts" | sort | uniq -c | sort -rn
-```
+Analyze inheritance hierarchies for duplicate code in sibling classes, unused inherited methods, and parallel hierarchies that change together.
 
 ## Code Review Checklist
 
@@ -265,109 +225,33 @@ When to refactor:
 
 ### Extract Method Pattern
 **When:** Method > 10 lines or doing multiple things
-```javascript
-// Before
-function processOrder(order) {
-  // validate
-  if (!order.items || order.items.length === 0) {
-    throw new Error('Order must have items');
-  }
-  // calculate total
-  let total = 0;
-  for (const item of order.items) {
-    total += item.price * item.quantity;
-  }
-  // apply discount
-  if (order.coupon) {
-    total = total * (1 - order.coupon.discount);
-  }
-  return total;
-}
-
-// After
-function processOrder(order) {
-  validateOrder(order);
-  const subtotal = calculateSubtotal(order.items);
-  return applyDiscount(subtotal, order.coupon);
-}
-```
+Extract code blocks into well-named methods that capture the intention.
 
 ### Replace Conditional with Polymorphism Pattern
 **When:** Switch/if-else based on type
-```javascript
-// Before
-function getSpeed(type) {
-  switch(type) {
-    case 'european': return 10;
-    case 'african': return 15;
-    case 'norwegian': return 20;
-  }
-}
-
-// After
-class Bird {
-  getSpeed() { throw new Error('Abstract method'); }
-}
-class European extends Bird {
-  getSpeed() { return 10; }
-}
-// ... other bird types
-```
+Use inheritance and polymorphism to eliminate type-based conditionals.
 
 ### Introduce Parameter Object Pattern
 **When:** Methods with 3+ related parameters
-```javascript
-// Before
-function createAddress(street, city, state, zip, country) {
-  // ...
-}
-
-// After
-class Address {
-  constructor(street, city, state, zip, country) {
-    // ...
-  }
-}
-function createAddress(address) {
-  // ...
-}
-```
+Group related parameters into a dedicated object or dataclass.
 
 ## Validation Steps
 
 After each refactoring:
-1. **Run tests:** `npm test` or project-specific command
-2. **Check linting:** `npm run lint` or `eslint .`
-3. **Verify types:** `npm run typecheck` or `tsc --noEmit`
+1. **Run tests:** Execute project test suite (pytest for Python)
+2. **Check linting:** Run project linter (ruff, black, pylint for Python)
+3. **Verify types:** For typed projects, run type checker (mypy for Python)
 4. **Check coverage:** Ensure no regression in test coverage
 5. **Performance check:** For critical paths, verify no degradation
 
 ## Tool Support
 
 ### Analysis Tools
-- **ESLint:** Configure complexity rules
-- **SonarJS:** Detect code smells
-- **CodeClimate:** Track maintainability
+- **Ruff:** Fast Python linter with complexity rules
+- **Pylint:** Comprehensive code analysis
+- **Bandit:** Security linter for Python
 - **Cyclomatic Complexity:** Should be < 10
-
-### IDE Refactoring Support
-- **VSCode:** F2 (rename), Ctrl+. (quick fixes)
-- **WebStorm:** Comprehensive refactoring menu
-- **VS Code Refactoring Extensions:** Available for enhanced support
-
-## Dynamic Domain Expertise Integration
-
-### Leverage Available Experts
-
-```bash
-# Discover available domain experts
-claudekit list agents
-
-# Get specific expert knowledge for refactoring guidance
-claudekit show agent [expert-name]
-
-# Apply expert patterns to enhance refactoring approach
-```
+- **mypy:** Static type checker for Python
 
 ## Resources
 
