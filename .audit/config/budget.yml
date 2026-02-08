@@ -1,0 +1,47 @@
+version: "2.0"
+updated_at: "2026-02-08T07:29:50Z"
+updated_by: "audit-run-2026-02-08T07:29:50Z"
+
+# === Scan Budget ===
+scan_budget:
+  max_files_per_run: 150
+  max_total_tokens: 75000
+  estimated_files: 50  # actions/13 + examples/13 + instructions/13 + tests/docs ~ 40-50
+
+# === Log Budget ===
+log_budget:
+  max_log_entries: 500
+  keep_last_n_entries: 300
+
+# === Proposal Budget ===
+proposal_budget:
+  max_prs_per_run: 8
+  max_total_proposals: 15
+
+# === Verification Budget ===
+verification_budget:
+  max_test_scenarios: 20
+  max_execution_time_seconds: 300  # 5 minutes per test scenario
+
+# === Retention Policy ===
+retention_policy:
+  execution_runs:
+    max_folders: 3
+    strategy: "keep_latest"
+    enforcement: "strict"
+
+  always_overwrite:
+    - "analysis/as_is.yml"
+    - "analysis/gap.yml"
+    - "analysis/verification_scenarios.yml"
+    - "proposal/roadmap.md"
+    - "proposal/changes/*.md"
+    - "output/summary.md"
+    - "output/next_questions.md"
+    - "output/self_score.yml"
+    - "output/verification_result.json"
+
+  never_delete:
+    - "config/intent.yml"
+    - "config/constraints.yml"
+    - "config/budget.yml"

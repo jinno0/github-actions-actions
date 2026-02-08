@@ -1,0 +1,148 @@
+version: "1.0"
+run_id: "2026-02-08T07:29:50Z"
+generated_at: "2026-02-08T07:29:50Z"
+
+# === Self-Evaluation Scores ===
+scores:
+  purpose_alignment: 4
+  evidence_soundness: 5
+  implementability: 5
+  risk_management: 4
+  verifiability: 5
+  cost_optimization: 5
+  collective_intelligence: 3
+
+total: 31
+max: 35
+
+# === Scoring Details ===
+scoring_details:
+  purpose_alignment:
+    score: 4
+    max: 5
+    rationale: |
+      監査はリポジトリの存在意義（AIネイティブなGitHub Actionsの提供）に沿って実施された。
+      Core Functionsの検証を実施し、README.mdの記載との整合性を確認した。
+      ただし、GAP-003で特定された「実装検証不足」に対して、今回の監査でDry Run検証の未実装を発見した。
+      この発見は監査の価値を高めているが、一部のCore Functions（CF-002, CF-004）の検証が不完全である。
+    
+  evidence_soundness:
+    score: 5
+    max: 5
+    rationale: |
+      事実/推測/不明を明確に分離した（claims.ndjson）。
+      全ての主張に参照元（ファイル:行）を付け、根拠を明確にした。
+      仮定はASM-xxxとして明記し、信頼度も記録した。
+      Core Function Verificationの実施により、README.mdの記載と実際の実装の不一致を発見した。
+    
+  implementability:
+    score: 5
+    max: 5
+    rationale: |
+      提案された改善アクション（PR-001, PR-002）は具体的で実行可能である。
+      PR-001はドキュメント修正のみで15分で完了する。
+      PR-002は検証スクリプトを作成済みで、追加の実装は不要。
+      各提案に実装手順、検証基準、ロールバック計画が含まれている。
+    
+  risk_management:
+    score: 4
+    max: 5
+    rationale: |
+      全ての変更提案にリスクと副作用の分析が含まれている。
+      ロールバック計画も明記されている。
+      ただし、PR-002の実装により発覚した問題（Dry Run検証の未実装）に対する改善提案が作成されていない。
+      これは次回の監査で対処が必要。
+    
+  verifiability:
+    score: 5
+    max: 5
+    rationale: |
+      全ての改善提案に検証基準が含まれている。
+      Core Function Verificationスクリプトを作成し、実際に実行して結果を確認した。
+      検証結果はverification_result.jsonに保存され、再現可能である。
+      テストカバレッジ、AIレビュー受入率などの品質メトリクスも測定可能である。
+    
+  cost_optimization:
+    score: 5
+    max: 5
+    rationale: |
+      変更範囲は必要最小限に抑えられている。
+      PR-001はドキュメント修正のみで、コード変更を伴わない。
+      PR-002は検証スクリプトの作成で、既存コードへの変更はない。
+      優先順位（P0/P1/P2/P3）を設定し、コストパフォーマンスの良い改善から順に提案している。
+    
+  collective_intelligence:
+    score: 3
+    max: 5
+    rationale: |
+      監査レポートは詳細で、チームでのレビューが可能である。
+      ただし、レビュー観点チェックリストが不足している。
+      next_questions.mdで質問リストを提供しているが、チーム内での議論を促進する具体的なプロセスが含まれていない。
+      改善提案に対するフィードバック収集の仕組みも不足している。
+
+# === Improvement Actions ===
+improvement_actions:
+  - priority: 1
+    target: "collective_intelligence"
+    action: "チームレビュー用チェックリストを作成する"
+    details: |
+      監査レポートのレビュー観点を明確にする。
+      例:
+      - 全てのGAPに対処しているか？
+      - 優先順位は適切か？
+      - 実装可能性は十分か？
+      - リスク評価は妥当か？
+    
+  - priority: 2
+    target: "risk_management"
+    action: "GAP-003で発覚したDry Run検証未実装に対する改善提案を作成する"
+    details: |
+      検証の結果、10個のActionでDry Run検証が未実装であることが発覚した。
+      これに対する改善提案（PR-003）を作成する必要がある。
+      PR-003では、未実装のActionにDry Run検証を追加する手順を示す。
+    
+  - priority: 3
+    target: "purpose_alignment"
+    action: "次回の監査で全Core Functionsの検証を完了させる"
+    details: |
+      今回はCF-002（Claude Code CLI統合）の検証が不完全であった。
+      次回の監査では、Claude Code CLIが実際に呼び出されていることを確認する。
+      また、各ActionがClaude Code CLIのどのような機能を使用しているかも調査する。
+
+# === Trends ===
+trend:
+  - run_id: "2026-02-08T07:29:50Z"
+    total: 31
+    max: 35
+    percentage: 88.6
+    notes: "初回監査実施。Core Function Verificationにより重要な発見があった。"
+
+# === Quality Checklist ===
+quality_checklist:
+  - item: "Completeness"
+    status: "pass"
+    notes: "質問待ちで止まっている項目はない。全ての仮定に対して暫定的な真実を設定した。"
+  
+  - item: "Traceability"
+    status: "pass"
+    notes: "仮定した内容がnext_questions.mdに明記されている。全ての主張に参照元がある。"
+  
+  - item: "Executability"
+    status: "pass"
+    notes: "提案コマンドは仮定環境下で実行可能。検証スクリプトも正常に動作した。"
+  
+  - item: "Interpretation"
+    status: "pass"
+    notes: "検証結果に「意味」と「次のアクション」が含まれている。"
+  
+  - item: "Safety"
+    status: "pass"
+    notes: "破壊的変更を提案していない。全ての変更にロールバック計画がある。"
+  
+  - item: "Reproducibility"
+    status: "pass"
+    notes: "audit_log.ndjsonに全判断の根拠が記録されている。検証スクリプトも再現可能。"
+  
+  - item: "Self-Improvement"
+    status: "pass"
+    notes: "self_score.ymlに改善アクションが記録されている。次回の監査で反映される。"

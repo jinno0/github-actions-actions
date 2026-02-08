@@ -1,0 +1,128 @@
+version: "2.0"
+run_id: "2026-02-08T07:29:50Z"
+generated_at: "2026-02-08T07:29:50Z"
+
+# === Repository Structure ===
+structure:
+  actions_count: 13
+  examples_count: 19
+  instructions_count: 38
+  test_files_count: 15
+
+# === Quality Metrics ===
+quality_metrics:
+  test_coverage:
+    current: 92.99
+    target: ">= 70 (README.md) / >= 80 (pyproject.toml)"
+    status: "exceeds_all_targets"
+    source: "coverage.json"
+
+  ai_review_acceptance_rate:
+    current: 70.0  # 7 approved out of 10 reviews
+    target: ">= 70"
+    status: "meets_target"
+    source: "metrics/review_metrics.json"
+    note: "ベースライン値は10件のレビューデータに基づく"
+
+# === Adoption Status ===
+adoption:
+  known_adopters: 2  # Internal pilot projects (test-repo-1, test-repo-2)
+  adoption_status: "pilot_phase"
+  most_used_actions:
+    - review-and-merge
+    - auto-merge
+  last_updated: "2026-02-07"
+
+# === Core Functions Status ===
+core_functions:
+  - id: "CF-001"
+    claim: "13種類のAI Actionsを提供している"
+    status: "verified"
+    evidence: "actions/ ディレクトリに13個のaction.ymlファイルが存在"
+
+  - id: "CF-002"
+    claim: "Claude Code CLIを活用し、コードの文脈を理解した高度な自動化を実現する"
+    status: "claimed_but_unverified"
+    evidence: "README.md:3-4に記載があるが、実際の動作検証は未実施"
+
+  - id: "CF-003"
+    claim: "カスタムレビュールール注入機能を提供している"
+    status: "verified"
+    evidence: "README.md:65-77, examples/custom-rules/ ディレクトリが存在"
+
+  - id: "CF-004"
+    claim: "全てのAI ActionsはDry Runモードで自動検証される"
+    status: "claimed_but_unverified"
+    evidence: "README.md:122-124に記載があるが、実際の検証実装は未確認"
+
+  - id: "CF-005"
+    claim: "匿名テレメトリー収集機能を提供している"
+    status: "verified"
+    evidence: "README.md:148-169, scripts/collect_metrics.py が存在"
+
+  - id: "CF-006"
+    claim: "AIレビュー品質メトリクス（受入率）を追跡・測定できる"
+    status: "verified"
+    evidence: "README.md:171-217, metrics/review_metrics.json に10件のレビューデータが存在"
+
+# === Technical Stack ===
+technical_stack:
+  python_version: ">= 3.11"
+  dependencies:
+    - "PyYAML>=6.0"
+  dev_dependencies:
+    - "pytest>=7.0.0"
+    - "pytest-cov>=4.1.0"
+    - "ruff>=0.1.0"
+
+# === Documentation Status ===
+documentation:
+  readme: "comprehensive"  # 11,699 bytes, Japanese
+  purpose: "exists"
+  adoption_guide: "exists"
+  testing_guide: "exists"  # TESTING.md
+  security_checklist: "exists"  # SECURITY_CHECKLIST.md
+  agents_guide: "exists"  # AGENTS.md
+
+# === Testing Status ===
+testing:
+  test_framework: "pytest"
+  coverage_measurement: "pytest-cov"
+  coverage_target:
+    readme: ">= 70%"
+    pyproject_toml: ">= 80%"
+    actual: "92.99%"
+  coverage_scope: "actions/ and scripts/ only"
+
+# === Inconsistencies Detected ===
+inconsistencies:
+  - id: "INC-001"
+    description: "テストカバレッジ目標値の不一致"
+    location: "README.md:128-130 vs pyproject.toml:38"
+    details: "READMEでは >= 70% と記載されているが、pyproject.tomlのfail_underは80%に設定されている"
+    impact: "low"
+    recommendation: "README.mdの目標値を80%に修正するか、pyproject.tomlのfail_underを70%に下げる"
+
+  - id: "INC-002"
+    description: "README.mdでのAIレビュー受入率の記載と実際のデータの不一致"
+    location: "README.md:175-193"
+    details: "README.mdでは「N/A (データなし)」と記載されているが、metrics/review_metrics.jsonには10件のレビューデータが存在する"
+    impact: "medium"
+    recommendation: "README.mdの記載を更新し、実際のベースライン値（70%）を反映させる"
+
+# === Unknowns ===
+unknowns:
+  - id: "UNK-001"
+    description: "実際の組織内プロジェクトでの導入数"
+    source: "C-015"
+    verification_method: "ADOPTION.mdには2つのパイロットプロジェクトが記載されているが、これが最新の状態か不明"
+
+  - id: "UNK-002"
+    description: "各AI Actionの実際の使用頻度"
+    source: "C-017"
+    verification_method: "テレメトリーデータの収集状況を確認する必要がある"
+
+  - id: "UNK-003"
+    description: "Dry Run検証の実装状況"
+    source: "C-011"
+    verification_method: "各Actionのaction.ymlファイルを確認し、dry-runモードの実装状況を検証する"

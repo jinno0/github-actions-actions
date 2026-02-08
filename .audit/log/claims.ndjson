@@ -1,0 +1,18 @@
+{"claim_id":"C-001","type":"fact","claim":"13種類のAI Actionsを提供している（action.ymlファイルが存在）","source":"actions/ ディレクトリスキャン","confidence":1.0,"evidence":"actions/ ディレクトリ配下に13個のaction.ymlファイルが存在する"}
+{"claim_id":"C-002","type":"fact","claim":"19個の利用例ワークフローを提供している","source":"examples/ ディレクトリスキャン","confidence":1.0,"evidence":"examples/ ディレクトリ配下に19個の.ymlファイルが存在する"}
+{"claim_id":"C-003","type":"fact","claim":"38個の導入ガイドドキュメントを提供している","source":"instructions/ ディレクトリスキャン","confidence":1.0,"evidence":"instructions/ ディレクトリ配下に38個の.mdファイルが存在する"}
+{"claim_id":"C-004","type":"fact","claim":"15個のテストファイルが存在する","source":"tests/ ディレクトリスキャン","confidence":1.0,"evidence":"tests/ ディレクトリ配下に15個のtest_*.pyファイルが存在する"}
+{"claim_id":"C-005","type":"fact","claim":"テストカバレッジは92.99%である","source":"coverage.json","confidence":1.0,"evidence":"coverage.jsonのtotals.percent_coveredが92.9881337648328"}
+{"claim_id":"C-006","type":"fact","claim":"Python >= 3.11を要求している","source":"pyproject.toml:9","confidence":1.0,"evidence":"requires_python = \">=3.11\""}
+{"claim_id":"C-007","type":"fact","claim":"README.mdでテストカバレッジ >= 70%を目標として明記している","source":"README.md:128-130","confidence":1.0,"evidence":"README.mdに「テストカバレッジ >= 70% を目標」と記載"}
+{"claim_id":"C-008","type":"fact","claim":"README.mdでAIレビュー受入率 >= 70%を目標として明記している","source":"README.md:177","confidence":1.0,"evidence":"README.mdに「AIレビュー受入率」の目標値として >= 70% と記載"}
+{"claim_id":"C-009","type":"inference","claim":"AIレビュー受入率のベースライン値はまだ確立されていない","source":"README.md:175-193","confidence":0.9,"reasoning":"README.mdに「N/A (データなし)」「⚠️ データ収集中」「パイロットプロジェクトでのレビューデータ収集が有効化されていません」と記載されているため","assumption":"ASM-003"}
+{"claim_id":"C-010","type":"inference","claim":"Self-hosted runner上でClaude Code CLIを実行する環境が必要","source":"README.md:82-85","confidence":0.95,"reasoning":"README.mdに「これらの Action を利用するには、Self-hosted Runner 上で Claude Code CLI が実行可能である必要があります」と明記されているため","assumption":"ASM-004"}
+{"claim_id":"C-011","type":"inference","claim":"13のAI ActionsはすべてDry Run検証が実装されている","source":"README.md:122-124","confidence":0.85,"reasoning":"README.mdに「全ての AI Actions は Dry Run モードで自動検証されます」と記載されているが、実際の実装は確認していないため","assumption":"ASM-006"}
+{"claim_id":"C-012","type":"fact","claim":"テレメトリー収集機能を提供し、オプトアウト可能","source":"README.md:148-169","confidence":1.0,"evidence":"README.mdに「匿名テレメトリー」「DISABLE_TELEMETRY環境変数で無効化可能」と記載"}
+{"claim_id":"C-013","type":"fact","claim":"カスタムレビュールール注入機能を提供している","source":"README.md:65-77","confidence":1.0,"evidence":"README.mdに「カスタムレビュールール (review-and-merge)」セクションが存在"}
+{"claim_id":"C-014","type":"inference","claim":"テストカバレッジ測定範囲はactions/とscripts/のみ","source":"README.md:130","confidence":0.95,"reasoning":"README.mdに「測定範囲: actions/ ディレクトリ（Action実装）と scripts/ ディレクトリ（ユーティリティスクリプト）のみを対象としています」と明記されているため","assumption":"ASM-007"}
+{"claim_id":"C-015","type":"unknown","claim":"実際の組織内プロジェクトでの導入数","source":"README.md:220-225","confidence":0.0,"needed_info":"組織内外での実際の導入リポジトリ数","verification_method":"ADOPTION.mdファイルの確認またはGitHub APIによるOrganization内リポジトリのスキャン"}
+{"claim_id":"C-016","type":"unknown","claim":"AIレビューの実際の受入率（ベースライン値）","source":"README.md:175-193","confidence":0.0,"needed_info":"review_metrics.jsonファイルの内容","verification_method":"metrics/review_metrics.jsonファイルの存在確認と内容の確認"}
+{"claim_id":"C-017","type":"unknown","claim":"各AI Actionの使用頻度","source":"README.md:148-169（テレメトリーセクション）","confidence":0.0,"needed_info":"テレメトリーデータの収集状況","verification_method":"テレメトリーデータベースまたはログファイルの確認"}
+{"claim_id":"C-018","type":"inference","claim":"pyproject.tomlでcoverageのfail_underが80%に設定されているが、READMEでは70%と記載されている","source":"pyproject.toml:38 vs README.md:128-130","confidence":1.0,"reasoning":"pyproject.tomlのtool.coverage.report.fail_underが80%になっているが、README.mdでは70%を目標として記載しているため、不一致が存在する"}
