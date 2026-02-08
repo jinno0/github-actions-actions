@@ -18,3 +18,7 @@
 {"claim_id":"C-018","type":"unknown","claim":"実際の組織内プロジェクトでの導入数","source":"README.md:220-225","confidence":0.0,"needed_info":"組織内外での実際の導入リポジトリ数","verification_method":"ADOPTION.mdファイルの確認またはGitHub APIによるOrganization内リポジトリのスキャン"}
 {"claim_id":"C-019","type":"unknown","claim":"各AI Actionの使用頻度","source":"README.md:148-169（テレメトリーセクション）","confidence":0.0,"needed_info":"テレメトリーデータの収集状況","verification_method":"テレメトリーデータベースまたはログファイルの確認"}
 {"claim_id":"C-020","type":"fact","claim":"README.mdの「全てのAI ActionsはDry Runモードで自動検証されます」という記述は実態と異なる","source":"README.md:122-124 vs verify_core_functions.py結果","confidence":1.0,"evidence":"実際には3/13 (23%) でのみ実装済み","verified_by":"feedback_to_auditor.yml ISS-NEW-001"}
+{"claim_id": "C-021", "type": "fact", "source": "feedback_to_auditor.yml: assumption_updates", "evidence": "CF-003 (custom review rules) and CF-006 (metrics tracking) were verified in previous run", "confidence": 1.0, "timestamp": "2026-02-08T13:55:13Z"}
+{"claim_id": "C-022", "type": "fact", "source": "metrics/review_metrics.json", "evidence": "Acceptance rate improved from 75.0% (3/4) to 90.0% (9/10)", "confidence": 1.0, "timestamp": "2026-02-08T13:55:13Z"}
+{"claim_id": "C-023", "type": "fact", "source": "coverage.json", "evidence": "Test coverage remains high at 92.97% (>= 80% target)", "confidence": 1.0, "timestamp": "2026-02-08T13:55:13Z"}
+{"claim_id": "C-024", "type": "inference", "source": "C-022", "reasoning": "Acceptance rate improvement suggests AI review quality is stable or improving", "confidence": 0.7, "timestamp": "2026-02-08T13:55:13Z"}

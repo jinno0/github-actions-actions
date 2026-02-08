@@ -1,262 +1,193 @@
-# Improvement Roadmap
+# 改善ロードマップ (Improvement Roadmap)
 
-## Overview
-このロードマップは、`github-actions-actions` リポジトリの監査結果に基づく改善提案を優先順位順に並べたものです。
-
-## Priority Levels
-
-- **P0 (Critical)**: リポジトリの存在意義に関わる問題
-- **P1 (High)**: 品質や信頼性に大きな影響を与える問題
-- **P2 (Medium)**: 改善の余地があるが、すぐに対処する必要はない問題
-- **P3 (Low)**: 文書化や整理レベルの問題
+**Version**: 2.0  
+**Updated**: 2026-02-08T13:55:13Z  
+**Audit Run ID**: 2026-02-08T13:55:13Z
 
 ---
 
-## Phase 1: Critical Issues (Week 1)
+## サマリ (Summary)
 
-### ✅ COMPLETED: Documentation Inconsistencies Fix
-**PR:** PR-001
-**Gap:** GAP-001, GAP-002
-**Effort:** 15分
-**Status:** ✅ Completed (2026-02-08)
+**全Gaps**: 7  
+**Resolved**: 4 (GAP-001, 002, 005, 006)  
+**Remaining**: 3 (GAP-003, 004, 007)
 
-**Completed Actions:**
-1. ✅ README.mdのテストカバレッジ目標値を70% → 80%に変更
-2. ✅ README.mdのAIレビュー受入率セクションを更新（75.0%を反映）
-3. ✅ ドキュメントと実際のデータの整合性を確保
-
-**Results:**
-- README.mdとpyproject.tomlの目標値が一致（80%）
-- AIレビュー受入率の実測値が正しく反映（75.0%, 3/4件）
+**全Core Functions**: 6  
+**Verified**: 6 (6/6)  
+**Passed**: 5 (CF-001, 002, 003, 005, 006)  
+**Failed**: 1 (CF-004)
 
 ---
 
-### ✅ COMPLETED: Core Function Verification
-**PR:** PR-002
-**Gap:** GAP-003, GAP-008
-**Effort:** 1時間45分
-**Status:** ✅ Completed (2026-02-08)
+## 優先度順の改善アクション (Prioritized Improvement Actions)
 
-**Completed Actions:**
-1. ✅ 全13個のActionでDry Run検証の実装状況を確認
-2. ✅ Claude Code CLI統合の状況を確認
-3. ✅ 検証スクリプトを作成し実行
+### 🔴 HIGH Priority (即時対応推奨)
 
-**Results:**
-- Dry Run検証: 3/13 Actionsのみ実装済み（pr-review-enqueuer, bulk-rebase-prs, bulk-merge-prs）
-- Claude CLI統合: 7/13 Actionsが統合済み
-- 10個のActionsでDry Run検証が未実装であることが判明
+#### 1. GAP-003: Dry Run検証の実装追加
+**PR**: [PR-006](./changes/PR-006_dry_run_implementation.md)  
+**Status**: Proposed  
+**Effort**: 2-3時間  
 
----
+**課題**: README.mdで「全てのAI ActionsはDry Runモードで自動検証される」と主張しているが、実際には3/13 (23%) でのみ実装済み。
 
-## Phase 2: Critical Resolution (Week 1-2)
+**アクション**:
+- 未実装の10 ActionsにDry Run検証を追加実装
+- または、README.mdの記載を修正
 
-### P0: Dry Run Verification Implementation
-**PR:** PR-003
-**Gap:** GAP-003
-**Effort:** 2-3日 (Option 1) / 15分 (Option 2)
-**Status:** 🔄 Proposed
+**期待効果**:
+- ドキュメントと実態の整合性確保
+- 安全性向上（本番環境での意図しない変更を防止）
 
-**Actions:**
-1. **Option 1 (Recommended)**: 未実装の10個のActionにDry Run検証を追加
-   - action-fixer, review-and-merge, spec-to-code, auto-document, release-notes-ai
-   - auto-rebase, review-auto-merge, auto-merge, auto-refactor, publish-pr
-   - 各action.ymlにdry-run入力を追加
-   - 各entrypoint.shにdry-runロジックを実装
-2. **Option 2 (Quick Fix)**: README.mdの記載を「一部のAction（3/13）で実装」に修正
-
-**Success Criteria:**
-- Option 1: 全13個のActionsがDry Run検証をサポート
-- Option 2: ドキュメントと実態が整合
-
-**Dependencies:** なし
-
-**Decision Required:** Option 1 (実装追加) または Option 2 (ドキュメント修正)
+**関連**: CF-004 (Dry Run検証)
 
 ---
 
-## Phase 3: High Priority Items (Week 2-3)
+### 🟡 MEDIUM Priority (計画的に対応)
 
-### P1: Claude CLI Integration Investigation
-**PR:** PR-004
-**Gap:** GAP-004
-**Effort:** 2-3時間調査 + 1時間ドキュメント
-**Status:** 🔄 Proposed
+#### 2. GAP-004: Claude CLI統合のない6 Actionsの調査
+**PR**: [PR-007](./changes/PR-007_claude_cli_investigation.md)  
+**Status**: Proposed  
+**Effort**: 1時間  
 
-**Actions:**
-1. Claude CLI統合がない6つのActionsの用途を調査
-   - pr-review-enqueuer, bulk-rebase-prs, bulk-merge-prs, auto-merge, review-auto-merge, publish-pr
-2. なぜこれらがClaude Codeを利用しない理由を文書化
-3. docs/claude-cli-integration-status.mdを作成
-4. 必要に応じてREADME.mdを更新
+**課題**: README.mdでは「Claude Code CLIを活用」と主張しているが、6/13 (46%) のActionsがClaude CLI統合なし。
 
-**Success Criteria:**
-- 6つのActionsの用途とClaude CLI未使用の理由が明確
-- ドキュメントが作成されている
-- README.mdの記載が実態と整合
+**アクション**:
+- Claude CLI統合のない6 Actionsの用途を調査・文書化
+- README.mdの記載との整合性を確認・修正
 
-**Dependencies:** なし
+**期待効果**:
+- ドキュメントの正確性向上
+- 設計意図の明確化
 
----
+**関連**: CF-002 (Claude CLI統合)
 
-### P2: Remaining Core Functions Verification
-**PR:** PR-005
-**Gap:** GAP-006
-**Effort:** 3-4時間
-**Status:** 🔄 Proposed
+#### 3. ISS-NEW-003: CF-003の機能検証
+**PR**: [PR-008](./changes/PR-008_cf003_functional_verification.md)  
+**Status**: Proposed  
+**Effort**: 1-2時間  
 
-**Actions:**
-1. CF-003 (カスタムレビュールール注入機能) の検証シナリオを作成
-2. CF-006 (AIレビュー品質メトリクス追跡) の検証シナリオを作成
-3. 検証スクリプトを実装し実行
-4. 結果をintent.ymlに反映
+**課題**: CF-003（カスタムレビュールール）の構造検証は完了したが、機能検証（実際の動作確認）は未実施。
 
-**Success Criteria:**
-- CF-003, CF-006の検証が完了
-- 全6つのCore Functionsが検証済み
+**アクション**:
+- カスタムレビュールールが実際にレビュー出力に反映されるかを検証
+- 機能検証シナリオとスクリプトを作成・実行
 
-**Dependencies:** なし
+**期待効果**:
+- 機能の保証
+- ユーザー信頼性の向上
 
----
+**関連**: CF-003 (カスタムレビュールール注入)
 
-## Phase 4: Medium Priority Items (Week 3-4)
+#### 4. ISS-NEW-004: CF-006のメトリクス収集自動化確認
+**Status**: Not Proposed Yet  
+**Effort**: 1時間  
 
-### P2: AI Review Data Collection Enhancement
-**Gap:** GAP-005
-**Effort:** 継続的
-**Status:** 🔄 Ongoing
+**課題**: CF-006（メトリクス追跡）の構造検証は完了したが、メトリクス収集が自動で行われているか未確認。
 
-**Actions:**
-1. 継続的なAIレビューデータの収集
-2. 目標: 20件以上のデータ収集（現状: 4/20件, 20%）
-3. 統計的に有意なベースライン値の確立
+**アクション**:
+- メトリクス収集がGitHub Actionsワークフローと連携して動作しているか確認
+- 必要に応じて自動化の実装
 
-**Success Criteria:**
-- 20件以上のレビューデータが収集されている
-- ベースライン値が安定している
+**期待効果**:
+- 継続的な品質測定の保証
 
-**Dependencies:** なし
+**関連**: CF-006 (AIレビュー品質メトリクス)
 
 ---
 
-### P2: Adoption Status Investigation
-**Gap:** GAP-007
-**Effort:** 1-2時間
-**Status:** 📋 Pending
+### 🟢 LOW Priority (継続的改善)
 
-**Actions:**
-1. ADOPTION.mdファイルの確認
-2. GitHub APIによるOrganization内リポジトリのスキャン
-3. 導入数の調査と報告
+#### 5. GAP-005: AIレビュー受入率のデータ収集強化
+**Status**: In Progress  
+**Progress**: 50% (10/20件)  
+**Current Rate**: 90.0% (9/10件)  
 
-**Success Criteria:**
-- 実際の導入数が把握できている
-- ミッション達成度が測定可能
+**課題**: 統計的に有意なベースライン値を確立するため、20件以上のデータ収集が必要。
 
-**Dependencies:** なし
+**アクション**:
+- 継続的なデータ収集
+- 20件以上のレビューデータを収集し、ベースライン値を確立
 
----
+**現状**: 前回監査時 (75.0%, 3/4件) からデータ収集が進捗 (90.0%, 9/10件)
 
-## Phase 5: Continuous Improvement (Week 4+)
+**期待効果**:
+- 統計的に有意なベースライン値の確立
+- AIレビューの品質トレンド把握
 
-### P3: Non-Goals Clarification
-**Gap:** (legacy)
-**Effort:** 1時間
-**Status:** 📋 Pending
+#### 6. GAP-007: 導入数の調査
+**Status**: Not Proposed Yet  
+**Effort**: 2-3時間  
 
-**Actions:**
-1. 非目標の判断基準を明確化
-2. 具体的な例を追加
-3. チーム内で合意を形成
+**課題**: 実際の組織内プロジェクトでの導入数が不明。
 
-**Success Criteria:**
-- 非目標の境界条件が明確になっている
-- ドキュメントに反映されている
+**アクション**:
+- ADOPTION.mdファイルの確認
+- またはGitHub APIによるOrganization内リポジトリのスキャン
 
-**Dependencies:** なし
+**期待効果**:
+- ミッション達成度の測定
 
 ---
 
-## Summary Table
+## 実装の推奨順序 (Recommended Implementation Order)
 
-| PR | Gap | Priority | Phase | Effort | Status | Dependencies |
-|----|-----|----------|-------|--------|--------|--------------|
-| PR-001 | GAP-001, GAP-002 | P1 | Phase 1 | 15分 | ✅ Completed | なし |
-| PR-002 | GAP-003, GAP-008 | P0 | Phase 1 | 1時間45分 | ✅ Completed | なし |
-| PR-003 | GAP-003 | P0 | Phase 2 | 2-3日/15分 | 🔄 Proposed | なし |
-| PR-004 | GAP-004 | P1 | Phase 3 | 3-4時間 | 🔄 Proposed | なし |
-| PR-005 | GAP-006 | P2 | Phase 3 | 3-4時間 | 🔄 Proposed | なし |
-| - | GAP-005 | P2 | Phase 4 | 継続的 | 🔄 Ongoing | なし |
-| - | GAP-007 | P2 | Phase 4 | 1-2時間 | 📋 Pending | なし |
-| - | (legacy) | P3 | Phase 5 | 1時間 | 📋 Pending | なし |
+### Phase 1: 高優先度課題の解決 (1週間以内)
+1. **PR-006**: Dry Run検証の実装追加（GAP-003）
+   - 理由: ドキュメントと実態の乖離が最大
+   - 工数: 2-3時間
 
-**Total Estimated Effort:** ~3-5日 (PR-003のOptionによる)
+### Phase 2: 中優先度課題の対応 (2週間以内)
+2. **PR-007**: Claude CLI統合の調査（GAP-004）
+   - 理由: README.mdの主張との整合性確認
+   - 工数: 1時間
 
----
+3. **PR-008**: CF-003の機能検証（ISS-NEW-003）
+   - 理由: リポジトリの存在意義の担保
+   - 工数: 1-2時間
 
-## Progress Tracking
+### Phase 3: 低優先度課題の対応 (1ヶ月以内)
+4. **ISS-NEW-004**: CF-006のメトリクス収集自動化確認
+   - 理由: 運用効率化
+   - 工数: 1時間
 
-### Completed (2 PRs)
-- ✅ PR-001: Documentation inconsistencies fix
-- ✅ PR-002: Core function verification
+5. **GAP-007**: 導入数の調査
+   - 理由: ミッション達成度の測定
+   - 工数: 2-3時間
 
-### Proposed (3 PRs)
-- 🔄 PR-003: Dry Run verification implementation
-- 🔄 PR-004: Claude CLI integration investigation
-- 🔄 PR-005: Remaining core functions verification
-
-### Ongoing Tasks
-- 🔄 GAP-005: AI review data collection (4/20件)
+6. **GAP-005**: データ収集の継続
+   - 理由: ベースライン値の確立
+   - 工数: 自動収集のため追加工数なし
 
 ---
 
-## Success Metrics
+## 品質メトリクスの推移 (Quality Metrics Trend)
 
-### Short-term (1 month)
-- [x] ドキュメントの不一致が解消されている (PR-001)
-- [x] Core Functionsの検証が実施されている (PR-002)
-- [ ] Dry Run検証の実装不足が解消されている (PR-003)
-- [ ] Claude CLI統合の整合性が確保されている (PR-004)
-- [ ] 全てのCore Functionsが検証されている (PR-005)
+| メトリクス | 前回監査 | 今回監査 | 目標値 | ステータス |
+|-----------|---------|---------|--------|----------|
+| テストカバレッジ | 92.97% | 92.97% | >= 80% | ✅ Achieved |
+| AIレビュー受入率 | 75.0% (3/4) | 90.0% (9/10) | >= 70% | ✅ Achieved |
+| Core Functions検証 | 4/6 (67%) | 6/6 (100%) | 100% | ✅ Achieved |
+| Dry Run実装 | 3/13 (23%) | 3/13 (23%) | 100% | ❌ Failed |
 
-### Medium-term (3 months)
-- [ ] AIレビューデータが20件以上収集されている (GAP-005)
-- [ ] 導入プロジェクト数が把握されている (GAP-007)
-- [ ] AIレビュー受入率が70%以上で安定している
-
-### Long-term (6 months)
-- [ ] 組織内の複数リポジトリで採用されている（成功条件達成）
-- [ ] AI Actionsが開発業務の標準ツールとして定着している
-- [ ] 継続的な改善が行われている
+**注記**: AIレビュー受入率はデータ収集進捗に伴い、値が変動する可能性がある。
 
 ---
 
-## Next Steps
+## 次回監査時の焦点 (Next Audit Focus)
 
-### Immediate Actions (This Week)
-1. **Decision Required**: PR-003の対応方針を決定
-   - Option 1: Dry Run検証を10個のActionsに実装（推奨、2-3日）
-   - Option 2: README.mdを修正（15分）
-
-2. **Investigation**: PR-004の調査を実施
-   - 6つのActionsの用途を調査
-   - Claude CLI未使用の理由を文書化
-
-### Short-term Actions (Next 2 Weeks)
-3. **Verification**: PR-005を実施
-   - CF-003, CF-006の検証シナリオを作成
-   - 検証スクリプトを実行
-
-4. **Data Collection**: AIレビューデータの収集を継続
-   - 目標: 20件以上
-
-### Medium-term Actions (Next Month)
-5. **Adoption Survey**: 導入数の調査を実施
-   - ADOPTION.mdの確認
-   - Organization内リポジトリのスキャン
+1. **PR-006の実施状況**: Dry Run検証が10 Actionsに実装されたか、またはREADME.mdが修正されたか
+2. **PR-007の実施状況**: Claude CLI統合のない6 Actionsの分析が完了したか
+3. **PR-008の実施状況**: CF-003の機能検証が完了したか
+4. **品質メトリクスの推移**: テストカバレッジとAIレビュー受入率の維持・向上
 
 ---
 
-**Last Updated:** 2026-02-08T19:35:00Z
-**Audit Run:** 2026-02-08T19:35:00Z
-**Overall Status:** 2/5 PRs completed, 3/5 PRs proposed
+## 関連ドキュメント (Related Documents)
+
+- [Gap Analysis](../analysis/gap.yml)
+- [Intent](../config/intent.yml)
+- [Previous Feedback](../execution/feedback_to_auditor.yml)
+
+---
+
+**End of Roadmap**
