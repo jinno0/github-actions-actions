@@ -1,0 +1,11 @@
+version: "1.0"
+commands:
+  lint: "python -m ruff check ."
+  test: "python -m pytest tests/ -v --cov=actions --cov=scripts --cov-report=term-missing"
+  build: "python -m pytest tests/ --collect-only"
+budget:
+  max_cycles: 5
+  max_files: 25
+  max_loc_add: 800
+  max_loc_del: 800
+mode: "commit"

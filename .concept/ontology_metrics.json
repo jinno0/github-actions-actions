@@ -1,0 +1,14 @@
+{
+  "total_terms": 0,
+  "core": 0,
+  "domain": 0,
+  "aux": 0,
+  "draft_ratio": 0.0,
+  "unmapped_ratio": 0.0,
+  "queue_pending": 0,
+  "conflicts_open": 0,
+  "ambiguities_high": 0,
+  "decisions_lines": 33,
+  "claims_lines": 0,
+  "last_updated": "2026-02-08T15:47:00Z"
+}

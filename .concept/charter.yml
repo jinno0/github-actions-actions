@@ -1,0 +1,95 @@
+version: "1.0"
+updated_at: "2026-02-08T13:20:00Z"
+
+product_goal:
+  north_star: "組織全体の開発効率と品質を向上させるAIネイティブなGitHub Actionsのハブを提供する"
+  success_metrics:
+    - id: "MET-001"
+      name: "AI Actionsの品質と安定性"
+      target: "全ActionsがDry Run検証をパスし、テストカバレッジ>=70%を維持"
+    - id: "MET-002"
+      name: "導入と利用"
+      target: "組織内の複数リポジトリでActionsが採用され、AIレビュー受入率>=70%"
+    - id: "MET-003"
+      name: "開発者体験"
+      target: "全ActionsにExampleとInstructionが完備し、導入ハードルを最小化"
+  non_goals:
+    - "完全無人運用（AIのハルシネーションリスクを考慮し、Human-in-the-Loopを維持）"
+    - "特定プロダクトに強く結合したロジック（再利用性を重視）"
+    - "既存のActionsで十分な単なるシェルスクリプトラッパー"
+
+milestones:
+  - id: "MS-001"
+    name: "MVP: 13種のAI Actionsを提供・検証完了"
+    intent: "AIネイティブ開発を加速するための基本Actionsセットを安定提供する"
+    deliverables:
+      - "13種のAI Actions（review-and-merge, spec-to-code, action-fixer, auto-refactor, auto-document, release-notes-ai, auto-merge, auto-rebase, review-auto-merge, publish-pr, bulk-merge-prs, bulk-rebase-prs, pr-review-enqueuer）"
+      - "各Actionの導入ガイド（instructions/）"
+      - "各Actionの利用例（examples/）"
+      - "AIレビュー品質メトリクス（受入率>=70%）"
+      - "テストカバレッジ>=70%"
+    acceptance:
+      - type: "test"
+        target: "pytestで463テストが全てPASS"
+      - type: "invariant"
+        target: "INV-001: 全Actionsがaction.ymlを持ち、必須フィールド（name, description, inputs）を持つ"
+      - type: "invariant"
+        target: "INV-002: 全Actionsに対応するexampleとinstructionが存在する"
+    priority: "P0"
+    status: "done"
+    dependencies: []
+    risks:
+      - "AIレビュー受入率のデータ収集が進んでおらず、ベースライン策定が必要"
+
+  - id: "MS-002"
+    name: "Stabilization & Adoption"
+    intent: "パイロット導入を通じてActionsの安定性を検証し、改善する"
+    deliverables:
+      - "パイロットプロジェクトでのActions導入"
+      - "AIレビュー受入率ベースラインの策定（目標20件以上のレビュー）"
+      - "フィードバックに基づくActionの改善"
+      - "テレメトリー機能の検証とプライバシーポリシーの確立"
+    acceptance:
+      - type: "test"
+        target: "全Actionsが実環境で安定動作（エラー率<5%）"
+      - type: "metric"
+        target: "AIレビュー受入率>=70%、レビュー件数>=20"
+    priority: "P0"
+    status: "active"
+    dependencies: ["MS-001"]
+    risks:
+      - "パイロットプロジェクトの確保"
+      - "AIレビューの品質が期待通りに向上しない可能性"
+
+  - id: "MS-003"
+    name: "Organization-wide Rollout"
+    intent: "組織全体への展開と継続的改善サイクルの確立"
+    deliverables:
+      - "組織内の複数リポジトリでのActions導入"
+      - "導入ガイドの充実とベストプラクティスの蓄積"
+      - "カスタムレビュールールのテンプレート拡充"
+      - "アクションのバージョニングと互換性管理"
+    acceptance:
+      - type: "metric"
+        target: "採用リポジトリ数>=5、AIレビュー受入率>=75%"
+      - type: "invariant"
+        target: "INV-003: 新規Action追加時はExample/Instruction/テストが必須"
+    priority: "P1"
+    status: "planned"
+    dependencies: ["MS-002"]
+    risks:
+      - "スケールによる品質の維持"
+      - "Claude Code CLIのバージョンアップ対応"
+
+work_policy:
+  default_mode: "commit"
+  iteration_budget:
+    max_cycles: 5
+    max_files_changed: 25
+    max_loc_add: 800
+    max_loc_del: 800
+  quality_gates:
+    must_pass: ["lint", "test"]
+  concept_policy:
+    concept_sync_version: "0.3"
+    bloat_is_failure: true
