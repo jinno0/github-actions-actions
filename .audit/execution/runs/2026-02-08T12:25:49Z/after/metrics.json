@@ -1,0 +1,47 @@
+{
+  "timestamp": "2026-02-08T12:25:49Z",
+  "run_id": "2026-02-08T12:25:49Z",
+  "test_coverage": {
+    "percent_covered": 92.97,
+    "target": 80,
+    "status": "achieved"
+  },
+  "acceptance_rate": {
+    "current": 75.0,
+    "target": 70,
+    "status": "achieved",
+    "total_reviews": 4
+  },
+  "core_functions_verification": {
+    "total": 6,
+    "passed": 3,
+    "failed": 1,
+    "not_verified": 2,
+    "results": {
+      "CF-001": {
+        "status": "passed",
+        "description": "13/13 Actions provided"
+      },
+      "CF-002": {
+        "status": "passed",
+        "description": "7/13 Actions with Claude CLI"
+      },
+      "CF-003": {
+        "status": "not_verified",
+        "description": "Custom review rules injection"
+      },
+      "CF-004": {
+        "status": "failed",
+        "description": "Dry Run - 3/13 only"
+      },
+      "CF-005": {
+        "status": "passed",
+        "description": "Telemetry implemented"
+      },
+      "CF-006": {
+        "status": "not_verified",
+        "description": "AI review metrics tracking"
+      }
+    }
+  }
+}
