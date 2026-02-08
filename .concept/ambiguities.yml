@@ -1,6 +1,0 @@
-updated_at: '2026-02-07T10:17:11Z'
-ambiguities: []
-
-# Resolved ambiguities archive
-# AMB-CLI-001 (superseded): Verified 7/7 actions using Claude have CLI checks (100% compliant)
-# AMB-SUCCESS-001 (applied): QA-001 is a specific quality invariant implementing broader SuccessMetric

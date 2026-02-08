@@ -68,9 +68,9 @@ git-rebase-todo
 debug.log
 *.debug
 
-# track .concept Source-of-Truth, ignore archives only
-.concept/archived/
-.concept/archive/
+# Audit and concept tracking directories
+.audit/
+.concept/
 
 
 # Auto-generated framework outputs
