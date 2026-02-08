@@ -1,0 +1,229 @@
+name: AI Review with Custom Rules Example
+
+# This example demonstrates how to inject custom review rules
+# into the review-and-merge action to enforce project-specific standards.
+#
+# Custom rules allow you to:
+# - Enforce project-specific coding standards
+# - Add security requirements for your domain
+# - Specify architectural patterns and constraints
+# - Customize review focus areas
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  review-with-custom-rules:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      # Example 1: Custom rules directly in workflow
+      - name: AI Review with Custom Rules (Inline)
+        uses: ./actions/review-and-merge
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          claude-model: sonnet
+          lgtm-threshold: '7'
+          # Define custom rules inline
+          custom-rules: |
+            1. Always use TypeScript strict mode in new files
+            2. No console.log statements in production code
+            3. All async functions must have error handling with try/catch
+            4. API responses must be validated with schemas (zod/joi/etc)
+            5. No hardcoded credentials or secrets
+            6. Use environment variables for configuration
+            7. All new components must have PropTypes or TypeScript interfaces
+            8. Follow naming conventions: camelCase for variables, PascalCase for components
+            9. Add JSDoc comments to public functions
+            10. Ensure proper null/undefined checks
+
+  # Alternative approach: Load custom rules from file
+  review-with-custom-rules-from-file:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      # Example 2: Load custom rules from repository file
+      - name: Load custom rules
+        id: rules
+        run: |
+          if [ -f ".github/review-rules.yml" ]; then
+            echo "rules=$(cat .github/review-rules.yml)" >> $GITHUB_OUTPUT
+          else
+            echo "rules=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: AI Review with Custom Rules (From File)
+        uses: ./actions/review-and-merge
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          custom-rules: ${{ steps.rules.outputs.rules }}
+
+  # Example 3: Environment-specific rules
+  review-with-environment-rules:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      # Example 3: Environment-specific custom rules
+      - name: AI Review (Backend Rules)
+        if: github.event.pull_request.base.ref == 'main'
+        uses: ./actions/review-and-merge
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          custom-rules: |
+            1. Database queries must use parameterized statements (no SQL injection)
+            2. All API endpoints must have authentication checks
+            3. Rate limiting must be implemented for public endpoints
+            4. Sensitive data must be encrypted at rest
+            5. Use proper HTTP status codes (200, 201, 400, 401, 403, 404, 500)
+            6. Log all security-relevant events
+            7. Validate input data on API boundaries
+            8. Implement proper error handling without exposing stack traces
+
+      - name: AI Review (Frontend Rules)
+        if: github.event.pull_request.base.ref == 'develop'
+        uses: ./actions/review-and-merge
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          custom-rules: |
+            1. All components must be responsive (mobile-first design)
+            2. Use semantic HTML elements
+            3. Ensure accessibility (ARIA labels, keyboard navigation)
+            4. Optimize images and assets (lazy loading, compression)
+            5. Implement proper error boundaries
+            6. No inline styles (use CSS modules or styled-components)
+            7. Test cross-browser compatibility
+            8. Performance: Lighthouse score > 90
+
+  # Example 4: Security-focused custom rules
+  security-review:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: Security-focused AI Review
+        uses: ./actions/review-and-merge
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          lgtm-threshold: '8'  # Higher threshold for security reviews
+          # Security-focused custom rules
+          custom-rules: |
+            1. No hardcoded secrets, API keys, or passwords
+            2. User input must be sanitized and validated
+            3. Use HTTPS for all external requests
+            4. Implement Content Security Policy (CSP)
+            5. Disable eval() and Function() constructor
+            6. Use parameterized queries to prevent SQL injection
+            7. Implement proper authentication and authorization
+            8. Set appropriate CORS headers
+            9. Keep dependencies up to date
+            10. Implement proper logging and monitoring
+
+  # Example 5: Language-specific rules
+  language-specific-review:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      # Detect primary language and apply appropriate rules
+      - name: Detect language
+        id: detect
+        run: |
+          # Count files by extension
+          PY_COUNT=$(find . -name "*.py" | wc -l)
+          TS_COUNT=$(find . -name "*.ts" -o -name "*.tsx" | wc -l)
+          GO_COUNT=$(find . -name "*.go" | wc -l)
+
+          # Determine primary language
+          if [ "$PY_COUNT" -gt "$TS_COUNT" ] && [ "$PY_COUNT" -gt "$GO_COUNT" ]; then
+            echo "lang=python" >> $GITHUB_OUTPUT
+          elif [ "$TS_COUNT" -gt "$PY_COUNT" ] && [ "$TS_COUNT" -gt "$GO_COUNT" ]; then
+            echo "lang=typescript" >> $GITHUB_OUTPUT
+          elif [ "$GO_COUNT" -gt 0 ]; then
+            echo "lang=go" >> $GITHUB_OUTPUT
+          else
+            echo "lang=general" >> $GITHUB_OUTPUT
+          fi
+
+      - name: AI Review (Python Rules)
+        if: steps.detect.outputs.lang == 'python'
+        uses: ./actions/review-and-merge
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          custom-rules: |
+            1. Follow PEP 8 style guide
+            2. Use type hints for all function parameters
+            3. Write docstrings for all public functions and classes
+            4. Use context managers for resource management
+            5. Handle exceptions properly (specific exceptions, not bare except)
+            6. Use virtual environments for dependencies
+            7. Follow the Zen of Python (import this)
+            8. Use f-strings for string formatting
+            9. Implement proper logging (not print statements)
+            10. Write unit tests with pytest
+
+      - name: AI Review (TypeScript Rules)
+        if: steps.detect.outputs.lang == 'typescript'
+        uses: ./actions/review-and-merge
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          custom-rules: |
+            1. Use strict mode in tsconfig.json
+            2. Avoid using 'any' type
+            3. Use interfaces for object shapes
+            4. Use async/await instead of Promises
+            5. Use const by default, let when reassignment is needed
+            6. Use arrow functions for callbacks
+            7. Use nullish coalescing (??) and optional chaining (?.)
+            8. Use Enums for fixed sets of values
+            9. Implement proper error boundaries
+            10. Use ESLint and Prettier
+
+      - name: AI Review (Go Rules)
+        if: steps.detect.outputs.lang == 'go'
+        uses: ./actions/review-and-merge
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          custom-rules: |
+            1. Follow standard Go project layout
+            2. Use gofmt for code formatting
+            3. Handle errors explicitly (don't ignore them)
+            4. Use goroutines for concurrency
+            5. Use channels for communication
+            6. Use defer for cleanup
+            7. Use interfaces for abstraction
+            8. Write table-driven tests
+            9. Use context for cancellation and timeouts
+            10. Follow Go naming conventions
