@@ -384,7 +384,7 @@ class IssueCreator:
             success_count = sum(1 for r in results if r["success"])
             auto_count = sum(
                 1
-                for config, result in zip(configs, results)
+                for config, result in zip(configs, results, strict=True)
                 if result["success"] and config.auto_execute
             )
 

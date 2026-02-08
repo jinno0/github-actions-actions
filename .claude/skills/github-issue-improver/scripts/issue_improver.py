@@ -61,9 +61,9 @@ if not COMMON_LIB_AVAILABLE:
             return True
 
 
-# Import local modules after path setup (ruff: noqa: E402)
-from github_client import GitHubClient
-from issue_analyzer import IssueAnalysis, IssueAnalyzer
+# Import local modules after path setup
+from github_client import GitHubClient  # noqa: E402
+from issue_analyzer import IssueAnalysis, IssueAnalyzer  # noqa: E402
 
 
 class IssueImprover(SkillBase):
@@ -77,10 +77,10 @@ class IssueImprover(SkillBase):
         if not token:
             try:
                 token = self.ensure_env_var("GITHUB_TOKEN", required=False)
-            except ValueError:
+            except ValueError as err:
                 if not allow_read_only:
                     msg = "GitHub token is required for write operations"
-                    raise ValueError(msg)
+                    raise ValueError(msg) from err
                 token = None
 
         # Initialize components

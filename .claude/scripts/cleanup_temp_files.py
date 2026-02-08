@@ -7,8 +7,8 @@ generated artifacts to prevent repository bloat.
 """
 
 import argparse
-from pathlib import Path
 import time
+from pathlib import Path
 
 
 def find_project_root():

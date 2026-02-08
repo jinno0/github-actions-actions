@@ -10,8 +10,8 @@
 """
 
 import json
-from pathlib import Path
 from datetime import datetime, timedelta
+from pathlib import Path
 
 
 def generate_test_metrics():
@@ -155,12 +155,12 @@ def main():
     print("Generating test review metrics...")
 
     try:
-        output_path = generate_test_metrics()
+        _ = generate_test_metrics()
         print("\n✅ Success!")
-        print(f"\nNext steps:")
-        print(f"  1. Run: python scripts/calculate_acceptance_rate.py --time-period 30d --output report")
-        print(f"  2. Verify the acceptance rate calculation")
-        print(f"  3. Check that the report generates correctly")
+        print("\nNext steps:")
+        print("  1. Run: python scripts/calculate_acceptance_rate.py --time-period 30d --output report")
+        print("  2. Verify the acceptance rate calculation")
+        print("  3. Check that the report generates correctly")
         return 0
     except Exception as e:
         print(f"\n❌ Error: {e}")

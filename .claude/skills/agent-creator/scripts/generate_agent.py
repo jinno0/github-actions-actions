@@ -18,11 +18,11 @@ from agent_workflows import AgentWorkflows
 def find_project_directory(target_name: str, max_levels: int = 8) -> str | None:
     """
     Search up the directory tree for a target directory.
-    
+
     Args:
         target_name: Name of the directory to find (e.g., ".claude")
         max_levels: Maximum number of parent directories to search
-    
+
     Returns:
         Path string to the target directory, or None if not found
     """

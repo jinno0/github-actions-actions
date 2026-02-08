@@ -3,11 +3,8 @@
 
 import json
 import sys
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime
 from pathlib import Path
-from unittest.mock import patch
-
-import pytest
 
 # Add scripts directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent / "scripts"))
@@ -471,13 +468,13 @@ class TestGenerateReport:
 
         # Find action usage section
         lines = report.split('\n')
-        action_lines = [l for l in lines if '| `action-' in l]
+        action_lines = [line for line in lines if '| `action-' in line]
 
         # Should be sorted: action-a (3), action-b (2), action-c (1)
         # Check that action-a comes before action-b and action-c
-        action_a_line = [l for l in action_lines if 'action-a' in l][0]
-        action_b_line = [l for l in action_lines if 'action-b' in l][0]
-        action_c_line = [l for l in action_lines if 'action-c' in l][0]
+        action_a_line = [line for line in action_lines if 'action-a' in line][0]
+        action_b_line = [line for line in action_lines if 'action-b' in line][0]
+        action_c_line = [line for line in action_lines if 'action-c' in line][0]
 
         # Verify order by position in report
         a_pos = report.index(action_a_line)
@@ -552,7 +549,7 @@ class TestMain:
                 "action_name": "action-a",
                 "repository_anonymous_id": "repo1",
                 "status": "success",
-                "timestamp": datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z')
+                "timestamp": datetime.now(UTC).isoformat().replace('+00:00', 'Z')
             }
         ]
 

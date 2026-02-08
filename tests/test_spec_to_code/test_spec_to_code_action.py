@@ -1,7 +1,8 @@
 """Tests for the spec-to-code GitHub Action."""
 
-import pytest
 from pathlib import Path
+
+import pytest
 
 
 class TestSpecToCodeAction:

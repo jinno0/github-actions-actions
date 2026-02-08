@@ -47,7 +47,7 @@ class TestActionFixer:
             "fix-prompt-template": ""
         }
 
-        for input_name, default_value in optional_inputs.items():
+        for input_name, _default_value in optional_inputs.items():
             assert f"{input_name}:" in content, f"Input {input_name} should be defined"
             # Check that default exists (format varies in YAML)
             assert "default:" in content, f"Input {input_name} should have a default value"

@@ -10,7 +10,6 @@ import sys
 from pathlib import Path
 from typing import Any
 
-
 # Constants
 MAX_PARENT_LEVELS = 8
 CLADE_TIMEOUT_SECONDS = 600

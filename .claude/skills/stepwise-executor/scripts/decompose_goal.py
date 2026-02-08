@@ -168,11 +168,11 @@ def decompose_with_claude(prompt: str) -> dict[str, Any]:
     """
     try:
         import anthropic
-    except ImportError:
+    except ImportError as err:
         raise RuntimeError(
             "anthropic パッケージがインストールされていません。"
             "pip install anthropic でインストールしてください。"
-        )
+        ) from err
 
     api_key = os.environ.get("ANTHROPIC_API_KEY")
     if not api_key:
@@ -214,7 +214,7 @@ def decompose_with_claude(prompt: str) -> dict[str, Any]:
         return result
 
     except Exception as e:
-        raise RuntimeError(f"Claude API の呼び出しに失敗しました: {e}")
+        raise RuntimeError(f"Claude API の呼び出しに失敗しました: {e}") from e
 
 
 def print_decomposition_summary(result: dict[str, Any]):

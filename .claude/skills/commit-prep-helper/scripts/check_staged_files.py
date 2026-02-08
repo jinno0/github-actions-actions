@@ -57,7 +57,7 @@ def get_file_diff_stats(file_path: str) -> dict:
                     # Check for binary file marker
                     if parts[0] == "-" and parts[1] == "-":
                         return {"added": 0, "removed": 0, "is_binary": True}
-                    
+
                     added = int(parts[0]) if parts[0].isdigit() else 0
                     removed = int(parts[1]) if parts[1].isdigit() else 0
                     return {"added": added, "removed": removed, "is_binary": False}

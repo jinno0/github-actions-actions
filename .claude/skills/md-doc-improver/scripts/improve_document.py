@@ -6,14 +6,15 @@ This script implements an iterative improvement system for technical markdown do
 It provides purpose-oriented enhancement with multi-perspective reviews and self-improvement loops.
 """
 
-import sys
 import argparse
 import json
-from pathlib import Path
-from typing import Dict, List, Any, Optional
-from dataclasses import dataclass, asdict
-from datetime import datetime
 import re
+import sys
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+
 
 # 共通ライブラリパスを追加（.claudeディレクトリを動的に探す）
 def find_claude_lib():
@@ -33,7 +34,7 @@ def main():
     if claude_lib_path:
         sys.path.insert(0, claude_lib_path)
         try:
-            from env_utils import setup_python_path, load_env_files
+            from env_utils import load_env_files, setup_python_path
             setup_python_path()
             load_env_files()
         except ImportError:
@@ -49,10 +50,10 @@ class DocumentAnalysis:
     purpose: str
     target_audience: str
     completeness_score: float
-    missing_sections: List[str]
-    structure_issues: List[str]
-    content_gaps: List[str]
-    improvement_areas: List[str]
+    missing_sections: list[str]
+    structure_issues: list[str]
+    content_gaps: list[str]
+    improvement_areas: list[str]
 
 
 @dataclass
@@ -60,19 +61,19 @@ class ReviewResult:
     """Review result from a specific perspective"""
     reviewer_type: str  # 'technical', 'ux', 'educational'
     score: float  # 0.0 to 1.0
-    feedback: List[str]
-    suggestions: List[str]
-    priority_issues: List[str]
+    feedback: list[str]
+    suggestions: list[str]
+    priority_issues: list[str]
 
 
 @dataclass
 class ImprovementPlan:
     """Plan for document improvement"""
     iteration: int
-    focus_areas: List[str]
-    specific_actions: List[Dict[str, Any]]
-    expected_outcomes: List[str]
-    review_weights: Dict[str, float]
+    focus_areas: list[str]
+    specific_actions: list[dict[str, Any]]
+    expected_outcomes: list[str]
+    review_weights: dict[str, float]
 
 
 class TechnicalDocumentAnalyzer:
@@ -107,7 +108,7 @@ class TechnicalDocumentAnalyzer:
 
     def analyze_document(self, file_path: Path) -> DocumentAnalysis:
         """Analyze document structure and completeness"""
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
 
         # Extract purpose and target audience
@@ -174,14 +175,14 @@ class TechnicalDocumentAnalyzer:
         total_expected = sum(len(sections) for sections in self.completeness_criteria.values())
         found_sections = 0
 
-        for category, sections in self.completeness_criteria.items():
+        for _category, sections in self.completeness_criteria.items():
             for section in sections:
                 if section in content:
                     found_sections += 1
 
         return found_sections / max(total_expected, 1)
 
-    def _identify_missing_sections(self, content: str) -> List[str]:
+    def _identify_missing_sections(self, content: str) -> list[str]:
         """Identify missing important sections"""
         missing = []
 
@@ -192,7 +193,7 @@ class TechnicalDocumentAnalyzer:
 
         return missing
 
-    def _identify_structure_issues(self, content: str) -> List[str]:
+    def _identify_structure_issues(self, content: str) -> list[str]:
         """Identify structural issues in the document"""
         issues = []
 
@@ -203,7 +204,7 @@ class TechnicalDocumentAnalyzer:
         else:
             # Check for skipped heading levels
             prev_level = 0
-            for level, title in headings:
+            for level, _title in headings:
                 if level > prev_level + 1:
                     issues.append(f"Skipped heading level from {prev_level} to {level}")
                 prev_level = len(level)
@@ -218,7 +219,7 @@ class TechnicalDocumentAnalyzer:
 
         return issues
 
-    def _identify_content_gaps(self, content: str, purpose: str) -> List[str]:
+    def _identify_content_gaps(self, content: str, purpose: str) -> list[str]:
         """Identify content gaps based on document purpose"""
         gaps = []
 
@@ -237,9 +238,9 @@ class TechnicalDocumentAnalyzer:
 
         return gaps
 
-    def _prioritize_improvement_areas(self, missing: List[str],
-                                   structure: List[str],
-                                   content_gaps: List[str]) -> List[str]:
+    def _prioritize_improvement_areas(self, missing: list[str],
+                                   structure: list[str],
+                                   content_gaps: list[str]) -> list[str]:
         """Prioritize improvement areas based on impact"""
         prioritized = []
 
@@ -291,11 +292,11 @@ class MultiPerspectiveReviewer:
             }
         }
 
-    def review_document(self, file_path: Path, analysis: DocumentAnalysis) -> List[ReviewResult]:
+    def review_document(self, file_path: Path, analysis: DocumentAnalysis) -> list[ReviewResult]:
         """Conduct multi-perspective review"""
         results = []
 
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
 
         # Technical review
@@ -451,7 +452,7 @@ class ImprovementPlanGenerator:
         }
 
     def generate_plan(self, analysis: DocumentAnalysis,
-                     reviews: List[ReviewResult],
+                     reviews: list[ReviewResult],
                      iteration: int) -> ImprovementPlan:
         """Generate improvement plan for current iteration"""
 
@@ -544,8 +545,8 @@ class DocumentImprover:
         self.improvement_threshold = 0.85
 
     def improve_document(self, file_path: Path,
-                        max_iterations: Optional[int] = None,
-                        output_dir: Optional[Path] = None) -> Dict[str, Any]:
+                        max_iterations: int | None = None,
+                        output_dir: Path | None = None) -> dict[str, Any]:
         """Main improvement loop"""
         if max_iterations is None:
             max_iterations = self.max_iterations
@@ -624,7 +625,7 @@ class DocumentImprover:
         return results
 
     def _apply_improvements(self, file_path: Path, plan: ImprovementPlan,
-                          iteration: int, output_dir: Path) -> List[str]:
+                          iteration: int, output_dir: Path) -> list[str]:
         """Apply improvements to document (simulated)"""
         improvements = []
 
@@ -644,7 +645,7 @@ class DocumentImprover:
 
         return improvements
 
-    def _generate_final_assessment(self, iterations: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def _generate_final_assessment(self, iterations: list[dict[str, Any]]) -> dict[str, Any]:
         """Generate final assessment of improvement process"""
         if not iterations:
             return {}
@@ -674,7 +675,7 @@ class DocumentImprover:
             'total_improvement': (sum(final_scores.values()) - sum(initial_scores.values())) / len(initial_scores)
         }
 
-    def _generate_improvement_summary(self, iterations: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def _generate_improvement_summary(self, iterations: list[dict[str, Any]]) -> dict[str, Any]:
         """Generate summary of all improvements made"""
         all_improvements = []
         all_focus_areas = []

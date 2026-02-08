@@ -12,10 +12,9 @@ Tests the aggregate_metrics module to ensure:
 import json
 import os
 import sys
-import tempfile
 from datetime import datetime, timedelta
 from pathlib import Path
-from unittest.mock import patch, MagicMock, mock_open
+from unittest.mock import patch
 
 import pytest
 
@@ -198,7 +197,7 @@ class TestLoadMetricsData:
 
     def test_handles_file_read_error(self, capsys):
         """Test that file read errors are handled gracefully."""
-        with patch("builtins.open", side_effect=IOError("Permission denied")):
+        with patch("builtins.open", side_effect=OSError("Permission denied")):
             result = aggregate_metrics.load_metrics_data(["/fake/path.json"])
 
         assert result == []

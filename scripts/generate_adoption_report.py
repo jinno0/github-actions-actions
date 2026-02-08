@@ -36,7 +36,7 @@ def load_telemetry_data(data_path: Path) -> list:
         return []
 
     events = []
-    with open(data_path, "r") as f:
+    with open(data_path) as f:
         for line in f:
             line = line.strip()
             if not line:

@@ -7,7 +7,7 @@ import re
 from dataclasses import dataclass
 from enum import Enum
 
-from anthropic import Anthropic, AuthenticationError, APIConnectionError
+from anthropic import Anthropic, APIConnectionError, AuthenticationError
 
 
 class IssueType(Enum):
@@ -49,7 +49,7 @@ class IssueAnalysis:
 
 class IssueAnalyzer:
     """Analyzes and improves GitHub issues using Claude API"""
-    
+
     # Class constants for keyword-based analysis (shared across instances)
     TYPE_KEYWORDS = {
         IssueType.BUG: [
@@ -88,7 +88,7 @@ class IssueAnalyzer:
         IssueType.CHORE: ["chore", "maintenance", "dependency", "update"],
         IssueType.QUESTION: ["question", "how to", "help", "confused", "clarify"],
     }
-    
+
     SEVERITY_KEYWORDS = {
         IssueSeverity.CRITICAL: [
             "critical",
@@ -101,13 +101,13 @@ class IssueAnalyzer:
         IssueSeverity.MEDIUM: ["medium", "normal", "moderate"],
         IssueSeverity.LOW: ["low", "minor", "nice to have", "enhancement"],
     }
-    
+
     # API configuration constants
     CLAUDE_MODEL = "claude-3-5-sonnet-20241022"
     MAX_INPUT_LENGTH = 50000
     MAX_OUTPUT_LENGTH = 10000
     MAX_TITLE_LENGTH = 200
-    
+
     def __init__(self, fallback_to_keywords: bool = True):
         """
         Initialize the analyzer with Claude API client
@@ -134,7 +134,7 @@ class IssueAnalyzer:
             except (AuthenticationError, APIConnectionError, Exception) as e:
                 error_type = type(e).__name__
                 if not fallback_to_keywords:
-                    raise ValueError(f"Claude API initialization failed ({error_type}): {e}")
+                    raise ValueError(f"Claude API initialization failed ({error_type}): {e}") from e
                 print(f"Warning: Claude API initialization failed ({error_type}), using keyword-based analysis: {e}")
         else:
             if not fallback_to_keywords:
@@ -151,7 +151,7 @@ class IssueAnalyzer:
                 print(f"Warning: Claude API analysis failed: {e}")
                 if not self.fallback_to_keywords:
                     msg = "Claude API analysis failed and fallback is disabled"
-                    raise ValueError(msg)
+                    raise ValueError(msg) from e
 
         # Fallback to keyword-based analysis
         return self._analyze_with_keywords(title, body)
@@ -278,7 +278,7 @@ Respond with valid JSON only:
         except json.JSONDecodeError as e:
             print(f"Warning: Failed to parse Claude response as JSON: {e}")
             msg = f"Invalid JSON response from Claude API: {response_text}"
-            raise ValueError(msg)
+            raise ValueError(msg) from e
         except Exception as e:
             print(f"Error calling Claude API: {e}")
             raise

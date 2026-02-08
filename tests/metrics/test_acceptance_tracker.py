@@ -155,7 +155,7 @@ class TestAcceptanceTracker:
             # Verify file exists and contains data
             assert os.path.exists(filepath)
 
-            with open(filepath, "r") as f:
+            with open(filepath) as f:
                 data = json.load(f)
 
             assert isinstance(data, list)
@@ -180,7 +180,7 @@ class TestAcceptanceTracker:
             tracker2.save_to_file(filepath)
 
             # Verify both entries are saved
-            with open(filepath, "r") as f:
+            with open(filepath) as f:
                 data = json.load(f)
 
             assert len(data) == 2

@@ -19,11 +19,11 @@ Environment Variables:
     GITHUB_REPOSITORY: Automatically set in GitHub Actions (hashed for privacy)
 """
 
+import hashlib
+import json
 import os
 import sys
-import json
-import hashlib
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 
@@ -83,7 +83,7 @@ def collect_metrics(
 
     metrics = {
         "action_name": action_name,
-        "timestamp": datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z'),
+        "timestamp": datetime.now(UTC).isoformat().replace('+00:00', 'Z'),
         "status": status,
         "duration_ms": duration_ms,
         "repository_anonymous_id": repo_id,

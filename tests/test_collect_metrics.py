@@ -8,12 +8,12 @@ Tests the collect_metrics.py script to ensure:
 - No sensitive data leaks
 """
 
+import json
 import os
 import sys
-import json
 import tempfile
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -211,7 +211,7 @@ class TestSendMetrics:
         """Test that send_metrics fails gracefully on errors."""
         metrics = {"action_name": "test", "status": "success"}
 
-        with patch("builtins.open", side_effect=IOError("Permission denied")):
+        with patch("builtins.open", side_effect=OSError("Permission denied")):
             # Should not raise exception, just return False
             result = collect_metrics.send_metrics(metrics)
             assert result is False

@@ -3,9 +3,10 @@ Integration tests for release-notes-ai action
 Tests the action structure and basic functionality
 """
 
+from pathlib import Path
+
 import pytest
 import yaml
-from pathlib import Path
 
 
 def _load_action_config():

@@ -211,7 +211,7 @@ def main():
         print(f"Error: Input file '{args.input}' not found")
         return 1
 
-    with open(input_path, "r") as f:
+    with open(input_path) as f:
         metrics_data = json.load(f)
 
     # Add source file reference

@@ -13,12 +13,11 @@ import argparse
 import json
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Optional
 
 
 def find_metrics_files(
-    root_dir: str = ".", since: Optional[datetime] = None
-) -> List[str]:
+    root_dir: str = ".", since: datetime | None = None
+) -> list[str]:
     """
     Find all metrics JSON files in the repository.
 
@@ -54,7 +53,7 @@ def find_metrics_files(
     return metrics_files
 
 
-def load_metrics_data(file_paths: List[str]) -> List[Dict]:
+def load_metrics_data(file_paths: list[str]) -> list[dict]:
     """
     Load metrics data from multiple JSON files.
 
@@ -68,7 +67,7 @@ def load_metrics_data(file_paths: List[str]) -> List[Dict]:
 
     for file_path in file_paths:
         try:
-            with open(file_path, "r") as f:
+            with open(file_path) as f:
                 data = json.load(f)
 
                 # Handle both list and single object formats
@@ -76,15 +75,15 @@ def load_metrics_data(file_paths: List[str]) -> List[Dict]:
                     all_metrics.extend(data)
                 elif isinstance(data, dict):
                     all_metrics.append(data)
-        except (json.JSONDecodeError, IOError) as e:
+        except (OSError, json.JSONDecodeError) as e:
             print(f"Warning: Could not load {file_path}: {e}")
 
     return all_metrics
 
 
 def aggregate_metrics(
-    metrics_data: List[Dict], action_name: Optional[str] = None
-) -> Dict:
+    metrics_data: list[dict], action_name: str | None = None
+) -> dict:
     """
     Aggregate metrics by action.
 
@@ -151,7 +150,7 @@ def aggregate_metrics(
     return aggregated
 
 
-def calculate_overall_metrics(aggregated: Dict) -> Dict:
+def calculate_overall_metrics(aggregated: dict) -> dict:
     """
     Calculate overall metrics across all actions.
 

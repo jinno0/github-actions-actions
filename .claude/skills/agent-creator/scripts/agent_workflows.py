@@ -75,7 +75,7 @@ class AgentWorkflows:
         # Fall back to general-purpose if specific workflow not found
         try:
             return cls._load_workflow_template("general-purpose")
-        except FileNotFoundError:
+        except FileNotFoundError as err:
             raise FileNotFoundError(
-                f"No workflow templates found. Please ensure templates/workflows/ directory exists."
-            )
+                "No workflow templates found. Please ensure templates/workflows/ directory exists."
+            ) from err

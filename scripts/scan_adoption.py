@@ -6,16 +6,17 @@ This script searches GitHub for repositories that reference our actions
 by looking for workflow files that use './actions/' paths.
 """
 
-import os
-import sys
-import subprocess
-import re
-from pathlib import Path
-from datetime import datetime
-from typing import List, Dict, Any
 import json
+import os
+import re
+import subprocess
+import sys
+from datetime import datetime
+from pathlib import Path
+from typing import Any
 
-def try_scan_github_org() -> List[Dict[str, Any]]:
+
+def try_scan_github_org() -> list[dict[str, Any]]:
     """
     Attempt to scan organization repositories using GitHub CLI.
 
@@ -75,7 +76,7 @@ def try_scan_github_org() -> List[Dict[str, Any]]:
         print(f"❌ Error scanning organization: {e}")
         return []
 
-def generate_adoption_report() -> Dict[str, Any]:
+def generate_adoption_report() -> dict[str, Any]:
     """
     Generate adoption statistics from ADOPTION.md.
 
@@ -96,7 +97,7 @@ def generate_adoption_report() -> Dict[str, Any]:
 
     try:
         content = adoption_file.read_text(encoding='utf-8')
-    except (UnicodeDecodeError, IOError) as e:
+    except (OSError, UnicodeDecodeError) as e:
         print(f"⚠️  Error reading ADOPTION.md: {e}")
         return {
             "total_adopters": 0,
@@ -154,12 +155,12 @@ def main() -> int:
     print()
 
     # Try to scan organization (requires gh CLI and GITHUB_ORG)
-    repos = try_scan_github_org()
+    _ = try_scan_github_org()  # Attempt org scan but don't use result for now
 
     # Generate report from ADOPTION.md
     report = generate_adoption_report()
 
-    print(f"📊 Adoption Statistics:")
+    print("📊 Adoption Statistics:")
     print(f"  Total Adopters: {report['total_adopters']}")
     print(f"  Last Updated: {report['last_updated']}")
     print()
@@ -187,7 +188,7 @@ def main() -> int:
         output.write_text(json.dumps(report, indent=2, ensure_ascii=False))
         print(f"\n📄 Report saved to: {output}")
         return 0
-    except IOError as e:
+    except OSError as e:
         print(f"❌ Error saving report: {e}")
         return 1
 

@@ -1,12 +1,14 @@
 """Tests for the acceptance rate calculator."""
 
 import json
-import pytest
-from pathlib import Path
-from datetime import datetime, timedelta, timezone
 
 # Import the module to test
 import sys
+from datetime import UTC, datetime, timedelta
+from pathlib import Path
+
+import pytest
+
 sys.path.insert(0, str(Path(__file__).parent.parent / "scripts"))
 import calculate_acceptance_rate
 
@@ -93,7 +95,7 @@ class TestFilterMetricsByTime:
 
     def test_filter_last_7_days(self):
         """Test filtering to last 7 days."""
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         metrics = [
             {
                 "outcome": "approved",
@@ -121,7 +123,7 @@ class TestFilterMetricsByTime:
             {"outcome": "rejected"},  # No timestamp
             {
                 "outcome": "approved",
-                "timestamp": datetime.now(timezone.utc).isoformat()
+                "timestamp": datetime.now(UTC).isoformat()
             },
         ]
 
@@ -170,13 +172,13 @@ class TestGenerateQualityReport:
         metrics = [
             {
                 "outcome": "approved",
-                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "timestamp": datetime.now(UTC).isoformat(),
                 "suggestions_count": 3,
                 "accepted_count": 3
             },
             {
                 "outcome": "modified",
-                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "timestamp": datetime.now(UTC).isoformat(),
                 "suggestions_count": 5,
                 "accepted_count": 2,
                 "rejection_reasons": ["Too aggressive"]
@@ -196,12 +198,12 @@ class TestGenerateQualityReport:
         metrics = [
             {
                 "outcome": "rejected",
-                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "timestamp": datetime.now(UTC).isoformat(),
                 "rejection_reasons": ["Too aggressive", "Missing context"]
             },
             {
                 "outcome": "rejected",
-                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "timestamp": datetime.now(UTC).isoformat(),
                 "rejection_reasons": ["Too aggressive"]
             },
         ]

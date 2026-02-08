@@ -6,13 +6,14 @@ This script provides comprehensive validation for technical markdown documents,
 checking for completeness, structure, and quality issues.
 """
 
-import sys
 import argparse
 import json
-from pathlib import Path
-from typing import Dict, List, Any, Optional
-from dataclasses import dataclass
 import re
+import sys
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
+
 
 # 共通ライブラリパスを追加（.claudeディレクトリを動的に探す）
 def find_claude_lib():
@@ -32,7 +33,7 @@ def main():
     if claude_lib_path:
         sys.path.insert(0, claude_lib_path)
         try:
-            from env_utils import setup_python_path, load_env_files
+            from env_utils import load_env_files, setup_python_path
             setup_python_path()
             load_env_files()
         except ImportError:
@@ -48,8 +49,8 @@ class ValidationIssue:
     severity: str  # 'error', 'warning', 'info'
     category: str  # 'structure', 'content', 'style', 'technical'
     message: str
-    line_number: Optional[int] = None
-    suggestion: Optional[str] = None
+    line_number: int | None = None
+    suggestion: str | None = None
     auto_fixable: bool = False
 
 
@@ -58,9 +59,9 @@ class ValidationResult:
     """Complete validation result"""
     file_path: str
     overall_score: float  # 0.0 to 1.0
-    issues: List[ValidationIssue]
-    metrics: Dict[str, Any]
-    recommendations: List[str]
+    issues: list[ValidationIssue]
+    metrics: dict[str, Any]
+    recommendations: list[str]
 
 
 class TechnicalDocumentValidator:
@@ -71,7 +72,7 @@ class TechnicalDocumentValidator:
         self.required_sections = self._get_required_sections()
         self.quality_metrics = self._get_quality_metrics()
 
-    def _load_validation_rules(self) -> Dict[str, Any]:
+    def _load_validation_rules(self) -> dict[str, Any]:
         """Load validation rules for technical documentation"""
         return {
             'structure': {
@@ -104,7 +105,7 @@ class TechnicalDocumentValidator:
             }
         }
 
-    def _get_required_sections(self) -> List[str]:
+    def _get_required_sections(self) -> list[str]:
         """Get list of required sections for technical documentation"""
         return [
             '## Overview', '## Purpose', '## Introduction',
@@ -112,7 +113,7 @@ class TechnicalDocumentValidator:
             '## Configuration', '## Troubleshooting'
         ]
 
-    def _get_quality_metrics(self) -> Dict[str, Any]:
+    def _get_quality_metrics(self) -> dict[str, Any]:
         """Get quality metrics to evaluate"""
         return {
             'readability': {
@@ -136,7 +137,7 @@ class TechnicalDocumentValidator:
         """Perform comprehensive document validation"""
         print(f"🔍 Validating document: {file_path}")
 
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
 
         issues = []
@@ -174,7 +175,7 @@ class TechnicalDocumentValidator:
             recommendations=recommendations
         )
 
-    def _validate_structure(self, content: str) -> List[ValidationIssue]:
+    def _validate_structure(self, content: str) -> list[ValidationIssue]:
         """Validate document structure"""
         issues = []
 
@@ -192,7 +193,7 @@ class TechnicalDocumentValidator:
         # Check heading hierarchy
         headings = re.findall(r'^(#{1,6})\s+(.+)$', content, re.MULTILINE)
         prev_level = 0
-        for i, (level_hash, title) in enumerate(headings):
+        for _i, (level_hash, title) in enumerate(headings):
             level = len(level_hash)
             if level > prev_level + 1:
                 issues.append(ValidationIssue(
@@ -229,7 +230,7 @@ class TechnicalDocumentValidator:
 
         return issues
 
-    def _validate_content(self, content: str) -> List[ValidationIssue]:
+    def _validate_content(self, content: str) -> list[ValidationIssue]:
         """Validate document content"""
         issues = []
 
@@ -281,7 +282,7 @@ class TechnicalDocumentValidator:
 
         return issues
 
-    def _validate_style(self, content: str) -> List[ValidationIssue]:
+    def _validate_style(self, content: str) -> list[ValidationIssue]:
         """Validate document style"""
         issues = []
         lines = content.split('\n')
@@ -344,7 +345,7 @@ class TechnicalDocumentValidator:
 
         return issues
 
-    def _validate_technical(self, content: str, file_path: Path) -> List[ValidationIssue]:
+    def _validate_technical(self, content: str, file_path: Path) -> list[ValidationIssue]:
         """Validate technical aspects"""
         issues = []
 
@@ -412,7 +413,7 @@ class TechnicalDocumentValidator:
 
         return issues
 
-    def _calculate_metrics(self, content: str, issues: List[ValidationIssue]) -> Dict[str, Any]:
+    def _calculate_metrics(self, content: str, issues: list[ValidationIssue]) -> dict[str, Any]:
         """Calculate quality metrics"""
         lines = content.split('\n')
         words = content.split()
@@ -454,7 +455,7 @@ class TechnicalDocumentValidator:
 
         return metrics
 
-    def _calculate_completeness_score(self, content: str, issues: List[ValidationIssue]) -> float:
+    def _calculate_completeness_score(self, content: str, issues: list[ValidationIssue]) -> float:
         """Calculate completeness score"""
         # Base score starts at 1.0
         score = 1.0
@@ -478,7 +479,7 @@ class TechnicalDocumentValidator:
 
         return max(0.0, score)
 
-    def _calculate_overall_score(self, issues: List[ValidationIssue], metrics: Dict[str, Any]) -> float:
+    def _calculate_overall_score(self, issues: list[ValidationIssue], metrics: dict[str, Any]) -> float:
         """Calculate overall quality score"""
         # Base score from completeness
         base_score = metrics['completeness']['score']
@@ -491,7 +492,7 @@ class TechnicalDocumentValidator:
         final_score = base_score - error_penalty - warning_penalty - info_penalty
         return max(0.0, min(1.0, final_score))
 
-    def _generate_recommendations(self, issues: List[ValidationIssue], metrics: Dict[str, Any]) -> List[str]:
+    def _generate_recommendations(self, issues: list[ValidationIssue], metrics: dict[str, Any]) -> list[str]:
         """Generate improvement recommendations"""
         recommendations = []
 
@@ -531,7 +532,7 @@ class TechnicalDocumentValidator:
 
         return recommendations
 
-    def _find_line_number(self, content: str, text: str) -> Optional[int]:
+    def _find_line_number(self, content: str, text: str) -> int | None:
         """Find line number for a given text snippet"""
         lines = content.split('\n')
         for i, line in enumerate(lines):

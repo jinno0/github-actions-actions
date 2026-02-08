@@ -9,12 +9,12 @@ providing insights into AI review quality and effectiveness.
 import json
 import os
 import sys
-from datetime import datetime, timedelta, timezone
-from typing import Any, Dict, List
 from collections import defaultdict
+from datetime import UTC, datetime, timedelta
+from typing import Any
 
 
-def calculate_acceptance_rate(metrics: List[Dict[str, Any]]) -> Dict[str, Any]:
+def calculate_acceptance_rate(metrics: list[dict[str, Any]]) -> dict[str, Any]:
     """
     Calculate acceptance rate from review metrics.
 
@@ -83,7 +83,7 @@ def calculate_acceptance_rate(metrics: List[Dict[str, Any]]) -> Dict[str, Any]:
     }
 
 
-def get_common_items(items: List[str], top_n: int = 5) -> List[Dict[str, Any]]:
+def get_common_items(items: list[str], top_n: int = 5) -> list[dict[str, Any]]:
     """Get most common items from a list."""
     if not items:
         return []
@@ -112,10 +112,10 @@ def get_interpretation(acceptance_rate: float, total_reviews: int) -> str:
         return f"Poor - AI review quality needs significant improvement ({acceptance_rate}% acceptance)"
 
 
-def load_metrics_from_file(filepath: str) -> List[Dict[str, Any]]:
+def load_metrics_from_file(filepath: str) -> list[dict[str, Any]]:
     """Load metrics from a JSON file."""
     try:
-        with open(filepath, 'r', encoding='utf-8') as f:
+        with open(filepath, encoding='utf-8') as f:
             data = json.load(f)
             return data if isinstance(data, list) else []
     except (FileNotFoundError, json.JSONDecodeError):
@@ -123,15 +123,15 @@ def load_metrics_from_file(filepath: str) -> List[Dict[str, Any]]:
 
 
 def filter_metrics_by_time(
-    metrics: List[Dict[str, Any]],
+    metrics: list[dict[str, Any]],
     time_period: str = "7d"
-) -> List[Dict[str, Any]]:
+) -> list[dict[str, Any]]:
     """Filter metrics by time period."""
     if not metrics:
         return []
 
     # Parse time period (e.g., "7d", "24h", "1w")
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
 
     if time_period.endswith('d'):
         days = int(time_period[:-1])
@@ -166,7 +166,7 @@ def filter_metrics_by_time(
     return filtered
 
 
-def generate_quality_report(metrics: List[Dict[str, Any]], time_period: str = "7d") -> str:
+def generate_quality_report(metrics: list[dict[str, Any]], time_period: str = "7d") -> str:
     """Generate a human-readable quality report."""
     filtered = filter_metrics_by_time(metrics, time_period)
     stats = calculate_acceptance_rate(filtered)

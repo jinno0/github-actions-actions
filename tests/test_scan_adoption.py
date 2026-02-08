@@ -9,16 +9,13 @@ Tests the adoption scanning functionality to ensure:
 - File I/O errors are handled properly
 """
 
-import os
-import sys
 import json
-import tempfile
+import os
 import subprocess
-from pathlib import Path
-from unittest.mock import patch, MagicMock, Mock
+import sys
 from datetime import datetime
-
-import pytest
+from pathlib import Path
+from unittest.mock import Mock, patch
 
 # Add scripts directory to path for testing
 sys.path.insert(0, str(Path(__file__).parent.parent / "scripts"))
@@ -207,7 +204,7 @@ class TestGenerateAdoptionReport:
         with patch("scan_adoption.Path") as mock_path_class:
             mock_path_instance = Mock()
             mock_path_instance.exists.return_value = True
-            mock_path_instance.read_text.side_effect = IOError("Permission denied")
+            mock_path_instance.read_text.side_effect = OSError("Permission denied")
             mock_path_class.return_value = mock_path_instance
 
             result = scan_adoption.generate_adoption_report()
@@ -486,7 +483,7 @@ class TestMainFunction:
 
     def test_main_success_with_adopters(self, tmp_path, capsys):
         """Test main function with successful adoption data."""
-        adoption_content = """# Adoption
+        _ = """# Adoption
 
 | Project | Team | Actions | Notes |
 |---------|------|---------|-------|
@@ -558,7 +555,7 @@ class TestMainFunction:
             with patch("scan_adoption.Path") as mock_path_class:
                 mock_path_instance = Mock()
                 mock_path_instance.parent = Mock()
-                mock_path_instance.write_text.side_effect = IOError("Disk full")
+                mock_path_instance.write_text.side_effect = OSError("Disk full")
 
                 mock_path_class.return_value = mock_path_instance
                 mock_path_class.side_effect = lambda x: mock_path_instance

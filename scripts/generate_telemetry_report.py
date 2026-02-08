@@ -25,12 +25,11 @@ import json
 import os
 import sys
 from collections import defaultdict
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
-from typing import Dict, List
 
 
-def load_telemetry_data(data_path: Path) -> List[Dict]:
+def load_telemetry_data(data_path: Path) -> list[dict]:
     """
     Load telemetry data from log file.
 
@@ -48,7 +47,7 @@ def load_telemetry_data(data_path: Path) -> List[Dict]:
     failed_lines = 0
 
     try:
-        with open(data_path, "r") as f:
+        with open(data_path) as f:
             for line_num, line in enumerate(f, 1):
                 line = line.strip()
                 if not line:
@@ -65,14 +64,14 @@ def load_telemetry_data(data_path: Path) -> List[Dict]:
         if failed_lines > 5:
             print(f"Warning: {failed_lines} total lines failed to parse")
 
-    except IOError as e:
+    except OSError as e:
         print(f"Error: Could not read telemetry file: {e}")
         return []
 
     return events
 
 
-def filter_events_by_period(events: List[Dict], days: int) -> List[Dict]:
+def filter_events_by_period(events: list[dict], days: int) -> list[dict]:
     """
     Filter events by time period.
 
@@ -86,7 +85,7 @@ def filter_events_by_period(events: List[Dict], days: int) -> List[Dict]:
     if days == 0:
         return events
 
-    cutoff = datetime.now(timezone.utc) - timedelta(days=days)
+    cutoff = datetime.now(UTC) - timedelta(days=days)
     filtered = []
 
     for event in events:
@@ -104,7 +103,7 @@ def filter_events_by_period(events: List[Dict], days: int) -> List[Dict]:
     return filtered
 
 
-def aggregate_metrics(events: List[Dict]) -> Dict[str, Dict]:
+def aggregate_metrics(events: list[dict]) -> dict[str, dict]:
     """
     Aggregate metrics from telemetry events.
 
@@ -135,7 +134,7 @@ def aggregate_metrics(events: List[Dict]) -> Dict[str, Dict]:
     return dict(metrics)
 
 
-def generate_report(metrics: Dict[str, Dict], period_days: int) -> str:
+def generate_report(metrics: dict[str, dict], period_days: int) -> str:
     """
     Generate markdown telemetry report.
 
