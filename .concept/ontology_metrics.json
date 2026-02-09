@@ -8,7 +8,7 @@
   "queue_pending": 0,
   "conflicts_open": 0,
   "ambiguities_high": 0,
-  "decisions_lines": 0,
+  "decisions_lines": 12,
   "claims_lines": 33,
-  "last_updated": "2026-02-09T00:21:38Z"
+  "last_updated": "2026-02-09T01:45:10Z"
 }
