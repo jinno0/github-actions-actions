@@ -4,87 +4,70 @@ Tests the action structure and basic functionality
 """
 
 from pathlib import Path
+from typing import Any, Dict
 
 import pytest
 import yaml
 
+# Constants
+ACTION_YML_PATH: str = "actions/review-and-merge/action.yml"
+DEFAULT_CLAUDE_MODEL: str = "sonnet"
+DEFAULT_LGTM_THRESHOLD: str = "7"
+DEFAULT_AUTO_FIX: str = "true"  # String format as stored in YAML
+
+
+@pytest.fixture
+def action_config() -> Dict[str, Any]:
+    """Load and return the review-and-merge action configuration"""
+    action_yml = Path(ACTION_YML_PATH)
+
+    if not action_yml.exists():
+        pytest.skip("review-and-merge action not found")
+
+    return yaml.safe_load(action_yml.read_text())
+
 
 @pytest.mark.integration
-def test_review_and_merge_action_structure():
+def test_review_and_merge_action_structure(action_config):
     """Test review-and-merge action has proper structure"""
-    action_yml = Path("actions/review-and-merge/action.yml")
-
-    if not action_yml.exists():
-        pytest.skip("review-and-merge action not found")
-
-    config = yaml.safe_load(action_yml.read_text())
-
     # Verify required fields
-    assert "name" in config
-    assert "description" in config
-    assert "runs" in config
-    assert config["runs"]["using"] == "composite"
+    assert "name" in action_config
+    assert "description" in action_config
+    assert "runs" in action_config
+    assert action_config["runs"]["using"] == "composite"
 
 
 @pytest.mark.integration
-def test_review_and_merge_inputs_defined():
+def test_review_and_merge_inputs_defined(action_config):
     """Test review-and-merge action has proper inputs"""
-    action_yml = Path("actions/review-and-merge/action.yml")
-
-    if not action_yml.exists():
-        pytest.skip("review-and-merge action not found")
-
-    config = yaml.safe_load(action_yml.read_text())
-
     # Verify required inputs
-    assert "github-token" in config["inputs"]
-    assert "claude-model" in config["inputs"]
-    assert "lgtm-threshold" in config["inputs"]
+    assert "github-token" in action_config["inputs"]
+    assert "claude-model" in action_config["inputs"]
+    assert "lgtm-threshold" in action_config["inputs"]
 
 
 @pytest.mark.integration
-def test_review_and_merge_outputs_defined():
+def test_review_and_merge_outputs_defined(action_config):
     """Test review-and-merge action has proper outputs"""
-    action_yml = Path("actions/review-and-merge/action.yml")
-
-    if not action_yml.exists():
-        pytest.skip("review-and-merge action not found")
-
-    config = yaml.safe_load(action_yml.read_text())
-
     # Verify outputs are defined
-    outputs = config.get("outputs", {})
+    outputs = action_config.get("outputs", {})
     assert "verdict" in outputs
     assert "confidence" in outputs
 
 
 @pytest.mark.integration
-def test_review_and_merge_default_values():
+def test_review_and_merge_default_values(action_config):
     """Test review-and-merge action has proper default values"""
-    action_yml = Path("actions/review-and-merge/action.yml")
-
-    if not action_yml.exists():
-        pytest.skip("review-and-merge action not found")
-
-    config = yaml.safe_load(action_yml.read_text())
-
     # Verify default values
-    assert config["inputs"]["claude-model"]["default"] == "sonnet"
-    assert config["inputs"]["lgtm-threshold"]["default"] == "7"
-    assert config["inputs"]["auto-fix"]["default"] == "true"
+    assert action_config["inputs"]["claude-model"]["default"] == DEFAULT_CLAUDE_MODEL
+    assert action_config["inputs"]["lgtm-threshold"]["default"] == DEFAULT_LGTM_THRESHOLD
+    assert action_config["inputs"]["auto-fix"]["default"] == DEFAULT_AUTO_FIX
 
 
 @pytest.mark.integration
-def test_review_and_merge_steps_exist():
+def test_review_and_merge_steps_exist(action_config):
     """Verify review-and-merge has required steps"""
-    action_yml = Path("actions/review-and-merge/action.yml")
-
-    if not action_yml.exists():
-        pytest.skip("review-and-merge action not found")
-
-    config = yaml.safe_load(action_yml.read_text())
-
-    steps = config.get("runs", {}).get("steps", [])
+    steps = action_config.get("runs", {}).get("steps", [])
 
     # Check for critical steps
     assert len(steps) > 0, "review-and-merge should have at least one step"
@@ -93,16 +76,9 @@ def test_review_and_merge_steps_exist():
 
 
 @pytest.mark.integration
-def test_review_and_merge_scripts_referenced():
+def test_review_and_merge_scripts_referenced(action_config):
     """Verify review-and-merge references required scripts"""
-    action_yml = Path("actions/review-and-merge/action.yml")
-
-    if not action_yml.exists():
-        pytest.skip("review-and-merge action not found")
-
-    config = yaml.safe_load(action_yml.read_text())
-
-    steps = config.get("runs", {}).get("steps", [])
+    steps = action_config.get("runs", {}).get("steps", [])
 
     # Check that scripts are referenced
     script_refs = []
