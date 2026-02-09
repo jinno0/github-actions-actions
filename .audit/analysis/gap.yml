@@ -1,91 +1,63 @@
 version: "2.0"
-run_id: "2026-02-08T20:22:29Z"
-generated_at: "2026-02-08T20:22:29Z"
+run_id: "2026-02-09T09:41:00Z"
+generated_at: "2026-02-09T09:41:00Z"
 
-# === ギャップ分析: Intent vs Current State ===
+# === ギャップ分析 ===
+
+# 意図（Intent）と現状（As-Is）の差分を分析
+# 前回監査からの変化も追跡
 
 summary:
-  total_gaps: 5
-  critical: 0
-  high: 1
-  medium: 3
-  low: 1
-  intent_achievement_score: 85  # /100
+  total_gaps: 6
+  critical: 2
+  high: 2
+  medium: 2
+  low: 0
+  intent_achievement_score: 65  # /100 (down from 85)
 
 gaps:
+  # === AIレビュー受入率（QA-003） ===
   - id: "GAP-001"
-    severity: "high"
+    severity: "critical"
     category: "quality_attributes"
     affected_qa: "QA-003 (AIレビュー受入率)"
     intent:
       target: "AIレビュー受入率 >= 70%"
       source: "intent.yml:123-134"
     current_state:
-      actual: "75.0% (3/4件)"
-      source: "claims.ndjson C-006, C-007"
-      note: "目標は達成しているがサンプル数が少ない"
-    gap_description: "受入率は目標を超えているが、サンプル数4件 << 目標20件"
-    impact: "統計的に有意な評価ができない。AIレビューの品質を実証するエビデンスが不十分"
+      actual: "60.0% (10件中: 承認6、修正3、拒否1)"
+      trend: "低下中 (66.7% → 66.7% → 50.0%)"
+      source: "claims.ndjson C-029, C-030"
+    gap_description: |
+      受入率が目標70%を下回る60%。さらに低下傾向が続いている。
+      PR-002でプロンプト改善を実施したが、効果が表れていないか、
+      逆効果になっている可能性がある。
+    impact: |
+      プロジェクトの核心的価値提案（AIレビューの品質）が証明されていない。
+      ASM-004の仮定「AIレビュー受入率が向上し続ける」が反証されている。
+      プロンプト改善戦略の再考が必要。
     confidence: "high"
     assumptions:
-      - id: "ASM-004"
-        description: "AIレビュー受入率が向上し続けることが成功状態"
+      - id: "ASM-NEW-001"
+        description: "プロンプト改善が不十分またはデータ収集期間が不足"
         confidence: "medium"
+    recommended_actions:
+      - priority: 1
+        action: "A/Bテスト実施: 新プロンプト vs 旧プロンプト"
+        estimated_effort: "1-2 weeks data collection"
+        expected_outcome: "統計的に有意な差の証明または新戦略の立案"
 
+      - priority: 2
+        action: "レビューサンプル収集の強化（現在10件 → 目標20件）"
+        estimated_effort: "ongoing"
+
+      - priority: 3
+        action: "拒否理由の深掘り分析（Low quality suggestionsのパターン特定）"
+        estimated_effort: "4-6 hours"
+
+  # === 外部採用（mission.desired_state） ===
   - id: "GAP-002"
-    severity: "medium"
-    category: "code_coverage"
-    affected_qa: "QA-001 (テストカバレッジ)"
-    intent:
-      target: "テストカバレッジ >= 80%"
-      source: "intent.yml:93-106"
-    current_state:
-      actual: "88.31% (全体)"
-      breakdown:
-        - "acceptance_tracker.py: 88.89% (6 gaps)"
-        - "env_config.py: 47.83% (最低)"
-        - "test_data_collection.py: 0% (ユーティリティ)"
-      source: "claims.ndjson C-001, C-019, C-020, C-021"
-    gap_description: "全体としては目標達成だが、env_config.pyが47.83%と低い"
-    impact: "設定値ロードのエラーハンドリングパスが未検証。本番環境での設定ミスに対する脆弱性がある可能性"
-    confidence: "medium"
-    recommendation: "env_config.pyのカバレッジを80%以上に引き上げる"
-
-  - id: "GAP-003"
-    severity: "medium"
-    category: "documentation"
-    affected_qa: "QA-004 (ドキュメントカバレッジ)"
-    intent:
-      target: "全13個のActionがセットアップガイドを持つ"
-      source: "intent.yml:137-148"
-    current_state:
-      actual: "14/15ディレクトリにドキュメント (93.3%)"
-      missing: ["actions/_shared"]
-      note: "_sharedはユーティリティディレクトリ"
-      source: "claims.ndjson C-005, C-022"
-    gap_description: "actions/_sharedにはinstructions.mdが存在しない"
-    impact: "技術的には_gapsではない（_sharedはユーザー向けアクションではない）。ドキュメント整備としては実質100%"
-    confidence: "low"
-    recommendation: "QA-004の定義を見直し、'_sharedを除外する'または'全アクションディレクトリ（_shared除く）'に修正"
-
-  - id: "GAP-004"
-    severity: "low"
-    category: "yaml_quality"
-    affected_qa: "QA-002 (YAML構文検証)"
-    intent:
-      target: "全てのaction.ymlが有効なYAMLである"
-      source: "intent.yml:109-120"
-    current_state:
-      actual: "全13個のaction.ymlが有効（yamllintでエラー0）"
-      warnings: ["document-start missing", "line too long (120文字超)"]
-      source: "claims.ndjson C-018"
-    gap_description: "構文エラーはないが、yamllint警告が5ファイルにある"
-    impact: "機能的には問題ない。可読性と保守性の観点で警告修正を検討"
-    confidence: "low"
-    recommendation: "yamllint警告を修正（---追加、長い行の折り返し）"
-
-  - id: "GAP-005"
-    severity: "medium"
+    severity: "critical"
     category: "adoption"
     affected_intent: "mission.desired_state"
     intent:
@@ -94,24 +66,196 @@ gaps:
     current_state:
       actual: "外部採用数: 0件"
       phase: "Phase 3 (Stabilization & Adoption)"
-      note: "パイロット募集中"
-      source: "claims.ndjson C-012, C-014"
-    gap_description: "プロジェクトはPhase 3（普及フェーズ）だが、外部採用が0件"
-    impact: "存在意義（提供価値）が実証されていない。改善サイクルを回すための実ユーザー不在"
+      note: "PR-001で採用キャンペーン実施済みだが成果なし"
+      source: "claims.ndjson C-034"
+    gap_description: |
+      プロジェクトはPhase 3（普及フェーズ）だが、外部採用が0件。
+      PR-001（採用キャンペーン）でドキュメント改善を実施したが、
+      実際のアウトリーチ活動が実施されていないため、成果が出ていない。
+      「良いドキュメントを作れば使ってもらえる」という仮説が崩壊中。
+    impact: |
+      ASM-001の仮定「Self-hosted runnerを運用するGitHub組織」が
+      リーチできていない。プロジェクトの存続可能性に関わる。
+      改善サイクルを回すための実ユーザー不在。
     confidence: "high"
     assumptions:
-      - id: "ASM-001"
-        description: "ターゲットユーザーはSelf-hosted runnerを運用するGitHub組織"
+      - id: "ASM-NEW-002"
+        description: "直接アウトリーチがドキュメント改善より10倍効果的"
         confidence: "high"
-    recommendation: "採用キャンペーンの実施（.audit/proposal/changes/PR-001-adoption-campaign.mdを参照）"
+    recommended_actions:
+      - priority: 1
+        action: "組織内での直接アウトリーチ（チームミーティング、1on 1）"
+        estimated_effort: "5-10 hours"
+        expected_outcome: "パイロット参加者2-3件"
+
+      - priority: 2
+        action: "GitHub Discussionsでのアナウンス"
+        estimated_effort: "1-2 hours"
+
+      - priority: 3
+        action: "カンファレンスや勉強会での発表"
+        estimated_effort: "10-20 hours"
+
+  # === テストカバレッジ（QA-001） ===
+  - id: "GAP-003"
+    severity: "high"
+    category: "code_coverage"
+    affected_qa: "QA-001 (テストカバレッジ)"
+    intent:
+      target: "テストカバレッジ >= 80%"
+      source: "intent.yml:93-106"
+    current_state:
+      actual: "78.15% (全体)"
+      breakdown:
+        - "generate_review_quality_dashboard.py: 0.00% (128行全て未カバー)"
+        - "test_data_collection.py: 0.00% (38行全て未カバー)"
+        - "env_config.py: 47.83% (依然として最低)"
+      source: "claims.ndjson C-024, C-025, C-026, C-027"
+      note: "前回88.31%から低下。新規スクリプト追加による一時的なもの"
+    gap_description: |
+      全体カバレッジが目標値80%をわずかに下回る78.15%。
+      前回は目標超過（88.31%）だったが、generate_review_quality_dashboard.pyが
+      テストなしで追加されたため、低下した。
+    impact: |
+      品質属性QA-001未達成。CIカバレッジチェックに失敗する可能性。
+      改善実行プロセスで「新規コードにはテストを追加する」という
+      原則が守られていない。
+    confidence: "high"
+    recommended_actions:
+      - priority: 1
+        action: "generate_review_quality_dashboard.pyのテスト追加"
+        estimated_effort: "3-5 hours"
+        expected_outcome: "カバレッジ78.15% → 82%+"
+
+  # === 改善戦略の効果測定 ===
+  - id: "GAP-004"
+    severity: "high"
+    category: "improvement_effectiveness"
+    affected_intent: "監査-改善サイクルの有効性"
+    intent:
+      target: "改善提案が意図した効果を表している"
+      source: "feedback_to_auditor.yml"
+    current_state:
+      actual: "PR-002の効果が未確認、PR-001は成果0件"
+      verification_pass_rate: "80% (4/5シナリオパス)"
+      source: "claims.ndjson C-032, C-034, C-035, C-036"
+    gap_description: |
+      前回実行で2つの改善提案を適用したが、効果が立証されていない：
+      1. PR-002（プロンプト改善）：受入率は逆に低下（75% → 60%）
+      2. PR-001（採用キャンペーン）：ドキュメント改善のみで採用数0件
+      改善前後の比較測定が不十分で、仮説検証ができていない。
+    impact: |
+      改善サイクルの仮説検証ができていない。
+      次回の改善提案の精度に影響する。
+      監査プロセス自体の有效性が問われる。
+    confidence: "high"
+    recommended_actions:
+      - priority: 1
+        action: "PR-002のA/Bテスト実施による効果測定"
+        estimated_effort: "1-2 weeks"
+
+      - priority: 2
+        action: "PR-001のアウトリーチ活動実施と効果測定"
+        estimated_effort: "5-10 hours + 1 month tracking"
+
+  # === サンプルサイズ ===
+  - id: "GAP-005"
+    severity: "medium"
+    category: "measurement_validity"
+    affected_qa: "QA-003 (AIレビュー受入率)"
+    intent:
+      target: "サンプル数 >= 20件"
+      source: "intent.yml:123-134"
+    current_state:
+      actual: "10件"
+      progress: "4件 → 10件（前回から+6件）"
+      source: "claims.ndjson C-031"
+    gap_description: |
+      サンプル数が目標の半分（10/20件）。
+      データ収集は進んでいるが、統計的有意性を得るには更に10件必要。
+    impact: "統計的有意性が不足。傾向分析の信頼性が低い。"
+    confidence: "medium"
+    recommended_actions:
+      - priority: 2
+        action: "複数プロジェクトでのレビュー実施キャンペーン"
+        estimated_effort: "ongoing"
+
+  # === 技術的負債 ===
+  - id: "GAP-006"
+    severity: "medium"
+    category: "code_quality"
+    affected_intent: "コード品質の維持"
+    intent:
+      target: "全スクリプトがテストされている"
+      source: "QA-001 implicit"
+    current_state:
+      actual: "2/10 scriptsが0%カバレッジ"
+      uncovered:
+        - "generate_review_quality_dashboard.py: 0% (新規)"
+        - "test_data_collection.py: 0% (ユーティリティ)"
+      source: "claims.ndjson C-025, C-026"
+    gap_description: |
+      2つのスクリプトでテストカバレッジ0%。
+      改善実行でgenerate_review_quality_dashboard.pyがテストなしで追加された。
+      test_data_collection.pyはユーティリティ扱いでテスト対象外。
+    impact: "コード品質の保証ができない。リファクタリング時のリスク。"
+    confidence: "medium"
+    recommended_actions:
+      - priority: 2
+        action: "generate_review_quality_dashboard.pyのテスト追加"
+        estimated_effort: "3-5 hours"
+
+      - priority: 3
+        action: "test_data_collection.pyのテスト追加または除外の明確化"
+        estimated_effort: "2-3 hours"
+
+# === 前回監査からの変化 ===
+
+changes_since_last_audit:
+  improved:
+    - gap_id: "GAP-005"
+      description: "サンプル数が4件 → 10件に増加（+150%）"
+      previous: "4件"
+      current: "10件"
+      achievement: "50%達成"
+
+  regressed:
+    - gap_id: "GAP-001"
+      description: "AIレビュー受入率が目標達成 → 未達、かつ低下傾向"
+      previous: "75.0% (target met)"
+      current: "60.0% (below target, declining)"
+      severity_change: "high → critical"
+
+    - gap_id: "GAP-003"
+      description: "テストカバレッジが目標超過 → 未達に転落"
+      previous: "88.31% (exceeded)"
+      current: "78.15% (approaching)"
+      severity_change: "medium → high"
+
+  unchanged:
+    - gap_id: "GAP-002"
+      description: "外部採用数0件（依然として停滞）"
+      status: "no_progress"
+      note: "PR-001実施したが、アウトリーチ活動が不足"
+
+  new_issues:
+    - gap_id: "GAP-004"
+      description: "改善戦略の効果測定不足"
+      status: "new"
+      severity: "high"
+
+    - gap_id: "GAP-006"
+      description: "新規スクリプト追加による技術的負債"
+      status: "new"
+      severity: "medium"
 
 # === 達成度スコアリング ===
 
 achievement_breakdown:
   test_coverage:
-    score: 100
+    score: 78
     max: 100
-    rationale: "88.31% >= 80% target (bonus points for exceeding)"
+    rationale: "78.15% < 80% target (regressed from 100)"
 
   yaml_validity:
     score: 100
@@ -119,9 +263,9 @@ achievement_breakdown:
     rationale: "All 13 action.yml files are valid YAML"
 
   ai_review_acceptance_rate:
-    score: 60
+    score: 40
     max: 100
-    rationale: "Target achieved (75% >= 70%) but sample size too small (4 << 20)"
+    rationale: "Target NOT achieved (60% < 70%) AND declining trend. Sample size still insufficient (10 << 20)"
 
   documentation_coverage:
     score: 95
@@ -129,32 +273,42 @@ achievement_breakdown:
     rationale: "14/15 directories have docs (93.3%). _shared is utility, not user-facing"
 
   adoption:
-    score: 30
+    score: 20
     max: 100
-    rationale: "0 external adopters despite being in Phase 3 (adoption phase)"
+    rationale: "0 external adopters despite PR-001 execution. Direct outreach needed"
 
-total_score: 85
+  improvement_effectiveness:
+    score: 50
+    max: 100
+    rationale: "2 improvements applied but neither shows clear positive impact yet"
+
+total_score: 65
 max_score: 100
+change_from_last_audit: "-20 points (85 → 65)"
 
 # === 優先順位付け ===
 
 priority_order:
   - priority: 1
-    gap_id: "GAP-005"
-    reason: "採用が進まないとプロジェクトの存在意義が実証されない"
+    gap_id: "GAP-001"
+    reason: "AIレビュー受入率の改善（核心的価値に関わる、低下中）"
 
   - priority: 2
-    gap_id: "GAP-001"
-    reason: "統計的有意性が不足しており、品質評価の信頼性が低い"
+    gap_id: "GAP-002"
+    reason: "外部採用の打破（プロジェクト存続に関わる）"
 
   - priority: 3
-    gap_id: "GAP-002"
-    reason: "設定ロジックのエラーハンドリングが未検証"
+    gap_id: "GAP-003"
+    reason: "テストカバレッジ80%達成（品質基準、改善プロセスの原則）"
 
   - priority: 4
-    gap_id: "GAP-003"
-    reason: "実質的なギャップではないが、定義を明確化すべき"
+    gap_id: "GAP-004"
+    reason: "改善効果測定（サイクル改善のため、学習のため）"
 
   - priority: 5
-    gap_id: "GAP-004"
-    reason: "機能的には問題なく、低優先度"
+    gap_id: "GAP-005"
+    reason: "サンプル数20件達成（測定信頼性）"
+
+  - priority: 6
+    gap_id: "GAP-006"
+    reason: "技術的負債解消（コード品質）"
