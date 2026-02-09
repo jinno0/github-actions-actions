@@ -1,0 +1,34 @@
+pr_id: "PR-007"
+status: "applied"
+applied_at: "2026-02-09T04:05:32Z"
+
+changes:
+  - file: "tests/scripts/test_generate_review_quality_dashboard.py"
+    action: "created"
+    lines_added: 361
+    lines_removed: 0
+    coverage_impact: "generate_review_quality_dashboard.py: 0% → 79.69%"
+
+  - file: "tests/scripts/test_test_data_collection.py"
+    action: "created"
+    lines_added: 100
+    lines_removed: 0
+    coverage_impact: "データ構造検証テスト追加"
+
+intermediate_verification:
+  test_result: "passed"
+  test_count: 500
+  failed_count: 0
+  skipped_count: 2
+  coverage_before: 78.15
+  coverage_after: 87.32
+
+diff_file: "PR-007_applied.diff"
+rollback_command: "git apply -R .audit/execution/runs/run-2026-02-09T04:05:32Z/changes/PR-007_applied.diff"
+
+summary: |
+  テストカバレッジ回復PRを適用。
+  - generate_review_quality_dashboard.py: 0% → 79.69% (+79.69%)
+  - 全体カバレッジ: 78.15% → 87.32% (+9.17%)
+  - 全500テストがパス（2件スキップ）
+  - QA-001（テストカバレッジ>=80%）達成

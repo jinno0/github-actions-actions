@@ -34,15 +34,15 @@
   {
     "function_id": "QA-001",
     "scenario_name": "Test coverage >= 80%",
-    "passed": false,
+    "passed": true,
     "actual_output": {
-      "coverage_percent": 78.15
+      "coverage_percent": 87.32
     },
     "expected_output": {
       "coverage_percent": 80.0
     },
     "error_message": null,
-    "interpretation": "テストカバレッジ: 78.15% (目標: 80.0%)",
+    "interpretation": "テストカバレッジ: 87.32% (目標: 80.0%)",
     "file_location": "coverage.json"
   },
   {

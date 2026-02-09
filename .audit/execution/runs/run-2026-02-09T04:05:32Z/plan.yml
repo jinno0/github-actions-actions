@@ -1,0 +1,33 @@
+run_id: "2026-02-09T04:05:32Z"
+started_at: "2026-02-09T04:05:32Z"
+scope:
+  prs_to_apply:
+    - "PR-007"
+  prs_deferred:
+    - id: "PR-006"
+      reason: "アウトリーチ活動は人間の実行を必要とするため、AI Executorの適用範囲外"
+      recommended_action: "プロジェクトオーナーが直接実行"
+  prs_skipped: []
+
+success_criteria:
+  - id: "SC-001"
+    from: "intent.yml#quality_attributes[0]"
+    target: "テストカバレッジ >= 80%"
+    verification: "pytest --cov=actions --cov=scripts --cov-fail-under=80"
+    current_value: 78.15%
+
+rollback_trigger:
+  - "検証失敗"
+  - "既存テスト失敗"
+  - "ビルドエラー"
+  - "カバレッジ低下"
+
+budget:
+  max_prs_per_run: 10
+  estimated_duration_minutes: 30
+  max_file_changes_per_pr: 10
+
+execution_strategy:
+  approach: "incremental"
+  verification_frequency: "after_each_pr"
+  rollback_strategy: "automatic_on_failure"
