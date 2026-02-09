@@ -1,4 +1,4 @@
-updated_at: "2026-02-09T00:21:38Z"
+updated_at: "2026-02-09T04:54:57Z"
 queue:
   - id: "TP-001"
     proposed_canonical: "ActionTestHelpers"
@@ -61,3 +61,19 @@ queue:
     rejection_reason: "Single source, aux layer, too specific implementation detail"
     created_run: "2026-02-09T00:21:38Z"
     resolved_run: "2026-02-09T00:21:38Z"
+  - id: "TP-005"
+    proposed_canonical: "CoreFunctionVerification"
+    proposed_layer: "domain"
+    term_raw_examples: ["Core Function Verification", "CF-ALL", "CF-002"]
+    reason: "Verification checks for core functions (CF-ALL, QA-001, QA-002, QA-004, CF-002)"
+    evidence:
+      - source: ".audit/execution/runs/run-2026-02-09T04:05:32Z/summary.md#L45-L50"
+        quote: "All 5 core function verification checks passed"
+    auto_merge_candidates:
+      - term: "TestCoverageTarget"
+        similarity: 0.62
+      - term: "TestingStrategy"
+        similarity: 0.58
+    decision: "pending"
+    reason_pending: "Only 1 source, need more evidence from verification/testing docs"
+    created_run: "2026-02-09T04:54:57Z"
