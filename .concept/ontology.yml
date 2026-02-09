@@ -1,5 +1,5 @@
 version: "0.3"
-updated_at: "2026-02-08T10:16:13Z"
+updated_at: "2026-02-09T00:21:38Z"
 
 canonical_terms:
   GitHubAction:
@@ -305,9 +305,9 @@ canonical_terms:
     layer: "domain"
     status: "stable"
     definition: "Quality metric tracking AI review acceptance rate, baseline 75% (3/4 reviews), target >= 70%"
-    synonyms: ["Acceptance rate", "Review acceptance baseline"]
+    synonyms: ["Acceptance rate", "Review acceptance baseline", "Review Quality Dashboard", "Quality metrics"]
     boundaries:
-      includes: ["AI review quality", "Human approval rate", "Outcome tracking"]
+      includes: ["AI review quality", "Human approval rate", "Outcome tracking", "Quality dashboard"]
       excludes: ["Code coverage", "Test pass rate"]
     lifecycle: ["Baseline", "Measuring", "Target Achieved"]
     related_terms: ["ReviewAndMergeAction", "AcceptanceRateCalculation"]
@@ -315,6 +315,8 @@ canonical_terms:
     evidence:
       - source: "README.md#L176-L186"
         quote: "AIレビュー受入率 | 75.0% (3/4件) | >= 70% | ✅ 目標達成"
+      - source: "metrics/review_quality_dashboard.md#L1-L5"
+        quote: "Dashboard tracking AI review quality metrics"
 
   AcceptanceRateCalculation:
     id: "TERM-ACCEPTCALC"
@@ -337,9 +339,9 @@ canonical_terms:
     layer: "core"
     status: "stable"
     definition: "Structural testing approach validating YAML syntax, structure, and configuration without runtime execution"
-    synonyms: ["Testing approach", "Test strategy"]
+    synonyms: ["Testing approach", "Test strategy", "ActionTestHelpers", "Test helpers"]
     boundaries:
-      includes: ["YAML syntax validation", "Structure verification", "Configuration checks"]
+      includes: ["YAML syntax validation", "Structure verification", "Configuration checks", "Shared test utilities"]
       excludes: ["Runtime execution", "GitHub API interaction", "Claude CLI invocation"]
     lifecycle: []
     related_terms: ["GitHubAction", "DryRun", "TestCoverageTarget"]
@@ -385,9 +387,9 @@ canonical_terms:
     layer: "domain"
     status: "stable"
     definition: "Metrics tracking usage across projects: 2 internal pilot projects, top actions review-and-merge and auto-merge"
-    synonyms: ["Adoption metrics", "Usage tracking"]
+    synonyms: ["Adoption metrics", "Usage tracking", "Pilot Program", "Early adopter program"]
     boundaries:
-      includes: ["Project count", "Action usage", "Adopter registration"]
+      includes: ["Project count", "Action usage", "Adopter registration", "Pilot projects"]
       excludes: ["Production deployment metrics"]
     lifecycle: []
     related_terms: ["AIActionsHub", "DevelopmentPhase"]
@@ -395,6 +397,8 @@ canonical_terms:
     evidence:
       - source: "ADOPTION.md#L28-L33"
         quote: "Total Adopters: 2 (Internal pilot projects), Most Used Actions: review-and-merge (2), auto-merge (2)"
+      - source: "ADOPTION.md#L16-L18"
+        quote: "Pilot program recruiting early adopters"
 
   CoreCompetency:
     id: "TERM-CORECOMP"

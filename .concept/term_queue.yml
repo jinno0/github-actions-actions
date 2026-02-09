@@ -1,0 +1,63 @@
+updated_at: "2026-02-09T00:21:38Z"
+queue:
+  - id: "TP-001"
+    proposed_canonical: "ActionTestHelpers"
+    proposed_layer: "aux"
+    term_raw_examples: ["ActionTestHelpers", "test helpers", "shared test utilities"]
+    reason: "New test utility module for shared test helper methods"
+    evidence:
+      - source: "tests/utils/action_test_helpers.py#L1-L12"
+        quote: "Shared helper methods for testing GitHub Actions"
+    auto_merge_candidates:
+      - term: "TestingStrategy"
+        similarity: 0.65
+    decision: "merged"
+    merged_into: "TestingStrategy"
+    merge_reason: "Single source, aux layer, implementation detail of testing strategy"
+    created_run: "2026-02-09T00:21:38Z"
+    resolved_run: "2026-02-09T00:21:38Z"
+  - id: "TP-002"
+    proposed_canonical: "ReviewQualityDashboard"
+    proposed_layer: "aux"
+    term_raw_examples: ["Review Quality Dashboard", "quality dashboard", "review metrics"]
+    reason: "New dashboard tracking AI review quality metrics"
+    evidence:
+      - source: "metrics/review_quality_dashboard.md#L1-L5"
+        quote: "Dashboard tracking AI review quality metrics"
+    auto_merge_candidates:
+      - term: "AcceptanceRateBaseline"
+        similarity: 0.72
+    decision: "merged"
+    merged_into: "AcceptanceRateBaseline"
+    merge_reason: "Quality metrics dashboard is implementation of acceptance rate tracking"
+    created_run: "2026-02-09T00:21:38Z"
+    resolved_run: "2026-02-09T00:21:38Z"
+  - id: "TP-003"
+    proposed_canonical: "PilotProgram"
+    proposed_layer: "domain"
+    term_raw_examples: ["Pilot Program", "pilot project", "early adopter program"]
+    reason: "Program for recruiting early adopters with support and benefits"
+    evidence:
+      - source: "ADOPTION.md#L16-L18"
+        quote: "Pilot program recruiting early adopters"
+    auto_merge_candidates:
+      - term: "AdoptionTracking"
+        similarity: 0.68
+    decision: "merged"
+    merged_into: "AdoptionTracking"
+    merge_reason: "Pilot program is part of adoption tracking strategy"
+    created_run: "2026-02-09T00:21:38Z"
+    resolved_run: "2026-02-09T00:21:38Z"
+  - id: "TP-004"
+    proposed_canonical: "ABTestConfiguration"
+    proposed_layer: "aux"
+    term_raw_examples: ["AB Test Configuration", "AB testing", "experiment config"]
+    reason: "Configuration for AB testing different prompt templates"
+    evidence:
+      - source: "actions/review-and-merge/ab_test_config.yml"
+        quote: "AB testing configuration for review-and-merge"
+    auto_merge_candidates: []
+    decision: "rejected"
+    rejection_reason: "Single source, aux layer, too specific implementation detail"
+    created_run: "2026-02-09T00:21:38Z"
+    resolved_run: "2026-02-09T00:21:38Z"
