@@ -36,13 +36,13 @@
     "scenario_name": "Test coverage >= 80%",
     "passed": true,
     "actual_output": {
-      "coverage_percent": 87.32
+      "coverage_percent": 90.41
     },
     "expected_output": {
       "coverage_percent": 80.0
     },
     "error_message": null,
-    "interpretation": "テストカバレッジ: 87.32% (目標: 80.0%)",
+    "interpretation": "テストカバレッジ: 90.41% (目標: 80.0%)",
     "file_location": "coverage.json"
   },
   {
