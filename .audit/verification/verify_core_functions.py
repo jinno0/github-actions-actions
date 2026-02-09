@@ -6,11 +6,10 @@ Run ID: 2026-02-08T20:22:29Z
 """
 
 import json
-import subprocess
 import sys
+from dataclasses import asdict, dataclass
 from pathlib import Path
-from dataclasses import dataclass, asdict
-from typing import Any, Optional
+from typing import Any
 
 
 @dataclass
@@ -20,52 +19,52 @@ class VerificationResult:
     passed: bool
     actual_output: Any
     expected_output: Any
-    error_message: Optional[str] = None
+    error_message: str | None = None
     interpretation: str = ""
     file_location: str = ""
 
 
 def verify_all_actions_exist() -> VerificationResult:
     """Verify all 13 core function actions exist and have action.yml"""
-    
+
     expected_actions = [
         "review-and-merge", "spec-to-code", "action-fixer", "auto-refactor",
         "auto-document", "release-notes-ai", "auto-merge", "auto-rebase",
         "review-auto-merge", "publish-pr", "bulk-merge-prs", "bulk-rebase-prs",
         "pr-review-enqueuer"
     ]
-    
+
     actions_dir = Path("actions")
     missing_actions = []
     present_actions = []
-    
+
     for action in expected_actions:
         action_path = actions_dir / action / "action.yml"
         if action_path.exists():
             present_actions.append(action)
         else:
             missing_actions.append(action)
-    
+
     passed = len(missing_actions) == 0
-    
+
     return VerificationResult(
         function_id="CF-ALL",
         scenario_name="All 13 core function actions exist",
         passed=passed,
         actual_output={"present": len(present_actions), "missing": len(missing_actions)},
         expected_output={"present": 13, "missing": 0},
-        interpretation=f"全13個のActionが存在する" if passed else f"{len(missing_actions)}個のActionが欠落",
+        interpretation="全13個のActionが存在する" if passed else f"{len(missing_actions)}個のActionが欠落",
         file_location="actions/"
     )
 
 
 def verify_yaml_syntax() -> VerificationResult:
     """Verify all action.yml files are valid YAML (QA-002)"""
-    
+
     actions_dir = Path("actions")
     valid_files = []
     invalid_files = []
-    
+
     for action_yml in actions_dir.glob("*/action.yml"):
         try:
             import yaml
@@ -74,9 +73,9 @@ def verify_yaml_syntax() -> VerificationResult:
             valid_files.append(str(action_yml))
         except Exception as e:
             invalid_files.append({"file": str(action_yml), "error": str(e)})
-    
+
     passed = len(invalid_files) == 0
-    
+
     return VerificationResult(
         function_id="QA-002",
         scenario_name="All action.yml files are valid YAML",
@@ -90,9 +89,9 @@ def verify_yaml_syntax() -> VerificationResult:
 
 def verify_test_coverage() -> VerificationResult:
     """Verify test coverage meets target (QA-001)"""
-    
+
     coverage_json = Path("coverage.json")
-    
+
     if not coverage_json.exists():
         return VerificationResult(
             function_id="QA-001",
@@ -104,16 +103,16 @@ def verify_test_coverage() -> VerificationResult:
             interpretation="カバレッジデータが存在しません",
             file_location="coverage.json"
         )
-    
+
     try:
         with open(coverage_json) as f:
             coverage_data = json.load(f)
-        
+
         total_coverage = coverage_data.get('totals', {}).get('percent_covered', 0)
         target = 80.0
-        
+
         passed = total_coverage >= target
-        
+
         return VerificationResult(
             function_id="QA-001",
             scenario_name="Test coverage >= 80%",
@@ -138,29 +137,29 @@ def verify_test_coverage() -> VerificationResult:
 
 def verify_documentation_coverage() -> VerificationResult:
     """Verify that actions have documentation (QA-004)"""
-    
+
     actions_dir = Path("actions")
     documented = []
     not_documented = []
-    
+
     for action_dir in actions_dir.iterdir():
         if not action_dir.is_dir() or action_dir.name.startswith('_'):
             continue
-        
+
         has_instructions = (action_dir / "instructions.md").exists()
         has_readme = (action_dir / "README.md").exists()
-        
+
         if has_instructions or has_readme:
             documented.append(action_dir.name)
         else:
             not_documented.append(action_dir.name)
-    
+
     user_facing_actions = [d for d in documented + not_documented if d not in ['lib', '_shared']]
     documented_count = len([d for d in documented if d not in ['lib', '_shared']])
     total_user_facing = len(user_facing_actions)
-    
+
     passed = documented_count >= 13
-    
+
     return VerificationResult(
         function_id="QA-004",
         scenario_name="Documentation coverage (13 actions)",
@@ -178,9 +177,9 @@ def verify_documentation_coverage() -> VerificationResult:
 
 def verify_spec_to_code() -> VerificationResult:
     """CF-002: spec-to-code - Markdown仕様書からコードを自動生成"""
-    
+
     action_yml = Path("actions/spec-to-code/action.yml")
-    
+
     if not action_yml.exists():
         return VerificationResult(
             function_id="CF-002",
@@ -191,23 +190,23 @@ def verify_spec_to_code() -> VerificationResult:
             interpretation="基本構造が欠落",
             file_location="actions/spec-to-code/"
         )
-    
+
     try:
         import yaml
         with open(action_yml) as f:
             config = yaml.safe_load(f)
-        
+
         inputs = config.get('inputs', {})
         # Check for spec-related input (spec-path, spec-file, specFile, etc.)
         has_spec_input = any(k for k in inputs.keys() if 'spec' in k.lower() and 'path' in k.lower() or k == 'spec-path')
         has_output = any(k for k in inputs.keys() if 'output' in k.lower() and 'dir' in k.lower() or k == 'output-dir')
-        
+
         # Check for template
         template_path = Path("actions/spec-to-code/templates/gen_prompt.txt")
         has_template = template_path.exists()
-        
+
         passed = has_spec_input and has_output and has_template
-        
+
         return VerificationResult(
             function_id="CF-002",
             scenario_name="spec-to-code structure validation",
@@ -239,13 +238,13 @@ def verify_spec_to_code() -> VerificationResult:
 
 def main():
     """Run all verification scenarios and generate report"""
-    
+
     print("=" * 80)
     print("CORE FUNCTION VERIFICATION REPORT")
     print("Repo Genesis Auditor v2.0")
     print("Run ID: 2026-02-08T20:22:29Z")
     print("=" * 80)
-    
+
     results = [
         verify_all_actions_exist(),
         verify_yaml_syntax(),
@@ -253,10 +252,10 @@ def main():
         verify_documentation_coverage(),
         verify_spec_to_code(),
     ]
-    
+
     passed_count = sum(1 for r in results if r.passed)
     total_count = len(results)
-    
+
     for r in results:
         status = "✅ PASS" if r.passed else "❌ FAIL"
         print(f"\n{status} [{r.function_id}] {r.scenario_name}")
@@ -265,15 +264,15 @@ def main():
             print(f"  場所: {r.file_location}")
         if r.error_message:
             print(f"  エラー: {r.error_message}")
-    
+
     print("\n" + "=" * 80)
     print(f"SUMMARY: {passed_count}/{total_count} passed")
-    
+
     if passed_count == total_count:
         print("判定: ✅ リポジトリの核心機能が検証された")
     else:
         print(f"判定: ⚠️  {total_count - passed_count}個の検証項目が未達成")
-    
+
     # Save results
     output_path = Path(".audit/output/verification_result.json")
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -283,10 +282,10 @@ def main():
         r_dict['actual_output'] = str(r.actual_output) if not isinstance(r.actual_output, (dict, list, str, int, float, bool, type(None))) else r.actual_output
         r_dict['expected_output'] = str(r.expected_output) if not isinstance(r.expected_output, (dict, list, str, int, float, bool, type(None))) else r.expected_output
         results_dict.append(r_dict)
-    
+
     output_path.write_text(json.dumps(results_dict, ensure_ascii=False, indent=2))
     print(f"\n詳細レポートを保存: {output_path}")
-    
+
     return 0 if passed_count == total_count else 1
 
 

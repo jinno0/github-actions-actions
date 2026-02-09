@@ -88,7 +88,7 @@ class TestSpecToCodeAction:
     def test_action_validates_spec_file(self, action_path):
         """Test that the action validates the spec file."""
         content = self._get_action_content(action_path)
-        
+
 
         # Check for file validation
         assert "[ ! -f" in content or "[[ ! -f" in content, "Action should check if file exists"
@@ -97,7 +97,7 @@ class TestSpecToCodeAction:
     def test_action_uses_base64_encoding(self, action_path):
         """Test that the action uses base64 encoding for safe content handling."""
         content = self._get_action_content(action_path)
-        
+
 
         # Check for base64 encoding
         assert "base64" in content, "Action should use base64 encoding for safe content handling"
@@ -106,7 +106,7 @@ class TestSpecToCodeAction:
     def test_action_uses_envsubst(self, action_path):
         """Test that the action uses envsubst for safe variable substitution."""
         content = self._get_action_content(action_path)
-        
+
 
         # Check for envsubst usage
         assert "envsubst" in content, "Action should use envsubst for safer variable substitution"
@@ -114,7 +114,7 @@ class TestSpecToCodeAction:
     def test_action_supports_custom_template(self, action_path):
         """Test that the action supports custom generation templates."""
         content = self._get_action_content(action_path)
-        
+
 
         # Check for custom template support
         assert "GEN_PROMPT_TEMPLATE" in content, "Action should accept custom template path"
@@ -123,7 +123,7 @@ class TestSpecToCodeAction:
     def test_action_invokes_claude_cli(self, action_path):
         """Test that the action invokes Claude Code CLI."""
         content = self._get_action_content(action_path)
-        
+
 
         # Check for Claude CLI invocation
         assert "claude" in content, "Action should invoke Claude CLI"
@@ -132,7 +132,7 @@ class TestSpecToCodeAction:
     def test_action_sets_environment_variables(self, action_path):
         """Test that the action sets required environment variables."""
         content = self._get_action_content(action_path)
-        
+
 
         # Check for environment variable usage
         assert "GITHUB_ENV" in content, "Action should set GitHub environment variables"
@@ -142,7 +142,7 @@ class TestSpecToCodeAction:
     def test_action_has_error_handling(self, action_path):
         """Test that the action has proper error handling."""
         content = self._get_action_content(action_path)
-        
+
 
         # Check for error handling
         assert "exit 1" in content, "Action should exit on error"
@@ -250,7 +250,7 @@ class TestSpecToCodeIntegration:
     def test_action_handles_special_characters(self, action_path):
         """Test that the action can handle special characters in spec content."""
         content = self._get_action_content(action_path)
-        
+
 
         # Check for proper escaping mechanisms
         assert "base64" in content, "Action should use base64 to handle special characters"
@@ -259,7 +259,7 @@ class TestSpecToCodeIntegration:
     def test_output_directory_handling(self, action_path):
         """Test that the action properly handles output directory creation."""
         content = self._get_action_content(action_path)
-        
+
 
         # Check for directory creation
         assert "mkdir -p" in content, "Action should create output directory with parents"
@@ -268,7 +268,7 @@ class TestSpecToCodeIntegration:
     def test_claude_model_parameter(self, action_path):
         """Test that the action properly passes the model parameter."""
         content = self._get_action_content(action_path)
-        
+
 
         # Check for model parameter handling
         assert "MODEL=" in content, "Action should set MODEL variable"
@@ -277,7 +277,7 @@ class TestSpecToCodeIntegration:
     def test_workflow_step_sequence(self, action_path):
         """Test that the workflow steps are in the correct sequence."""
         content = self._get_action_content(action_path)
-        
+
 
         # Steps should be in order: ensure output dir, validate spec, generate code
         lines = [line.strip() for line in content.split('\n') if line.strip()]

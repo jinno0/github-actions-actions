@@ -10,12 +10,12 @@ import argparse
 import json
 import sys
 from collections import Counter, defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 
-def load_metrics(metrics_file: Path) -> List[Dict[str, Any]]:
+def load_metrics(metrics_file: Path) -> list[dict[str, Any]]:
     """Load review metrics from JSON file."""
     if not metrics_file.exists():
         print(f"Error: Metrics file not found: {metrics_file}", file=sys.stderr)
@@ -29,7 +29,7 @@ def load_metrics(metrics_file: Path) -> List[Dict[str, Any]]:
         return []
 
 
-def calculate_acceptance_rate(metrics: List[Dict]) -> float:
+def calculate_acceptance_rate(metrics: list[dict]) -> float:
     """Calculate overall acceptance rate."""
     if not metrics:
         return 0.0
@@ -38,7 +38,7 @@ def calculate_acceptance_rate(metrics: List[Dict]) -> float:
     return (approved / len(metrics)) * 100 if metrics else 0.0
 
 
-def group_by_week(metrics: List[Dict]) -> Dict[str, List[Dict]]:
+def group_by_week(metrics: list[dict]) -> dict[str, list[dict]]:
     """Group metrics by week."""
     weekly = defaultdict(list)
     for m in metrics:
@@ -53,7 +53,7 @@ def group_by_week(metrics: List[Dict]) -> Dict[str, List[Dict]]:
     return dict(sorted(weekly.items()))
 
 
-def extract_rejection_reasons(metrics: List[Dict]) -> Counter:
+def extract_rejection_reasons(metrics: list[dict]) -> Counter:
     """Extract and count rejection reasons."""
     reasons = Counter()
     for m in metrics:
@@ -63,7 +63,7 @@ def extract_rejection_reasons(metrics: List[Dict]) -> Counter:
     return reasons
 
 
-def categorize_suggestions(metrics: List[Dict]) -> Dict[str, int]:
+def categorize_suggestions(metrics: list[dict]) -> dict[str, int]:
     """Categorize suggestions by type (placeholder for future enhancement)."""
     # This would need to be populated from actual suggestion data
     # For now, return empty dict
@@ -75,7 +75,7 @@ def categorize_suggestions(metrics: List[Dict]) -> Dict[str, int]:
     }
 
 
-def calculate_confidence_correlation(metrics: List[Dict]) -> Dict[str, float]:
+def calculate_confidence_correlation(metrics: list[dict]) -> dict[str, float]:
     """Calculate correlation between confidence and acceptance."""
     accepted_confidences = [m.get("confidence_score", 0) for m in metrics if m.get("outcome") == "approved"]
     rejected_confidences = [m.get("confidence_score", 0) for m in metrics if m.get("outcome") == "rejected"]
@@ -89,7 +89,7 @@ def calculate_confidence_correlation(metrics: List[Dict]) -> Dict[str, float]:
     }
 
 
-def generate_markdown_dashboard(metrics: List[Dict]) -> str:
+def generate_markdown_dashboard(metrics: list[dict]) -> str:
     """Generate a markdown dashboard from metrics."""
     if not metrics:
         return "# AI Review Quality Dashboard\n\n**No data available**\n"
