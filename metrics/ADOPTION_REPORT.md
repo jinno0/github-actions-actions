@@ -1,6 +1,6 @@
 # Adoption Metrics Report
 
-**Generated**: 2026-10-18 03:17:37 UTC
+**Generated**: 2026-10-25 03:27:23 UTC
 **Data Source**: metrics/telemetry/telemetry.log
 
 ---
